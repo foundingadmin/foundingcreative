@@ -145,7 +145,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "Founding Creative is a brand and web creative agency for brands of all sizes. Brand strategy, website design, and design systems that drive real growth.",
+        "og:description": "Founding Creative is a brand and web creative agency for brands of all sizes. Brand strategy, website design, and design systems that drive real growth."
+      },
+      "ported": true
     },
     {
       "path": "/10-key-factors-to-consider-when-choosing-the-best-web-design-company-for-your-business/",
