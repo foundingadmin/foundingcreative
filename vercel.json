@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": true,
   "redirects": [
     {
       "source": "/coffee",
@@ -10,6 +11,46 @@
       "source": "/coffee/",
       "destination": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1I3oI4KqMnFfcTTL5qkzXIuY06h4DeAE4B10vNbRNinT71if9o6Tj8-BXP-0kzp8vnu2KKz7yb",
       "permanent": false
+    },
+    {
+      "source": "/testimonial/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/category/:path*",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/tag/:path*",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/author/:path*",
+      "destination": "/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/page/:n",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/page/:n/",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies/:filter(_[^/]+)/:rest*",
+      "destination": "/case-studies/",
+      "permanent": true
+    },
+    {
+      "source": "/comments/feed/",
+      "destination": "/feed/",
+      "permanent": true
     }
   ],
   "rewrites": [
