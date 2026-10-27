@@ -79,7 +79,6 @@ We scratched the menu idea and spaced out the buttons to interact with. This is 
 
 ![Tata interactive mural design version 2 slide 3](./image-10.jpg)
 
-[](#prev)[](#next)
 
 ## Outcome achieved
 

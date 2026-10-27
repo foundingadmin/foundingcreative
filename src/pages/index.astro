@@ -227,7 +227,7 @@ const jsonLd = [
                 <li>{tag}</li>
               ))}
             </ul>
-            <ul class="service__gallery" aria-label={`${service.title}: example work`}>
+            <ul class="service__gallery" aria-label={`${service.title}: example work`} tabindex="0">
               {service.images.map((image) => (
                 <li>
                   <Image src={image.src} alt={image.alt} widths={[300, 600]} sizes="280px" />
@@ -555,7 +555,7 @@ const jsonLd = [
     color: var(--color-mint);
   }
 
-  .engagement > p {
+  .engagement > p:not(.engagement__badge) {
     flex: 1;
     margin: 0;
     color: var(--color-text-muted);

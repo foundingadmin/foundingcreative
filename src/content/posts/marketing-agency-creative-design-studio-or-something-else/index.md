@@ -81,4 +81,4 @@ When you hire Founding Creative, you’re hiring a team that treats brand, desig
 
 There’s no wrong answer for your business. Sometimes you genuinely just need a logo, and sometimes you genuinely just need a media buy. But if what you actually want is a partner who can take you from “we need a brand” to “we need this thing to keep growing,” that’s the gap Founding Creative was built to fill.
 
-If that sounds like where you are, [let’s talk](/coffee).
+If that sounds like where you are, [let’s talk](/coffee/).

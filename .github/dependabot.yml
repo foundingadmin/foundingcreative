@@ -1,0 +1,18 @@
+# Weekly dependency and GitHub Actions updates as pull requests. CI runs the
+# build and Playwright tests on each one before it can be merged.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      astro:
+        patterns: ['astro', '@astrojs/*']
+      dev-dependencies:
+        dependency-type: development
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
