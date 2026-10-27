@@ -1,4 +1,5 @@
-// Crawl the live WordPress site and write src/data/wp-inventory.json.
+// Crawl the live WordPress site and write src/data/wp-inventory.json,
+// including the uploaded media files each page uses (`media`).
 //
 // Seeds from the sitemap plus a few known URLs, then follows internal links
 // to catch pages the sitemap leaves out. Pages load with JavaScript off so
@@ -118,12 +119,24 @@ async function loadPage(context, path) {
       };
     });
 
-    return { path, status, contentType, ...head };
+    return { path, status, contentType, ...head, media: uploadsIn(await page.content()) };
   } catch (error) {
     return { path, status: null, error: String(error).split('\n')[0], links: [] };
   } finally {
     await page.close();
   }
+}
+
+// Every file under /wp-content/uploads/ the page references anywhere in its
+// HTML: img src/srcset, lazy-load data attributes, og:image, inline and
+// <style> background images, video sources, and JSON with escaped slashes.
+// Returned as paths relative to uploads/, e.g. "2024/02/Flag.png".
+function uploadsIn(html) {
+  const found = new Set();
+  for (const match of html.replaceAll('\\/', '/').matchAll(/wp-content\/uploads\/([^"'()\s,<>?#]+)/g)) {
+    found.add(decodeURIComponent(match[1]).replace(/&amp;$/, ''));
+  }
+  return [...found].sort();
 }
 
 function pageLinks(page) {
