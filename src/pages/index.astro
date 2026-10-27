@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CaseStudyCard from '../components/CaseStudyCard.astro';
+import SiteLaunchSection from '../components/SiteLaunchSection.astro';
+import ClientLogos from '../components/ClientLogos.astro';
 import Icon from '../components/Icon.astro';
 import { getCaseStudies } from '../lib/content';
 import { letsTalkHref } from '../data/navigation';
@@ -25,24 +27,6 @@ import design3 from '../assets/home/services/design-3.webp';
 import design4 from '../assets/home/services/design-4.webp';
 import design5 from '../assets/home/services/design-5.webp';
 
-// SiteLaunch card art
-import prismArt from '../assets/home/sitelaunch/flare-1.png';
-import rocketArt from '../assets/home/sitelaunch/rocket-1.png';
-import orbitArt from '../assets/home/sitelaunch/orbit-1.png';
-
-// Client logos
-import honeywell from '../assets/home/clients/honeywell-logo.png';
-import gsk from '../assets/home/clients/gsk-logo.png';
-import maryKay from '../assets/home/clients/mary-kay-logo-solid.png';
-import mastercard from '../assets/home/clients/mastercard-logo.png';
-import tata from '../assets/home/clients/tat-horizontal.png';
-import volvo from '../assets/home/clients/volvo-logo-solid.png';
-import wrigley from '../assets/home/clients/wrigley-logo-solid.png';
-import zurich from '../assets/home/clients/zurich-logo.png';
-import infosys from '../assets/home/clients/infosys-logo.png';
-import nissan from '../assets/home/clients/nissan-logo-solid.png';
-import zippo from '../assets/home/clients/zippo-logo.png';
-import bankOfAmerica from '../assets/home/clients/bank-of-america-logo.png';
 
 const services = [
   {
@@ -95,12 +79,6 @@ const services = [
   },
 ] as const;
 
-const packages = [
-  { name: 'Prism', href: '/prism-sitelaunch/', tagline: 'For brands ready to make an unforgettable entrance.', art: prismArt, tone: 'prism' },
-  { name: 'Rocket', href: '/rocket-sitelaunch/', tagline: 'For growth-focused brands ready to fuel conversions.', art: rocketArt, tone: 'rocket' },
-  { name: 'Orbit', href: '/orbit-sitelaunch/', tagline: 'For scaling companies needing clarity, structure, and alignment.', art: orbitArt, tone: 'orbit' },
-];
-
 const engagements = [
   {
     title: 'Fixed projects',
@@ -124,21 +102,6 @@ const engagements = [
     href: '/contact-us/',
     cta: "Let's talk",
   },
-];
-
-const clients = [
-  { src: honeywell, name: 'Honeywell' },
-  { src: gsk, name: 'GSK' },
-  { src: maryKay, name: 'Mary Kay' },
-  { src: mastercard, name: 'Mastercard' },
-  { src: tata, name: 'Tata' },
-  { src: volvo, name: 'Volvo' },
-  { src: wrigley, name: 'Wrigley' },
-  { src: zurich, name: 'Zurich' },
-  { src: infosys, name: 'Infosys' },
-  { src: nissan, name: 'Nissan' },
-  { src: zippo, name: 'Zippo' },
-  { src: bankOfAmerica, name: 'Bank of America' },
 ];
 
 const trustpilot = 'https://www.trustpilot.com/review/foundingcreative.com';
@@ -277,34 +240,7 @@ const jsonLd = [
     }
   </section>
 
-  <!-- SiteLaunch -->
-  <section class="sitelaunch" aria-labelledby="sitelaunch-heading">
-    <div class="container section">
-      <div class="section__intro section__intro--center">
-        <p class="eyebrow">We build <em>websites</em></p>
-        <h2 id="sitelaunch-heading">Not every brand needs the same website</h2>
-        <p class="section__lead">
-          SiteLaunch™ breaks the one-size-fits-all web model with three unique packages designed for your unique needs
-        </p>
-      </div>
-      <ul class="packages">
-        {
-          packages.map((pkg) => (
-            <li class:list={['package', `package--${pkg.tone}`]}>
-              <Image class="package__art" src={pkg.art} alt="" widths={[360, 720]} sizes="360px" />
-              <h3 class="package__name">
-                <a href={pkg.href}>
-                  {pkg.name}
-                  <span>SiteLaunch</span>
-                </a>
-              </h3>
-              <p>{pkg.tagline}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+  <SiteLaunchSection />
 
   <!-- How we work -->
   <section class="container section" aria-labelledby="engagement-heading">
@@ -350,15 +286,7 @@ const jsonLd = [
       <h2 id="testimonials-heading">Proof is better than a pitch</h2>
       <p class="section__lead">See what it's like to work with a creative team that builds for the long run.</p>
     </div>
-    <ul class="clients" aria-label="Brands we've worked with">
-      {
-        clients.map((client) => (
-          <li>
-            <Image src={client.src} alt={`${client.name} logo`} height={48} />
-          </li>
-        ))
-      }
-    </ul>
+    <ClientLogos />
     <ul class="testimonials">
       {
         testimonials.map((t) => (
@@ -439,43 +367,6 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
-  .section {
-    padding-block: var(--space-2xl);
-  }
-
-  .section__intro {
-    max-width: 44rem;
-    margin-bottom: var(--space-xl);
-  }
-
-  .section__intro--center {
-    margin-inline: auto;
-    text-align: center;
-  }
-
-  .section__intro--split {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-md);
-    max-width: none;
-  }
-
-  .section__intro--split > div {
-    max-width: 44rem;
-  }
-
-  .section__lead {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-lg);
-  }
-
-  .section__more {
-    margin-top: var(--space-xl);
-    text-align: center;
-  }
-
   /* Hero */
   .hero {
     padding-block: var(--space-3xl) var(--space-2xl);
@@ -606,99 +497,6 @@ const jsonLd = [
     border-radius: var(--radius-md);
   }
 
-  /* SiteLaunch */
-  .sitelaunch {
-    background: radial-gradient(ellipse at 50% 0%, var(--color-plum), var(--color-black) 60%);
-  }
-
-  .packages {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--space-md);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .package {
-    position: relative;
-    display: grid;
-    align-content: end;
-    gap: var(--space-2xs);
-    min-height: 22rem;
-    padding: var(--space-lg);
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    isolation: isolate;
-    transition: border-color var(--transition-fast);
-  }
-
-  .package:hover,
-  .package:focus-within {
-    border-color: var(--color-mint);
-  }
-
-  .package--prism {
-    background-color: var(--color-navy);
-  }
-
-  .package--rocket {
-    background-color: var(--color-teal);
-  }
-
-  .package--orbit {
-    background-color: var(--color-plum);
-  }
-
-  /* Keep the text readable over bright artwork */
-  .package::before {
-    content: '';
-    position: absolute;
-    inset: 40% 0 0;
-    z-index: -1;
-    background: linear-gradient(transparent, rgb(0 0 0 / 0.75));
-  }
-
-  .package__art {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.85;
-  }
-
-  .package__name {
-    margin: 0;
-    font-size: var(--font-size-h3);
-  }
-
-  .package__name a {
-    color: var(--color-text);
-    text-decoration: none;
-  }
-
-  .package__name a::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-  }
-
-  .package__name span {
-    display: block;
-    font-family: var(--font-body);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-
-  .package p {
-    margin: 0;
-  }
-
   /* How we work */
   .engagements {
     display: grid;
@@ -764,25 +562,6 @@ const jsonLd = [
   }
 
   /* Testimonials */
-  .clients {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-lg) var(--space-xl);
-    margin: 0 0 var(--space-xl);
-    padding: 0;
-    list-style: none;
-  }
-
-  .clients img {
-    width: auto;
-    height: 2rem;
-    max-width: 7.5rem;
-    object-fit: contain;
-    filter: brightness(1.7);
-  }
-
   .testimonials {
     columns: 3 18rem;
     column-gap: var(--space-md);

@@ -1,0 +1,68 @@
+path: /services/animation-services/
+order: 5
+name: Animation Services
+summary: Explainer videos, brand animation, product demos, event visuals, and social motion.
+seoTitle: Motion Graphics Agency & Design Agency For Top Brands
+description: Bring stories to life with our motion graphics agency services. Long and short-form animation. We create to captivate.
+ogTitle: Motion Graphics Agency & Design Agency For Top Brands
+ogDescription: Bring stories to life with our motion graphics agency services. Long and short-form animation. We create to captivate.
+eyebrow: Motion Graphics Agency
+title: Bringing narratives to life frame by frame
+intro: Stories manifest through stunning animation.
+heroImages:
+  - src: ../../assets/services/bank-of-america-interactive-pdf.webp
+    alt: Bank of America interactive sales PDF on a tablet beside a laptop
+  - src: ../../assets/services/phone-mockup-mobile-app.webp
+    alt: Hand holding a phone showing a mobile app asking how much you need
+  - src: ../../assets/services/bank-of-america-gateway-kiosk.webp
+    alt: Bank of America service gateway app on a touchscreen kiosk
+capabilities:
+  - title: Animated Explainer Videos
+    items:
+      - Scriptwriting and storyboarding
+      - Custom design and animation
+      - Voiceover and sound design integration
+  - title: Brand Animation
+    items:
+      - Animated logos and stings for brand identity
+      - Motion graphics for brand storytelling
+      - Social media animation loops
+  - title: Product and Service Demos
+    items:
+      - SaaS product demonstrations
+  - title: Corporate and Training Videos
+    items:
+      - Engaging training and instructional design
+      - Animated infographics and data visualization
+      - Communication and announcements
+  - title: Event and Presentation Visuals
+    items:
+      - Dynamic visuals for live events and presentations
+      - Background animations and thematic visuals
+  - title: Social Media and Content Marketing
+    items:
+      - Short-form animations for social media platforms
+      - Animated banners and ads for digital marketing
+      - GIFs and animated stickers for brand engagement
+work:
+  heading: Creativity in motion
+  intro: Motion graphics, event visuals, and interactive experiences built to capture attention and keep it.
+  caseStudies: [innovation-forum-event, genpact-grow-event, interactive-learning-mural]
+statement:
+  lead: Motion with meaning.
+  images:
+    - src: ../../assets/services/huckleberry-holler-farmer-greenhouse.webp
+      alt: Farmer in a greenhouse using the Huckleberry Holler website on a laptop
+    - src: ../../assets/services/atl-freight-website-on-laptop.webp
+      alt: ATL Freight worker holding a laptop showing the new website at a truck yard
+    - src: ../../assets/services/huckleberry-holler-farmers.webp
+      alt: Two farmers reviewing the Huckleberry Holler website on a laptop
+    - src: ../../assets/services/bell-bird-atm-construction-worker.webp
+      alt: Construction worker using his phone at a glowing green Bell Bird ATM
+  heading: Elevate your narrative
+  body:
+    - In today's age where attention is currency, our motion graphics not only capture but also retain viewer engagement. From initial concept to the final cut, we meticulously craft each frame to ensure your message is felt and remembered.
+    - We bring your stories to life in ways that static images and text simply cannot. Let us help you break through the noise with motion graphics that propel your brand forward and leave a lasting impression. Let our motion graphics agency take the helm and steer your story.
+cta:
+  heading: Set your brand in motion
+  text: Discover how our motion graphics agency can transform ideas into engaging narratives.

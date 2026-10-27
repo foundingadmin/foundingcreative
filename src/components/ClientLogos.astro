@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import honeywell from '../assets/home/clients/honeywell-logo.png';
+import gsk from '../assets/home/clients/gsk-logo.png';
+import maryKay from '../assets/home/clients/mary-kay-logo-solid.png';
+import mastercard from '../assets/home/clients/mastercard-logo.png';
+import tata from '../assets/home/clients/tat-horizontal.png';
+import volvo from '../assets/home/clients/volvo-logo-solid.png';
+import wrigley from '../assets/home/clients/wrigley-logo-solid.png';
+import zurich from '../assets/home/clients/zurich-logo.png';
+import infosys from '../assets/home/clients/infosys-logo.png';
+import nissan from '../assets/home/clients/nissan-logo-solid.png';
+import zippo from '../assets/home/clients/zippo-logo.png';
+import bankOfAmerica from '../assets/home/clients/bank-of-america-logo.png';
+
+// Brands Founding Creative has worked with.
+const clients = [
+  { src: honeywell, name: 'Honeywell' },
+  { src: gsk, name: 'GSK' },
+  { src: maryKay, name: 'Mary Kay' },
+  { src: mastercard, name: 'Mastercard' },
+  { src: tata, name: 'Tata' },
+  { src: volvo, name: 'Volvo' },
+  { src: wrigley, name: 'Wrigley' },
+  { src: zurich, name: 'Zurich' },
+  { src: infosys, name: 'Infosys' },
+  { src: nissan, name: 'Nissan' },
+  { src: zippo, name: 'Zippo' },
+  { src: bankOfAmerica, name: 'Bank of America' },
+];
+---
+
+<ul class="clients" aria-label="Brands we've worked with">
+  {
+    clients.map((client) => (
+      <li>
+        <Image src={client.src} alt={`${client.name} logo`} height={48} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .clients {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-lg) var(--space-xl);
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    list-style: none;
+  }
+
+  .clients img {
+    width: auto;
+    height: 2rem;
+    max-width: 7.5rem;
+    object-fit: contain;
+    filter: brightness(1.7);
+  }
+</style>

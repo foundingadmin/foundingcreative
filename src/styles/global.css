@@ -281,6 +281,44 @@ button {
   transform: none;
 }
 
+/* Page sections: vertical rhythm plus the eyebrow, heading, lead intro */
+.section {
+  padding-block: var(--space-2xl);
+}
+
+.section__intro {
+  max-width: 44rem;
+  margin-bottom: var(--space-xl);
+}
+
+.section__intro--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section__intro--split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+  max-width: none;
+}
+
+.section__intro--split > div {
+  max-width: 44rem;
+}
+
+.section__lead {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+.section__more {
+  margin-top: var(--space-xl);
+  text-align: center;
+}
+
 /* Section eyebrow: the small label above a section heading */
 .eyebrow {
   margin: 0 0 var(--space-xs);

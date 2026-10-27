@@ -1,0 +1,128 @@
+path: /services/website-services/
+order: 1
+name: Website Services
+summary: Custom websites, eCommerce, CMS, and interactive touchscreen experiences built to perform.
+seoTitle: Web Design & Development Experts for Top Brands
+description: Boost business with our expert website design services. Elevate online presence, increase engagement, and gain ROI.
+ogTitle: Web Design & Development Experts for Top Brands
+ogDescription: Boost business with our expert website design services. Elevate online presence, increase engagement, and gain ROI.
+eyebrow: Be seen anywhere with scalable, custom website design
+title: Focused on the user
+intro: Websites built strategy first, designed around your users, and engineered to grow with your business.
+heroImages:
+  - src: ../../assets/services/bank-of-america-interactive-pdf.webp
+    alt: Bank of America interactive sales PDF on a tablet beside a laptop
+  - src: ../../assets/services/phone-mockup-mobile-app.webp
+    alt: Hand holding a phone showing a mobile app asking how much you need
+  - src: ../../assets/services/bank-of-america-gateway-kiosk.webp
+    alt: Bank of America service gateway app on a touchscreen kiosk
+capabilities:
+  - title: Website Design and Development
+    items:
+      - Custom website design for optimal user experience
+      - Responsive design for mobile and tablet compatibility
+      - SEO-optimized content and structure for higher visibility
+  - title: E-commerce Solutions
+    items:
+      - Online store design and development
+      - Shopping cart and payment gateway integration
+      - Product catalog and inventory management systems
+  - title: Content Management Systems (CMS)
+    items:
+      - Easy-to-use CMS setup and customization
+      - Content strategy and architecture
+      - Training and support for in-house teams
+  - title: Interactive Touchscreen Experiences
+    items:
+      - Design and development of interactive kiosks and displays
+      - Engaging content for exhibitions and trade shows
+      - Integration with real-time data and social media feeds
+  - title: Digital Marketing and Analytics
+    items:
+      - Digital strategy and campaign management
+      - Analytics setup and conversion tracking
+      - Social media and email marketing integration
+work:
+  heading: Creative foundations worth showing off
+  intro: A look inside the web projects where strategy, structure, and design all came together to drive meaningful business outcomes.
+  caseStudies: [turntide-website, plant-nursery-ecommerce, atlfreight-website]
+teams:
+  eyebrow: Built for buy-in
+  heading: Designed to serve every team.
+  intro: Your website should do more than look good. It should solve real problems for Marketing, Sales, Legal, IT, HR, and beyond.
+  groups:
+    - label: Marketing
+      heading: Your website is your growth engine. We build for momentum.
+      text: Designed with strategy first, our sites support your marketing pipeline from SEO to lead gen.
+      points:
+        - Custom SEO strategy and performance-oriented architecture
+        - Built-in analytics integrations and user behavior tracking
+        - Fast load speeds for better rankings and retention
+        - Dynamic content modules to support campaign pivots
+        - CTAs optimized through UX research and conversion data
+    - label: Executives
+      heading: A website that reflects the vision and performs like an asset.
+      text: It's not just design. It's a long-term investment in brand equity, growth, and internal alignment.
+      points:
+        - Increases brand valuation and perception in the market
+        - Supports investor communications, press, and thought leadership
+        - Creates alignment across departments and messaging
+        - Sets a visual tone for future initiatives and campaigns
+        - Modernizes digital presence in step with business strategy
+    - label: Sales
+      heading: Turn interest into action with a conversion-ready experience.
+      text: We optimize your site to move leads through the funnel and plug directly into your CRM.
+      points:
+        - Seamless CRM integrations (Salesforce, HubSpot, etc.)
+        - Custom lead forms and triggers mapped to your pipeline
+        - Analytics-driven content hierarchy for persuasive storytelling
+        - Frictionless mobile experience for prospects on the go
+        - Sharable URLs for reps to drive traffic to key assets
+    - label: HR
+      heading: Top talent is judging your brand by its homepage.
+      text: Recruiting is competitive. A sharp, modern site signals growth, innovation, and culture.
+      points:
+        - Beautiful, on-brand careers pages designed for conversion
+        - Dedicated employee experience content (benefits, values, culture)
+        - Mobile-first job applications that don't frustrate top candidates
+        - Showcases your people, not just your products
+        - Great design that makes employees proud to share
+    - label: IT
+      heading: Enterprise-grade security without the enterprise headache.
+      text: Our infrastructure prioritizes performance, uptime, and protection, so your IT team can sleep at night.
+      points:
+        - Encrypted hosting environment with high-availability architecture
+        - Automated backups, threat detection, and DDoS mitigation
+        - Best-practice dev stack with clean, maintainable code
+        - Easy-to-manage CMS with permission controls
+        - Ongoing patching and performance optimization
+    - label: Legal
+      heading: Compliance isn't optional. We make it effortless.
+      text: From accessibility to data protection, our websites are engineered to minimize legal risk and maximize inclusivity.
+      points:
+        - ADA-compliant builds to reduce risk of accessibility lawsuits
+        - Cookie consent and privacy handling that meets international standards (GDPR, CCPA)
+        - Documentation-ready compliance architecture
+        - Ongoing monitoring tools for peace of mind
+statement:
+  images:
+    - src: ../../assets/services/huckleberry-holler-farmer-greenhouse.webp
+      alt: Farmer in a greenhouse using the Huckleberry Holler website on a laptop
+    - src: ../../assets/services/atl-freight-website-on-laptop.webp
+      alt: ATL Freight worker holding a laptop showing the new website at a truck yard
+    - src: ../../assets/services/huckleberry-holler-farmers.webp
+      alt: Two farmers reviewing the Huckleberry Holler website on a laptop
+    - src: ../../assets/services/bell-bird-atm-construction-worker.webp
+      alt: Construction worker using his phone at a glowing green Bell Bird ATM
+  heading: Navigating interactive together
+  body:
+    - In the vast and ever-evolving digital landscape, we are your brand architects dedicated to crafting an online presence that is powerful, persuasive, and purposeful. From the initial wireframe to the final launch, your vision remains our priority.
+    - Whether you're looking for website design, to launch an e-commerce space, develop an interactive exhibit, or simply revamp your website, we tailor our digital solutions to you. Blending aesthetics with functionality, we create experiences that engage, inform, and convert.
+showSiteLaunch: true
+relatedPosts:
+  - 5-website-truths-for-marketers
+  - death-by-homepage-5-costs-of-a-bad-website
+  - 10-key-factors-to-consider-when-choosing-the-best-web-design-company-for-your-business
+cta:
+  heading: Embrace a new digital front
+  text: Let's build a natural extension of your brand for the right audience.

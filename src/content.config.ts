@@ -52,4 +52,45 @@ const caseStudies = defineCollection({
     }),
 });
 
-export const collections = { posts, caseStudies };
+// Service pages share one template (src/pages/services/[...slug].astro).
+// Content lives in YAML with images in src/assets/services.
+const services = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/services' }),
+  schema: ({ image }) => {
+    const pic = z.object({ src: image(), alt: z.string().min(1) });
+    return z.object({
+      path: z.string().regex(/^\/.*\/$/),
+      ...seo,
+      order: z.number(),
+      name: z.string(),
+      summary: z.string(),
+      eyebrow: z.string(),
+      title: z.string(),
+      intro: z.string(),
+      heroImages: z.array(pic).min(1),
+      capabilities: z.array(z.object({ title: z.string(), items: z.array(z.string()).min(1) })),
+      work: z.object({ heading: z.string(), intro: z.string(), caseStudies: z.array(z.string()).min(1) }),
+      statement: z.object({
+        lead: z.string().optional(),
+        images: z.array(pic),
+        heading: z.string(),
+        body: z.array(z.string()).min(1),
+      }),
+      teams: z
+        .object({
+          eyebrow: z.string(),
+          heading: z.string(),
+          intro: z.string(),
+          groups: z.array(
+            z.object({ label: z.string(), heading: z.string(), text: z.string(), points: z.array(z.string()) }),
+          ),
+        })
+        .optional(),
+      showSiteLaunch: z.boolean().default(false),
+      relatedPosts: z.array(z.string()).default([]),
+      cta: z.object({ heading: z.string(), text: z.string() }),
+    });
+  },
+});
+
+export const collections = { posts, caseStudies, services };

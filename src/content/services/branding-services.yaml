@@ -1,0 +1,60 @@
+path: /services/branding-services/
+order: 2
+name: Branding Services
+summary: Brand strategy, positioning, identity design, and content strategy for scaling companies.
+seoTitle: Brand Identity Design & Redesign for Scaling Companies
+description: Increase revenue with expert brand identity design, visual identity, and marketing strategy for scaling companies from Founding Creative.
+ogTitle: Brand Identity Design & Redesign for Scaling Companies
+ogDescription: Increase revenue with expert brand identity design, visual identity, and marketing strategy for scaling companies from Founding Creative.
+eyebrow: Visionary Brand Identity Design
+title: Charting you towards brand excellence
+intro: We guide you through the strategic blueprint that elevates your brand potential.
+heroImages:
+  - src: ../../assets/services/brand-strategy-laptop.webp
+    alt: Laptop showing a brand strategy framework and color wheel
+  - src: ../../assets/services/brand-workshop-laptop.webp
+    alt: Laptop with a brand workshop board of green sticky notes
+  - src: ../../assets/services/brand-workshop-blue-notes.webp
+    alt: Brand workshop board of blue sticky notes answering where the brand is going
+capabilities:
+  - title: Strategic Consulting
+    items:
+      - Comprehensive market analysis
+      - Brand positioning and messaging
+      - Competitive landscape assessment
+  - title: Brand Strategy
+    items:
+      - Brand Identity Design and storytelling
+      - Customer journey mapping
+      - Brand voice and personality crafting
+  - title: Content Strategy
+    items:
+      - Editorial and content calendar planning
+      - SEO-driven content creation
+      - Multimedia content strategies
+  - title: Digital Marketing Strategy
+    items:
+      - Social media strategy and design
+      - Email marketing campaigns
+work:
+  heading: From vision to victory
+  intro: A look inside the branding projects where strategy, structure, and design all came together to drive meaningful business outcomes.
+  caseStudies: [bell-bird-atm, plant-nursery-ecommerce, genpact-grow-event, safezone-product-and-branding]
+statement:
+  lead: Brand Identity Design is the compass that guides your brand through today's market landscape, ensuring every step is calculated, impactful, and aligned.
+  images:
+    - src: ../../assets/services/strategy-session-silhouettes.webp
+      alt: Three people silhouetted against a whiteboard of strategy sketches
+    - src: ../../assets/services/brand-strategy-book.webp
+      alt: Open brand strategy book with highlighted pages
+    - src: ../../assets/services/sticky-notes-glass-wall.webp
+      alt: Sticky notes from a strategy session on a glass wall
+    - src: ../../assets/services/strategy-room-whiteboard.webp
+      alt: Meeting room with brand strategy notes on a whiteboard wall
+  heading: Expertise & conviction
+  body:
+    - In a world saturated with fleeting trends and momentary wins, we stand as your strategic bastion. Committed to elevating your brand with foresight, let us navigate the intricacies of brand development together.
+    - With Founding by your side, your brand identity design is poised to not just compete, but lead. Our comprehensive approach to strategy is designed to harness your unique strengths, target the right audiences, and carve a distinct space for you in the market.
+cta:
+  heading: Ready to elevate your Brand Identity Design?
+  text: Discover how strategic expertise can transform your trajectory.

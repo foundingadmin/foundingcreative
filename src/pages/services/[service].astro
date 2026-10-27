@@ -1,0 +1,390 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, getEntries, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import PostCard from '../../components/PostCard.astro';
+import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
+import ClientLogos from '../../components/ClientLogos.astro';
+import Icon from '../../components/Icon.astro';
+import { letsTalkHref } from '../../data/navigation';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((service) => ({ params: { service: service.id }, props: { service } }));
+}
+
+interface Props {
+  service: CollectionEntry<'services'>;
+}
+
+const { service } = Astro.props;
+const { data } = service;
+
+const caseStudies = await getEntries(data.work.caseStudies.map((id) => ({ collection: 'caseStudies' as const, id })));
+const posts = await getEntries(data.relatedPosts.map((id) => ({ collection: 'posts' as const, id })));
+
+const url = new URL(data.path, Astro.site).href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: data.name,
+    serviceType: data.name,
+    description: data.description,
+    url,
+    provider: { '@id': `${Astro.site}#organization` },
+    areaServed: { '@type': 'Country', name: 'United States' },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: data.name,
+      itemListElement: data.capabilities.map((c) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: c.title, description: c.items.join(', ') },
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: new URL('/services/', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: data.name, item: url },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={data.seoTitle}
+  description={data.description}
+  ogTitle={data.ogTitle}
+  ogDescription={data.ogDescription}
+  ogImage={data.heroImages[0].src}
+  ogImageAlt={data.heroImages[0].alt}
+  jsonLd={jsonLd}
+>
+  <section class="service-hero" aria-labelledby="service-title">
+    <div class="container">
+      <nav aria-label="Breadcrumb" class="service-hero__breadcrumb">
+        <a href="/services/">Services</a>
+      </nav>
+      <p class="eyebrow"><em>{data.eyebrow}</em></p>
+      <h1 id="service-title" class="service-hero__title">{data.title}</h1>
+      <p class="section__lead service-hero__intro">{data.intro}</p>
+      <a class="button button--primary" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+    <ul class="container service-hero__images" aria-label={`${data.name} examples`}>
+      {
+        data.heroImages.map((image, i) => (
+          <li>
+            <Image
+              src={image.src}
+              alt={image.alt}
+              widths={[400, 800]}
+              sizes="(max-width: 700px) 80vw, 380px"
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="container section" aria-labelledby="capabilities-heading">
+    <h2 id="capabilities-heading" class="capabilities__heading">Capabilities</h2>
+    <div class="capabilities">
+      {
+        data.capabilities.map((group) => (
+          <div class="capability">
+            <h3>{group.title}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li>
+                  <Icon name="check" size={16} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container section" aria-labelledby="work-heading">
+    <div class="section__intro section__intro--split">
+      <div>
+        <p class="eyebrow">Our <em>work</em></p>
+        <h2 id="work-heading">{data.work.heading}</h2>
+        <p class="section__lead">{data.work.intro}</p>
+      </div>
+      <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+    <div class="card-grid">
+      {caseStudies.map((study) => <CaseStudyCard study={study} headingLevel={3} />)}
+    </div>
+  </section>
+
+  {
+    data.teams && (
+      <section class="container section" aria-labelledby="teams-heading">
+        <div class="section__intro">
+          <p class="eyebrow">
+            <em>{data.teams.eyebrow}</em>
+          </p>
+          <h2 id="teams-heading">{data.teams.heading}</h2>
+          <p class="section__lead">{data.teams.intro}</p>
+        </div>
+        <div class="teams">
+          {data.teams.groups.map((group) => (
+            <article class="team">
+              <p class="team__label">{group.label}</p>
+              <h3>{group.heading}</h3>
+              <p>{group.text}</p>
+              <ul>
+                {group.points.map((point) => (
+                  <li>
+                    <Icon name="check" size={16} />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="container section statement" aria-labelledby="statement-heading">
+    {data.statement.lead && <p class="statement__lead">{data.statement.lead}</p>}
+    <ul class="statement__images">
+      {
+        data.statement.images.map((image) => (
+          <li>
+            <Image src={image.src} alt={image.alt} widths={[400, 800]} sizes="(max-width: 700px) 50vw, 280px" />
+          </li>
+        ))
+      }
+    </ul>
+    <div class="statement__text">
+      <h2 id="statement-heading">{data.statement.heading}</h2>
+      {data.statement.body.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </section>
+
+  {data.showSiteLaunch && <SiteLaunchSection />}
+
+  {
+    posts.length > 0 && (
+      <section class="container section" aria-labelledby="posts-heading">
+        <div class="section__intro section__intro--split">
+          <h2 id="posts-heading">From Field Notes</h2>
+          <a class="button" href="/blog/">
+            All posts <Icon name="arrow-up-right" size={16} />
+          </a>
+        </div>
+        <div class="card-grid">
+          {posts.map((post) => (
+            <PostCard post={post} headingLevel={3} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="container section" aria-label="Brands we've worked with">
+    <ClientLogos />
+  </section>
+
+  <section class="cta holo-bg" aria-labelledby="cta-heading">
+    <div class="container cta__content">
+      <h2 id="cta-heading">{data.cta.heading}</h2>
+      <p class="section__lead">{data.cta.text}</p>
+      <div class="cta__actions">
+        <a class="button button--primary" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
+        <a class="button" href="/contact-us/">Send us a message</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .service-hero {
+    padding-block: var(--space-2xl);
+    background: radial-gradient(ellipse at 20% 0%, var(--color-teal), var(--color-black) 65%);
+  }
+
+  .service-hero__breadcrumb a {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .service-hero__title {
+    max-width: 16ch;
+  }
+
+  .service-hero__intro {
+    max-width: 36rem;
+  }
+
+  .service-hero__images {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-xl);
+    padding-bottom: var(--space-xs);
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .service-hero__images li {
+    flex: 0 0 min(22rem, 80%);
+    scroll-snap-align: start;
+  }
+
+  .service-hero__images img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+
+  .capabilities__heading {
+    font-size: var(--font-size-h3);
+  }
+
+  .capabilities {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: var(--space-md);
+  }
+
+  .capability,
+  .team {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+  }
+
+  .capability h3,
+  .team h3 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .capability ul,
+  .team ul {
+    display: grid;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .capability li,
+  .team li {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .capability .icon,
+  .team .icon {
+    margin-top: 0.25em;
+    color: var(--color-mint);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-md);
+  }
+
+  .teams {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: var(--space-md);
+  }
+
+  .team__label {
+    color: var(--color-mint);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .team > p:not(.team__label) {
+    color: var(--color-text-muted);
+  }
+
+  .statement__lead {
+    max-width: 50rem;
+    margin-bottom: var(--space-xl);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h5);
+    line-height: var(--line-height-snug);
+  }
+
+  .statement__images {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    list-style: none;
+  }
+
+  .statement__images img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+
+  .statement__images li:nth-child(even) img {
+    aspect-ratio: 1;
+    margin-top: var(--space-xl);
+  }
+
+  .statement__text {
+    max-width: 44rem;
+  }
+
+  .statement__text p {
+    color: var(--color-text-muted);
+  }
+
+  .cta {
+    padding-block: var(--space-3xl);
+    text-align: center;
+  }
+
+  .cta__content {
+    position: relative;
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+
+  @media (max-width: 700px) {
+    .statement__images {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
