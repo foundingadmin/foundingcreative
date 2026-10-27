@@ -1940,6 +1940,10 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
+      "overrides": {
+        "description": "Tell us about your brand, website, or creative project. Send Founding Creative a message and we'll get back to you soon.",
+        "og:description": "Tell us about your brand, website, or creative project. Send Founding Creative a message and we'll get back to you soon."
+      },
       "ported": false
     },
     {
