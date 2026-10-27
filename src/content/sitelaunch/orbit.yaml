@@ -1,0 +1,76 @@
+name: Orbit
+order: 3
+seoTitle: "Orbit SiteLaunch: Scalable Team Websites | Founding Creative"
+description: Unify your brand, teams, and content under one modular, scalable website built for growth and alignment.
+ogTitle: Orbit SiteLaunch
+ogDescription: Unify your brand, teams, and content under one modular, scalable website built for growth and alignment.
+heroImage: ../../assets/sitelaunch/orbit-hero.webp
+shareImage: ../../assets/sitelaunch/orbit-share.webp
+shareImageAlt: "Orbit SiteLaunch: we launch sites your whole team can use"
+pillars: [Modular Architecture, User Permissions, Scalable Foundations]
+title: From fragmented to fully focused
+subtitle: For organizations that need a website to bring every page, platform, and person into a single orbit.
+audience:
+  heading: Websites for teams ready to scale
+  lead: Unity moves faster. Alignment is survival.
+  points:
+    - Mid-sized and enterprise B2B companies
+    - Post-merger organizations needing brand alignment
+    - Marketing teams juggling multiple needs
+    - Enterprises with siloed departments and fractured messaging
+    - "Any team saying, “Our website doesn't reflect how we operate.”"
+stats:
+  - value: 25%
+    label: increase in productivity with systems built for collaboration
+    source: https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/the-social-economy
+  - value: 66%
+    label: see operational gains with CMS
+    source: https://moldstud.com/articles/p-developing-custom-content-management-systems
+  - value: 65%
+    label: of content wasted without systems
+    source: https://seismic.com/enablement-explainers/sales-content-management-guide/
+  - value: 100%
+    label: WCAG website compliance built in
+why:
+  heading: Growth should be clarity, not chaos
+  lead: Break your team out of their silos.
+  text: Orbit SiteLaunch fixes the structural issues that hold brands back as they scale. We build modular, scalable websites designed to support marketing, finance, HR, sales, and everyone in between, under a single, unified experience.
+features:
+  heading: Bring your team together
+  text: Orbit SiteLaunch is built for growing teams that need their website to work like a system, not a scramble. We craft websites that adapt to your org, empower your team, and scale without reinventing the wheel every quarter.
+  lead: When your website works, so does your whole team.
+  items:
+    - title: Modular CMS Architecture
+      text: Give your teams the ability to create, edit, and launch content without breaking design systems or sending the site into a tailspin.
+    - title: Role-Based User Permissions
+      text: Provide marketing, HR, product, and leadership teams controlled access to quickly and easily update what they own.
+    - title: Strategic Info Architecture
+      text: A collaborative, stakeholder-driven site structure that reflects how your organization actually works, communicates, and grows.
+    - title: Governance and Accessibility
+      text: Protects your brand with WCAG-compliant builds, clear usage policies, and scalable documentation.
+    - title: Stakeholder Alignment
+      text: Ensures your website serves real needs by aligning with stakeholders before the first pixel is even designed.
+    - title: Scalable System Foundation
+      text: Creates a future-proofed site that adapts as you grow (new divisions, new audiences, and new initiatives) without constant overhauls.
+process:
+  heading: Built to align. Designed to scale.
+  text: Orbit SiteLaunch is more than a website project. It's a unifying system for your brand, teams, and users. Through collaborative discovery and modular execution, we help bring structure to complexity and clarity to scale. Whether navigating multi-audience communication, siloed content systems, or post-merger brand confusion, our process brings it all into one clean orbit.
+  lead: No patchwork. Just a digital experience that reflects your full organizational gravity.
+  steps:
+    - phase: Discovery
+      title: Align the org before we build
+      text: We start with internal stakeholder interviews and system mapping to uncover what your website really needs to support, from marketing and HR to product and leadership. This ensures the platform works for everyone.
+    - phase: Design
+      title: Build clarity into every click
+      text: We create a modular, scalable design system that supports your brand across multiple audiences, pages, and touchpoints. From persona-based journeys to multi-layered nav structures, every detail is intentionally crafted.
+    - phase: Develop
+      title: Developed to unify, built to evolve
+      text: We construct a flexible, secure CMS with role-based controls and infrastructure that grows with your business. It's fast, accessible, WCAG-compliant, and ready to support your next brand evolution without constant rework.
+    - phase: Launch
+      title: Clarity and confidence
+      text: Post-launch, we deliver internal onboarding and training for your team to confidently own their unique site functions. From playbooks to documentation, you leave with a system, not just a site, that's ready for what's next.
+closing:
+  heading: The right website provides structure
+  text: Orbit SiteLaunch isn't just about external polish. It's about building a digital system that supports internal clarity, cross-functional alignment, and brand consistency at scale.
+  tagline: Less friction. More unity.
+ctaHeading: Ready to clear up the chaos?

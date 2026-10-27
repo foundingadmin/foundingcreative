@@ -93,4 +93,39 @@ const services = defineCollection({
   },
 });
 
-export const collections = { posts, caseStudies, services };
+// SiteLaunch website packages (Prism, Rocket, Orbit), one YAML file each,
+// rendered by src/components/SiteLaunchPage.astro.
+const sitelaunch = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/sitelaunch' }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      ...seo,
+      order: z.number(),
+      heroImage: image(),
+      shareImage: image(),
+      shareImageAlt: z.string().min(1),
+      pillars: z.array(z.string()).length(3),
+      title: z.string(),
+      subtitle: z.string(),
+      audience: z.object({ heading: z.string(), lead: z.string(), points: z.array(z.string()).min(1) }),
+      stats: z.array(z.object({ value: z.string(), label: z.string(), source: z.string().url().optional() })),
+      why: z.object({ heading: z.string(), lead: z.string(), text: z.string() }),
+      features: z.object({
+        heading: z.string(),
+        text: z.string(),
+        lead: z.string(),
+        items: z.array(z.object({ title: z.string(), text: z.string() })).length(6),
+      }),
+      process: z.object({
+        heading: z.string(),
+        text: z.string(),
+        lead: z.string(),
+        steps: z.array(z.object({ phase: z.string(), title: z.string(), text: z.string() })).length(4),
+      }),
+      closing: z.object({ heading: z.string(), text: z.string(), tagline: z.string() }),
+      ctaHeading: z.string(),
+    }),
+});
+
+export const collections = { posts, caseStudies, services, sitelaunch };
