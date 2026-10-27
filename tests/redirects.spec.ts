@@ -11,14 +11,19 @@ const vercel = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url
   redirects: { source: string; destination: string; permanent?: boolean }[];
 };
 
-// Minimal matcher for Vercel source patterns: :name, :name*, :name(regex).
+// Minimal matcher for Vercel source patterns, following path-to-regexp:
+// :name matches one segment, :name* matches segments but not a trailing
+// slash, and (regex) groups are used as written.
 function toRegExp(source: string) {
-  const escape = (s: string) => s.replace(/[.+?^${}()|[\]\\*]/g, '\\$&');
+  const escape = (s: string) => s.replace(/[.+?^${}|[\]\\*]/g, '\\$&');
   let pattern = '';
   let last = 0;
-  for (const m of source.matchAll(/:(\w+)(?:\(([^)]+)\))?(\*)?/g)) {
+  for (const m of source.matchAll(/:(\w+)(?:\(([^)]+)\))?(\*)?|\(([^)]+)\)/g)) {
     pattern += escape(source.slice(last, m.index));
-    pattern += m[2] ? `(${m[2]})` : m[3] ? '(.*)' : '([^/]+)';
+    if (m[4]) pattern += `(${m[4]})`;
+    else if (m[2]) pattern += `(${m[2]})`;
+    else if (m[3]) pattern += '((?:[^/]+(?:/[^/]+)*)?)';
+    else pattern += '([^/]+)';
     last = m.index! + m[0].length;
   }
   return new RegExp(`^${pattern}${escape(source.slice(last))}$`);

@@ -13,37 +13,32 @@
       "permanent": false
     },
     {
-      "source": "/testimonial/:path*",
+      "source": "/testimonial/(.*)",
       "destination": "/",
       "permanent": true
     },
     {
-      "source": "/category/:path*",
+      "source": "/category/(.*)",
       "destination": "/blog/",
       "permanent": true
     },
     {
-      "source": "/tag/:path*",
+      "source": "/tag/(.*)",
       "destination": "/blog/",
       "permanent": true
     },
     {
-      "source": "/author/:path*",
+      "source": "/author/(.*)",
       "destination": "/about-us/",
       "permanent": true
     },
     {
-      "source": "/blog/page/:n",
+      "source": "/blog/page/(.*)",
       "destination": "/blog/",
       "permanent": true
     },
     {
-      "source": "/blog/page/:n/",
-      "destination": "/blog/",
-      "permanent": true
-    },
-    {
-      "source": "/case-studies/:filter(_[^/]+)/:rest*",
+      "source": "/case-studies/(_.*)",
       "destination": "/case-studies/",
       "permanent": true
     },
