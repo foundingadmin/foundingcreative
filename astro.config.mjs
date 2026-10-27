@@ -3,7 +3,7 @@ import { defineConfig, envField, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 // Pages that set `noindex` in BaseLayout; keep this list in sync.
-const NOINDEX = ['/client-portal/'];
+const NOINDEX = ['/client-portal/', '/404/'];
 
 // WordPress slugs all end in a trailing slash, so build every page as
 // /slug/index.html and require the slash to keep URLs identical.

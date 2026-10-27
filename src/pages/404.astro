@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const links = [
+  { label: 'Case Studies', href: '/case-studies/' },
+  { label: 'Services', href: '/services/' },
+  { label: 'Field Notes', href: '/blog/' },
+  { label: 'About', href: '/about-us/' },
+  { label: 'Contact Us', href: '/contact-us/' },
+];
+---
+
+<BaseLayout
+  title="Page not found - Founding Creative"
+  description="The page you're looking for has moved or no longer exists. Find our work, services, and Field Notes from here."
+  noindex
+>
+  <section class="container section not-found">
+    <p class="eyebrow">Error <em>404</em></p>
+    <h1>Page not found</h1>
+    <p class="section__lead">The page you're looking for has moved or no longer exists. These might help:</p>
+    <ul class="not-found__links">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="button button--primary" href="/">Go to the homepage <Icon name="arrow-up-right" size={16} /></a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 50vh;
+  }
+
+  .not-found__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    list-style: none;
+  }
+</style>
