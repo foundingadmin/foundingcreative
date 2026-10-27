@@ -1,0 +1,44 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Prose from './Prose.astro';
+import { formatDate, isoDate } from '../lib/content';
+
+interface Props {
+  /** Entry in the legal collection, which is also the page slug. */
+  id: string;
+}
+
+const entry = await getEntry('legal', Astro.props.id);
+if (!entry) throw new Error(`Unknown legal page: ${Astro.props.id}`);
+const { Content } = await render(entry);
+const { data } = entry;
+---
+
+<BaseLayout title={data.seoTitle} description={data.description} ogTitle={data.ogTitle} ogDescription={data.ogDescription}>
+  <header class="container legal-hero">
+    <p class="eyebrow">Legal</p>
+    <h1>{data.title}</h1>
+    <p class="legal-hero__updated">Last updated <time datetime={isoDate(data.updated)}>{formatDate(data.updated)}</time></p>
+  </header>
+  <div class="legal-body">
+    <div class="container">
+      <Prose><Content /></Prose>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-hero {
+    padding-block: var(--space-2xl) var(--space-xl);
+  }
+
+  .legal-hero__updated {
+    color: var(--color-text-muted);
+  }
+
+  .legal-body {
+    padding-block: var(--space-2xl);
+    background-color: var(--color-white);
+  }
+</style>

@@ -3331,7 +3331,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "How foundingcreative.com uses cookies and similar technologies for visitors in the European Economic Area and Switzerland.",
+        "og:description": "How foundingcreative.com uses cookies and similar technologies for visitors in the European Economic Area and Switzerland."
+      },
+      "ported": true
     },
     {
       "path": "/cookie-policy-uk/",
@@ -3404,7 +3408,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "How foundingcreative.com uses cookies and similar technologies for visitors in the United Kingdom.",
+        "og:description": "How foundingcreative.com uses cookies and similar technologies for visitors in the United Kingdom."
+      },
+      "ported": true
     },
     {
       "path": "/death-by-homepage-5-costs-of-a-bad-website/",
@@ -3573,7 +3581,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "The terms that apply to the content of foundingcreative.com, including accuracy, liability, and intellectual property.",
+        "og:description": "The terms that apply to the content of foundingcreative.com, including accuracy, liability, and intellectual property."
+      },
+      "ported": true
     },
     {
       "path": "/feed/",
@@ -3921,7 +3933,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "Legal information about Founding Creative LLC, the company that owns and operates foundingcreative.com, and how to contact us.",
+        "og:description": "Legal information about Founding Creative LLC, the company that owns and operates foundingcreative.com, and how to contact us."
+      },
+      "ported": true
     },
     {
       "path": "/marketing-agency-creative-design-studio-or-something-else/",
@@ -4172,7 +4188,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "How foundingcreative.com uses cookies for visitors in the United States, and how to opt out of the sale or sharing of personal data.",
+        "og:description": "How foundingcreative.com uses cookies for visitors in the United States, and how to opt out of the sale or sharing of personal data."
+      },
+      "ported": true
     },
     {
       "path": "/orbit-sitelaunch",
@@ -4536,7 +4556,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "How Founding Creative collects, uses, and protects personal data from visitors in the European Economic Area and Switzerland.",
+        "og:description": "How Founding Creative collects, uses, and protects personal data from visitors in the European Economic Area and Switzerland."
+      },
+      "ported": true
     },
     {
       "path": "/privacy-statement-uk/",
@@ -4609,7 +4633,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "How Founding Creative collects, uses, and protects personal data from visitors in the United Kingdom.",
+        "og:description": "How Founding Creative collects, uses, and protects personal data from visitors in the United Kingdom."
+      },
+      "ported": true
     },
     {
       "path": "/privacy-statement-us",
@@ -4693,7 +4721,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "How Founding Creative collects, uses, and protects personal data from visitors in the United States.",
+        "og:description": "How Founding Creative collects, uses, and protects personal data from visitors in the United States."
+      },
+      "ported": true
     },
     {
       "path": "/rocket-sitelaunch",

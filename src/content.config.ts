@@ -128,4 +128,15 @@ const sitelaunch = defineCollection({
     }),
 });
 
-export const collections = { posts, caseStudies, services, sitelaunch };
+// Legal pages (imprint, disclaimer, privacy statements, cookie policies),
+// imported from the Complianz-generated WordPress pages.
+const legal = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/legal' }),
+  schema: z.object({
+    title: z.string(),
+    ...seo,
+    updated: z.coerce.date(),
+  }),
+});
+
+export const collections = { posts, caseStudies, services, sitelaunch, legal };
