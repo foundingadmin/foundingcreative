@@ -78,6 +78,21 @@ const id = (name: string) => `${idPrefix}-${name}`;
         required></textarea>
     </div>
 
+    <!-- Optional and unchecked by default, so consent is opt-in. Unchecked boxes are not sent. -->
+    <div class="contact-form__optin">
+      <input
+        type="checkbox"
+        id={id('optin')}
+        name="marketing_opt_in"
+        value="Yes"
+        aria-describedby={id('optin-note')}
+      />
+      <label for={id('optin')}>Send me occasional emails with Founding Creative news and insights.</label>
+      <p class="contact-form__note" id={id('optin-note')}>
+        Unsubscribe anytime. See our <a href="/privacy-statement-us/">Privacy Statement</a>.
+      </p>
+    </div>
+
     <!-- Honeypot: hidden from people, filled in by bots. Formspree drops submissions that include it. -->
     <div class="contact-form__trap" aria-hidden="true">
       <label class="visually-hidden" for={id('gotcha')}>Leave this field empty</label>
@@ -90,7 +105,7 @@ const id = (name: string) => `${idPrefix}-${name}`;
   </form>
 
   <p class="contact-form__success" role="status" tabindex="-1" hidden>
-    Thanks for reaching out. Your message is on its way, and we'll be in touch soon.
+    <strong>Thanks, we got your message.</strong> Someone from our team will get back to you soon.
   </p>
 </div>
 
@@ -176,6 +191,28 @@ const id = (name: string) => `${idPrefix}-${name}`;
 
   .contact-form [aria-invalid='true'] {
     border-color: var(--color-orchid);
+  }
+
+  .contact-form__optin {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-3xs) var(--space-xs);
+    align-items: start;
+  }
+
+  .contact-form__optin input {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.2em;
+    padding: 0;
+    accent-color: var(--color-cyan);
+  }
+
+  .contact-form__note {
+    grid-column: 2;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
   }
 
   .contact-form__trap {

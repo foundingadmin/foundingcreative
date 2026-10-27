@@ -2,14 +2,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactForm from '../../components/ContactForm.astro';
 
-// Head values from the WordPress crawl. The live meta description is broken
-// plugin text ("Please enable JavaScript..."), so this uses the page's lead-in
-// copy instead.
+// Title and OG title match the WordPress crawl. The live meta description is
+// broken plugin text ("Please enable JavaScript..."), so it is rewritten here.
 ---
 
 <BaseLayout
   title="Contact Us - Founding Creative"
-  description="We are here to hear. Send us a message."
+  description="Tell us about your brand, website, or creative project. Send Founding Creative a message and we'll get back to you soon."
   ogTitle="Contact Us"
 >
   <section class="container contact">

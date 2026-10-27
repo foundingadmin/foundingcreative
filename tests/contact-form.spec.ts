@@ -5,9 +5,9 @@ import { test, expect } from '@playwright/test';
 const FORMSPREE = 'https://formspree.io/f/**';
 
 async function fillRequired(page: import('@playwright/test').Page) {
-  await page.getByLabel('Name').fill('Test Person');
-  await page.getByLabel('Email').fill('test@example.com');
-  await page.getByLabel('Message').fill('Testing the contact form.');
+  await page.getByLabel('Name', { exact: true }).fill('Test Person');
+  await page.getByLabel('Email', { exact: true }).fill('test@example.com');
+  await page.getByLabel('Message', { exact: true }).fill('Testing the contact form.');
 }
 
 test('contact form submits to Formspree and confirms inline', async ({ page }) => {
@@ -20,16 +20,20 @@ test('contact form submits to Formspree and confirms inline', async ({ page }) =
 
   await page.goto('/contact-us/');
   await fillRequired(page);
-  await page.getByLabel('Company').fill('Acme');
+  await page.getByLabel('Company', { exact: true }).fill('Acme');
+  const optIn = page.getByRole('checkbox', { name: /occasional emails/ });
+  await expect(optIn, 'marketing opt-in starts unchecked').not.toBeChecked();
+  await expect(page.getByRole('link', { name: 'Privacy Statement' })).toHaveAttribute('href', '/privacy-statement-us/');
+  await optIn.check();
   await page.getByRole('button', { name: 'Submit' }).click();
 
-  await expect(page.getByRole('status')).toContainText('Thanks for reaching out');
+  await expect(page.getByRole('status')).toContainText('Thanks, we got your message.');
   await expect(page.getByRole('status')).toBeFocused();
   await expect(page.locator('form[data-contact-form]')).toBeHidden();
 
   expect(posted?.url).toMatch(/^https:\/\/formspree\.io\/f\/[^/]+$/);
   expect(posted?.accept).toContain('application/json');
-  for (const value of ['Test Person', 'test@example.com', 'Testing the contact form.', 'Acme', 'Contact page']) {
+  for (const value of ['Test Person', 'test@example.com', 'Testing the contact form.', 'Acme', 'Contact page', 'marketing_opt_in']) {
     expect(posted?.body).toContain(value);
   }
 });
@@ -48,7 +52,7 @@ test('contact form shows Formspree errors and keeps the form', async ({ page }) 
   await page.getByRole('button', { name: 'Submit' }).click();
 
   await expect(page.getByRole('alert')).toHaveText('should be an email');
-  await expect(page.getByLabel('Email')).toHaveAttribute('aria-invalid', 'true');
+  await expect(page.getByLabel('Email', { exact: true })).toHaveAttribute('aria-invalid', 'true');
   await expect(page.getByRole('button', { name: 'Submit' })).toBeEnabled();
 });
 
@@ -62,6 +66,6 @@ test('contact form requires name, email, and message before sending', async ({ p
   await page.goto('/contact-us/');
   await page.getByRole('button', { name: 'Submit' }).click();
 
-  expect(await page.getByLabel('Name').evaluate((el: HTMLInputElement) => el.validity.valueMissing)).toBe(true);
+  expect(await page.getByLabel('Name', { exact: true }).evaluate((el: HTMLInputElement) => el.validity.valueMissing)).toBe(true);
   expect(sent).toBe(false);
 });
