@@ -4,6 +4,7 @@ import { Font, getImage } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import logo from '../assets/brand/founding-wordmark-white.svg';
+import defaultShareImage from '../assets/home/services/web-5.webp';
 import { linkedInHref } from '../data/navigation';
 import '../styles/global.css';
 
@@ -31,8 +32,9 @@ const {
   description,
   ogTitle = title,
   ogDescription = description,
-  ogImage,
-  ogImageAlt,
+  // Pages without their own share image use a Founding Creative project shot.
+  ogImage = defaultShareImage,
+  ogImageAlt = ogImage === defaultShareImage ? 'Turntide website designed by Founding Creative, shown on an iMac' : undefined,
   ogType = 'website',
   article,
   jsonLd,
