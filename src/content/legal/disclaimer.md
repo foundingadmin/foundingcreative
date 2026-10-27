@@ -11,7 +11,7 @@ Founding Creative LLC is committed to keeping this website up to date and accura
 
 We are not liable for loss as a result of inaccuracies or incompleteness, nor for loss resulting from problems caused by or inherent to the dissemination of information through the internet, such as disruptions or interruptions. When using web forms, we strive to limit the number of required fields to a minimum. For any loss suffered as a result of the use of data, advice or ideas provided by or on behalf of Founding Creative LLC via this website, Founding Creative LLC accepts no liability.
 
-The use of the website and all its components (including forums) is subject to [terms of use](/terms-of-use). The mere use of this website implies the knowledge and the acceptance of these terms of use.
+The use of the website and all its components (including forums) is subject to terms of use. The mere use of this website implies the knowledge and the acceptance of these terms of use.
 
 Responses and privacy inquiries submitted by email or using a web form will be treated in the same way as letters. This means that you can expect a response from us within a period of 1 month at the latest. In the case of complex requests, we will let you know within 1 month if we need a maximum of 3 months.
 
