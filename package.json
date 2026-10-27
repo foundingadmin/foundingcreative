@@ -11,7 +11,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "playwright test"
+    "test": "playwright test",
+    "crawl": "node scripts/crawl-live-site.mjs"
   },
   "dependencies": {
     "astro": "^7.4.2"
