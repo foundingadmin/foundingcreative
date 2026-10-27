@@ -1,0 +1,146 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
+import Icon from '../../components/Icon.astro';
+import { letsTalkHref } from '../../data/navigation';
+import shareImage from '../../assets/services/genpact-grow-website-laptop.webp';
+
+// Replaces the unfinished WordPress /services/ page with a real overview.
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const offerings = [
+  {
+    name: 'BrandForge™ branding and strategy',
+    summary: 'Research-backed brand strategy and an AI-ready identity system, launch-ready in weeks.',
+    href: '/brandforge/',
+  },
+  ...services.map((s) => ({ name: s.data.name, summary: s.data.summary, href: s.data.path })),
+];
+
+const description =
+  "Explore Founding Creative's services: brand strategy, website design and development, graphic design, event design, animation, and custom creative work.";
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Services',
+  description,
+  url: new URL('/services/', Astro.site).href,
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: offerings.map((o, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: o.name,
+      url: new URL(o.href, Astro.site).href,
+    })),
+  },
+};
+---
+
+<BaseLayout
+  title="Creative Services: Brand, Web, Design & Events | Founding Creative"
+  description={description}
+  ogTitle="Services"
+  ogImage={shareImage}
+  ogImageAlt="Laptop showing the Genpact GROW18 event website"
+  jsonLd={jsonLd}
+>
+  <section class="container section">
+    <div class="section__intro">
+      <p class="eyebrow">Our <em>services</em></p>
+      <h1>Creative services built on strategy</h1>
+      <p class="section__lead">
+        Our services fuse strategy, structure, and design to deliver impactful business results. Start with one, or bring us
+        in across all of them.
+      </p>
+    </div>
+    <ul class="offerings">
+      {
+        offerings.map((offering) => (
+          <li class="offering">
+            <h2>
+              <a href={offering.href}>{offering.name}</a>
+            </h2>
+            <p>{offering.summary}</p>
+            <span class="offering__arrow" aria-hidden="true">
+              <Icon name="arrow-up-right" size={20} />
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <SiteLaunchSection />
+
+  <section class="container section cta">
+    <h2>Not sure where to start?</h2>
+    <p class="section__lead">Tell us what you're building and we'll help you find the right fit.</p>
+    <a class="button button--primary" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
+  </section>
+</BaseLayout>
+
+<style>
+  .offerings {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .offering {
+    position: relative;
+    padding: var(--space-lg) var(--space-lg) var(--space-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    transition: border-color var(--transition-fast);
+  }
+
+  .offering:hover,
+  .offering:focus-within {
+    border-color: var(--color-mint);
+  }
+
+  .offering h2 {
+    font-size: var(--font-size-h5);
+  }
+
+  .offering a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .offering a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .offering a:focus-visible {
+    outline: none;
+  }
+
+  .offering:has(a:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .offering p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .offering__arrow {
+    position: absolute;
+    right: var(--space-lg);
+    bottom: var(--space-md);
+    color: var(--color-mint);
+  }
+
+  .cta {
+    text-align: center;
+  }
+</style>

@@ -27,7 +27,7 @@ export const sitelaunch: NavLink[] = [
 
 export const mainNav: NavItem[] = [
   { label: 'Case Studies', href: '/case-studies/' },
-  { label: 'Services', href: '/services/', children: services },
+  { label: 'Services', href: '/services/', children: [...services, { label: 'All services', href: '/services/' }] },
   { label: 'About', href: '/about-us/' },
   { label: 'Fractional Creative', href: '/fractional-creative/' },
   { label: 'Contact Us', href: '/contact-us/' },

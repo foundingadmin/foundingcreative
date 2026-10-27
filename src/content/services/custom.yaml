@@ -1,0 +1,70 @@
+path: /services/custom/
+order: 6
+name: Custom Services
+summary: Illustration, photo and video, audio and podcasts, copywriting, and sustainable design.
+seoTitle: Custom Creative Services | Founding Creative
+description: Custom creative services for unique challenges, from illustration and photography to podcasts, copywriting, and sustainable design.
+ogTitle: Custom Creative Services
+ogDescription: Custom creative services for unique challenges, from illustration and photography to podcasts, copywriting, and sustainable design.
+eyebrow: Solution Architects
+title: Problem solvers against unique challenges
+intro: Tailoring bespoke answers to fit your unique needs.
+heroImages:
+  - src: ../../assets/services/damage-scan-game-sketch.webp
+    alt: Concept sketch of a drone Damage Scan event game
+  - src: ../../assets/services/bell-bird-atm-concept-render.webp
+    alt: 3D render of two Bell Bird ATM concepts with glowing green crystal tops
+  - src: ../../assets/services/event-meeting-room-design.webp
+    alt: Orange branded meeting room enclosure design
+  - src: ../../assets/services/genpact-kiosk-render.webp
+    alt: Genpact branded kiosk render
+  - src: ../../assets/services/bell-bird-atm-man.webp
+    alt: Man leaning on a glowing green Bell Bird ATM
+capabilities:
+  - title: Illustration and Graphic Art
+    items:
+      - Custom illustrations for digital and print
+      - Editorial illustrations and cover art
+      - Infographics and visual data storytelling
+  - title: Photography and Videography
+    items:
+      - Product photography and lifestyle shoots
+      - Corporate and event videography
+      - Post-production editing and color grading
+  - title: Audio and Podcast Production
+    items:
+      - Podcast concept development and production
+      - Sound design and audio branding
+      - Voiceover recording and editing
+  - title: Copywriting and Content Creation
+    items:
+      - SEO-driven website and blog content
+      - Marketing copy and sales materials
+      - Scriptwriting for video and audio content
+  - title: Sustainability in Design
+    items:
+      - Eco-friendly packaging and branding solutions
+      - Sustainable event design and materials
+      - Green marketing and communication strategies
+work:
+  heading: Crafting the Custom
+  intro: A look inside the custom projects where strategy, structure, and design all came together to drive meaningful business outcomes.
+  caseStudies: [bell-bird-atm, genpact-grow-event, safezone-product-and-branding]
+statement:
+  lead: Beyond conventional, our creative services run deep and wide to address your unique challenges with innovative solutions. We pride ourselves on our ability to think differently and deliver custom-tailored results that exceed expectations.
+  images:
+    - src: ../../assets/services/bell-bird-atm-scale-render.webp
+      alt: Bell Bird ATM render beside a human figure for scale
+    - src: ../../assets/services/event-spin-wheel-game.webp
+      alt: Interactive spin wheel graphic for an event game
+    - src: ../../assets/services/genpact-drone-scanner-kiosk.webp
+      alt: Genpact Drone Scanner game kiosk design
+    - src: ../../assets/services/safezone-thumbprint-scanner.webp
+      alt: SafeZone fingerprint scanner attached to a holster on a transparent figure
+  heading: Comfortable with a blank canvas
+  body:
+    - No challenge is too niche, no idea too outlandish. We thrive on the unique and the unconventional. We bring a diverse set of skills to leverage and create something exceptional for your brand. From first brainstorm to final delivery, we are your partners in crafting creative solutions that stand out.
+    - Embrace the opportunity to differentiate your brand with creative solutions that speak directly to your audience. Whether it's through captivating illustrations, immersive digital experiences, or sustainable design practices, we're here to bring your visionary ideas to life.
+cta:
+  heading: Imagine the impossible
+  text: Ready to explore a world of creative possibilities tailored just for you?

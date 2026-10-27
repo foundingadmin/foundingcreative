@@ -1,0 +1,71 @@
+path: /services/design-services/
+order: 3
+name: Design Services
+summary: Logo and identity systems, sales enablement, packaging, publications, and environmental design.
+seoTitle: Custom Logo Graphics Designer & Logo Redevelopment Services
+description: Elevate your brand with our expert logo and graphics designer services. Build visual impact that drives sales and marketing.
+ogTitle: Custom Logo Graphics Designer & Logo Redevelopment Services
+ogDescription: Elevate your brand with our expert logo and graphics designer services. Build visual impact that drives sales and marketing.
+eyebrow: Creative design pioneers
+title: Hoisting brands through design
+intro: Transforming concepts into visual narratives through quality design.
+heroImages:
+  - src: ../../assets/services/modl-mailer-bag.webp
+    alt: MODL branded mailer bag with the infinity logo
+  - src: ../../assets/services/modl-shopping-bags.webp
+    alt: MODL branded paper shopping bags
+  - src: ../../assets/services/modl-hoodie.webp
+    alt: MODL branded hoodie with an orange line pattern
+capabilities:
+  - title: Brand and Identity
+    items:
+      - Logo graphics designer and brand identity systems
+      - Brand guidelines and standards
+      - Stationery and corporate collateral design
+  - title: Marketing and Sales Enablement
+    items:
+      - Brochure and sales kit design
+      - Presentation design and templates
+      - Trade show and event materials
+  - title: Digital Design
+    items:
+      - Website design and user experience
+      - Email templates and landing pages
+      - Social media graphics and digital ads
+  - title: Packaging Design
+    items:
+      - Product packaging and labels
+      - Retail and in-store display
+      - Welcome kit experiences
+  - title: Publication Design
+    items:
+      - Annual reports and corporate publications
+      - Magazines and editorial
+      - eBooks and digital publications
+  - title: Environmental and Signage Design
+    items:
+      - Office branding and interior graphics
+      - Wayfinding and signage systems
+      - Exhibition and trade show stand design
+work:
+  heading: Design that speaks
+  intro: A look inside the design projects where strategy, structure, and design all came together to drive meaningful business outcomes.
+  caseStudies: [bell-bird-atm, interactive-learning-mural, safezone-product-and-branding]
+statement:
+  lead: From first sketch to final pixel, our design blends artistry with strategy to create visually stunning and strategically effective assets that resonate and reinforce.
+  images:
+    - src: ../../assets/services/modl-event-tent.webp
+      alt: MODL branded event tent and banner
+    - src: ../../assets/services/modl-logo-sketches.webp
+      alt: Hand-drawn MODL infinity logo sketches on graph paper
+    - src: ../../assets/services/modl-retail-display.webp
+      alt: MODL Infinity Tool 2.0 retail display stand
+    - src: ../../assets/services/modl-infinity-mark.webp
+      alt: MODL infinity mark drawn with construction lines
+  heading: Your vision, skillfully executed
+  body:
+    - In the realm of visual communication, details matter. We are logo graphics designers. We are dedicated to transforming your vision into reality, ensuring every color, line, and font aligns with your brand ethos and objectives. With Founding, your brand will be more than seen. It will be felt.
+    - Leverage our comprehensive design expertise to create a cohesive and captivating brand experience across all touchpoints. From the tactile texture of packaging to the digital landscape of web and interactive, we ensure consistent creativity that elevates your brand above the competition.
+cta:
+  heading: Visualize your brand's future
+  text: Discover how our design expertise can transform your brand's presence.

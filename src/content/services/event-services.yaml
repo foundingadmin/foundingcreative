@@ -1,0 +1,71 @@
+path: /services/event-services/
+order: 4
+name: Event Services
+summary: Corporate event branding, trade show exhibits, signage, wayfinding, and post-event content.
+seoTitle: Corporate Event Design Services For Conferences & Exhibits
+description: Transform events with our expert design. From exhibit booths to conferences, we deliver spaces that captivate attendees.
+ogTitle: Corporate Event Design Services For Conferences & Exhibits
+ogDescription: Transform events with our expert design. From exhibit booths to conferences, we deliver spaces that captivate attendees.
+eyebrow: Corporate Event Design
+title: Transforming spaces into memories
+intro: Crafting environments for unforgettable experiences.
+heroImages:
+  - src: ../../assets/services/genpact-grow-website-laptop.webp
+    alt: Laptop showing the Genpact GROW18 event website
+  - src: ../../assets/services/tata-interactive-wall.webp
+    alt: Man exploring the TCS Business 4.0 interactive wall
+  - src: ../../assets/services/genpact-grow-hallway.webp
+    alt: Genpact GROW event hallway with branded walls and signage
+  - src: ../../assets/services/mastercard-breakthrough-stage.webp
+    alt: Mastercard Breakthrough stage backdrop design
+  - src: ../../assets/services/genpact-grow-mural.webp
+    alt: Genpact GROW18 event mural in a convention center
+  - src: ../../assets/services/mastercard-event-signage.webp
+    alt: Mastercard event wayfinding signs for general session, lunch, and breakouts
+capabilities:
+  - title: Corporate Event Design
+    items:
+      - Custom event branding
+      - Presentation design
+      - Interactive digital content
+  - title: Trade Show Exhibits and Booths
+    items:
+      - Interactive touchscreens and digital displays
+      - Environment strategy and design
+  - title: Event Branding and Collateral
+    items:
+      - Event identity and thematic development
+      - Signage, banners, and environmental graphics
+      - Brochures, programs, and promotional materials
+  - title: Signage and Wayfinding
+    items:
+      - Custom signage systems for events and exhibitions
+      - Digital wayfinding solutions
+      - Branded environmental design and decor
+  - title: Post-Event Digital Content
+    items:
+      - Event highlight reels and motion graphics
+      - Digital content for follow-up marketing
+      - Interactive online platforms for continued engagement
+work:
+  heading: Crafted Connections
+  intro: A look inside the events where strategy, structure, and design all came together to drive meaningful business outcomes.
+  caseStudies: [innovation-forum-event, bank-apps, interactive-learning-mural]
+statement:
+  lead: Did it happen if no one remembers it? We turn gatherings into memories at every cohesive touch point with Corporate Event Design.
+  images:
+    - src: ../../assets/services/event-presenter-on-stage.webp
+      alt: Audience silhouette facing a presenter on a lit conference stage
+    - src: ../../assets/services/bank-of-america-event-touchscreen.webp
+      alt: Two attendees using a Bank of America touchscreen at an event
+    - src: ../../assets/services/genpact-event-attendees.webp
+      alt: Attendees with lanyards talking at a Genpact event
+    - src: ../../assets/services/mastercard-forum-attendees.webp
+      alt: Two attendees laughing at the Mastercard Innovation Forum
+  heading: Elevating events into experiences
+  body:
+    - In the world of events, the difference between ordinary and extraordinary lies in the details. At Founding, we excel in these details. From conceptual design to the final day, we enable your vision with experience and creativity.
+    - Whether a corporate meeting, trade show exhibit, or live event, our holistic approach aims to captivate. Let's break the conventional bounds of event design and create spaces that tell your brand's story in compelling and new ways.
+cta:
+  heading: Create your next memorable event
+  text: Ready to transform your next event into an unforgettable experience?

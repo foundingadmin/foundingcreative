@@ -1051,7 +1051,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "BrandForge: Brand Strategy & Identity in Weeks | Founding Creative",
+        "description": "BrandForge delivers research-backed brand strategy, four creative directions, and an AI-ready brand system, launch-ready in weeks, not months.",
+        "og:title": "BrandForge",
+        "og:description": "BrandForge delivers research-backed brand strategy, four creative directions, and an AI-ready brand system, launch-ready in weeks, not months."
+      },
+      "ported": true
     },
     {
       "path": "/buckit/",
@@ -4917,7 +4923,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Creative Services: Brand, Web, Design & Events | Founding Creative",
+        "description": "Explore Founding Creative's services: brand strategy, website design and development, graphic design, event design, animation, and custom creative work.",
+        "og:description": "Explore Founding Creative's services: brand strategy, website design and development, graphic design, event design, animation, and custom creative work.",
+        "h1": "Creative services built on strategy"
+      },
+      "ported": true
     },
     {
       "path": "/services/animation-services/",
@@ -5012,7 +5024,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "Bring stories to life with our motion graphics agency services. Long and short-form animation. We create to captivate.",
+        "og:description": "Bring stories to life with our motion graphics agency services. Long and short-form animation. We create to captivate."
+      },
+      "ported": true
     },
     {
       "path": "/services/branding-services/",
@@ -5120,7 +5136,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "Increase revenue with expert brand identity design, visual identity, and marketing strategy for scaling companies from Founding Creative.",
+        "og:description": "Increase revenue with expert brand identity design, visual identity, and marketing strategy for scaling companies from Founding Creative."
+      },
+      "ported": true
     },
     {
       "path": "/services/custom/",
@@ -5237,7 +5257,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Custom Creative Services | Founding Creative",
+        "description": "Custom creative services for unique challenges, from illustration and photography to podcasts, copywriting, and sustainable design.",
+        "og:title": "Custom Creative Services",
+        "og:description": "Custom creative services for unique challenges, from illustration and photography to podcasts, copywriting, and sustainable design."
+      },
+      "ported": true
     },
     {
       "path": "/services/design-services/",
@@ -5344,7 +5370,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "Elevate your brand with our expert logo and graphics designer services. Build visual impact that drives sales and marketing.",
+        "og:description": "Elevate your brand with our expert logo and graphics designer services. Build visual impact that drives sales and marketing."
+      },
+      "ported": true
     },
     {
       "path": "/services/event-services/",
@@ -5447,7 +5477,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "Transform events with our expert design. From exhibit booths to conferences, we deliver spaces that captivate attendees.",
+        "og:description": "Transform events with our expert design. From exhibit booths to conferences, we deliver spaces that captivate attendees."
+      },
+      "ported": true
     },
     {
       "path": "/services/website-services",
@@ -5565,7 +5599,8 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {},
+      "ported": true
     },
     {
       "path": "/site-care-plan/",
