@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import { getCaseStudies, caseStudyUrl } from '../../lib/content';
+
+const studies = await getCaseStudies();
+const description =
+  'A look inside projects where strategy, structure, and design came together to drive real business outcomes for Mastercard, Bank of America, and more.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Case Studies',
+  description,
+  url: new URL('/case-studies/', Astro.site).href,
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: studies.map((study, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: new URL(caseStudyUrl(study), Astro.site).href,
+      name: study.data.title,
+    })),
+  },
+};
+---
+
+<BaseLayout
+  title="Case Studies: Brand, Web & Event Design | Founding Creative"
+  description={description}
+  ogTitle="Case Studies"
+  ogImage={studies[0]?.data.cover}
+  ogImageAlt={studies[0]?.data.coverAlt}
+  jsonLd={jsonLd}
+>
+  <section class="container work-intro">
+    <p class="work-intro__eyebrow">Our work</p>
+    <h1>Creative foundations worth showing off</h1>
+    <p class="work-intro__lead">
+      A look inside the projects where strategy, structure, and design all came together to drive meaningful business
+      outcomes.
+    </p>
+  </section>
+
+  <section class="container work-grid" aria-label="All case studies">
+    {studies.map((study) => <CaseStudyCard study={study} />)}
+  </section>
+</BaseLayout>
+
+<style>
+  .work-intro {
+    padding-block: var(--space-2xl) var(--space-xl);
+  }
+
+  .work-intro h1 {
+    max-width: 16ch;
+  }
+
+  .work-intro__eyebrow {
+    color: var(--color-mint);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .work-intro__lead {
+    max-width: 40rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: var(--space-md);
+    padding-bottom: var(--space-2xl);
+  }
+</style>

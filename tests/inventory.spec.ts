@@ -23,7 +23,7 @@ const pages = inventory.pages.filter(
 
 const first = (values?: string[]) => values?.[0];
 
-type Overrides = Partial<Record<'title' | 'description' | 'og:title' | 'og:description', string>>;
+type Overrides = Partial<Record<'title' | 'description' | 'og:title' | 'og:description' | 'h1', string>>;
 
 for (const entry of pages) {
   const overrides: Overrides = (!auditingLive && (entry as { overrides?: Overrides }).overrides) || {};
@@ -57,7 +57,7 @@ for (const entry of pages) {
 
     await expect(canonical.first(), 'canonical').toHaveAttribute('href', first(entry.canonicals) ?? '');
 
-    const expectedH1 = first(entry.h1s);
+    const expectedH1 = overrides.h1 ?? first(entry.h1s);
     if (expectedH1) {
       await expect(h1.first(), 'H1').toHaveText(expectedH1, { useInnerText: false });
     }

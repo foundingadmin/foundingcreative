@@ -11,5 +11,15 @@
       "destination": "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1I3oI4KqMnFfcTTL5qkzXIuY06h4DeAE4B10vNbRNinT71if9o6Tj8-BXP-0kzp8vnu2KKz7yb",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/feed",
+      "destination": "/feed.xml"
+    },
+    {
+      "source": "/feed/",
+      "destination": "/feed.xml"
+    }
   ]
 }

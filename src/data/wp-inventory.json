@@ -235,7 +235,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     },
     {
       "path": "/3d-product-renders-to-stand-out-in-beauty-industry-marketing-jobs/",
@@ -342,7 +342,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     },
     {
       "path": "/3d-test/",
@@ -514,7 +514,7 @@
         "description": "Discover 5 reasons your outdated website is killing campaigns and ROI. Learn why speed, UX, and credibility are critical for marketing success.",
         "og:description": "Discover 5 reasons your outdated website is killing campaigns and ROI. Learn why speed, UX, and credibility are critical for marketing success."
       },
-      "ported": false
+      "ported": true
     },
     {
       "path": "/about-us",
@@ -956,9 +956,13 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "og:description": "May 27, 2026 Without a human-built creative foundation, AI will confidently take your brand in the wrong direction. May 27, 2026 / Branding /"
+        "og:description": "Field Notes from Founding Creative: practical insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.",
+        "title": "Field Notes: Brand, Web & Design Insights | Founding Creative",
+        "description": "Field Notes from Founding Creative: practical insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.",
+        "og:title": "Field Notes",
+        "h1": "Field Notes"
       },
-      "ported": false
+      "ported": true
     },
     {
       "path": "/brandforge/",
@@ -1334,7 +1338,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Case Studies: Brand, Web & Event Design | Founding Creative",
+        "description": "A look inside projects where strategy, structure, and design came together to drive real business outcomes for Mastercard, Bank of America, and more.",
+        "og:title": "Case Studies",
+        "og:description": "A look inside projects where strategy, structure, and design came together to drive real business outcomes for Mastercard, Bank of America, and more."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/aprilaire-product-app/",
@@ -1451,7 +1461,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Aprilaire Product Selector App Case Study | Founding Creative",
+        "description": "How Founding Creative designed an interactive product selector app that matches Aprilaire customers to the right indoor air quality products.",
+        "og:title": "Aprilaire Product Selector App",
+        "og:description": "How Founding Creative designed an interactive product selector app that matches Aprilaire customers to the right indoor air quality products."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/atlfreight-website/",
@@ -1564,7 +1580,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "ATL Freight Website Design Case Study | Founding Creative",
+        "description": "A bold, conversion-focused website for ATL Freight that reflects the reliability of their trucking operations and supports a fast-growing business.",
+        "og:title": "ATL Freight Website Design",
+        "og:description": "A bold, conversion-focused website for ATL Freight that reflects the reliability of their trucking operations and supports a fast-growing business."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/bank-apps/",
@@ -1681,7 +1703,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Bank of America Interactive Apps Case Study | Founding Creative",
+        "description": "Interactive PDFs, a cached web app, and event touchscreens that made Bank of America content easy to explore, share, and track across sectors.",
+        "og:title": "Bank of America Interactive Apps",
+        "og:description": "Interactive PDFs, a cached web app, and event touchscreens that made Bank of America content easy to explore, share, and track across sectors."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/bell-bird-atm/",
@@ -1793,7 +1821,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Bell Bird ATM UX and Branding Case Study | Founding Creative",
+        "description": "Branding and UX design for Bell Bird, a cardless ATM that uses soundwaves to transfer secure financial data. See how we defined the ATM of tomorrow.",
+        "og:title": "Bell Bird ATM UX and Branding",
+        "og:description": "Branding and UX design for Bell Bird, a cardless ATM that uses soundwaves to transfer secure financial data. See how we defined the ATM of tomorrow."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/genpact-grow-event/",
@@ -1920,7 +1954,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Genpact GROW Event Branding Case Study | Founding Creative",
+        "description": "How we rebranded Genpact's annual GROW event from concept to execution, with a fresh identity and digital experience for a global audience.",
+        "og:title": "Genpact GROW Event Branding",
+        "og:description": "How we rebranded Genpact's annual GROW event from concept to execution, with a fresh identity and digital experience for a global audience."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/innovation-forum-event/",
@@ -2042,7 +2082,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Mastercard Innovation Forum Event Case Study | Founding Creative",
+        "description": "Event branding for Mastercard's LAC Innovation Forum: a visual system that carried across digital, physical, and motion formats for an immersive experience.",
+        "og:title": "Mastercard LAC Innovation Forum",
+        "og:description": "Event branding for Mastercard's LAC Innovation Forum: a visual system that carried across digital, physical, and motion formats for an immersive experience."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/interactive-learning-mural/",
@@ -2158,7 +2204,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Tata Interactive Learning Mural Case Study | Founding Creative",
+        "description": "We turned a 44-page Tata company document into a large interactive mural that merged physical space with digital storytelling at a busy conference.",
+        "og:title": "Tata Interactive Learning Mural",
+        "og:description": "We turned a 44-page Tata company document into a large interactive mural that merged physical space with digital storytelling at a busy conference."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/plant-nursery-ecommerce/",
@@ -2276,7 +2328,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Huckleberry Holler eCommerce Case Study | Founding Creative",
+        "description": "Branding and an eCommerce website for Huckleberry Holler, a sustainable plant nursery, that turns plant education into a path to purchase.",
+        "og:title": "Huckleberry Holler Plant Nursery eCommerce",
+        "og:description": "Branding and an eCommerce website for Huckleberry Holler, a sustainable plant nursery, that turns plant education into a path to purchase."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/safezone-product-and-branding/",
@@ -2393,7 +2451,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "SafeZone Gun Safety Branding Case Study | Founding Creative",
+        "description": "Brand identity, product design, and app UI for SafeZone, a fingerprint-authorized gun safety device built for fast, secure access when it matters.",
+        "og:title": "SafeZone Product and Branding",
+        "og:description": "Brand identity, product design, and app UI for SafeZone, a fingerprint-authorized gun safety device built for fast, secure access when it matters."
+      },
+      "ported": true
     },
     {
       "path": "/case-study/turntide-website/",
@@ -2513,7 +2577,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Turntide B2B Website Redesign Case Study | Founding Creative",
+        "description": "A full-stack website overhaul, brand repositioning, and marketing funnel for Turntide, a B2B electrification company selling to engineers.",
+        "og:title": "Turntide B2B Website Redesign",
+        "og:description": "A full-stack website overhaul, brand repositioning, and marketing funnel for Turntide, a B2B electrification company selling to engineers."
+      },
+      "ported": true
     },
     {
       "path": "/category/branding/",
@@ -3400,7 +3470,7 @@
         "description": "A slow, outdated website kills trust, traffic, and sales. Learn the hidden costs, and how to turn your site into a growth engine instead of a liability.",
         "og:description": "A slow, outdated website kills trust, traffic, and sales. Learn the hidden costs, and how to turn your site into a growth engine instead of a liability."
       },
-      "ported": false
+      "ported": true
     },
     {
       "path": "/disclaimer/",
@@ -3656,7 +3726,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     },
     {
       "path": "/how-marketing-in-sales-gets-stronger-with-brand-aligned-ui/",
@@ -3745,7 +3815,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     },
     {
       "path": "/imprint/",
@@ -3907,7 +3977,10 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Marketing Agency, Design Studio, or Something Else?"
+      },
+      "ported": true
     },
     {
       "path": "/marketing-with-content-fails-without-a-design-system/",
@@ -3993,7 +4066,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     },
     {
       "path": "/opt-out-preferences/",
@@ -4251,7 +4324,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     },
     {
       "path": "/prism-sitelaunch",
@@ -6030,7 +6103,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     },
     {
       "path": "/tools/",
@@ -6199,7 +6272,7 @@
         "title": "What Is a Founding Designer, and Do You Need One?",
         "og:title": "What Is a Founding Designer, and Do You Need One?"
       },
-      "ported": false
+      "ported": true
     },
     {
       "path": "/when-looking-good-isnt-enough-the-roi-of-design-consistency/",
@@ -6288,7 +6361,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     },
     {
       "path": "/why-marketing-direct-relies-on-website-trust/",
@@ -6377,7 +6450,7 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "ported": true
     }
   ]
 }

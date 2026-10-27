@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts, postUrl } from '../../lib/content';
+
+const posts = await getPosts();
+const description =
+  'Field Notes from Founding Creative: practical insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Field Notes',
+  description,
+  url: new URL('/blog/', Astro.site).href,
+  publisher: { '@id': `${Astro.site}#organization` },
+  blogPost: posts.map((post) => ({
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    url: new URL(postUrl(post), Astro.site).href,
+    datePublished: post.data.date.toISOString(),
+  })),
+};
+---
+
+<BaseLayout
+  title="Field Notes: Brand, Web & Design Insights | Founding Creative"
+  description={description}
+  ogTitle="Field Notes"
+  ogImage={posts[0]?.data.cover}
+  ogImageAlt={posts[0]?.data.coverAlt}
+  jsonLd={jsonLd}
+>
+  <section class="container blog-intro">
+    <p class="blog-intro__eyebrow">Founding Creative blog</p>
+    <h1>Field Notes</h1>
+    <p class="blog-intro__lead">
+      Practical thinking on brand strategy, websites, and design systems for marketers and founders who want their next
+      move to hit harder.
+    </p>
+  </section>
+
+  <section class="container blog-grid" aria-label="All posts">
+    {posts.map((post) => <PostCard post={post} />)}
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-intro {
+    padding-block: var(--space-2xl) var(--space-xl);
+  }
+
+  .blog-intro__eyebrow {
+    color: var(--color-mint);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .blog-intro__lead {
+    max-width: 40rem;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-md);
+    padding-bottom: var(--space-2xl);
+  }
+</style>

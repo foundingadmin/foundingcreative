@@ -9,15 +9,12 @@ import stacey from '../assets/team/stacey.webp';
 import jamie from '../assets/team/jamie.webp';
 import sasha from '../assets/team/sasha.webp';
 import blake from '../assets/team/blake.webp';
-import {
-  companyLinks,
-  services,
-  sitelaunch,
-  latestWork,
-  latestPosts,
-  legalLinks,
-  linkedInHref,
-} from '../data/navigation';
+import { companyLinks, services, sitelaunch, legalLinks, linkedInHref } from '../data/navigation';
+import { getCaseStudies, getPosts, caseStudyUrl, postUrl } from '../lib/content';
+
+// Newest five case studies and three posts, as on the live footer.
+const latestWork = (await getCaseStudies()).slice(0, 5).map((s) => ({ label: s.data.title, href: caseStudyUrl(s) }));
+const latestPosts = (await getPosts()).slice(0, 3).map((p) => ({ label: p.data.title, href: postUrl(p) }));
 
 const team = [
   { name: 'Tyler', photo: tyler },

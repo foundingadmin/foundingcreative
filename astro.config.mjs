@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, envField, fontProviders } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // WordPress slugs all end in a trailing slash, so build every page as
 // /slug/index.html and require the slash to keep URLs identical.
@@ -9,6 +10,8 @@ export default defineConfig({
   build: {
     format: 'directory',
   },
+  // sitemap-index.xml for search engines (listed in public/robots.txt).
+  integrations: [sitemap()],
   // Manrope is downloaded at build time and served from this site, so
   // visitors never request Google Fonts. Gelica is Adobe Fonts and has to
   // load from Adobe's kit (see BaseLayout).

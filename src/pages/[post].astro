@@ -1,0 +1,199 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Prose from '../components/Prose.astro';
+import PostCard from '../components/PostCard.astro';
+import { getPosts, postUrl, formatDate, isoDate, type Post } from '../lib/content';
+
+// Field Notes posts live at the site root, like the WordPress permalinks.
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { post: post.id }, props: { post, posts } }));
+}
+
+interface Props {
+  post: Post;
+  posts: Post[];
+}
+
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const { data } = post;
+
+// Internal links help readers and search engines: same-category posts first.
+const related = posts
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => {
+    const shared = (p: Post) => p.data.categories.filter((c) => data.categories.includes(c)).length;
+    return shared(b) - shared(a);
+  })
+  .slice(0, 3);
+
+const url = new URL(postUrl(post), Astro.site).href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: data.title,
+    description: data.description,
+    datePublished: data.date.toISOString(),
+    dateModified: data.updated.toISOString(),
+    author: { '@type': 'Person', name: data.author },
+    publisher: { '@id': `${Astro.site}#organization` },
+    mainEntityOfPage: url,
+    articleSection: data.categories,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
+      { '@type': 'ListItem', position: 2, name: 'Field Notes', item: new URL('/blog/', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: data.title, item: url },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={data.seoTitle}
+  description={data.description}
+  ogTitle={data.ogTitle}
+  ogDescription={data.ogDescription}
+  ogImage={data.cover}
+  ogImageAlt={data.coverAlt}
+  ogType="article"
+  article={{ published: data.date, modified: data.updated, section: data.categories[0], tags: data.categories }}
+  jsonLd={jsonLd}
+>
+  <article>
+    <header class="container post-hero">
+      <div class="post-hero__card">
+        <Image
+          class="post-hero__image"
+          src={data.cover}
+          alt={data.coverAlt}
+          widths={[640, 1280]}
+          sizes="(max-width: 1200px) 100vw, 1140px"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div class="post-hero__text">
+          <nav aria-label="Breadcrumb" class="post-hero__breadcrumb">
+            <a href="/blog/">Field Notes</a>
+          </nav>
+          <h1 class="post-hero__title">{data.title}</h1>
+          <p class="post-hero__excerpt">{data.excerpt}</p>
+          <p class="post-hero__meta">
+            <span>{data.categories.join(', ')}</span>
+            <span aria-hidden="true">·</span>
+            <time datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
+            <span aria-hidden="true">·</span>
+            <span>By {data.author}</span>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <div class="post-body">
+      <div class="container">
+        <Prose><Content /></Prose>
+      </div>
+    </div>
+  </article>
+
+  <section class="container related" aria-labelledby="related-heading">
+    <h2 id="related-heading" class="related__heading">More Field Notes</h2>
+    <div class="related__grid">
+      {related.map((p) => <PostCard post={p} headingLevel={3} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .post-hero {
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
+  .post-hero__card {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    min-height: 26rem;
+  }
+
+  .post-hero__image,
+  .post-hero__text {
+    grid-area: 1 / 1;
+  }
+
+  .post-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-hero__text {
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-2xl) var(--space-lg);
+    text-align: center;
+    background: linear-gradient(rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.8));
+  }
+
+  .post-hero__breadcrumb a {
+    color: var(--color-mint);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .post-hero__title {
+    max-width: 18ch;
+    margin: 0;
+    font-size: var(--font-size-h2);
+  }
+
+  .post-hero__excerpt {
+    max-width: 40rem;
+    margin: 0;
+    font-size: var(--font-size-lg);
+  }
+
+  .post-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2xs);
+    margin: 0;
+    color: var(--color-neutral-lighter);
+    font-size: var(--font-size-sm);
+  }
+
+  .post-body {
+    padding-block: var(--space-2xl);
+    background-color: var(--color-white);
+  }
+
+  .related {
+    padding-block: var(--space-2xl);
+  }
+
+  .related__heading {
+    font-size: var(--font-size-h3);
+  }
+
+  .related__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: var(--space-md);
+  }
+</style>
