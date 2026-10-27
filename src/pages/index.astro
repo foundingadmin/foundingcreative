@@ -1,20 +1,889 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CaseStudyCard from '../components/CaseStudyCard.astro';
+import Icon from '../components/Icon.astro';
+import { getCaseStudies } from '../lib/content';
+import { letsTalkHref } from '../data/navigation';
+import wave from '../assets/brand/wave-black.svg';
+import shareImage from '../assets/home/services/web-5.webp';
+
+// Service sliders
+import web1 from '../assets/home/services/web-1.webp';
+import web2 from '../assets/home/services/web-2.webp';
+import web3 from '../assets/home/services/web-3.webp';
+import web4 from '../assets/home/services/web-4.webp';
+import web5 from '../assets/home/services/web-5.webp';
+import brand1 from '../assets/home/services/brand-1.webp';
+import brand2 from '../assets/home/services/brand-2.webp';
+import brand3 from '../assets/home/services/brand-3.webp';
+import brand4 from '../assets/home/services/brand-4.webp';
+import brand5 from '../assets/home/services/brand-5.webp';
+import design1 from '../assets/home/services/design-1.webp';
+import design2 from '../assets/home/services/design-2.webp';
+import design3 from '../assets/home/services/design-3.webp';
+import design4 from '../assets/home/services/design-4.webp';
+import design5 from '../assets/home/services/design-5.webp';
+
+// SiteLaunch card art
+import prismArt from '../assets/home/sitelaunch/flare-1.png';
+import rocketArt from '../assets/home/sitelaunch/rocket-1.png';
+import orbitArt from '../assets/home/sitelaunch/orbit-1.png';
+
+// Client logos
+import honeywell from '../assets/home/clients/honeywell-logo.png';
+import gsk from '../assets/home/clients/gsk-logo.png';
+import maryKay from '../assets/home/clients/mary-kay-logo-solid.png';
+import mastercard from '../assets/home/clients/mastercard-logo.png';
+import tata from '../assets/home/clients/tat-horizontal.png';
+import volvo from '../assets/home/clients/volvo-logo-solid.png';
+import wrigley from '../assets/home/clients/wrigley-logo-solid.png';
+import zurich from '../assets/home/clients/zurich-logo.png';
+import infosys from '../assets/home/clients/infosys-logo.png';
+import nissan from '../assets/home/clients/nissan-logo-solid.png';
+import zippo from '../assets/home/clients/zippo-logo.png';
+import bankOfAmerica from '../assets/home/clients/bank-of-america-logo.png';
+
+const services = [
+  {
+    icon: 'globe',
+    title: 'We launch websites',
+    lead: 'No two sites should be the same because no two businesses are.',
+    text: 'Our SiteLaunch system has three unique entry points, each tailored to unique business goals and growth stages.',
+    href: '/services/website-services/',
+    cta: 'Website services',
+    tags: ['User journeys', 'Design systems', 'Content strategy', 'Custom dev', 'Integrations'],
+    images: [
+      { src: web1, alt: 'Laptop showing the Genpact GROW18 event website' },
+      { src: web2, alt: 'Turntide website article pages on two phones' },
+      { src: web3, alt: 'Huckleberry Holler plant page for the Mexican sunflower' },
+      { src: web4, alt: 'Bank of America Public Sector app on a tablet beside a laptop' },
+      { src: web5, alt: 'Turntide website homepage featuring a motor product render' },
+    ],
+  },
+  {
+    icon: 'flag',
+    title: 'We shape brands',
+    lead: 'Brand identities built to last through clear, scalable creative foundations.',
+    text: 'From strategy and copy to logo systems and style guides, we create the foundations that help brands grow with confidence.',
+    href: '/services/branding-services/',
+    cta: 'Branding services',
+    tags: ['Brand strategy', 'Visual identity', 'Guidelines', 'Creative copywriting'],
+    images: [
+      { src: brand1, alt: 'Laptop showing a bold "Disrupt or be disrupted" brand graphic' },
+      { src: brand2, alt: 'ATL Freight website on a laptop with the headline "Built on service, backed by integrity"' },
+      { src: brand3, alt: 'Brand color palette swatches named Sky, Sea, Fern, Ash, Smoke, and Fog' },
+      { src: brand4, alt: 'Hand-drawn logo sketches of an infinity loop on graph paper' },
+      { src: brand5, alt: 'Genpact GROW18 event mural in a convention center' },
+    ],
+  },
+  {
+    icon: 'pen-tool',
+    title: 'We design everything',
+    lead: 'Design systems that ensure your brand consistently shines across all platforms.',
+    text: 'From pitch decks to packaging, we deliver quality design consistently across every single one of your channels.',
+    href: '/services/design-services/',
+    cta: 'Design services',
+    tags: ['Digital marketing', 'Print collateral', 'Packaging', 'Presentations', 'Sales enablement'],
+    images: [
+      { src: design1, alt: 'Construction worker using his phone at a glowing green Bell Bird ATM' },
+      { src: design2, alt: 'Man presenting on a large TCS Business 4.0 interactive wall' },
+      { src: design3, alt: '3D render of Turntide motors and controllers on white pedestals' },
+      { src: design4, alt: 'Event graphic for speaker Steve Wozniak, co-founder of Apple' },
+      { src: design5, alt: 'MODL branded hoodie with an orange line pattern' },
+    ],
+  },
+] as const;
+
+const packages = [
+  { name: 'Prism', href: '/prism-sitelaunch/', tagline: 'For brands ready to make an unforgettable entrance.', art: prismArt, tone: 'prism' },
+  { name: 'Rocket', href: '/rocket-sitelaunch/', tagline: 'For growth-focused brands ready to fuel conversions.', art: rocketArt, tone: 'rocket' },
+  { name: 'Orbit', href: '/orbit-sitelaunch/', tagline: 'For scaling companies needing clarity, structure, and alignment.', art: orbitArt, tone: 'orbit' },
+];
+
+const engagements = [
+  {
+    title: 'Fixed projects',
+    points: ['Clear scope', 'Defined timelines', 'Focused engagement'],
+    text: 'Straightforward path from idea to launch through clearly defined scopes.',
+    href: '/contact-us/',
+    cta: "Let's talk",
+  },
+  {
+    title: 'Fractional creative',
+    featured: true,
+    points: ['Priority access', 'Multiple work streams', 'Sliding scale cost'],
+    text: 'Designed to reduce expenses for teams in need of regular creative support.',
+    href: '/fractional-creative/',
+    cta: 'Learn more',
+  },
+  {
+    title: 'Custom fit',
+    points: ['Creative ops guidance', 'Adapted to your systems', 'Built around your org'],
+    text: 'Co-create the right structure for your unique goals, constraints, and vision.',
+    href: '/contact-us/',
+    cta: "Let's talk",
+  },
+];
+
+const clients = [
+  { src: honeywell, name: 'Honeywell' },
+  { src: gsk, name: 'GSK' },
+  { src: maryKay, name: 'Mary Kay' },
+  { src: mastercard, name: 'Mastercard' },
+  { src: tata, name: 'Tata' },
+  { src: volvo, name: 'Volvo' },
+  { src: wrigley, name: 'Wrigley' },
+  { src: zurich, name: 'Zurich' },
+  { src: infosys, name: 'Infosys' },
+  { src: nissan, name: 'Nissan' },
+  { src: zippo, name: 'Zippo' },
+  { src: bankOfAmerica, name: 'Bank of America' },
+];
+
+const trustpilot = 'https://www.trustpilot.com/review/foundingcreative.com';
+const testimonials = [
+  {
+    quote:
+      'Founding Creative is truly a wonderful partner who combines great creative along with a strategic team. Josh, Tyler, and the team not only are a creative powerhouse, but also think about the project and needs at hand as well as how the creative project has legs outside of the immediate need. If you need a dynamic partner who will bring great creative and can truly get to know you and your brand look no further than Founding Creative!',
+    name: 'Diana Hustedt',
+    role: 'Senior Event Producer, MGME',
+  },
+  {
+    quote: 'Very responsive, amazing skills, and super easy to work with! Highly recommended.',
+    name: 'Dean Davasia',
+    role: 'CTO, TEN Leasing',
+  },
+  { quote: 'Truly incredible minds and humans here.', name: 'Justin Guld', role: 'Co-Founder, MODL' },
+  {
+    quote:
+      "I've worked on two brand identity projects now with Founding Creative with technology startups. Josh and Tyler are creative, collaborative, honest, professional, and fast, and their output is exceptional. I would absolutely hire them again in a heartbeat.",
+    name: 'Eric Meyerson',
+    role: 'Fractional CMO, Turntide / Mashgin / Coach Bank',
+  },
+  {
+    quote: 'Their expertise and creativity brought our vision to life, resulting in a stunning website.',
+    name: 'Brooke McPoyle',
+    role: 'Founder, Musical Breathwork',
+  },
+  {
+    quote:
+      'Working with Founding showed us what we had been missing in previous rebrands. [...] The end result was better than we imagined.',
+    name: 'DeAnna Miller',
+    role: 'Managing Director of Experiential Marketing, 82 South',
+  },
+];
+
+const values = [
+  { title: 'Clarity over chaos', text: 'Solutions rooted in structure and strategy' },
+  { title: 'Relationships first', text: 'We work with people, not logos' },
+  { title: 'Creative systems', text: 'Always building together to drive outcomes' },
+  { title: 'Founding energy', text: 'Every project is a chance for something big' },
+];
+
+const studies = (await getCaseStudies()).slice(0, 4);
+
+const description =
+  'Founding Creative is a brand and web creative agency for brands of all sizes. Brand strategy, website design, and design systems that drive real growth.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Founding Creative',
+    url: Astro.site?.href,
+    publisher: { '@id': `${Astro.site}#organization` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: 'Founding Creative',
+    url: Astro.site?.href,
+    description,
+    parentOrganization: { '@id': `${Astro.site}#organization` },
+    areaServed: { '@type': 'Country', name: 'United States' },
+    address: [
+      { '@type': 'PostalAddress', addressLocality: 'Denver', addressRegion: 'CO', addressCountry: 'US' },
+      { '@type': 'PostalAddress', addressLocality: 'Chattanooga', addressRegion: 'TN', addressCountry: 'US' },
+    ],
+    knowsAbout: ['Brand strategy', 'Website design', 'Design systems', 'Event design', 'Animation'],
+  },
+];
 ---
 
 <BaseLayout
   title="Founding Creative - Brand & Web Creative Marketing Agency"
-  description="US based marketing agency specializing in web design and brand strategy. Modern innovative solutions to elevate your brand."
+  description={description}
   ogTitle="Founding Creative"
+  ogImage={shareImage}
+  ogImageAlt="Turntide website designed by Founding Creative, shown on an iMac"
+  jsonLd={jsonLd}
 >
-  <section class="container placeholder">
-    <h1>Creative foundations for brands of all sizes</h1>
-    <p>Placeholder homepage. The full page gets ported from WordPress next.</p>
+  <!-- Hero -->
+  <section class="hero holo-bg">
+    <Image class="hero__wave" src={wave} alt="" loading="eager" />
+    <div class="container hero__content">
+      <p class="eyebrow">Brand &amp; Web Creative Marketing Agency</p>
+      <h1 class="hero__title holo-text">Creative foundations for brands of all sizes</h1>
+      <p class="hero__lead">
+        <a href="/services/website-services/">Web</a>, <a href="/services/branding-services/">brand</a>,{' and '}
+        <a href="/services/design-services/">design</a> systems that drive better outcomes and stronger growth for businesses
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="/case-studies/">See our work <Icon name="arrow-up-right" size={16} /></a>
+        <a class="button" href="#services">Our services <Icon name="arrow-up-right" size={16} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="container section" id="services" aria-labelledby="services-heading">
+    <div class="section__intro">
+      <p class="eyebrow">Our <em>services</em></p>
+      <h2 id="services-heading">What we do</h2>
+      <p class="section__lead">Our services fuse strategy, structure, and design to deliver impactful business results.</p>
+    </div>
+
+    {
+      services.map((service, i) => (
+        <article class:list={['service', { 'service--reverse': i % 2 === 1 }]} aria-labelledby={`service-${i}`}>
+          <div class="service__text">
+            <span class="service__icon">
+              <Icon name={service.icon} size={24} />
+            </span>
+            <h3 id={`service-${i}`}>{service.title}</h3>
+            <p class="service__lead">{service.lead}</p>
+            <p>{service.text}</p>
+            <a class="button" href={service.href}>
+              {service.cta} <Icon name="arrow-up-right" size={16} />
+            </a>
+          </div>
+          <div class="service__media">
+            <ul class="tags" aria-label={`${service.title}: what's included`}>
+              {service.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+            <ul class="service__gallery" aria-label={`${service.title}: example work`}>
+              {service.images.map((image) => (
+                <li>
+                  <Image src={image.src} alt={image.alt} widths={[300, 600]} sizes="280px" />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <!-- SiteLaunch -->
+  <section class="sitelaunch" aria-labelledby="sitelaunch-heading">
+    <div class="container section">
+      <div class="section__intro section__intro--center">
+        <p class="eyebrow">We build <em>websites</em></p>
+        <h2 id="sitelaunch-heading">Not every brand needs the same website</h2>
+        <p class="section__lead">
+          SiteLaunch™ breaks the one-size-fits-all web model with three unique packages designed for your unique needs
+        </p>
+      </div>
+      <ul class="packages">
+        {
+          packages.map((pkg) => (
+            <li class:list={['package', `package--${pkg.tone}`]}>
+              <Image class="package__art" src={pkg.art} alt="" widths={[360, 720]} sizes="360px" />
+              <h3 class="package__name">
+                <a href={pkg.href}>
+                  {pkg.name}
+                  <span>SiteLaunch</span>
+                </a>
+              </h3>
+              <p>{pkg.tagline}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- How we work -->
+  <section class="container section" aria-labelledby="engagement-heading">
+    <div class="section__intro">
+      <p class="eyebrow">How we <em>work</em></p>
+      <h2 id="engagement-heading">Built to fit your process</h2>
+      <p class="section__lead">
+        Every team works differently. Which is why we designed our engagement models to match. Whether you need a scoped
+        project, ongoing support, or something totally unique, we'll meet you where you are.
+      </p>
+      <a class="button" href="/contact-us/">Find the right fit <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+    <ul class="engagements">
+      {
+        engagements.map((model) => (
+          <li class:list={['engagement', { 'engagement--featured': model.featured }]}>
+            {model.featured && <p class="engagement__badge">Most popular</p>}
+            <h3>{model.title}</h3>
+            <ul class="engagement__points">
+              {model.points.map((point) => (
+                <li>
+                  <Icon name="check" size={16} />
+                  {point}
+                </li>
+              ))}
+            </ul>
+            <p>{model.text}</p>
+            <a class:list={['button', { 'button--primary': model.featured }]} href={model.href}>
+              {model.cta}
+              <span class="visually-hidden"> about {model.title.toLowerCase()}</span>
+              <Icon name="arrow-up-right" size={16} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="container section" aria-labelledby="testimonials-heading">
+    <div class="section__intro section__intro--center">
+      <p class="eyebrow">Partner <em>testimonials</em></p>
+      <h2 id="testimonials-heading">Proof is better than a pitch</h2>
+      <p class="section__lead">See what it's like to work with a creative team that builds for the long run.</p>
+    </div>
+    <ul class="clients" aria-label="Brands we've worked with">
+      {
+        clients.map((client) => (
+          <li>
+            <Image src={client.src} alt={`${client.name} logo`} height={48} />
+          </li>
+        ))
+      }
+    </ul>
+    <ul class="testimonials">
+      {
+        testimonials.map((t) => (
+          <li>
+            <figure class="testimonial">
+              <blockquote>
+                <p>“{t.quote}”</p>
+              </blockquote>
+              <figcaption>
+                <strong>{t.name}</strong>
+                <span>{t.role}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="section__more">
+      <a class="button" href={trustpilot}>View all testimonials on Trustpilot <Icon name="arrow-up-right" size={16} /></a>
+    </p>
+  </section>
+
+  <!-- Our work -->
+  <section class="container section" aria-labelledby="work-heading">
+    <div class="section__intro section__intro--split">
+      <div>
+        <p class="eyebrow">Our <em>work</em></p>
+        <h2 id="work-heading">Creative foundations worth showing off</h2>
+        <p class="section__lead">
+          A look inside the projects where strategy, structure, and design all came together to drive meaningful business
+          outcomes.
+        </p>
+      </div>
+      <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+    <div class="work-grid">
+      {studies.map((study) => <CaseStudyCard study={study} headingLevel={3} />)}
+    </div>
+  </section>
+
+  <!-- Who we are -->
+  <section class="container section about" aria-labelledby="about-heading">
+    <div>
+      <p class="eyebrow">Who <em>we are</em></p>
+      <h2 id="about-heading">Built by creatives. Backed by strategy.</h2>
+      <p class="section__lead">
+        With too many businesses stuck between bloated agencies and scattered freelancers, we built the creative agency we
+        always wished existed.
+      </p>
+      <a class="button" href="/about-us/">Meet the team <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+    <dl class="values">
+      {
+        values.map((value) => (
+          <div>
+            <dt>{value.title}</dt>
+            <dd>{value.text}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <!-- Closing call to action -->
+  <section class="cta holo-bg" aria-labelledby="cta-heading">
+    <div class="container cta__content">
+      <p class="eyebrow">We launch <em>websites</em></p>
+      <h2 id="cta-heading">Your custom website starts here.</h2>
+      <p class="section__lead">Tailored web packages designed to match your goals.</p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="/services/website-services/">
+          Find the right fit <Icon name="arrow-up-right" size={16} />
+        </a>
+        <a class="button" href={letsTalkHref}>Let's talk</a>
+      </div>
+    </div>
   </section>
 </BaseLayout>
 
 <style>
-  .placeholder {
+  .section {
+    padding-block: var(--space-2xl);
+  }
+
+  .section__intro {
+    max-width: 44rem;
+    margin-bottom: var(--space-xl);
+  }
+
+  .section__intro--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .section__intro--split {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-md);
+    max-width: none;
+  }
+
+  .section__intro--split > div {
+    max-width: 44rem;
+  }
+
+  .section__lead {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  .section__more {
+    margin-top: var(--space-xl);
+    text-align: center;
+  }
+
+  /* Hero */
+  .hero {
+    padding-block: var(--space-3xl) var(--space-2xl);
+  }
+
+  .hero__wave {
+    position: absolute;
+    z-index: -1;
+    inset: auto 0 0 auto;
+    width: 70%;
+    max-width: 60rem;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .hero__content {
+    position: relative;
+  }
+
+  .hero__title {
+    max-width: 14ch;
+  }
+
+  .hero__lead {
+    max-width: 30rem;
+    font-size: var(--font-size-lg);
+  }
+
+  .hero__lead a {
+    text-decoration: none;
+  }
+
+  .hero__lead a:nth-of-type(1) {
+    color: var(--color-cyan);
+  }
+
+  .hero__lead a:nth-of-type(2) {
+    color: var(--color-holo-mint);
+  }
+
+  .hero__lead a:nth-of-type(3) {
+    color: var(--color-lavender-light);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+
+  /* Services */
+  .service {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--space-xl);
+    align-items: center;
+    padding-block: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .service--reverse .service__text {
+    order: 2;
+  }
+
+  .service__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+    color: var(--color-mint);
+  }
+
+  .service h3 {
+    font-size: var(--font-size-h4);
+  }
+
+  .service__lead {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .service__text p:not(.service__lead) {
+    color: var(--color-text-muted);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    list-style: none;
+  }
+
+  .tags li {
+    padding: 2px var(--space-xs);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  /* Horizontal scroll strip; swipe or scroll, no script needed */
+  .service__gallery {
+    display: flex;
+    gap: var(--space-sm);
+    margin: 0;
+    padding: 0 0 var(--space-xs);
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .service__gallery li {
+    flex: 0 0 min(17.5rem, 70%);
+    scroll-snap-align: start;
+  }
+
+  .service__gallery img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+
+  /* SiteLaunch */
+  .sitelaunch {
+    background: radial-gradient(ellipse at 50% 0%, var(--color-plum), var(--color-black) 60%);
+  }
+
+  .packages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .package {
+    position: relative;
+    display: grid;
+    align-content: end;
+    gap: var(--space-2xs);
+    min-height: 22rem;
+    padding: var(--space-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    isolation: isolate;
+    transition: border-color var(--transition-fast);
+  }
+
+  .package:hover,
+  .package:focus-within {
+    border-color: var(--color-mint);
+  }
+
+  .package--prism {
+    background-color: var(--color-navy);
+  }
+
+  .package--rocket {
+    background-color: var(--color-teal);
+  }
+
+  .package--orbit {
+    background-color: var(--color-plum);
+  }
+
+  /* Keep the text readable over bright artwork */
+  .package::before {
+    content: '';
+    position: absolute;
+    inset: 40% 0 0;
+    z-index: -1;
+    background: linear-gradient(transparent, rgb(0 0 0 / 0.75));
+  }
+
+  .package__art {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.85;
+  }
+
+  .package__name {
+    margin: 0;
+    font-size: var(--font-size-h3);
+  }
+
+  .package__name a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .package__name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .package__name span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .package p {
+    margin: 0;
+  }
+
+  /* How we work */
+  .engagements {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .engagement {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background-color: var(--color-surface);
+  }
+
+  .engagement--featured {
+    border-color: var(--color-mint);
+  }
+
+  .engagement h3 {
+    margin: 0;
+    font-size: var(--font-size-h5);
+  }
+
+  .engagement__badge {
+    margin: 0;
+    padding: 2px var(--space-xs);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-mint);
+    color: var(--color-black);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .engagement__points {
+    display: grid;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .engagement__points li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .engagement__points .icon {
+    color: var(--color-mint);
+  }
+
+  .engagement > p {
+    flex: 1;
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  /* Testimonials */
+  .clients {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-lg) var(--space-xl);
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    list-style: none;
+  }
+
+  .clients img {
+    width: auto;
+    height: 2rem;
+    max-width: 7.5rem;
+    object-fit: contain;
+    filter: brightness(1.7);
+  }
+
+  .testimonials {
+    columns: 3 18rem;
+    column-gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .testimonials li {
+    break-inside: avoid;
+    margin-bottom: var(--space-md);
+  }
+
+  .testimonial {
+    margin: 0;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+  }
+
+  .testimonial blockquote {
+    margin: 0 0 var(--space-md);
+    font-size: var(--font-size-base);
+  }
+
+  .testimonial figcaption {
+    display: grid;
+    font-size: var(--font-size-sm);
+  }
+
+  .testimonial figcaption span {
+    color: var(--color-text-muted);
+  }
+
+  /* Our work */
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-md);
+  }
+
+  /* Who we are */
+  .about {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .values {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+  }
+
+  .values div {
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .values dt {
+    color: var(--color-mint);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h6);
+  }
+
+  .values dd {
+    margin: var(--space-3xs) 0 0;
+    color: var(--color-text-muted);
+  }
+
+  /* Closing CTA */
+  .cta {
     padding-block: var(--space-3xl);
+    text-align: center;
+  }
+
+  .cta__content {
+    position: relative;
+  }
+
+  .cta .hero__actions {
+    justify-content: center;
+  }
+
+  @media (max-width: 977px) {
+    .service {
+      grid-template-columns: 1fr;
+    }
+
+    .service--reverse .service__text {
+      order: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service__gallery {
+      scroll-behavior: auto;
+    }
   }
 </style>

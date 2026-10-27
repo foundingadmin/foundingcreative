@@ -37,6 +37,7 @@
   --color-lavender: #c6a2ff;
   --color-lavender-light: #dec9ff;
   --color-orchid: #e2a8ff; /* from the live site, used for form errors */
+  --color-magenta: #ff7ad9; /* end of the holo glow cycle */
 
   /* Color: SiteLaunch card anchors */
   --color-navy: #001441; /* Prism */
@@ -278,4 +279,102 @@ button {
 
 .skip-link:focus {
   transform: none;
+}
+
+/* Section eyebrow: the small label above a section heading */
+.eyebrow {
+  margin: 0 0 var(--space-xs);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.eyebrow em {
+  color: var(--color-mint);
+  font-style: normal;
+}
+
+/* Buttons (links styled as buttons) */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.button:hover {
+  border-color: var(--color-mint);
+  color: var(--color-text);
+}
+
+/* Primary: the holographic pill */
+.button--primary {
+  border-color: transparent;
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-holo-mint), var(--color-lavender-light));
+  color: var(--color-black);
+}
+
+.button--primary:hover {
+  border-color: transparent;
+  background: var(--color-mint);
+  color: var(--color-black);
+}
+
+/* Gradient text for marquee headings */
+.holo-text {
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-holo-mint), var(--color-lavender-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Holographic signature background (design system): slow conic gradient
+ * under a black veil. For marquee sections only. */
+.holo-bg {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.holo-bg::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  z-index: -2;
+  background: conic-gradient(
+    from 0deg,
+    var(--color-holo-cyan),
+    var(--color-holo-mint),
+    var(--color-lavender),
+    var(--color-magenta),
+    var(--color-holo-cyan)
+  );
+  filter: blur(80px);
+  animation: holo-spin 30s linear infinite;
+}
+
+.holo-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse at 30% 20%, rgb(0 0 0 / 0.55), rgb(0 0 0 / 0.85) 70%);
+}
+
+@keyframes holo-spin {
+  to {
+    transform: rotate(1turn);
+  }
 }
