@@ -1,0 +1,75 @@
+---
+// Placeholder header. The full nav (services dropdown, SiteLaunch packages)
+// gets ported from the WordPress header later. Slugs match the live site.
+const links = [
+  { href: '/about-us/', label: 'About' },
+  { href: '/fractional-creative/', label: 'Fractional Creative' },
+  { href: '/case-studies/', label: 'Case Studies' },
+  { href: '/blog/', label: 'Field Notes' },
+  { href: '/contact-us/', label: 'Contact' },
+];
+
+const current = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__logo" href="/">Founding Creative</a>
+    <nav aria-label="Main">
+      <ul class="site-header__nav">
+        {
+          links.map(({ href, label }) => (
+            <li>
+              <a href={href} aria-current={current === href ? 'page' : undefined}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-block: var(--space-sm);
+  }
+
+  .site-header__logo {
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: var(--font-size-lg);
+    text-decoration: none;
+  }
+
+  .site-header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-header__nav a {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+  }
+
+  .site-header__nav a:hover,
+  .site-header__nav a[aria-current='page'] {
+    color: var(--color-link);
+  }
+</style>

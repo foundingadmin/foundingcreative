@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+  # Vercel's GitHub integration reports each deployment back to GitHub.
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and test (local)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-local
+          path: playwright-report/
+          retention-days: 14
+
+  test-preview:
+    name: Test Vercel preview
+    if: >-
+      github.event_name == 'deployment_status' &&
+      github.event.deployment_status.state == 'success' &&
+      contains(github.event.deployment.environment, 'Preview')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+          # Only needed if Vercel Deployment Protection is on for previews.
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-preview
+          path: playwright-report/
+          retention-days: 14
