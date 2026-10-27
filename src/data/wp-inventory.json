@@ -228,7 +228,7 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "drop",
       "ported": false
     },
     {
@@ -413,8 +413,9 @@
       "type": "page",
       "inSitemap": false,
       "foundOn": "/marketing-agency-creative-design-studio-or-something-else/",
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/about-us/"
     },
     {
       "path": "/author/jamiel/",
@@ -470,8 +471,9 @@
       "type": "page",
       "inSitemap": false,
       "foundOn": "/the-missing-middle-ground-why-your-ai-needs-a-human-driven-creative-foundation/",
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/about-us/"
     },
     {
       "path": "/author/titusfoundingcreative-com/",
@@ -527,8 +529,9 @@
       "type": "page",
       "inSitemap": false,
       "foundOn": "/3d-product-renders-to-stand-out-in-beauty-industry-marketing-jobs/",
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/about-us/"
     },
     {
       "path": "/blog",
@@ -712,7 +715,7 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "port",
       "ported": false
     },
     {
@@ -771,7 +774,7 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "port",
       "ported": false
     },
     {
@@ -1520,8 +1523,9 @@
       "type": "page",
       "inSitemap": false,
       "foundOn": "/the-missing-middle-ground-why-your-ai-needs-a-human-driven-creative-foundation/",
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/blog/"
     },
     {
       "path": "/category/design/",
@@ -1571,8 +1575,9 @@
       "type": "page",
       "inSitemap": false,
       "foundOn": "/blog/",
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/blog/"
     },
     {
       "path": "/category/strategy/",
@@ -1622,8 +1627,9 @@
       "type": "page",
       "inSitemap": false,
       "foundOn": "/blog/",
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/blog/"
     },
     {
       "path": "/category/web/",
@@ -1673,8 +1679,9 @@
       "type": "page",
       "inSitemap": false,
       "foundOn": "/5-website-truths-for-marketers/",
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/blog/"
     },
     {
       "path": "/category/web/prism/",
@@ -1724,8 +1731,9 @@
       "type": "page",
       "inSitemap": false,
       "foundOn": "/3d-product-renders-to-stand-out-in-beauty-industry-marketing-jobs/",
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/blog/"
     },
     {
       "path": "/client-portal/",
@@ -1780,7 +1788,7 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "port",
       "ported": false
     },
     {
@@ -1856,7 +1864,7 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "drop",
       "ported": false
     },
     {
@@ -2559,7 +2567,7 @@
       "type": "legal",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "port",
       "ported": false
     },
     {
@@ -3052,7 +3060,7 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "drop",
       "ported": false
     },
     {
@@ -3107,7 +3115,7 @@
       "type": "service",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "port",
       "ported": false
     },
     {
@@ -3220,7 +3228,7 @@
       "type": "service",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "port",
       "ported": false
     },
     {
@@ -3509,7 +3517,7 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "port",
       "ported": false
     },
     {
@@ -3560,8 +3568,9 @@
       "type": "testimonial",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/"
     },
     {
       "path": "/testimonial/brooke-mcpoyle/",
@@ -3611,8 +3620,9 @@
       "type": "testimonial",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/"
     },
     {
       "path": "/testimonial/john-keen/",
@@ -3662,8 +3672,9 @@
       "type": "testimonial",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/"
     },
     {
       "path": "/testimonial/jon-ciotti/",
@@ -3713,8 +3724,9 @@
       "type": "testimonial",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/"
     },
     {
       "path": "/testimonial/paige-isovitsch/",
@@ -3764,8 +3776,9 @@
       "type": "testimonial",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
-      "ported": false
+      "port": "drop",
+      "ported": false,
+      "redirectTo": "/"
     },
     {
       "path": "/the-missing-middle-ground-why-your-ai-needs-a-human-driven-creative-foundation/",
@@ -3884,7 +3897,7 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "review",
+      "port": "port",
       "ported": false
     },
     {

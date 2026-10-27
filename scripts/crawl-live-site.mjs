@@ -4,8 +4,14 @@
 // to catch pages the sitemap leaves out. Pages load with JavaScript off so
 // we record the server-rendered head, which is what crawlers see.
 //
-// Usage: node scripts/crawl-live-site.mjs
-// Re-running keeps each entry's `port` and `ported` values.
+// Usage: npm run crawl
+// Re-running keeps each entry's hand-set `port`, `redirectTo`, and `ported`.
+//
+// `port` values:
+//   port      rebuild the page at the same URL
+//   redirect  already redirects on WordPress; carry the redirect over
+//   drop      not rebuilt; 301 to `redirectTo` if set, otherwise a 404
+//   review    not decided yet
 
 import { chromium } from '@playwright/test';
 import { readFile, writeFile } from 'node:fs/promises';
@@ -188,7 +194,12 @@ async function main() {
         inSitemap: fromSitemap.has(r.path),
         foundOn: fromSitemap.has(r.path) ? null : (foundOn[r.path] ?? 'seed'),
       };
-      return { ...entry, port: kept.port ?? defaultPort(entry), ported: kept.ported ?? false };
+      return {
+        ...entry,
+        port: kept.port ?? defaultPort(entry),
+        ...(kept.redirectTo && { redirectTo: kept.redirectTo }),
+        ported: kept.ported ?? false,
+      };
     })
     .sort((a, b) => a.path.localeCompare(b.path));
 
