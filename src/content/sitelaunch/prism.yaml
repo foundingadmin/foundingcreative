@@ -1,0 +1,75 @@
+name: Prism
+order: 1
+seoTitle: "Prism SiteLaunch: High-Impact Website Design | Founding Creative"
+description: Elevate your brand with a high-impact website built for visual wow, immersive motion, and polished identity.
+ogTitle: Prism SiteLaunch
+ogDescription: Elevate your brand with a high-impact website built for visual wow, immersive motion, and polished identity.
+heroImage: ../../assets/sitelaunch/prism-hero.webp
+shareImage: ../../assets/sitelaunch/prism-share.webp
+shareImageAlt: "Prism SiteLaunch: we launch sites that captivate your users"
+pillars: [Premium Design, Immersive Interaction, Seamless Motion]
+title: Push your brand into the spotlight
+subtitle: Stunning high-impact websites designed to send up a flare that just can't be ignored.
+audience:
+  heading: Websites for brands ready to shine
+  lead: Attention is currency. Perception is power.
+  points:
+    - Founders looking to impress partners and investors
+    - Design-forward brands who need visual sophistication
+    - CMOs undergoing a rebrand or raising awareness
+    - Agencies, firms, or startups looking for an edge
+    - "Anyone saying, “We've evolved and our site hasn't kept up.”"
+stats:
+  - value: 75%
+    label: of users judge credibility on design
+    source: https://credibility.stanford.edu/
+  - value: 1000+
+    label: components per design system
+  - value: 38%
+    label: of users bounce as a result of bad website design
+    source: https://www.facebook.com/pixelfiremktg/videos/research-shows-that-38-of-people-will-stop-engaging-with-a-site-if-the-layout-or/644134511343683/
+  - value: 100%
+    label: WCAG website compliance built in
+why:
+  heading: First impressions become a strength
+  lead: Your brand has grown, but your website hasn't.
+  text: Prism SiteLaunch is for brands that want to turn heads, build credibility, and own the moment visually. It's more than a redesign. It's a full design system flex.
+features:
+  heading: Next world digital identity
+  text: Prism SiteLaunch is built for brands ready to show up boldly, beautifully, and without apology. Every element, every animation, and every pixel is crafted to project confidence and creativity. This isn't about following trends. It's about building a digital experience that makes people stop, feel something, and remember you.
+  lead: Scroll-stopping experiences make your brand impossible to ignore.
+  items:
+    - title: Complete Digital Design System
+      text: Tailored UI through art direction sets the tone for how your audience perceives your brand from the first click to every scroll.
+    - title: Engaging Interactivity
+      text: Micro-interactions, motion layers, and depth create an immersive experience that keeps users engaged and elevates brand value.
+    - title: On-Brand, On-Purpose
+      text: Every design choice from color systems to iconography is intentionally crafted to align with your voice, story, and market position.
+    - title: Flawless Mobile Expression
+      text: Responsive layouts and mobile-native design ensure your brand looks just as bold and beautiful in the palm of your audience's hand.
+    - title: High-Impact Hero Sections
+      text: Dynamic, above-the-fold moments that instantly inspire confidence and interest, setting the tone before a word is even read.
+    - title: Strategic Motion That Sticks
+      text: Thoughtful animation creates emotional touchpoints without distracting from your message to leave a lasting impression.
+process:
+  heading: Designed to dazzle. Built to resonate.
+  text: Every Prism SiteLaunch project is rooted in clarity, taste, and precision. We don't just build something that looks good. We build something that feels right. From creative direction to pixel-perfection, your site becomes a reflection of the brand you're becoming.
+  lead: More than a launch, this is a visual reintroduction of your brand to the market.
+  steps:
+    - phase: Discovery
+      title: Clarity first, always
+      text: We begin with deep discovery, learning your brand's personality, goals, audiences, and emotional drivers. This phase ensures we're designing not just what you like, but what your future customers will feel.
+    - phase: Design
+      title: Create the scroll-stopping standard
+      text: We craft a high-end visual design system and site architecture tailored to your brand voice and business goals. From art direction to interaction design, this is where we inject the flair that makes your brand unforgettable.
+    - phase: Develop
+      title: Bring design to life flawlessly
+      text: Using clean, performance-optimized code, we transform the vision into a fully responsive site. Mobile, tablet, and desktop are dialed in to perfection. Every scroll, every hover, every transition is engineered for delight.
+    - phase: Launch
+      title: Step into the spotlight
+      text: We go live with intention. From performance testing to fine-tuned QA, we ensure your launch is as smooth as your scroll. Post-launch, we're in your corner to optimize and push updates as needed.
+closing:
+  heading: The right website is strategic confidence
+  text: Prism SiteLaunch builds trust, shapes perception, and drives opportunity. The polish of your digital experience tells the world what kind of business you are, and what kind of business you're becoming.
+  tagline: No templates. More attention.
+ctaHeading: Ready to light up your market?

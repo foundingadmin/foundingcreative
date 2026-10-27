@@ -52,3 +52,7 @@ export const legalLinks: NavLink[] = [
 export const letsTalkHref = '/coffee/';
 export const bookMeetingHref = 'https://bit.ly/chatwithfounding';
 export const linkedInHref = 'https://www.linkedin.com/company/founding-creative/';
+
+// Discovery-call booking page linked from the SiteLaunch package pages.
+export const siteLaunchBookingHref =
+  'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ05BDuPiNgyfpK6HRFzchDUrBoX2SjOj_dGFp47_xWtYoovrxOv1kLTSdDIoXCudPLii9WVIFpX';

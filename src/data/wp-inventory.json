@@ -4245,7 +4245,12 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Orbit SiteLaunch: Scalable Team Websites | Founding Creative",
+        "description": "Unify your brand, teams, and content under one modular, scalable website built for growth and alignment.",
+        "og:description": "Unify your brand, teams, and content under one modular, scalable website built for growth and alignment."
+      },
+      "ported": true
     },
     {
       "path": "/paying-a-front-end-web-developer-salary-doesnt-cover-branding/",
@@ -4430,7 +4435,12 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Prism SiteLaunch: High-Impact Website Design | Founding Creative",
+        "description": "Elevate your brand with a high-impact website built for visual wow, immersive motion, and polished identity.",
+        "og:description": "Elevate your brand with a high-impact website built for visual wow, immersive motion, and polished identity."
+      },
+      "ported": true
     },
     {
       "path": "/privacy-statement-eu/",
@@ -4762,7 +4772,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Rocket SiteLaunch: Conversion-Focused Websites | Founding Creative",
+        "description": "Turn traffic into leads with a website engineered for speed, conversion, and integrated marketing workflows.",
+        "og:description": "Turn traffic into leads with a website engineered for speed, conversion, and integrated marketing workflows.",
+        "h1": "Designed to sell. Built to convert."
+      },
+      "ported": true
     },
     {
       "path": "/sample-page/",

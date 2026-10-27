@@ -1,0 +1,75 @@
+name: Rocket
+order: 2
+seoTitle: "Rocket SiteLaunch: Conversion-Focused Websites | Founding Creative"
+description: Turn traffic into leads with a website engineered for speed, conversion, and integrated marketing workflows.
+ogTitle: Rocket SiteLaunch
+ogDescription: Turn traffic into leads with a website engineered for speed, conversion, and integrated marketing workflows.
+heroImage: ../../assets/sitelaunch/rocket-hero.webp
+shareImage: ../../assets/sitelaunch/rocket-share.webp
+shareImageAlt: "Rocket SiteLaunch: we launch sites that convert your visitors"
+pillars: [Conversion UX, Marketing Integrations, Analytics Tracking]
+title: Designed to sell. Built to convert.
+subtitle: Rocket visitors through your funnel with a website engineered for speed and conversion.
+audience:
+  heading: Websites built for number chasers
+  lead: Revenue is religion. Metrics are gospel.
+  points:
+    - SaaS companies and B2B brands with inbound traffic
+    - Sales teams frustrated by low-quality leads
+    - Growth-stage founders who need their site to sell
+    - Marketing leaders with pipeline goals and no time to waste
+    - "Anyone saying, “We need our traffic to start converting.”"
+stats:
+  - value: 60%
+    label: average page speed improvement
+  - value: 5%
+    label: conversion lift with every second saved
+    source: https://medium.com/design-bootcamp/by-making-the-site-1-second-faster-we-could-increase-engagement-by-5-87cd72eac643
+  - value: 400%
+    label: conversion lift could be made through UX design
+    source: https://www.profitoptics.com/blog/the-untapped-potential-of-ux-for-better-business-outcomes
+  - value: 100%
+    label: WCAG website compliance built in
+why:
+  heading: A website that works as hard as you
+  lead: When your website doesn't convert, your bottom line suffers.
+  text: Rocket SiteLaunch is for brands that need more than a digital brochure. You get a fast, focused, performance-built website engineered to funnel leads, support sales, and scale with your marketing strategy.
+features:
+  heading: Move your visitors to act
+  text: Rocket SiteLaunch isn't just about building a website. It's about building a conversion platform that works for you 24/7. Every page, every form, and every interaction is crafted to remove friction, accelerate decision-making, and move visitors closer to action.
+  lead: A revenue-ready tool that fuels your growth from first click.
+  items:
+    - title: Conversion-Optimized UX
+      text: Removes friction from user flows and guides visitors naturally toward key actions, resulting in higher conversion rates.
+    - title: Custom Landing Page Templates
+      text: Allows marketing and sales teams to quickly launch new campaigns without reinventing the wheel, accelerating time-to-market.
+    - title: CRM-Integrated Lead Forms
+      text: Pushes captured leads directly into your CRM, automating lead flow and improving sales team response times.
+    - title: Built-in SEO and Analytics
+      text: Drives organic traffic, improves site visibility, and provides actionable insights for ongoing marketing optimization.
+    - title: Consistent Lead Capture Paths
+      text: Ensures calls-to-action are always visible and accessible, increasing user engagement without relying on disruptive tactics.
+    - title: Fast-Loading Performance
+      text: Reduces bounce rates, increases mobile engagement, and enhances the overall user experience to directly impact lead volume.
+process:
+  heading: Engineered for speed and traction
+  text: Rocket SiteLaunch is built for momentum. From first discovery to final deployment, every phase is structured to perform hard without cutting corners. We collaborate with your sales, marketing, and leadership teams to make sure your site works hard from day one.
+  lead: The end result? A conversion-ready platform ready to support your pipeline.
+  steps:
+    - phase: Discovery
+      title: Map the funnel before we fuel it
+      text: We kick off by digging into your existing site, traffic sources, goals, and conversion points. This strategic audit helps us identify drop-offs, missed opportunities, and where the site should start doing more of the heavy lifting.
+    - phase: Design
+      title: Build the path of least resistance
+      text: We design user flows that guide your visitors toward clear actions like demos, contact forms, downloads, or signups. Clean, conversion-optimized UX and content strategy drive every layout decision.
+    - phase: Develop
+      title: Performance-first, no bloat allowed
+      text: We develop with best practices in SEO, load speed, and responsive behavior. Everything is lightweight, lightning-fast, and fully integrated with your marketing stack. There's no duct-taped forms or half-baked CTAs here.
+    - phase: Launch
+      title: Flip the switch
+      text: We launch fast and clean. Once live, we help you monitor key metrics and make small adjustments so your new site doesn't just look good, but performs.
+closing:
+  heading: The right website helps you sell
+  text: Rocket SiteLaunch bridges the gap between brand and sales. We turn your site into a tool that helps you qualify prospects, build trust, and makes it easy for the right people to take the right action.
+  tagline: Less drop-off. More action.
+ctaHeading: Ready to build more traction?

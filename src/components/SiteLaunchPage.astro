@@ -1,0 +1,550 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from './Icon.astro';
+import { siteLaunchBookingHref } from '../data/navigation';
+
+interface Props {
+  /** Entry in the sitelaunch collection: prism, rocket, or orbit. */
+  id: 'prism' | 'rocket' | 'orbit';
+}
+
+const { id } = Astro.props;
+const entry = await getEntry('sitelaunch', id);
+if (!entry) throw new Error(`Unknown SiteLaunch package: ${id}`);
+const { data } = entry;
+const packageName = `${data.name} SiteLaunch`;
+const path = `/${id}-sitelaunch/`;
+
+const others = (await getCollection('sitelaunch'))
+  .filter((p) => p.id !== id)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const nextSteps = [
+  'Submissions reviewed within 2 to 3 business days',
+  "We'll email you a link to schedule a call",
+  "You'll meet directly with our founders",
+  "Together, we'll map a path forward that converts",
+];
+
+const url = new URL(path, Astro.site).href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${packageName}™`,
+    serviceType: 'Website design and development',
+    description: data.description,
+    url,
+    provider: { '@id': `${Astro.site}#organization` },
+    areaServed: { '@type': 'Country', name: 'United States' },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: `${packageName} features`,
+      itemListElement: data.features.items.map((f) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: f.title, description: f.text },
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Website Services',
+        item: new URL('/services/website-services/', Astro.site).href,
+      },
+      { '@type': 'ListItem', position: 3, name: packageName, item: url },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={data.seoTitle}
+  description={data.description}
+  ogTitle={data.ogTitle}
+  ogDescription={data.ogDescription}
+  ogImage={data.shareImage}
+  ogImageAlt={data.shareImageAlt}
+  jsonLd={jsonLd}
+>
+  <div class:list={['sitelaunch-page', `sitelaunch-page--${id}`]}>
+    <section class="hero" aria-labelledby="sitelaunch-title">
+      <Image class="hero__bg" src={data.heroImage} alt="" widths={[800, 1600]} sizes="100vw" loading="eager" />
+      <div class="container hero__content">
+        <p class="eyebrow"><em>{data.name}</em> SiteLaunch™</p>
+        <ul class="pillars">
+          {data.pillars.map((pillar) => <li>{pillar}</li>)}
+        </ul>
+        <h1 id="sitelaunch-title">{data.title}</h1>
+        <p class="section__lead hero__subtitle">{data.subtitle}</p>
+        <div class="actions">
+          <a class="button button--primary" href="#get-started">Get started <Icon name="arrow-up-right" size={16} /></a>
+          <a class="button" href={siteLaunchBookingHref}>Book a meeting</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section split" aria-labelledby="audience-heading">
+      <div>
+        <p class="eyebrow">Who is <em>{packageName}</em> for?</p>
+        <h2 id="audience-heading">{data.audience.heading}</h2>
+        <p class="section__lead">{data.audience.lead}</p>
+        <ul class="checks">
+          {
+            data.audience.points.map((point) => (
+              <li>
+                <Icon name="check" size={18} />
+                {point}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <dl class="stats">
+        {
+          data.stats.map((stat) => (
+            <div>
+              <dt>{stat.value}</dt>
+              <dd>
+                {stat.label}
+                {stat.source && (
+                  <>
+                    {' '}
+                    (<a href={stat.source}>source</a>)
+                  </>
+                )}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section class="container section why" aria-labelledby="why-heading">
+      <p class="eyebrow">Why <em>{packageName}?</em></p>
+      <h2 id="why-heading">{data.why.heading}</h2>
+      <p class="section__lead">{data.why.lead}</p>
+      <p class="why__text">{data.why.text}</p>
+    </section>
+
+    <section class="container section" aria-labelledby="features-heading">
+      <div class="section__intro">
+        <p class="eyebrow"><em>{packageName}</em> features</p>
+        <h2 id="features-heading">{data.features.heading}</h2>
+        <p class="section__lead">{data.features.text}</p>
+        <p>{data.features.lead}</p>
+      </div>
+      <ol class="features">
+        {
+          data.features.items.map((feature) => (
+            <li>
+              <h3>{feature.title}</h3>
+              <p>{feature.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="container section" aria-labelledby="process-heading">
+      <div class="section__intro">
+        <p class="eyebrow"><em>{packageName}</em> process</p>
+        <h2 id="process-heading">{data.process.heading}</h2>
+        <p class="section__lead">{data.process.text}</p>
+        <p>{data.process.lead}</p>
+      </div>
+      <ol class="steps">
+        {
+          data.process.steps.map((step) => (
+            <li>
+              <p class="steps__phase">{step.phase}</p>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="booking">
+        <div>
+          <h3>Tell us about your needs</h3>
+          <p>Book a free discovery meeting to learn how we can help turn your site into a numbers machine with {packageName}™.</p>
+        </div>
+        <a class="button button--primary" href={siteLaunchBookingHref}>Book a meeting <Icon name="arrow-up-right" size={16} /></a>
+      </div>
+    </section>
+
+    <section class="container section closing" aria-labelledby="closing-heading">
+      <h2 id="closing-heading">{data.closing.heading}</h2>
+      <p class="section__lead">{data.closing.text}</p>
+      <p class="closing__tagline">{data.closing.tagline}</p>
+    </section>
+
+    <section class="cta holo-bg" id="get-started" aria-labelledby="cta-heading">
+      <div class="container cta__content">
+        <p class="eyebrow"><em>{data.name}</em> SiteLaunch™</p>
+        <h2 id="cta-heading">{data.ctaHeading}</h2>
+        <p class="section__lead">
+          Tell us a little about your brand and your goals. We'll review your details and reach out to schedule a discovery
+          call. No pressure, no hard sells. Just a conversation about building a digital presence as bold as your ambitions.
+        </p>
+        <ul class="checks checks--center">
+          {
+            nextSteps.map((step) => (
+              <li>
+                <Icon name="check" size={18} />
+                {step}
+              </li>
+            ))
+          }
+        </ul>
+        <div class="actions actions--center">
+          <a class="button button--primary" href="#get-in-touch">
+            Tell us about your brand <Icon name="arrow-up-right" size={16} />
+          </a>
+          <a class="button" href={siteLaunchBookingHref}>Book a meeting</a>
+        </div>
+        <p class="cta__note">
+          Submitting an inquiry does not guarantee acceptance into the SiteLaunch™ program. All inquiries are reviewed for fit
+          with our services, process, and scheduling availability.
+        </p>
+      </div>
+    </section>
+
+    <section class="container section" aria-labelledby="others-heading">
+      <div class="section__intro section__intro--center">
+        <h2 id="others-heading">Find the right launch for your next move</h2>
+        <p class="section__lead">
+          Not sure if this SiteLaunch™ is the right fit? Explore our other options tailored for different goals, audiences,
+          and growth stages.
+        </p>
+      </div>
+      <ul class="others">
+        {
+          others.map((other) => (
+            <li class:list={['other', `other--${other.id}`]}>
+              <h3>
+                <a href={`/${other.id}-sitelaunch/`}>
+                  {other.data.name} SiteLaunch™
+                </a>
+              </h3>
+              <p>{other.data.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .sitelaunch-page {
+    --tone: var(--color-navy);
+    --accent: var(--color-cyan);
+  }
+
+  .sitelaunch-page--rocket {
+    --tone: var(--color-teal);
+    --accent: var(--color-mint);
+  }
+
+  .sitelaunch-page--orbit {
+    --tone: var(--color-plum);
+    --accent: var(--color-lavender-light);
+  }
+
+  .sitelaunch-page .eyebrow em {
+    color: var(--accent);
+  }
+
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: var(--space-3xl) var(--space-2xl);
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero h1 {
+    max-width: 14ch;
+  }
+
+  .hero__subtitle {
+    max-width: 34rem;
+    color: var(--color-text);
+  }
+
+  .pillars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    list-style: none;
+  }
+
+  .pillars li {
+    padding: 2px var(--space-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background-color: rgb(0 0 0 / 0.4);
+    font-size: var(--font-size-sm);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+
+  .actions--center {
+    justify-content: center;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .checks {
+    display: grid;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .checks li {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .checks .icon {
+    margin-top: 0.3em;
+    color: var(--accent);
+  }
+
+  .checks--center {
+    justify-content: center;
+    width: fit-content;
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    margin: 0;
+  }
+
+  .stats div {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, var(--tone), var(--color-surface) 70%);
+  }
+
+  .stats dt {
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h2);
+    line-height: 1;
+  }
+
+  .stats dd {
+    margin: var(--space-2xs) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .why {
+    max-width: calc(48rem + 2 * var(--container-gutter));
+    text-align: center;
+  }
+
+  .why__text {
+    color: var(--color-text-muted);
+  }
+
+  .features,
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: item;
+  }
+
+  .features li,
+  .steps li {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    counter-increment: item;
+  }
+
+  .features li::before,
+  .steps li::before {
+    content: counter(item, decimal-leading-zero);
+    color: var(--accent);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .features h3,
+  .steps h3 {
+    margin-top: var(--space-2xs);
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .features p,
+  .steps p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .steps .steps__phase {
+    margin-top: var(--space-2xs);
+    color: var(--accent);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .booking {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(120deg, var(--tone), var(--color-surface) 70%);
+  }
+
+  .booking h3 {
+    font-size: var(--font-size-h5);
+  }
+
+  .booking p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .closing {
+    text-align: center;
+  }
+
+  .closing h2 {
+    max-width: 20ch;
+    margin-inline: auto;
+  }
+
+  .closing .section__lead {
+    max-width: 44rem;
+    margin-inline: auto;
+  }
+
+  .closing__tagline {
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h5);
+  }
+
+  .cta {
+    padding-block: var(--space-3xl);
+    text-align: center;
+  }
+
+  .cta__content {
+    position: relative;
+  }
+
+  .cta .section__lead {
+    max-width: 44rem;
+    margin-inline: auto;
+  }
+
+  .cta__note {
+    max-width: 40rem;
+    margin: var(--space-lg) auto 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  .others {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .other {
+    position: relative;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, var(--color-navy), var(--color-surface) 70%);
+    transition: border-color var(--transition-fast);
+  }
+
+  .other--rocket {
+    background: linear-gradient(160deg, var(--color-teal), var(--color-surface) 70%);
+  }
+
+  .other--orbit {
+    background: linear-gradient(160deg, var(--color-plum), var(--color-surface) 70%);
+  }
+
+  .other:hover,
+  .other:focus-within {
+    border-color: var(--color-mint);
+  }
+
+  .other h3 {
+    font-size: var(--font-size-h5);
+  }
+
+  .other a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .other a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .other p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+</style>
