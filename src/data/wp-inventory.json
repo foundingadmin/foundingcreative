@@ -610,7 +610,12 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "About Us: The Team Behind Founding Creative",
+        "description": "Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business.",
+        "og:description": "Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business."
+      },
+      "ported": true
     },
     {
       "path": "/author/foundingcreati/",
@@ -1143,7 +1148,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "BucKit: Notion Brand Portal for Creative Assets | Founding Creative",
+        "description": "BucKit is Founding Creative's Notion-based brand portal: one organized, searchable home for your brand assets, guidelines, projects, and files.",
+        "og:description": "BucKit is Founding Creative's Notion-based brand portal: one organized, searchable home for your brand assets, guidelines, projects, and files.",
+        "h1": "BucKit: a brand new home for your brand"
+      },
+      "ported": true
     },
     {
       "path": "/buyindeck/",
@@ -1234,7 +1245,12 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Free Website Buy-In Playbook | Founding Creative",
+        "description": "Get the free Website Buy-In Playbook: a ready-to-present deck that shows every team why a better website means better business.",
+        "og:description": "Get the free Website Buy-In Playbook: a ready-to-present deck that shows every team why a better website means better business."
+      },
+      "ported": true
     },
     {
       "path": "/case-studies",
@@ -3057,7 +3073,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "description": "Resources for Founding Creative clients. Your project lead can give you access to your BucKit brand portal and project files.",
+        "og:description": "Resources for Founding Creative clients. Your project lead can give you access to your BucKit brand portal and project files."
+      },
+      "ported": true
     },
     {
       "path": "/coffee",
@@ -3238,7 +3258,7 @@
         "description": "Tell us about your brand, website, or creative project. Send Founding Creative a message and we'll get back to you soon.",
         "og:description": "Tell us about your brand, website, or creative project. Send Founding Creative a message and we'll get back to you soon."
       },
-      "ported": false
+      "ported": true
     },
     {
       "path": "/cookie-policy-eu/",
@@ -3650,7 +3670,10 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Fractional Creative Team: In-House Talent, Fractional Cost"
+      },
+      "ported": true
     },
     {
       "path": "/how-a-figma-web-template-could-hurt-your-websites-first-impression/",
@@ -5699,7 +5722,12 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Site Care Plan: Website Hosting, Updates & Security | Founding Creative",
+        "description": "One plan for website hosting, updates, backups, and security. Founding Creative's Site Care Plan keeps your site fast, secure, and up to date.",
+        "og:description": "One plan for website hosting, updates, backups, and security. Founding Creative's Site Care Plan keeps your site fast, secure, and up to date."
+      },
+      "ported": true
     },
     {
       "path": "/testimonial/543/",
@@ -6237,7 +6265,12 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": false
+      "overrides": {
+        "title": "Free Brand Tools: FontSeek & VoiceSeek | Founding Creative",
+        "description": "Free tools from Founding Creative: FontSeek helps you find your brand's typography and VoiceSeek helps you find your brand's voice.",
+        "og:description": "Free tools from Founding Creative: FontSeek helps you find your brand's typography and VoiceSeek helps you find your brand's voice."
+      },
+      "ported": true
     },
     {
       "path": "/what-is-a-founding-designer-and-do-you-actually-need-one/",

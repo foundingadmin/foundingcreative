@@ -1,0 +1,355 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaSection from '../../components/CtaSection.astro';
+import Icon from '../../components/Icon.astro';
+import logo from '../../assets/pages/buckit-logo-white.svg';
+import interfaceArt from '../../assets/pages/buckit-interface-illustration.svg';
+import shareImage from '../../assets/home/services/brand-3.webp';
+
+const collaboration = [
+  {
+    title: 'Your one-stop shop',
+    text: "Access all your creative assets in a unified, secure location. Whether it's branding guidelines, design files, or marketing materials, everything you need is just a click away.",
+  },
+  {
+    title: 'Scalable for growing business',
+    text: 'Our portal scales with you, supporting everything from small projects to extensive campaigns. As you grow, so does your portal, ensuring seamless support all along the way.',
+  },
+  {
+    title: 'Sharing made simple',
+    text: 'Effortlessly share projects and assets, internally with your team or externally with clients and partners. Your brand is streamlined, keeping everyone connected and informed with ease.',
+  },
+  {
+    title: 'Project and asset tracking',
+    text: 'Wave goodbye to endless email threads and scattered files. Our portal brings your projects into focus, offering updates, milestone tracking, and tagging all at a glance.',
+  },
+  {
+    title: 'Customization at the core',
+    text: "Every brand is unique, and so is our portal. Tailored to fit your specific needs, it ensures that your brand's identity shines through in every project.",
+  },
+];
+
+const fileTypes = [
+  {
+    title: 'Document Files',
+    text: 'From strategic planning documents to creative briefs, easily store and share Word, PDF, and other text-based documents.',
+  },
+  {
+    title: 'Visual Assets',
+    text: 'Keep your high-resolution images, brand logos, and design files (JPEG, PNG, SVG) organized and accessible for every team member.',
+  },
+  {
+    title: 'Video Content',
+    text: 'Centralize your video assets, including commercials, branded content, and campaign teasers, supporting formats like MP4 and MOV.',
+  },
+  {
+    title: 'Presentations',
+    text: 'Upload and collaborate on PowerPoint presentations and PDF slideshows, ensuring your pitches and proposals are always within reach.',
+  },
+  {
+    title: 'Design Projects',
+    text: 'Incorporate design files from Adobe Creative Suite (Photoshop, Illustrator) via linked assets, streamlining your design workflows.',
+  },
+  {
+    title: 'Spreadsheets',
+    text: 'Manage your budgets, timelines, and content calendars with support for Excel files and Google Sheets, facilitating real-time updates and collaboration.',
+  },
+  {
+    title: 'Audio Files',
+    text: 'Store background music, podcasts, and sound effects crucial for your projects, supporting MP3 and WAV formats.',
+  },
+  {
+    title: 'Web Links & Embeds',
+    text: 'Embed web links, Google Docs, Figma designs, and more directly into your portal pages, creating a central hub for all digital resources.',
+  },
+];
+
+const search = [
+  { title: 'Contextual understanding', text: 'Finds what you need, interpreting context, synonyms, and related terms.' },
+  { title: 'Quick asset access', text: 'Instantly locate any file, from design elements to copy, reducing search time.' },
+  {
+    title: 'Smart collaboration boost',
+    text: 'Streamlines teamwork by simplifying information retrieval, keeping projects on track.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'How can I integrate my current tools with the Notion brand portal?',
+    a: 'Our Notion brand portal is designed with flexibility in mind. While Notion itself offers a range of integrations with popular tools such as Slack, Google Drive, and Trello, we can also help set up custom integrations using third-party automation tools like Zapier. This ensures that you can seamlessly connect your existing workflows and tools with our portal, enhancing efficiency without disrupting your established processes.',
+  },
+  {
+    q: 'Is our data and creative assets secure within the Notion portal?',
+    a: "Absolutely. Security is a top priority, both for us and for Notion. The portal is built on Notion's secure infrastructure, which includes end-to-end encryption for data in transit and at rest, as well as compliance with industry-standard certifications. We also implement additional measures, such as restricted access controls and regular audits, to ensure that your assets remain protected and confidential at all times.",
+  },
+  {
+    q: 'What kind of support can we expect with the Notion brand portal?',
+    a: 'We provide comprehensive support for all our clients using the Notion brand portal. This includes personalized onboarding sessions, detailed user guides, and responsive technical support for any questions or issues that may arise. Our team is dedicated to ensuring you make the most out of your portal, offering both technical assistance and best practice advice for managing your creative projects and assets.',
+  },
+  {
+    q: "Can we customize the Notion portal to fit our brand's needs?",
+    a: "Yes, customization is a key feature of our Notion brand portal. We understand that every brand has unique requirements, which is why we work closely with you to tailor the portal's structure, design, and functionality to meet your specific needs. From custom templates and branded elements to specific workflow configurations, we ensure the portal reflects your brand identity and supports your creative processes effectively.",
+  },
+  {
+    q: 'How do we manage access permissions within the portal?',
+    a: 'Managing access permissions is straightforward with our Notion brand portal. You can easily define roles and permissions for your team members, controlling who can view, edit, or comment on different parts of the portal. This allows you to maintain control over your creative assets and project information, ensuring that only authorized personnel have access to sensitive data.',
+  },
+  {
+    q: 'How can we track project progress and collaborate within the portal?',
+    a: "Our Notion brand portal is designed to facilitate easy project tracking and collaboration. You can set up project timelines, milestones, and task lists to monitor progress. Additionally, Notion's collaborative features enable real-time commenting, document sharing, and team updates within the portal. This streamlines communication and ensures everyone involved in a project is aligned and informed, regardless of their location.",
+  },
+];
+
+const description =
+  "BucKit is Founding Creative's Notion-based brand portal: one organized, searchable home for your brand assets, guidelines, projects, and files.";
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'BucKit brand portal',
+    serviceType: 'Brand asset management portal',
+    description,
+    url: new URL('/buckit/', Astro.site).href,
+    provider: { '@id': `${Astro.site}#organization` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title="BucKit: Notion Brand Portal for Creative Assets | Founding Creative"
+  description={description}
+  ogTitle="BucKit"
+  ogImage={shareImage}
+  ogImageAlt="Brand color palette swatches organized in a brand portal"
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <div class="container">
+      <Image class="hero__logo" src={logo} alt="BucKit by Founding" height={80} loading="eager" />
+      <h1>BucKit: a brand new home for your brand</h1>
+      <p class="section__lead hero__lead">
+        Founding's brand portal is not just a toolkit, it's your creative destination. Designed with your business needs in
+        mind.
+      </p>
+    </div>
+  </section>
+
+  <section class="container section split" aria-labelledby="simple-heading">
+    <div>
+      <h2 id="simple-heading">Creativity, uncomplicated</h2>
+      <p class="section__lead">Managed &amp; organized for you</p>
+      <p>
+        In the realm of creativity and innovation, your brand deserves a hub that's as dynamic and intuitive as your vision.
+        At Founding, we've pioneered a brand portal that transcends conventional management and asset storage. It's the
+        seamless, collaborative workspace your brand has been waiting for.
+      </p>
+      <p class="split__tagline">Your total toolkit, all in one bucket. Your BucKit™.</p>
+    </div>
+    <Image class="split__art" src={interfaceArt} alt="" />
+  </section>
+
+  <section class="container section" aria-labelledby="collab-heading">
+    <div class="section__intro">
+      <h2 id="collab-heading">Effortless collaboration</h2>
+      <p class="section__lead">Transforming your creative workflow</p>
+    </div>
+    <div class="cards">
+      {
+        collaboration.map((item) => (
+          <div class="card">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container section" aria-labelledby="repo-heading">
+    <div class="section__intro">
+      <h2 id="repo-heading">Your complete creative repository</h2>
+      <p class="section__lead">Embrace the power of organization with unmatched versatility</p>
+      <p>
+        In the heart of every project lies a diverse array of files and assets, each playing a pivotal role in bringing
+        creative visions to life. Our Notion-based brand portal is engineered to not only accommodate but enhance the way you
+        manage these essential elements. Explore the wide range of files and assets you can seamlessly integrate and organize
+        within your personalized portal:
+      </p>
+    </div>
+    <div class="cards">
+      {
+        fileTypes.map((item) => (
+          <div class="card">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container section" aria-labelledby="search-heading">
+    <div class="section__intro">
+      <h2 id="search-heading">Intelligent search</h2>
+      <p class="section__lead">Immediately find what you need throughout your creative ecosystem</p>
+      <p>
+        Designed to guide you towards the exact assets and information you need. Search understands context and connections,
+        ensuring an intuitive experience that surpasses traditional keyword hunts.
+      </p>
+    </div>
+    <div class="cards">
+      {
+        search.map((item) => (
+          <div class="card">
+            <h3>
+              <Icon name="check" size={18} />
+              {item.title}
+            </h3>
+            <p>{item.text}</p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="section__more muted">
+      Our portal transcends traditional asset management by offering a flexible, dynamic space without bounds. BucKit adapts
+      to your needs, streamlining workflows and fostering collaboration.
+    </p>
+  </section>
+
+  <section class="container section faq" aria-labelledby="faq-heading">
+    <h2 id="faq-heading">FAQs</h2>
+    {
+      faqs.map((faq) => (
+        <details>
+          <summary>{faq.q}</summary>
+          <p>{faq.a}</p>
+        </details>
+      ))
+    }
+  </section>
+
+  <CtaSection
+    heading="Give your brand a home"
+    text="Let's talk about a brand portal built around your team."
+    secondary={{ label: 'Fractional Creative', href: '/fractional-creative/' }}
+  />
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-2xl);
+    background: radial-gradient(ellipse at 20% 0%, var(--color-teal), var(--color-black) 65%);
+  }
+
+  .hero__logo {
+    width: auto;
+    height: 5rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero h1 {
+    max-width: 18ch;
+  }
+
+  .hero__lead {
+    max-width: 38rem;
+    color: var(--color-text);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .split p:not(.section__lead) {
+    color: var(--color-text-muted);
+  }
+
+  .split .split__tagline {
+    color: var(--color-mint);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h6);
+  }
+
+  .split__art {
+    width: 100%;
+    max-width: 26rem;
+    justify-self: center;
+  }
+
+  .section__intro p:not(.section__lead) {
+    color: var(--color-text-muted);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-md);
+  }
+
+  .card {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+  }
+
+  .card h3 {
+    display: flex;
+    gap: var(--space-2xs);
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .card h3 .icon {
+    margin-top: 0.3em;
+    color: var(--color-mint);
+  }
+
+  .card p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .muted {
+    max-width: 44rem;
+    margin-inline: auto;
+    color: var(--color-text-muted);
+  }
+
+  .faq {
+    max-width: calc(48rem + 2 * var(--container-gutter));
+  }
+
+  .faq details {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq summary {
+    padding-block: var(--space-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+  }
+
+  .faq summary::marker {
+    color: var(--color-mint);
+  }
+
+  .faq details p {
+    color: var(--color-text-muted);
+  }
+</style>

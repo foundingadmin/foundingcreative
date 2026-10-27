@@ -1,31 +1,101 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactForm from '../../components/ContactForm.astro';
+import Icon from '../../components/Icon.astro';
+import illustration from '../../assets/pages/contact-illustration.svg';
+import shareImage from '../../assets/home/services/web-4.webp';
+import { letsTalkHref, linkedInHref } from '../../data/navigation';
 
 // Title and OG title match the WordPress crawl. The live meta description is
 // broken plugin text ("Please enable JavaScript..."), so it is rewritten here.
+const description =
+  "Tell us about your brand, website, or creative project. Send Founding Creative a message and we'll get back to you soon.";
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact Founding Creative',
+  description,
+  url: new URL('/contact-us/', Astro.site).href,
+  about: { '@id': `${Astro.site}#organization` },
+};
 ---
 
 <BaseLayout
   title="Contact Us - Founding Creative"
-  description="Tell us about your brand, website, or creative project. Send Founding Creative a message and we'll get back to you soon."
+  description={description}
   ogTitle="Contact Us"
+  ogImage={shareImage}
+  ogImageAlt="Bank of America app on a tablet, designed by Founding Creative"
+  jsonLd={jsonLd}
 >
   <section class="container contact">
-    <p class="contact__eyebrow">We are here to hear</p>
-    <h1>Send us a message.</h1>
-    <ContactForm variant="full" />
+    <div class="contact__intro">
+      <p class="eyebrow">We are here to <em>hear</em></p>
+      <h1>Send us a message.</h1>
+      <p class="section__lead">
+        Tell us about your brand, website, or project, and we'll get back to you soon.
+      </p>
+      <Image class="contact__art" src={illustration} alt="" />
+      <ul class="contact__ways">
+        <li>
+          <Icon name="arrow-up-right" size={16} />
+          <span>Prefer to talk? <a href={letsTalkHref}>Book a time with us</a></span>
+        </li>
+        <li>
+          <Icon name="arrow-up-right" size={16} />
+          <span>Local to Denver, CO or Chattanooga, TN? Let's meet up, free coffee on the house.</span>
+        </li>
+        <li>
+          <Icon name="linkedin" size={16} />
+          <span><a href={linkedInHref}>Follow us on LinkedIn</a></span>
+        </li>
+      </ul>
+    </div>
+    <div class="contact__form">
+      <ContactForm variant="full" />
+    </div>
   </section>
 </BaseLayout>
 
 <style>
   .contact {
-    max-width: 720px;
-    padding-block: var(--space-3xl);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+    padding-block: var(--space-2xl);
   }
 
-  .contact__eyebrow {
+  .contact__art {
+    width: 100%;
+    max-width: 18rem;
+    margin-block: var(--space-lg);
+  }
+
+  .contact__ways {
+    display: grid;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
     color: var(--color-text-muted);
-    font-size: var(--font-size-md);
+  }
+
+  .contact__ways li {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .contact__ways .icon {
+    margin-top: 0.3em;
+    color: var(--color-mint);
+  }
+
+  .contact__form {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background-color: var(--color-surface);
+    align-self: start;
   }
 </style>

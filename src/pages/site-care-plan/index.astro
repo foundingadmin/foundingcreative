@@ -1,0 +1,391 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaSection from '../../components/CtaSection.astro';
+import Icon from '../../components/Icon.astro';
+import idea from '../../assets/pages/idea-illustration.svg';
+import shareImage from '../../assets/home/services/web-5.webp';
+
+// Copy is ported as-is from WordPress. Note: the CMS section still says
+// Founding Creative builds exclusively on WordPress.
+const groups = [
+  {
+    heading: 'Content Management System',
+    intro:
+      "Founding Creative exclusively builds websites using the WordPress CMS, the world's leading content management system. This choice offers several advantages.",
+    items: [
+      {
+        title: 'User-Friendly Interface',
+        text: 'WordPress is renowned for its intuitive and easy-to-use interface, allowing clients to manage their content effortlessly.',
+      },
+      {
+        title: 'Customizability',
+        text: 'With thousands of themes and plugins, WordPress offers unparalleled flexibility to create unique, tailored websites.',
+      },
+      {
+        title: 'SEO-Friendly',
+        text: 'WordPress is optimized for search engines right out of the box, helping your website rank higher.',
+      },
+      {
+        title: 'Scalability',
+        text: "Whether you're a small business or a large corporation, WordPress grows with your needs, accommodating everything from simple landing pages to complex e-commerce sites.",
+      },
+    ],
+  },
+  {
+    heading: 'Comprehensive Website Maintenance',
+    items: [
+      {
+        title: 'Performance Optimization',
+        text: 'Regular performance checks to ensure swift load times and smooth user experiences.',
+      },
+      {
+        title: 'Regular Software Updates',
+        text: "Keeping your website's core, themes, and plugins up-to-date for optimal functionality and security.",
+      },
+      {
+        title: 'Daily Backups',
+        text: 'Daily backups stored securely, ensuring data recovery in the event of unforeseen incidents.',
+      },
+    ],
+  },
+  {
+    heading: 'Advanced Security Protocols',
+    items: [
+      { title: 'Proactive Threat Detection', text: 'Continuous monitoring for potential threats and vulnerabilities.' },
+      {
+        title: 'SSL Certificate Management',
+        text: 'Implementation and renewal of SSL certificates to ensure secure data transmission.',
+      },
+      {
+        title: 'Firewall Protection',
+        text: 'Robust firewall defenses to protect against unauthorized access and attacks.',
+      },
+    ],
+  },
+];
+
+const industry = [
+  {
+    title: 'High Hosting Costs',
+    text: 'Many companies pay significant amounts for hosting, often with long-term contracts. Average costs can range from $100+ per month, depending on the level of service ranging from simple blogs to robust e-commerce solutions.',
+  },
+  {
+    title: 'Agency Retainers for Updates',
+    text: 'For content updates, redesigns, or feature additions, businesses typically need to pay high agency retainers, often exceeding $500 monthly.',
+  },
+  {
+    title: 'Separate Security Packages',
+    text: 'Dedicated website security services to combat malware and online threats can add an extra $100 monthly.',
+  },
+];
+
+const renewal = {
+  title: 'Flexible Renewal Options',
+  text: 'Choose between 6-month or annual plans with auto-renewal, cancellable with a written notice.',
+};
+
+const plans = [
+  {
+    name: 'Site Care Plan',
+    tagline: "Let's make it simple.",
+    monthly: 100,
+    yearly: 1200,
+    features: [
+      {
+        title: 'All-Inclusive Pricing',
+        text: 'One single price all under one roof for a comprehensive package of hosting, updates, and security.',
+      },
+      renewal,
+    ],
+  },
+  {
+    name: 'Site Care Plan Plus',
+    tagline: 'Simple with help.',
+    monthly: 200,
+    yearly: 2400,
+    featured: true,
+    features: [
+      {
+        title: 'Monthly Web Update Hours',
+        text: 'Up to 3 hours of personalized support for content updates, minor feature additions, and visual enhancements.',
+      },
+      { title: 'Consultation and Strategy', text: 'Consultations to discuss website performance and potential improvements.' },
+      {
+        title: 'All-Inclusive Pricing',
+        text: 'One single price all under one roof for a comprehensive package of hosting, updates, support services, and security.',
+      },
+      renewal,
+    ],
+  },
+];
+
+const money = (n: number) => `$${n.toLocaleString('en-US')}`;
+const description =
+  "One plan for website hosting, updates, backups, and security. Founding Creative's Site Care Plan keeps your site fast, secure, and up to date.";
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Site Care Plan',
+  serviceType: 'Website hosting, maintenance, and security',
+  description,
+  url: new URL('/site-care-plan/', Astro.site).href,
+  provider: { '@id': `${Astro.site}#organization` },
+  offers: plans.map((plan) => ({
+    '@type': 'Offer',
+    name: plan.name,
+    price: String(plan.monthly),
+    priceCurrency: 'USD',
+    priceSpecification: {
+      '@type': 'UnitPriceSpecification',
+      price: String(plan.monthly),
+      priceCurrency: 'USD',
+      unitText: 'MONTH',
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="Site Care Plan: Website Hosting, Updates & Security | Founding Creative"
+  description={description}
+  ogTitle="Site Care Plan"
+  ogImage={shareImage}
+  ogImageAlt="Turntide website shown on an iMac"
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <h1>Site Care Plan</h1>
+        <p class="section__lead hero__lead">
+          Founding Creative is proud to offer our Site Care Plan, a holistic solution designed to empower your online
+          presence while ensuring maximum uptime, security, and performance.
+        </p>
+        <p>
+          We proudly partner with and consolidate third-party solutions to offer our clients a singular, comprehensive touch
+          point for all their web needs. These strategic collaborations with leaders in web hosting and digital experience
+          platforms enable us to provide this confident Site Care Plan.
+        </p>
+        <p>
+          We combine innovative design and digital strategy expertise with advanced hosting technologies. The result is a
+          seamless, dedicated solution that simplifies your digital experience, providing a secure and high-performing digital
+          presence for your business efficiently and effectively under one roof.
+        </p>
+      </div>
+      <Image class="hero__art" src={idea} alt="" loading="eager" />
+    </div>
+  </section>
+
+  {
+    groups.map((group) => (
+      <section class="container section">
+        <h2 class="group__heading">{group.heading}</h2>
+        {group.intro && <p class="section__lead group__intro">{group.intro}</p>}
+        <div class="cards">
+          {group.items.map((item) => (
+            <div class="card">
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="container section" aria-labelledby="pricing-heading">
+    <p class="statement">
+      Our Site Care Plan by Founding Creative offers an unmatched blend of technical expertise and dedicated support,
+      ensuring your website remains a dynamic and secure asset for your business, carefree to you.
+    </p>
+    <h2 id="pricing-heading" class="group__heading">Pricing</h2>
+    <div class="pricing">
+      <article class="plan plan--industry">
+        <h3>Typical industry pricing and terms</h3>
+        <p>Businesses typically face substantial expenses in maintaining an online presence.</p>
+        <dl>
+          {
+            industry.map((item) => (
+              <div>
+                <dt>{item.title}</dt>
+                <dd>{item.text}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="plan__price"><strong>$600</strong>/month <span>$7,200/year</span></p>
+      </article>
+      {
+        plans.map((plan) => (
+          <article class:list={['plan', { 'plan--featured': plan.featured }]}>
+            <h3>{plan.name}</h3>
+            <p class="plan__tagline">{plan.tagline}</p>
+            <dl>
+              {plan.features.map((feature) => (
+                <div>
+                  <dt>
+                    <Icon name="check" size={16} />
+                    {feature.title}
+                  </dt>
+                  <dd>{feature.text}</dd>
+                </div>
+              ))}
+            </dl>
+            <p class="plan__price">
+              <strong>{money(plan.monthly)}</strong>/month <span>{money(plan.yearly)}/year</span>
+            </p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaSection heading="Let's get you online" text="Be where the world lives." />
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-2xl);
+    background: radial-gradient(ellipse at 20% 0%, var(--color-teal), var(--color-black) 65%);
+  }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .hero__lead {
+    color: var(--color-text);
+  }
+
+  .hero p:not(.hero__lead) {
+    color: var(--color-text-muted);
+  }
+
+  .hero__art {
+    width: 100%;
+    max-width: 24rem;
+    justify-self: center;
+  }
+
+  .group__heading {
+    font-size: var(--font-size-h3);
+  }
+
+  .group__intro {
+    max-width: 44rem;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: var(--space-md);
+  }
+
+  .card {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+  }
+
+  .card h3 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .card p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .statement {
+    max-width: 52rem;
+    margin-bottom: var(--space-xl);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h5);
+    line-height: var(--line-height-snug);
+  }
+
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-md);
+    align-items: stretch;
+  }
+
+  .plan {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background-color: var(--color-surface);
+  }
+
+  .plan--featured {
+    border-color: var(--color-mint);
+  }
+
+  .plan--industry {
+    background-color: transparent;
+  }
+
+  .plan h3 {
+    font-size: var(--font-size-h5);
+  }
+
+  .plan__tagline {
+    color: var(--color-mint);
+  }
+
+  .plan dl {
+    display: grid;
+    gap: var(--space-sm);
+    flex: 1;
+    margin: 0 0 var(--space-md);
+  }
+
+  .plan dt {
+    display: flex;
+    gap: var(--space-2xs);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .plan dt .icon {
+    margin-top: 0.3em;
+    color: var(--color-mint);
+  }
+
+  .plan dd {
+    margin: var(--space-3xs) 0 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .plan__price {
+    margin: 0;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .plan__price strong {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h3);
+  }
+
+  .plan__price span {
+    display: block;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .plan--industry .plan__price strong {
+    color: var(--color-text-muted);
+  }
+</style>

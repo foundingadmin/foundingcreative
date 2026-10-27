@@ -2,6 +2,9 @@
 import { defineConfig, envField, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
+// Pages that set `noindex` in BaseLayout; keep this list in sync.
+const NOINDEX = ['/client-portal/'];
+
 // WordPress slugs all end in a trailing slash, so build every page as
 // /slug/index.html and require the slash to keep URLs identical.
 export default defineConfig({
@@ -11,7 +14,8 @@ export default defineConfig({
     format: 'directory',
   },
   // sitemap-index.xml for search engines (listed in public/robots.txt).
-  integrations: [sitemap()],
+  // Pages marked noindex in BaseLayout are left out here too.
+  integrations: [sitemap({ filter: (page) => !NOINDEX.some((path) => page.endsWith(path)) })],
   // Manrope is downloaded at build time and served from this site, so
   // visitors never request Google Fonts. Gelica is Adobe Fonts and has to
   // load from Adobe's kit (see BaseLayout).

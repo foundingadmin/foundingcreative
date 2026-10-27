@@ -1,0 +1,214 @@
+---
+import { Image } from 'astro:assets';
+import { getEntries } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import Icon from '../../components/Icon.astro';
+import magazine from '../../assets/pages/buyin-playbook-magazine.webp';
+import cover from '../../assets/pages/buyin-playbook-cover.webp';
+import nextSteps from '../../assets/pages/buyin-playbook-next-steps.webp';
+import marketing from '../../assets/pages/buyin-playbook-marketing.webp';
+import teams from '../../assets/pages/buyin-playbook-teams.webp';
+
+// The WordPress page gates the playbook download behind a form. Until that
+// form is rebuilt, "Get your copy" goes to the footer contact form.
+const preview = [
+  { src: cover, alt: 'Website Buy-In Playbook cover page' },
+  { src: nextSteps, alt: 'Playbook page: where to go from here' },
+  { src: marketing, alt: 'Playbook page: what a new website means for Marketing' },
+];
+
+const wins = [
+  "Marketing isn't stuck begging devs for tiny fixes",
+  "Sales isn't bottlenecked",
+  "Leadership gets the clarity they're looking for quickly",
+];
+
+const caseStudies = await getEntries(
+  ['turntide-website', 'plant-nursery-ecommerce', 'atlfreight-website'].map((id) => ({
+    collection: 'caseStudies' as const,
+    id,
+  })),
+);
+
+const description =
+  'Get the free Website Buy-In Playbook: a ready-to-present deck that shows every team why a better website means better business.';
+---
+
+<BaseLayout
+  title="Free Website Buy-In Playbook | Founding Creative"
+  description={description}
+  ogTitle="Buy-in Deck"
+  ogImage={magazine}
+  ogImageAlt="Website Buy-In Playbook shown as a printed magazine"
+>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">Free <em>playbook</em></p>
+        <h1>Better Website = Better Business</h1>
+        <p class="section__lead hero__lead">
+          Snag our free Website Buy-In Playbook and get everyone across the org nodding "yes".
+        </p>
+        <p>
+          It's packed with a ready-to-go presentation deck covering the perks, pitfalls, fixes, and wins of a website refresh
+          for each team, so everyone from Leadership, HR, and Sales to Marketing and Legal are on the same page.
+        </p>
+        <a class="button button--primary" href="#get-in-touch">Get your free copy <Icon name="arrow-up-right" size={16} /></a>
+      </div>
+      <Image
+        class="hero__image"
+        src={magazine}
+        alt="Website Buy-In Playbook shown as a printed magazine"
+        widths={[600, 1200]}
+        sizes="(max-width: 700px) 90vw, 540px"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <section class="container section" aria-labelledby="preview-heading">
+    <h2 id="preview-heading" class="preview__heading">Playbook preview</h2>
+    <ul class="preview">
+      {
+        preview.map((page) => (
+          <li>
+            <Image src={page.src} alt={page.alt} widths={[400, 800]} sizes="(max-width: 700px) 90vw, 360px" />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="container section split" aria-labelledby="access-heading">
+    <div>
+      <h2 id="access-heading">Access the full playbook</h2>
+      <p>
+        A great website is more than a digital doo-dad, it's a tenacious team player. The website is the one team member
+        that everyone should actually want to work with. When the site empowers internal teams with the right tools,
+        workflows, and flexibility it means:
+      </p>
+      <ul class="checks">
+        {
+          wins.map((win) => (
+            <li>
+              <Icon name="check" size={18} />
+              {win}
+            </li>
+          ))
+        }
+      </ul>
+      <p>
+        And the cherry on top? Customers get the slick, seamless experience they expect and ultimately the business grows as
+        a result.
+      </p>
+      <p class="split__tagline">Internal wins = external wins = business wins.</p>
+      <a class="button button--primary" href="#get-in-touch">Get your copy <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+    <Image
+      src={teams}
+      alt="Playbook spread showing how a new website helps each team"
+      widths={[500, 1000]}
+      sizes="(max-width: 700px) 90vw, 520px"
+    />
+  </section>
+
+  <section class="container section" aria-labelledby="work-heading">
+    <div class="section__intro section__intro--split">
+      <div>
+        <p class="eyebrow">Website <em>case studies</em></p>
+        <h2 id="work-heading">Creative foundations worth showing off</h2>
+        <p class="section__lead">
+          A look inside the web projects where strategy, structure, and design all came together to drive meaningful
+          business outcomes.
+        </p>
+      </div>
+      <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+    <div class="card-grid">
+      {caseStudies.map((study) => <CaseStudyCard study={study} headingLevel={3} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-2xl);
+    background: radial-gradient(ellipse at 20% 0%, var(--color-plum), var(--color-black) 65%);
+  }
+
+  .hero__grid,
+  .split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .hero__lead {
+    color: var(--color-text);
+  }
+
+  .hero p:not(.hero__lead, .eyebrow) {
+    color: var(--color-text-muted);
+  }
+
+  .hero__image,
+  .split img {
+    width: 100%;
+    border-radius: var(--radius-lg);
+  }
+
+  .preview__heading {
+    font-size: var(--font-size-h3);
+  }
+
+  .preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .preview img {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .split p {
+    color: var(--color-text-muted);
+  }
+
+  .split .split__tagline {
+    color: var(--color-mint);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h6);
+  }
+
+  .checks {
+    display: grid;
+    gap: var(--space-xs);
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    list-style: none;
+  }
+
+  .checks li {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .checks .icon {
+    margin-top: 0.3em;
+    color: var(--color-mint);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-md);
+  }
+</style>

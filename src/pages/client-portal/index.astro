@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import shareImage from '../../assets/home/services/brand-3.webp';
+
+// The WordPress page is unfinished (placeholder tabs). Kept at its URL but
+// out of search results until it has real content.
+---
+
+<BaseLayout
+  title="Client Portal - Founding Creative"
+  description="Resources for Founding Creative clients. Your project lead can give you access to your BucKit brand portal and project files."
+  ogTitle="Client Portal"
+  ogImage={shareImage}
+  ogImageAlt="Brand color palette swatches organized in a brand portal"
+  noindex
+>
+  <section class="container section">
+    <div class="section__intro">
+      <h1>Client Portal</h1>
+      <p class="section__lead">
+        Working with us already? Your project lead can give you access to your BucKit brand portal and project files.
+      </p>
+      <div class="actions">
+        <a class="button button--primary" href="/contact-us/">Contact your team <Icon name="arrow-up-right" size={16} /></a>
+        <a class="button" href="/buckit/">About BucKit</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+</style>
