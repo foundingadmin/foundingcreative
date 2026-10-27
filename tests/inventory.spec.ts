@@ -9,6 +9,10 @@ import inventory from '../src/data/wp-inventory.json' with { type: 'json' };
 // PLAYWRIGHT_BASE_URL at https://foundingcreative.com to check the inventory
 // against the live site itself. The live site repeats some tags, so the
 // one-per-page checks are skipped in that mode.
+//
+// An entry's `overrides` replace recorded values the port deliberately
+// changes (for example, copy rewritten to drop em dashes). They apply only
+// when testing the port, not when auditing the live site.
 
 const runAll = process.env.INVENTORY_ALL === '1';
 const auditingLive = (process.env.PLAYWRIGHT_BASE_URL ?? '').startsWith(inventory.source);
@@ -19,14 +23,18 @@ const pages = inventory.pages.filter(
 
 const first = (values?: string[]) => values?.[0];
 
+type Overrides = Partial<Record<'title' | 'description' | 'og:title' | 'og:description', string>>;
+
 for (const entry of pages) {
+  const overrides: Overrides = (!auditingLive && (entry as { overrides?: Overrides }).overrides) || {};
+
   test(`matches WordPress: ${entry.path}`, async ({ page }) => {
     test.fixme(!runAll && !entry.ported, 'Not ported yet');
 
     const response = await page.goto(entry.path);
     expect(response?.status(), 'status').toBe(200);
 
-    await expect(page, 'title').toHaveTitle(entry.title ?? '');
+    await expect(page, 'title').toHaveTitle(overrides.title ?? entry.title ?? '');
 
     const description = page.locator('meta[name="description"]');
     const canonical = page.locator('link[rel="canonical"]');
@@ -40,7 +48,7 @@ for (const entry of pages) {
 
     // Some live pages (the legal pages) have no meta description. CLAUDE.md
     // still requires one, so the port only has to have a non-empty value there.
-    const expectedDescription = first(entry.descriptions);
+    const expectedDescription = overrides.description ?? first(entry.descriptions);
     if (expectedDescription !== undefined) {
       await expect(description.first(), 'meta description').toHaveAttribute('content', expectedDescription);
     } else if (!auditingLive) {
@@ -55,7 +63,7 @@ for (const entry of pages) {
     }
 
     for (const key of ['og:type', 'og:title', 'og:description', 'og:url'] as const) {
-      const expected = first(entry.og?.[key]);
+      const expected = (key === 'og:title' || key === 'og:description' ? overrides[key] : undefined) ?? first(entry.og?.[key]);
       if (expected !== undefined) {
         await expect(page.locator(`meta[property="${key}"]`).first(), key).toHaveAttribute('content', expected);
       }

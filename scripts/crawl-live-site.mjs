@@ -5,7 +5,8 @@
 // we record the server-rendered head, which is what crawlers see.
 //
 // Usage: npm run crawl
-// Re-running keeps each entry's hand-set `port`, `redirectTo`, and `ported`.
+// Re-running keeps each entry's hand-set `port`, `redirectTo`, `overrides`,
+// and `ported`. `overrides` holds values the port changes on purpose.
 //
 // `port` values:
 //   port      rebuild the page at the same URL
@@ -198,6 +199,7 @@ async function main() {
         ...entry,
         port: kept.port ?? defaultPort(entry),
         ...(kept.redirectTo && { redirectTo: kept.redirectTo }),
+        ...(kept.overrides && { overrides: kept.overrides }),
         ported: kept.ported ?? false,
       };
     })

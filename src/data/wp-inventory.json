@@ -293,6 +293,10 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
+      "overrides": {
+        "description": "Discover 5 reasons your outdated website is killing campaigns and ROI. Learn why speed, UX, and credibility are critical for marketing success.",
+        "og:description": "Discover 5 reasons your outdated website is killing campaigns and ROI. Learn why speed, UX, and credibility are critical for marketing success."
+      },
       "ported": false
     },
     {
@@ -601,6 +605,9 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
+      "overrides": {
+        "og:description": "May 27, 2026 Without a human-built creative foundation, AI will confidently take your brand in the wrong direction. May 27, 2026 / Branding /"
+      },
       "ported": false
     },
     {
@@ -2099,6 +2106,10 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
+      "overrides": {
+        "description": "A slow, outdated website kills trust, traffic, and sales. Learn the hidden costs, and how to turn your site into a growth engine instead of a liability.",
+        "og:description": "A slow, outdated website kills trust, traffic, and sales. Learn the hidden costs, and how to turn your site into a growth engine instead of a liability."
+      },
       "ported": false
     },
     {
@@ -3959,6 +3970,10 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
+      "overrides": {
+        "title": "What Is a Founding Designer, and Do You Need One?",
+        "og:title": "What Is a Founding Designer, and Do You Need One?"
+      },
       "ported": false
     },
     {
