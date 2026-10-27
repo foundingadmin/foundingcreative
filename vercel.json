@@ -13,6 +13,11 @@
       "permanent": false
     },
     {
+      "source": "/client-portal/",
+      "destination": "/buckit/",
+      "permanent": true
+    },
+    {
       "source": "/testimonial/(.*)",
       "destination": "/",
       "permanent": true

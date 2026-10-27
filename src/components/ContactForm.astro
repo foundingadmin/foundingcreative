@@ -2,13 +2,23 @@
 import { FORMSPREE_FORM_ID, FORMSPREE_TEST_FORM_ID } from 'astro:env/server';
 
 interface Props {
-  /** `full` is the Contact page form; `short` is the name/email/message form used elsewhere on the live site. */
-  variant?: 'full' | 'short';
+  /**
+   * `full` is the Contact page form; `short` is the name/email/message form
+   * used elsewhere on the live site; `sitelaunch` is the inquiry form on the
+   * SiteLaunch package pages (adds package and timeline).
+   */
+  variant?: 'full' | 'short' | 'sitelaunch';
+  /** For `sitelaunch`: the package to preselect. */
+  sitelaunchPackage?: 'Prism' | 'Rocket' | 'Orbit';
   /** Prefix for element ids, so two forms can share a page. */
   idPrefix?: string;
 }
 
-const { variant = 'full', idPrefix = 'contact' } = Astro.props;
+const { variant = 'full', idPrefix = 'contact', sitelaunchPackage } = Astro.props;
+const detailed = variant !== 'short';
+const formName = { full: 'Contact page', short: 'Short form', sitelaunch: `SiteLaunch: ${sitelaunchPackage ?? 'Not sure'}` }[variant];
+const packages = ['Prism', 'Rocket', 'Orbit'];
+const timelines = ['As soon as possible', 'In 1 to 3 months', 'In 3 to 6 months', 'Just exploring'];
 
 // Production posts to the live form. Previews and local builds use the test
 // form when one is configured, so testing never lands in the real inbox.
@@ -29,7 +39,12 @@ const id = (name: string) => `${idPrefix}-${name}`;
     data-contact-form
     aria-describedby={id('error')}
   >
-    <input type="hidden" name="form" value={variant === 'full' ? 'Contact page' : 'Short form'} />
+    <input type="hidden" name="form" value={formName} />
+    {
+      variant === 'sitelaunch' && (
+        <input type="hidden" name="_subject" value={`New ${sitelaunchPackage ?? ''} SiteLaunch inquiry`.replace('  ', ' ')} />
+      )
+    }
 
     <!-- Labels are visually hidden to match the live design, which shows placeholders only. -->
     <div class="contact-form__field">
@@ -38,7 +53,7 @@ const id = (name: string) => `${idPrefix}-${name}`;
     </div>
 
     {
-      variant === 'full' && (
+      detailed && (
         <div class="contact-form__field">
           <label class="visually-hidden" for={id('company')}>Company</label>
           <input type="text" id={id('company')} name="company" placeholder="Company" autocomplete="organization" />
@@ -60,10 +75,38 @@ const id = (name: string) => `${idPrefix}-${name}`;
     </div>
 
     {
-      variant === 'full' && (
+      detailed && (
         <div class="contact-form__field">
           <label class="visually-hidden" for={id('website')}>Website</label>
           <input type="url" id={id('website')} name="website" placeholder="Website" autocomplete="url" />
+        </div>
+      )
+    }
+
+    {
+      variant === 'sitelaunch' && (
+        <div class="contact-form__row">
+          <div class="contact-form__field">
+            <label for={id('package')}>SiteLaunch package</label>
+            <select id={id('package')} name="sitelaunch_package">
+              {packages.map((name) => (
+                <option value={name} selected={name === sitelaunchPackage}>
+                  {name} SiteLaunch
+                </option>
+              ))}
+              <option value="Not sure yet" selected={!sitelaunchPackage}>
+                Not sure yet
+              </option>
+            </select>
+          </div>
+          <div class="contact-form__field">
+            <label for={id('timeline')}>Ideal launch timeline</label>
+            <select id={id('timeline')} name="timeline">
+              {timelines.map((timeline) => (
+                <option value={timeline}>{timeline}</option>
+              ))}
+            </select>
+          </div>
         </div>
       )
     }
@@ -74,7 +117,7 @@ const id = (name: string) => `${idPrefix}-${name}`;
         id={id('message')}
         name="message"
         rows="5"
-        placeholder="What goals do you need your brand to achieve?"
+        placeholder={variant === 'sitelaunch' ? 'What goals do you need your website to achieve?' : 'What goals do you need your brand to achieve?'}
         required></textarea>
     </div>
 
@@ -173,8 +216,20 @@ const id = (name: string) => `${idPrefix}-${name}`;
     gap: var(--space-3xs);
   }
 
+  .contact-form__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .contact-form__field label:not(.visually-hidden) {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
   .contact-form input,
-  .contact-form textarea {
+  .contact-form textarea,
+  .contact-form select {
     width: 100%;
     padding: var(--space-xs) var(--space-sm);
     border: 1px solid var(--color-border);

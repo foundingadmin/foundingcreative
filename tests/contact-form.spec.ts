@@ -72,3 +72,25 @@ test('contact form requires name, email, and message before sending', async ({ p
   expect(await pageForm(page).getByLabel('Name', { exact: true }).evaluate((el: HTMLInputElement) => el.validity.valueMissing)).toBe(true);
   expect(sent).toBe(false);
 });
+
+test('SiteLaunch inquiry form preselects the package and sends it with the timeline', async ({ page }) => {
+  let body = '';
+  await page.route(FORMSPREE, async (route) => {
+    body = route.request().postData() ?? '';
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
+  });
+
+  await page.goto('/rocket-sitelaunch/');
+  const form = page.locator('#get-started');
+  await expect(form.getByLabel('SiteLaunch package')).toHaveValue('Rocket');
+  await form.getByLabel('Name', { exact: true }).fill('Test Person');
+  await form.getByLabel('Email', { exact: true }).fill('test@example.com');
+  await form.getByLabel('Message', { exact: true }).fill('We need more leads.');
+  await form.getByLabel('Ideal launch timeline').selectOption('In 1 to 3 months');
+  await form.getByRole('button', { name: 'Submit' }).click();
+
+  await expect(form.getByRole('status')).toContainText('Thanks, we got your message.');
+  for (const value of ['SiteLaunch: Rocket', 'sitelaunch_package', 'Rocket', 'In 1 to 3 months', 'New Rocket SiteLaunch inquiry']) {
+    expect(body).toContain(value);
+  }
+});

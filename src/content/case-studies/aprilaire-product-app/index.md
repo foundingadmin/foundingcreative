@@ -108,17 +108,21 @@ The database is connected to an online API emailer that will send an email to th
 
 ### Conclusion
 
-As the curtains fell on Grow18, the success of the event was etched not just in the memories of those who attended, but in the tangible outcomes that followed. Attendees left engaged, through interactive installations and digital interfaces registering high participation levels, indicating a deeper connection with the content and brand. Secondly, post-event feedback highlighted an unprecedented appreciation for the immersive brand experience, leading to an enhanced perception of Genpact as not just a corporate entity, but as a beacon of innovation and transformation in the industry. These outcomes not only reflect the fruition of our creative endeavors but also set a new benchmark for Genpact's future corporate events.
+The Aprilaire Interactive Product Selector turned a large, technical product catalog into a guided experience anyone can finish in a few taps. Customers start with something they already know, where they live and what their climate is like, and the app does the narrowing for them, surfacing only the humidifiers, dehumidifiers, and air filters that fit their home. A playful scratch-off intro and a visible progress bar keep the experience light, while every completed session hands the Aprilaire sales team a qualified lead that already knows which products it needs.
 
 ### Key outcomes
 
-#### Increased engagement
+#### Clearer product discovery
 
-Through interactive experiences, conversations were sparked, connections were deeper, and otherwise passive viewing turned into active experiencing.
+Region and climate filtering replaced endless scrolling, so customers see a short, relevant list instead of the entire catalog.
 
-#### Quality perception
+#### Sales-ready leads
 
-The unified visual identity at Grow enhanced Genpact's brand perception, embodying excellence and innovation at every event touchpoint.
+Each submission pairs contact details with the exact products chosen and sends them straight to the sales team, so follow-up conversations start from real interest.
+
+#### An approachable brand experience
+
+Visual, game-like interactions made a technical category feel simple and friendly, reinforcing Aprilaire's reputation for healthy, comfortable homes.
 
 In collaboration with:
 
