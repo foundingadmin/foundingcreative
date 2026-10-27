@@ -42,28 +42,6 @@ export const companyLinks: NavLink[] = [
   { label: 'Blog', href: '/blog/' },
 ];
 
-// Hand-copied from the live footer until the case study and blog content
-// collections exist; then these become "latest N" queries.
-export const latestWork: NavLink[] = [
-  { label: 'Turntide Website', href: '/case-study/turntide-website/' },
-  { label: 'Aprilaire Product App', href: '/case-study/aprilaire-product-app/' },
-  { label: 'Bell Bird ATM', href: '/case-study/bell-bird-atm/' },
-  { label: 'Plant Nursery eCommerce', href: '/case-study/plant-nursery-ecommerce/' },
-  { label: 'Innovation Forum Event', href: '/case-study/innovation-forum-event/' },
-];
-
-export const latestPosts: NavLink[] = [
-  {
-    label: 'Marketing Agency, Creative Design Studio, or Something Else?',
-    href: '/marketing-agency-creative-design-studio-or-something-else/',
-  },
-  {
-    label: 'The Missing Middle Ground: Why Your AI Needs a Human-Driven Creative Foundation',
-    href: '/the-missing-middle-ground-why-your-ai-needs-a-human-driven-creative-foundation/',
-  },
-  { label: '5 Website Truths for Marketers', href: '/5-website-truths-for-marketers/' },
-];
-
 export const legalLinks: NavLink[] = [
   { label: 'Imprint', href: '/imprint/' },
   { label: 'Cookie Policy', href: '/opt-out-preferences/' },

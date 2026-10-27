@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://foundingcreative.com/sitemap-index.xml

@@ -1,0 +1,254 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Prose from '../../components/Prose.astro';
+import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import { getCaseStudies, caseStudyUrl, type CaseStudy } from '../../lib/content';
+import { letsTalkHref } from '../../data/navigation';
+
+export async function getStaticPaths() {
+  const studies = await getCaseStudies();
+  return studies.map((study) => ({ params: { slug: study.id }, props: { study, studies } }));
+}
+
+interface Props {
+  study: CaseStudy;
+  studies: CaseStudy[];
+}
+
+const { study, studies } = Astro.props;
+const { Content } = await render(study);
+const { data } = study;
+
+const more = studies.filter((s) => s.id !== study.id).slice(0, 2);
+const facts = [
+  { label: 'Client', value: data.clients.join(', ') },
+  { label: 'Sector', value: data.sectors.join(', ') },
+  { label: 'Services', value: data.services.join(', ') },
+].filter((fact) => fact.value);
+
+const url = new URL(caseStudyUrl(study), Astro.site).href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: data.headline,
+    name: data.title,
+    description: data.description,
+    datePublished: data.date.toISOString(),
+    author: { '@id': `${Astro.site}#organization` },
+    publisher: { '@id': `${Astro.site}#organization` },
+    mainEntityOfPage: url,
+    about: data.clients.map((name) => ({ '@type': 'Organization', name })),
+    keywords: [...data.services, ...data.sectors].join(', '),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
+      { '@type': 'ListItem', position: 2, name: 'Case Studies', item: new URL('/case-studies/', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: data.title, item: url },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={data.seoTitle}
+  description={data.description}
+  ogTitle={data.ogTitle}
+  ogDescription={data.ogDescription}
+  ogImage={data.cover}
+  ogImageAlt={data.coverAlt}
+  ogType="article"
+  article={{ published: data.date, section: 'Case Studies', tags: [...data.services, ...data.sectors] }}
+  jsonLd={jsonLd}
+>
+  <article>
+    <header class="case-hero">
+      <div class="container case-hero__text">
+        <nav aria-label="Breadcrumb" class="case-hero__breadcrumb">
+          <a href="/case-studies/">Case Studies</a>
+        </nav>
+        <p class="case-hero__eyebrow">{data.eyebrow}</p>
+        <h1 class="case-hero__title">{data.headline}</h1>
+        <p class="case-hero__subtitle">{data.subheadline}</p>
+      </div>
+      <div class="container">
+        <div class="case-hero__media">
+          <Image
+            class="case-hero__image"
+            src={data.cover}
+            alt={data.coverAlt}
+            widths={[640, 1280, 1920]}
+            sizes="(max-width: 1200px) 100vw, 1140px"
+            loading="eager"
+            fetchpriority="high"
+          />
+          {data.logo && <Image class="case-hero__logo" src={data.logo} alt={data.logoAlt ?? ''} height={64} />}
+        </div>
+        {
+          facts.length > 0 && (
+            <dl class="case-facts">
+              {facts.map((fact) => (
+                <div>
+                  <dt>{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="case-body">
+      <div class="container">
+        <Prose><Content /></Prose>
+      </div>
+    </div>
+  </article>
+
+  <section class="container case-next" aria-labelledby="case-next-heading">
+    <div class="case-next__header">
+      <h2 id="case-next-heading">More case studies</h2>
+      <a class="case-next__cta" href={letsTalkHref}>Let's talk about your project</a>
+    </div>
+    <div class="case-next__grid">
+      {more.map((s) => <CaseStudyCard study={s} headingLevel={3} />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .case-hero {
+    padding-top: var(--space-2xl);
+    background: radial-gradient(ellipse at top, var(--color-navy), var(--color-black) 70%);
+  }
+
+  .case-hero__text {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-xl);
+    text-align: center;
+  }
+
+  .case-hero__breadcrumb a,
+  .case-hero__eyebrow {
+    margin: 0;
+    color: var(--color-mint);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .case-hero__eyebrow {
+    color: var(--color-neutral-lighter);
+    letter-spacing: 0.06em;
+    text-transform: none;
+    font-size: var(--font-size-sm);
+  }
+
+  .case-hero__title {
+    max-width: 20ch;
+    margin: 0;
+    font-size: var(--font-size-h2);
+  }
+
+  .case-hero__subtitle {
+    max-width: 40rem;
+    margin: 0;
+    font-size: var(--font-size-lg);
+  }
+
+  .case-hero__media {
+    position: relative;
+  }
+
+  .case-hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 0;
+    background: linear-gradient(transparent, rgb(0 0 0 / 0.6));
+    pointer-events: none;
+  }
+
+  .case-hero__logo {
+    position: absolute;
+    z-index: 1;
+    bottom: var(--space-lg);
+    left: var(--space-lg);
+    width: auto;
+    height: clamp(2rem, 5vw, 4rem);
+    max-width: 50%;
+  }
+
+  .case-hero__image {
+    width: 100%;
+    height: auto;
+    max-height: 40rem;
+    object-fit: cover;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .case-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: var(--space-md) var(--space-lg);
+    background-color: var(--color-surface);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  }
+
+  .case-facts dt {
+    color: var(--color-mint);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .case-facts dd {
+    margin: 0;
+  }
+
+  .case-body {
+    margin-top: var(--space-2xl);
+    padding-block: var(--space-2xl);
+    background-color: var(--color-white);
+  }
+
+  .case-next {
+    padding-block: var(--space-2xl);
+  }
+
+  .case-next__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .case-next__header h2 {
+    margin: 0;
+    font-size: var(--font-size-h3);
+  }
+
+  .case-next__cta {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .case-next__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-md);
+  }
+</style>
