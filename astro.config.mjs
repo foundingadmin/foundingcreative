@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 
 // WordPress slugs all end in a trailing slash, so build every page as
 // /slug/index.html and require the slash to keep URLs identical.
@@ -8,5 +8,13 @@ export default defineConfig({
   trailingSlash: 'always',
   build: {
     format: 'directory',
+  },
+  env: {
+    schema: {
+      // Formspree form IDs end up in the page HTML, so they are public, but
+      // they live in env vars (Vercel and .env.local) per CLAUDE.md.
+      FORMSPREE_FORM_ID: envField.string({ context: 'server', access: 'public', optional: true }),
+      FORMSPREE_TEST_FORM_ID: envField.string({ context: 'server', access: 'public', optional: true }),
+    },
   },
 });

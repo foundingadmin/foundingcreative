@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+
+// Head values from the WordPress crawl. The live meta description is broken
+// plugin text ("Please enable JavaScript..."), so this uses the page's lead-in
+// copy instead.
+---
+
+<BaseLayout
+  title="Contact Us - Founding Creative"
+  description="We are here to hear. Send us a message."
+  ogTitle="Contact Us"
+>
+  <section class="container contact">
+    <p class="contact__eyebrow">We are here to hear</p>
+    <h1>Send us a message.</h1>
+    <ContactForm variant="full" />
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    max-width: 720px;
+    padding-block: var(--space-3xl);
+  }
+
+  .contact__eyebrow {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+  }
+</style>
