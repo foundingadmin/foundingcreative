@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, fontProviders } from 'astro/config';
 
 // WordPress slugs all end in a trailing slash, so build every page as
 // /slug/index.html and require the slash to keep URLs identical.
@@ -9,6 +9,20 @@ export default defineConfig({
   build: {
     format: 'directory',
   },
+  // Manrope is downloaded at build time and served from this site, so
+  // visitors never request Google Fonts. Gelica is Adobe Fonts and has to
+  // load from Adobe's kit (see BaseLayout).
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Manrope',
+      cssVariable: '--font-manrope',
+      weights: ['200 800'],
+      styles: ['normal'],
+      subsets: ['latin', 'latin-ext'],
+      fallbacks: ['system-ui', 'sans-serif'],
+    },
+  ],
   env: {
     schema: {
       // Formspree form IDs end up in the page HTML, so they are public, but

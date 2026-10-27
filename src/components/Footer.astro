@@ -1,65 +1,381 @@
 ---
-// Placeholder footer. Remaining legal links (Cookie Policy, Privacy
-// Statement) get added once their WordPress slugs are confirmed.
-const year = new Date().getFullYear();
+import { Image } from 'astro:assets';
+import ContactForm from './ContactForm.astro';
+import Icon from './Icon.astro';
+import logo from '../assets/brand/founding-wordmark-white.svg';
+import tyler from '../assets/team/tyler.webp';
+import titus from '../assets/team/titus.webp';
+import stacey from '../assets/team/stacey.webp';
+import jamie from '../assets/team/jamie.webp';
+import sasha from '../assets/team/sasha.webp';
+import blake from '../assets/team/blake.webp';
+import {
+  companyLinks,
+  services,
+  sitelaunch,
+  latestWork,
+  latestPosts,
+  legalLinks,
+  linkedInHref,
+} from '../data/navigation';
 
-const legal = [
-  { href: '/imprint/', label: 'Imprint' },
-  { href: '/disclaimer/', label: 'Disclaimer' },
+const team = [
+  { name: 'Tyler', photo: tyler },
+  { name: 'Titus', photo: titus },
+  { name: 'Stacey', photo: stacey },
+  { name: 'Jamie', photo: jamie },
+  { name: 'Sasha', photo: sasha },
+  { name: 'Blake', photo: blake },
 ];
+
+// Column headings put one phrase in mint, as on the live footer.
+const columns = [
+  { id: 'company', before: '', accent: 'Company', after: '', links: companyLinks },
+  { id: 'services', before: '', accent: 'What', after: ' we do', links: services },
+  { id: 'sitelaunch', before: '', accent: 'SiteLaunch™', after: '', links: sitelaunch },
+  {
+    id: 'work',
+    before: 'Our ',
+    accent: 'latest',
+    after: ' work',
+    links: latestWork,
+    viewAll: { href: '/case-studies/', label: 'case studies' },
+  },
+  {
+    id: 'posts',
+    before: '',
+    accent: 'Field Notes',
+    after: ' blog',
+    links: latestPosts,
+    viewAll: { href: '/blog/', label: 'blog posts' },
+  },
+];
+
+const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
-  <div class="container site-footer__inner">
-    <p class="site-footer__copy">&copy; {year} Founding Creative</p>
-    <nav aria-label="Legal">
-      <ul class="site-footer__nav">
-        {
-          legal.map(({ href, label }) => (
-            <li>
-              <a href={href}>{label}</a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
+<footer class="site-footer" id="footer">
+  <div class="container">
+    <section class="footer-contact" aria-labelledby="footer-contact-heading">
+      <div class="footer-contact__intro">
+        <img class="footer-contact__logo" src={logo.src} width="175" height="58" alt="" />
+        <h2 class="footer-contact__heading" id="footer-contact-heading">
+          Creative foundations for <br />brands of all sizes
+        </h2>
+        <p class="footer-contact__tagline">Brand and Web Creative Marketing Agency</p>
+        <ul class="footer-contact__team" aria-label="The Founding Creative team">
+          {
+            team.map(({ name, photo }) => (
+              <li>
+                <Image src={photo} alt={name} width={96} height={96} />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="footer-contact__card">
+        <p class="footer-contact__prompt">From bold brands to smart websites, it starts with a message.</p>
+        <ContactForm variant="short" idPrefix="footer-contact" />
+      </div>
+    </section>
+
+    <div class="footer-columns">
+      {
+        columns.map((column) => (
+          <section class="footer-column" aria-labelledby={`footer-${column.id}`}>
+            <h2 class="footer-column__heading" id={`footer-${column.id}`}>
+              {column.before}
+              <span class="footer-column__accent">{column.accent}</span>
+              {column.after}
+            </h2>
+            <ul class="footer-column__list">
+              {column.links.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+            {column.viewAll && (
+              <a class="footer-column__view-all" href={column.viewAll.href}>
+                View all<span class="visually-hidden"> {column.viewAll.label}</span>
+                <Icon name="arrow-up-right" size={16} />
+              </a>
+            )}
+          </section>
+        ))
+      }
+    </div>
+
+    <section class="footer-linkedin" aria-labelledby="footer-linkedin-heading">
+      <Icon name="linkedin" size={20} class="footer-linkedin__icon" />
+      <h2 class="footer-linkedin__heading" id="footer-linkedin-heading">We only share the good stuff on LinkedIn</h2>
+      <p class="footer-linkedin__text">
+        Helpful brand strategy content posted weekly for marketers and founders who want their next move to hit
+        harder.
+      </p>
+      <a class="footer-linkedin__link" href={linkedInHref}>
+        Creative tips weekly<span class="visually-hidden"> on LinkedIn</span>
+        <Icon name="arrow-up-right" size={16} />
+      </a>
+    </section>
+
+    <p class="footer-local">
+      <span class="footer-local__question">Local to Denver, CO or Chattanooga, TN?</span>
+      <a href="/contact-us/">Let's meet up, free coffee on the house.</a>
+    </p>
+
+    <div class="footer-bottom">
+      <p class="footer-bottom__copy">Copyright &copy; {year} Founding Creative. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <ul class="footer-bottom__legal">
+          {
+            legalLinks.map((link) => (
+              <li>
+                <a href={link.href}>{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <p class="footer-bottom__credit">
+        Designed &amp; developed with <Icon name="heart" size={14} label="love" /> by Founding Creative
+      </p>
+    </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
+    padding-block: var(--space-2xl) var(--space-lg);
     border-top: 1px solid var(--color-border);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
   }
 
-  .site-footer__inner {
-    display: flex;
-    flex-wrap: wrap;
+  /* Contact block */
+  .footer-contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xl);
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    padding-block: var(--space-lg);
+    padding-bottom: var(--space-2xl);
   }
 
-  .site-footer__copy {
-    margin: 0;
+  .footer-contact__logo {
+    width: 175px;
+    margin-bottom: var(--space-md);
   }
 
-  .site-footer__nav {
+  .footer-contact__heading {
+    font-size: var(--font-size-h2);
+    line-height: 1;
+    background: linear-gradient(90deg, var(--color-cyan), var(--color-holo-mint), var(--color-lavender-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .footer-contact__tagline {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .footer-contact__team {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-md);
+    margin: var(--space-md) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-contact__team li + li {
+    margin-left: calc(-1 * var(--space-2xs));
+  }
+
+  .footer-contact__team img {
+    width: 3rem;
+    height: 3rem;
+    border: 2px solid var(--color-black);
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .footer-contact__card {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+  }
+
+  .footer-contact__prompt {
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-h6);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-snug);
+  }
+
+  /* Link columns */
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-lg);
+    padding-block: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-column__heading {
+    margin-bottom: var(--space-md);
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .footer-column__accent {
+    color: var(--color-mint);
+  }
+
+  .footer-column__list {
+    display: grid;
+    gap: var(--space-xs);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .site-footer__nav a {
+  .footer-column__list a,
+  .footer-column__view-all {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
+    text-decoration: none;
+  }
+
+  .footer-column__list a:hover,
+  .footer-column__view-all:hover {
+    color: var(--color-mint);
+  }
+
+  .footer-column__view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin-top: var(--space-md);
+    color: var(--color-mint);
+  }
+
+  /* LinkedIn card */
+  .footer-linkedin {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-xs) var(--space-lg);
+    align-items: end;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .footer-linkedin__icon {
+    grid-column: 1 / -1;
+    color: var(--color-mint);
+  }
+
+  .footer-linkedin__heading {
+    grid-column: 1;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .footer-linkedin__text {
+    grid-column: 1;
+    max-width: 30rem;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .footer-linkedin__link {
+    grid-column: 2;
+    grid-row: 2 / 4;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+  }
+
+  /* Local line */
+  .footer-local {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs) var(--space-sm);
+    margin: var(--space-xl) 0;
+  }
+
+  .footer-local__question {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .footer-local a {
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+  }
+
+  /* Bottom bar */
+  .footer-bottom {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-2xs) var(--space-lg);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  .footer-bottom p {
+    margin: 0;
+  }
+
+  .footer-bottom__credit {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .footer-bottom__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-bottom__legal a {
     color: var(--color-text-muted);
   }
 
-  .site-footer__nav a:hover {
-    color: var(--color-link);
+  .footer-bottom__legal a:hover {
+    color: var(--color-mint);
+  }
+
+  @media (max-width: 977px) {
+    .footer-contact {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-columns {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 599px) {
+    .footer-columns,
+    .footer-linkedin,
+    .footer-bottom {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-linkedin__link,
+    .footer-bottom__credit {
+      grid-column: 1;
+      grid-row: auto;
+    }
   }
 </style>

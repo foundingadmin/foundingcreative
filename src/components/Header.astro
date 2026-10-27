@@ -1,75 +1,383 @@
 ---
-// Placeholder header. The full nav (services dropdown, SiteLaunch packages)
-// gets ported from the WordPress header later. Slugs match the live site.
-const links = [
-  { href: '/about-us/', label: 'About' },
-  { href: '/fractional-creative/', label: 'Fractional Creative' },
-  { href: '/case-studies/', label: 'Case Studies' },
-  { href: '/blog/', label: 'Field Notes' },
-  { href: '/contact-us/', label: 'Contact' },
-];
+import Icon from './Icon.astro';
+import logo from '../assets/brand/founding-wordmark-white.svg';
+import { mainNav, letsTalkHref, bookMeetingHref } from '../data/navigation';
 
 const current = Astro.url.pathname;
+const isCurrent = (href: string) => (current === href ? 'page' : undefined);
 ---
 
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="site-header__logo" href="/">Founding Creative</a>
-    <nav aria-label="Main">
-      <ul class="site-header__nav">
+    <a class="site-header__logo" href="/">
+      <img src={logo.src} width="135" height="45" alt="Founding Creative home" />
+    </a>
+
+    <nav class="site-nav" aria-label="Main">
+      <ul class="site-nav__list">
         {
-          links.map(({ href, label }) => (
-            <li>
-              <a href={href} aria-current={current === href ? 'page' : undefined}>
-                {label}
-              </a>
-            </li>
-          ))
+          mainNav.map((item) =>
+            item.children ? (
+              <li class="site-nav__item" data-disclosure="dropdown">
+                <button type="button" class="site-nav__toggle" aria-expanded="false" aria-controls="services-menu">
+                  {item.label}
+                  <Icon name="chevron-down" size={16} />
+                </button>
+                <ul class="site-nav__menu" id="services-menu" hidden>
+                  {item.children.map((child) => (
+                    <li>
+                      <a href={child.href} aria-current={isCurrent(child.href)}>
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li class="site-nav__item">
+                <a class="site-nav__link" href={item.href} aria-current={isCurrent(item.href)}>
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
         }
       </ul>
     </nav>
+
+    <a class="site-header__cta" href={letsTalkHref}>Let's talk</a>
+
+    <a class="site-header__book" href={bookMeetingHref}>Book a Meeting</a>
+    <button type="button" class="site-header__menu-button" aria-haspopup="dialog" aria-controls="mobile-menu">
+      <Icon name="menu" size={28} />
+      <span class="visually-hidden">Menu</span>
+    </button>
   </div>
+
+  <dialog class="mobile-menu" id="mobile-menu" aria-label="Menu">
+    <button type="button" class="mobile-menu__close" data-close>
+      <Icon name="x" size={24} />
+      <span class="visually-hidden">Close menu</span>
+    </button>
+    <nav aria-label="Main">
+      <ul class="mobile-menu__list">
+        {
+          mainNav.map((item) =>
+            item.children ? (
+              <li data-disclosure="accordion">
+                <button
+                  type="button"
+                  class="mobile-menu__item mobile-menu__toggle"
+                  aria-expanded="false"
+                  aria-controls="mobile-services-menu"
+                >
+                  {item.label}
+                  <Icon name="chevron-down" size={16} />
+                </button>
+                <ul class="mobile-menu__sublist" id="mobile-services-menu" hidden>
+                  {item.children.map((child) => (
+                    <li>
+                      <a class="mobile-menu__item" href={child.href} aria-current={isCurrent(child.href)}>
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li>
+                <a class="mobile-menu__item" href={item.href} aria-current={isCurrent(item.href)}>
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+        <li>
+          <a class="mobile-menu__item mobile-menu__cta" href={letsTalkHref}>Let's talk</a>
+        </li>
+      </ul>
+    </nav>
+  </dialog>
 </header>
+
+<script>
+  // Services dropdown (and the mobile Services accordion): a disclosure
+  // button that opens on click, Enter, or Space.
+  for (const item of document.querySelectorAll<HTMLElement>('[data-disclosure]')) {
+    const button = item.querySelector<HTMLButtonElement>('button[aria-controls]')!;
+    const panel = document.getElementById(button.getAttribute('aria-controls')!)!;
+
+    const setOpen = (open: boolean) => {
+      button.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    };
+
+    button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+    // The desktop dropdown floats over the page, so Escape, a click outside,
+    // or focus leaving it closes it. The mobile accordion stays open until
+    // toggled, and Escape there closes the whole menu.
+    if (item.dataset.disclosure === 'dropdown') {
+      item.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+          setOpen(false);
+          button.focus();
+        }
+      });
+      item.addEventListener('focusout', (event) => {
+        if (!item.contains(event.relatedTarget as Node | null)) setOpen(false);
+      });
+      document.addEventListener('click', (event) => {
+        if (!item.contains(event.target as Node)) setOpen(false);
+      });
+    }
+  }
+
+  // Mobile menu: a modal <dialog>, which traps focus and closes on Escape.
+  const dialog = document.querySelector<HTMLDialogElement>('#mobile-menu')!;
+  const opener = document.querySelector<HTMLButtonElement>('.site-header__menu-button')!;
+  opener.addEventListener('click', () => dialog.showModal());
+  dialog.querySelector('[data-close]')!.addEventListener('click', () => dialog.close());
+  // Close on a click outside the panel (on the backdrop). Clicks on the
+  // panel's own empty space also target the dialog, so check the position.
+  dialog.addEventListener('click', (event) => {
+    const box = dialog.getBoundingClientRect();
+    const outside =
+      event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom;
+    if (event.target === dialog && outside) dialog.close();
+  });
+  dialog.addEventListener('close', () => opener.focus());
+</script>
 
 <style>
   .site-header {
-    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: rgb(0 0 0 / 0.85);
+    backdrop-filter: blur(12px);
   }
 
   .site-header__inner {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    padding-block: var(--space-sm);
+    gap: var(--space-md);
+    min-height: var(--header-height);
   }
 
   .site-header__logo {
-    color: var(--color-text);
-    font-family: var(--font-display);
-    font-size: var(--font-size-lg);
-    text-decoration: none;
+    margin-right: auto;
   }
 
-  .site-header__nav {
+  .site-header__logo img {
+    width: 135px;
+    height: auto;
+  }
+
+  /* Desktop nav */
+  .site-nav__list {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs) var(--space-md);
+    align-items: center;
+    gap: var(--space-md);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .site-header__nav a {
+  .site-nav__item {
+    position: relative;
+  }
+
+  .site-nav__link,
+  .site-nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    padding: var(--space-2xs) 0;
+    border: 0;
+    background: none;
     color: var(--color-text);
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-regular);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .site-nav__link:hover,
+  .site-nav__toggle:hover,
+  .site-nav__link[aria-current='page'] {
+    color: var(--color-mint);
+  }
+
+  .site-nav__toggle .icon {
+    transition: transform var(--transition-fast);
+  }
+
+  .site-nav__toggle[aria-expanded='true'] .icon {
+    transform: rotate(180deg);
+  }
+
+  .site-nav__menu {
+    position: absolute;
+    top: 100%;
+    left: calc(-1 * var(--space-md));
+    min-width: 14rem;
+    margin: var(--space-2xs) 0 0;
+    padding: var(--space-2xs) 0;
+    list-style: none;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-white);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
+  }
+
+  .site-nav__menu a {
+    display: block;
+    padding: var(--space-2xs) var(--space-md);
+    color: var(--color-black);
+    font-size: var(--font-size-sm);
     text-decoration: none;
   }
 
-  .site-header__nav a:hover,
-  .site-header__nav a[aria-current='page'] {
-    color: var(--color-link);
+  .site-nav__menu a:hover,
+  .site-nav__menu a[aria-current='page'] {
+    background-color: var(--color-mint-lighter);
+    color: var(--color-black);
+  }
+
+  .site-nav__menu a:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .site-header__cta {
+    padding: var(--space-2xs) var(--space-lg);
+    border: 1px solid var(--color-white);
+    border-radius: var(--radius-pill);
+    color: var(--color-white);
+    font-size: var(--font-size-lg);
+    text-decoration: none;
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+  .site-header__cta:hover {
+    background-color: var(--color-mint);
+    border-color: var(--color-mint);
+    color: var(--color-black);
+  }
+
+  /* Mobile header: Book a Meeting plus the menu button */
+  .site-header__book,
+  .site-header__menu-button {
+    display: none;
+  }
+
+  .site-header__book {
+    color: var(--color-cyan);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+  }
+
+  .site-header__menu-button {
+    padding: var(--space-2xs);
+    border: 0;
+    background: none;
+    color: var(--color-white);
+    cursor: pointer;
+  }
+
+  @media (max-width: 977px) {
+    .site-nav,
+    .site-header__cta {
+      display: none;
+    }
+
+    .site-header__book,
+    .site-header__menu-button {
+      display: inline-flex;
+    }
+  }
+
+  /* Mobile menu panel, light like the live site */
+  .mobile-menu {
+    width: min(100%, 26rem);
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0 0 0 auto;
+    padding: var(--space-xl) var(--space-md) var(--space-md);
+    border: 0;
+    background-color: var(--color-white);
+    color: var(--color-black);
+  }
+
+  .mobile-menu::backdrop {
+    background-color: rgb(0 0 0 / 0.6);
+  }
+
+  .mobile-menu__close {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    padding: var(--space-2xs);
+    border: 0;
+    background: none;
+    color: var(--color-black);
+    cursor: pointer;
+  }
+
+  .mobile-menu__list,
+  .mobile-menu__sublist {
+    display: grid;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mobile-menu__sublist {
+    margin-top: var(--space-2xs);
+    padding-left: var(--space-sm);
+  }
+
+  .mobile-menu__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 0;
+    border-radius: var(--radius-xs);
+    background-color: var(--color-neutral-lightest);
+    color: var(--color-black);
+    font-size: var(--font-size-sm);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .mobile-menu__item:hover,
+  .mobile-menu__item[aria-current='page'] {
+    background-color: var(--color-neutral-lighter);
+    color: var(--color-black);
+  }
+
+  .mobile-menu__toggle[aria-expanded='true'] .icon {
+    transform: rotate(180deg);
+  }
+
+  .mobile-menu__cta {
+    justify-content: center;
+    margin-top: var(--space-sm);
+    background-color: var(--color-mint);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .mobile-menu__cta:hover {
+    background-color: var(--color-mint-dark);
+  }
+
+  .mobile-menu :focus-visible {
+    outline-color: var(--color-black);
   }
 </style>

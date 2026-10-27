@@ -1,4 +1,5 @@
 ---
+import { Font } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
@@ -37,6 +38,14 @@ const ogImageUrl = ogImage ? new URL(ogImage, Astro.site).href : undefined;
     {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
 
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Manrope, self-hosted by Astro (see astro.config.mjs) -->
+    <Font cssVariable="--font-manrope" preload />
+    <!-- Gelica from the Founding Creative Adobe Fonts kit. Adobe's license
+         requires serving it from Adobe; the kit only serves domains listed in
+         its Adobe Fonts settings. -->
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin />
+    <link rel="stylesheet" href="https://use.typekit.net/ooi7rue.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
