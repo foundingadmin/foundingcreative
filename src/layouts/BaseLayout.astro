@@ -22,6 +22,8 @@ interface Props {
   article?: { published: Date; modified?: Date; section?: string; tags?: string[] };
   /** Page-specific schema.org data, added after the site-wide Organization. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Keep the page out of search results (also excluded from the sitemap in astro.config.mjs). */
+  noindex?: boolean;
 }
 
 const {
@@ -34,6 +36,7 @@ const {
   ogType = 'website',
   article,
   jsonLd,
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -70,6 +73,7 @@ const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="alternate" type="application/rss+xml" title="Founding Creative Field Notes" href="/feed/" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 

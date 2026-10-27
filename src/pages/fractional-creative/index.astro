@@ -1,0 +1,432 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaSection from '../../components/CtaSection.astro';
+import Icon from '../../components/Icon.astro';
+import wave from '../../assets/brand/wave-black.svg';
+import idea from '../../assets/pages/idea-illustration.svg';
+import buckitLogo from '../../assets/pages/buckit-logo-white.svg';
+import growth from '../../assets/pages/growth-chart-illustration.svg';
+import shareImage from '../../assets/home/services/brand-2.webp';
+
+const offers = [
+  'Flexible engagement tailored to your needs.',
+  'Access to broad capabilities without multiple specialists.',
+  'Cost-effective alternative to traditional creative models.',
+];
+
+const portal = [
+  'Centralized brand assets',
+  'Sales & marketing materials',
+  'Language & creative direction',
+  'User-centric intuitive interface',
+  '24/7 accessibility',
+];
+
+const benefits = [
+  { title: 'Priority access', text: 'Lower MLT for fast business acceleration' },
+  { title: 'Strategic focus', text: 'Creative strategy workshop and guidance' },
+  { title: 'Brand equity building', text: 'Centralize your creative execution' },
+  { title: 'Roll-over benefits', text: 'Reduce business over-expenditure' },
+];
+
+const dilemmas = [
+  'Inconsistent branding across platforms.',
+  'Strained internal resources juggling creative tasks.',
+  'Prohibitive costs while maintaining a full-time creative team.',
+];
+
+const gains = [
+  'Long-term brand consistency and quality.',
+  'Ample savings compared to full-time staff or large agencies.',
+  'Bespoke solutions crafted for your unique brand story.',
+];
+
+// Comparison table from the live page. true = ✓, false = ✕.
+const models = [
+  'Self-Service Tools',
+  'Freelancer Network',
+  'Fractional Creative (Founding)',
+  'Large Agency Partners',
+  'In-House Creative Teams',
+];
+const comparison: [string, boolean[]][] = [
+  ['Cost-Effective', [true, true, true, false, false]],
+  ['Scalability', [true, true, true, false, false]],
+  ['Consistent Branding', [false, false, true, true, true]],
+  ['Customized Solutions', [false, false, true, true, true]],
+  ['Expertise & Quality', [false, true, true, true, true]],
+  ['Long-term Relationship', [false, false, true, true, true]],
+  ['Time Efficiency', [true, false, true, false, true]],
+  ['Ease of Communication', [false, false, true, false, true]],
+  ['Flexibility', [true, true, true, false, false]],
+  ['Project Management', [false, false, true, true, true]],
+];
+
+const partnership = [
+  'Strategic, cost-effective, and high-quality creative work.',
+  'Flexibility to adapt to your changing business needs.',
+  'A partnership focused on your long-term brand success.',
+];
+
+const description =
+  'Access expert branding and creative services to build your brand without the cost of full-time hires.';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Fractional Creative',
+  serviceType: 'Fractional creative team',
+  description,
+  url: new URL('/fractional-creative/', Astro.site).href,
+  provider: { '@id': `${Astro.site}#organization` },
+  areaServed: { '@type': 'Country', name: 'United States' },
+};
+---
+
+<BaseLayout
+  title="Fractional Creative Team: In-House Talent, Fractional Cost"
+  description={description}
+  ogTitle="A New Brand Design Agencies Model | Fractional Creative"
+  ogImage={shareImage}
+  ogImageAlt="ATL Freight website on a laptop"
+  jsonLd={jsonLd}
+>
+  <section class="hero holo-bg">
+    <Image class="hero__wave" src={wave} alt="" loading="eager" />
+    <div class="container hero__grid">
+      <div>
+        <p class="eyebrow">Changing Brand Design <em>Agencies</em></p>
+        <h1 class="holo-text">In-house creative at fractional costs</h1>
+        <h2 class="hero__subhead">A new era of brand design agencies</h2>
+        <p class="section__lead hero__lead">
+          Fractional creative service means having a dedicated creative team, but only when you need it.
+        </p>
+        <p>This model offers:</p>
+        <ul class="checks">
+          {
+            offers.map((item) => (
+              <li>
+                <Icon name="check" size={18} />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <Image class="hero__art" src={idea} alt="" loading="eager" />
+    </div>
+  </section>
+
+  <section class="container section portal" aria-labelledby="portal-heading">
+    <div class="portal__card">
+      <Image class="portal__logo" src={buckitLogo} alt="BucKit by Founding" height={48} />
+      <h2 id="portal-heading">Creative system</h2>
+      <p>We build your team an all-in-one project and toolkit portal to easily access your branding and creative.</p>
+      <ul class="checks">
+        {
+          portal.map((item) => (
+            <li>
+              <Icon name="check" size={18} />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+      <a class="button" href="/buckit/">Learn more about BucKit <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+    <dl class="benefits">
+      {
+        benefits.map((benefit) => (
+          <div>
+            <dt>{benefit.title}</dt>
+            <dd>{benefit.text}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="container section split" aria-labelledby="experts-heading">
+    <div>
+      <h2 id="experts-heading">Creative system experts</h2>
+      <p>
+        At Founding Creative, we're not just designers and strategists; we're creative system experts. We bring a wealth of
+        industry experience, infused with foresight to build creative solutions that scale with your business. There's
+        science in the art of developing creative systems that grow and evolve as you do. This is different from most Brand
+        Design Agencies.
+      </p>
+      <h2>Solving the dilemma</h2>
+      <p>Many business leaders face:</p>
+      <ul class="crosses">
+        {dilemmas.map((item) => <li>{item}</li>)}
+      </ul>
+      <p>
+        These challenges restrict growth, dilute brand, and drain resources. Our fractional service is the key to turning
+        these pain points into growth opportunities.
+      </p>
+    </div>
+    <div>
+      <Image class="split__art" src={growth} alt="" />
+      <h2>Your path to sustained creative excellence</h2>
+      <p>Choosing Founding Creative's fractional services means you gain:</p>
+      <ul class="checks">
+        {
+          gains.map((item) => (
+            <li>
+              <Icon name="check" size={18} />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="container section" aria-labelledby="models-heading">
+    <div class="section__intro">
+      <p class="eyebrow">Finding your <em>best fit</em></p>
+      <h2 id="models-heading">Brand design agency models</h2>
+      <p class="section__lead">
+        Choosing the right creative path for your business is key. Founding is setting out to bring the missing middle
+        ground to the playing field. A new time calls for a new solution that marries affordability, quality, and
+        flexibility. Perfect for businesses of all sizes, from "we don't even have a logo yet" to "we need to pivot our
+        entire brand strategy." We are your creative guru in the corner helping you stand out and attract your tribe. Ready
+        to raise your flag?
+      </p>
+    </div>
+    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="models-heading">
+      <table class="comparison">
+        <caption class="visually-hidden">How creative service models compare</caption>
+        <thead>
+          <tr>
+            <td></td>
+            {models.map((model, i) => <th scope="col" class:list={{ featured: i === 2 }}>{model}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {
+            comparison.map(([criterion, marks]) => (
+              <tr>
+                <th scope="row">{criterion}</th>
+                {marks.map((yes, i) => (
+                  <td class:list={{ featured: i === 2, yes, no: !yes }}>
+                    <span aria-hidden="true">{yes ? '✓' : '✕'}</span>
+                    <span class="visually-hidden">{yes ? 'Yes' : 'No'}</span>
+                  </td>
+                ))}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <CtaSection
+    eyebrow="Empower your creative starting today"
+    heading="Let's explore a partnership that grows with you."
+    text="Our Fractional Creative partnership is ideal for businesses ready to elevate their brand without overextending resources."
+  >
+    <ul class="checks checks--center">
+      {
+        partnership.map((item) => (
+          <li>
+            <Icon name="check" size={18} />
+            {item}
+          </li>
+        ))
+      }
+    </ul>
+  </CtaSection>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-3xl) var(--space-2xl);
+  }
+
+  .hero__wave {
+    position: absolute;
+    z-index: -1;
+    inset: auto 0 0 auto;
+    width: 70%;
+    max-width: 60rem;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .hero h1 {
+    max-width: 14ch;
+  }
+
+  .hero__subhead {
+    font-size: var(--font-size-h5);
+  }
+
+  .hero__lead {
+    color: var(--color-text);
+  }
+
+  .hero__art {
+    width: 100%;
+    max-width: 26rem;
+    justify-self: center;
+  }
+
+  .checks,
+  .crosses {
+    display: grid;
+    gap: var(--space-xs);
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    list-style: none;
+  }
+
+  .checks li {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .checks .icon {
+    margin-top: 0.3em;
+    color: var(--color-mint);
+  }
+
+  :global(.cta) .checks--center {
+    width: fit-content;
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  .crosses li::before {
+    content: '✕';
+    margin-right: var(--space-2xs);
+    color: var(--color-orchid);
+  }
+
+  .portal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .portal__card {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background-color: var(--color-surface);
+  }
+
+  .portal__logo {
+    width: auto;
+    height: 3rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .portal h2 {
+    font-size: var(--font-size-h4);
+  }
+
+  .benefits {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    margin: 0;
+  }
+
+  .benefits div {
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .benefits dt {
+    color: var(--color-mint);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h6);
+  }
+
+  .benefits dd {
+    margin: var(--space-3xs) 0 0;
+    color: var(--color-text-muted);
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+  }
+
+  .split h2 {
+    font-size: var(--font-size-h4);
+  }
+
+  .split p {
+    color: var(--color-text-muted);
+  }
+
+  .split__art {
+    width: 100%;
+    max-width: 20rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .comparison {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+
+  .comparison th,
+  .comparison td {
+    padding: var(--space-xs) var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .comparison thead th {
+    vertical-align: bottom;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .comparison tbody th {
+    text-align: left;
+    font-weight: var(--font-weight-regular);
+  }
+
+  .comparison .featured {
+    background-color: var(--color-mint-darkest);
+  }
+
+  .comparison thead .featured {
+    color: var(--color-mint);
+  }
+
+  .comparison .yes {
+    color: var(--color-mint);
+  }
+
+  .comparison .no {
+    color: var(--color-neutral);
+  }
+
+  .comparison tr:last-child > * {
+    border-bottom: 0;
+  }
+</style>

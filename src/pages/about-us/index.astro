@@ -1,0 +1,206 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CtaSection from '../../components/CtaSection.astro';
+import ClientLogos from '../../components/ClientLogos.astro';
+import builder from '../../assets/pages/about-builder-illustration.svg';
+import titus from '../../assets/team/titus.webp';
+import tyler from '../../assets/team/tyler.webp';
+import stacey from '../../assets/team/stacey.webp';
+import sasha from '../../assets/team/sasha.webp';
+import jamie from '../../assets/team/jamie.webp';
+import blake from '../../assets/team/blake.webp';
+
+const team = [
+  { name: 'Josh Titus', role: 'Brand & Marketing Design', photo: titus },
+  { name: 'Tyler Lukey', role: 'Systems & Product Design', photo: tyler },
+  { name: 'Stacey Cuzzacrea', role: 'Creative Production Coordinator', photo: stacey },
+  { name: 'Sasha Beck', role: 'Senior Designer', photo: sasha },
+  { name: 'Jamie Caceres', role: 'Marketing Director', photo: jamie },
+  { name: 'Blake Hickey', role: 'Account Executive', photo: blake },
+];
+
+const values = [
+  { title: 'Clarity over chaos', text: 'Solutions rooted in structure and strategy' },
+  { title: 'Relationships first', text: 'We work with people, not logos' },
+  { title: 'Creative systems', text: 'Always building together to drive outcomes' },
+  { title: 'Founding energy', text: 'Every project is a chance for something big' },
+];
+
+const description =
+  'Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business.';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'About Founding Creative',
+  description,
+  url: new URL('/about-us/', Astro.site).href,
+  mainEntity: {
+    '@id': `${Astro.site}#organization`,
+    employee: team.map((person) => ({ '@type': 'Person', name: person.name, jobTitle: person.role })),
+  },
+};
+---
+
+<BaseLayout
+  title="About Us: The Team Behind Founding Creative"
+  description={description}
+  ogTitle="About Us"
+  ogImage={titus}
+  ogImageAlt="Josh Titus, Brand & Marketing Design at Founding Creative"
+  jsonLd={jsonLd}
+>
+  <section class="about-hero holo-bg">
+    <div class="container about-hero__grid">
+      <div>
+        <h1 class="holo-text">About us</h1>
+        <p class="section__lead about-hero__lead">Sustainable growth begins with a solid foundation.</p>
+        <p>
+          Brought together from a desire to offer up the missing middle ground. A ground where holistic creative strategies
+          are developed not just as one-offs, but as one-mores.
+        </p>
+        <p class="about-hero__statement">
+          Every initiative is one more step towards foundational creative systems that scale with your business.
+        </p>
+      </div>
+      <Image class="about-hero__art" src={builder} alt="" loading="eager" />
+    </div>
+  </section>
+
+  <section class="container section" aria-labelledby="team-heading">
+    <div class="section__intro">
+      <p class="eyebrow">Our <em>team</em></p>
+      <h2 id="team-heading">Built by creatives. Backed by strategy.</h2>
+      <p class="section__lead">
+        With too many businesses stuck between bloated agencies and scattered freelancers, we built the creative agency we
+        always wished existed.
+      </p>
+    </div>
+    <ul class="team">
+      {
+        team.map((person) => (
+          <li class="person">
+            <Image
+              src={person.photo}
+              alt={`${person.name}, ${person.role}`}
+              widths={[280, 560]}
+              sizes="(max-width: 600px) 45vw, 260px"
+            />
+            <h3>{person.name}</h3>
+            <p>{person.role}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="container section" aria-labelledby="values-heading">
+    <h2 id="values-heading" class="values__heading">What we stand for</h2>
+    <dl class="values">
+      {
+        values.map((value) => (
+          <div>
+            <dt>{value.title}</dt>
+            <dd>{value.text}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="container section" aria-label="Brands we've worked with">
+    <ClientLogos />
+  </section>
+
+  <CtaSection heading="Let's build your foundation" text="Tell us where you're headed and we'll help you get there." />
+</BaseLayout>
+
+<style>
+  .about-hero {
+    padding-block: var(--space-3xl) var(--space-2xl);
+  }
+
+  .about-hero__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .about-hero__lead {
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .about-hero__statement {
+    margin-top: var(--space-lg);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h5);
+    line-height: var(--line-height-snug);
+  }
+
+  .about-hero__art {
+    width: 100%;
+    max-width: 28rem;
+    justify-self: center;
+  }
+
+  .team {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .person img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+
+  .person h3 {
+    margin: var(--space-sm) 0 0;
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .person p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .values__heading {
+    font-size: var(--font-size-h3);
+  }
+
+  .values {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+  }
+
+  .values div {
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+  }
+
+  .values dt {
+    color: var(--color-mint);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h6);
+  }
+
+  .values dd {
+    margin: var(--space-3xs) 0 0;
+    color: var(--color-text-muted);
+  }
+</style>

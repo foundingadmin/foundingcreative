@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import shareImage from '../../assets/home/services/brand-4.webp';
+
+const tools = [
+  {
+    name: 'FontSeek',
+    tagline: "Find your brand's typography",
+    href: 'https://fontseek.foundingcreative.com/',
+  },
+  {
+    name: 'VoiceSeek',
+    tagline: "Find your brand's voice",
+    href: 'https://voiceseek.foundingcreative.com/',
+  },
+];
+
+const description =
+  "Free tools from Founding Creative: FontSeek helps you find your brand's typography and VoiceSeek helps you find your brand's voice.";
+const jsonLd = tools.map((tool) => ({
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: tool.name,
+  description: tool.tagline,
+  url: tool.href,
+  applicationCategory: 'DesignApplication',
+  operatingSystem: 'Web',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  creator: { '@id': `${Astro.site}#organization` },
+}));
+---
+
+<BaseLayout
+  title="Free Brand Tools: FontSeek & VoiceSeek | Founding Creative"
+  description={description}
+  ogTitle="Tools"
+  ogImage={shareImage}
+  ogImageAlt="Hand-drawn logo sketches on graph paper"
+  jsonLd={jsonLd}
+>
+  <section class="container section">
+    <div class="section__intro">
+      <p class="eyebrow">Free <em>brand tools</em></p>
+      <h1>Tools</h1>
+      <p class="section__lead">Small tools we built to help you make big brand decisions with more confidence.</p>
+    </div>
+    <ul class="tools">
+      {
+        tools.map((tool) => (
+          <li class="tool">
+            <h2>
+              <a href={tool.href}>{tool.name}</a>
+            </h2>
+            <p>{tool.tagline}</p>
+            <span class="tool__arrow" aria-hidden="true">
+              <Icon name="arrow-up-right" size={20} />
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0 0 var(--space-2xl);
+    list-style: none;
+  }
+
+  .tool {
+    position: relative;
+    padding: var(--space-xl) var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(160deg, var(--color-mint-darkest), var(--color-surface) 70%);
+    transition: border-color var(--transition-fast);
+  }
+
+  .tool:hover,
+  .tool:focus-within {
+    border-color: var(--color-mint);
+  }
+
+  .tool h2 {
+    font-size: var(--font-size-h4);
+  }
+
+  .tool a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .tool a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .tool a:focus-visible {
+    outline: none;
+  }
+
+  .tool:has(a:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .tool p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .tool__arrow {
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    color: var(--color-mint);
+  }
+</style>
