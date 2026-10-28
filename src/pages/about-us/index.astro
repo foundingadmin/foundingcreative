@@ -3,7 +3,9 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/CtaSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
-import builder from '../../assets/pages/about-builder-illustration.svg';
+import Icon from '../../components/Icon.astro';
+import wave from '../../assets/brand/wave-black.svg';
+import builderSvg from '../../assets/pages/about-builder-illustration.svg?raw';
 import titus from '../../assets/team/titus.webp';
 import tyler from '../../assets/team/tyler.webp';
 import stacey from '../../assets/team/stacey.webp';
@@ -11,13 +13,20 @@ import sasha from '../../assets/team/sasha.webp';
 import jamie from '../../assets/team/jamie.webp';
 import blake from '../../assets/team/blake.webp';
 
+// LinkedIn profiles come from the photo links on the live page (the live
+// corner tabs all point to one profile by mistake).
 const team = [
-  { name: 'Josh Titus', role: 'Brand & Marketing Design', photo: titus },
-  { name: 'Tyler Lukey', role: 'Systems & Product Design', photo: tyler },
-  { name: 'Stacey Cuzzacrea', role: 'Creative Production Coordinator', photo: stacey },
-  { name: 'Sasha Beck', role: 'Senior Designer', photo: sasha },
-  { name: 'Jamie Caceres', role: 'Marketing Director', photo: jamie },
-  { name: 'Blake Hickey', role: 'Account Executive', photo: blake },
+  { name: 'Josh Titus', role: 'Brand & Marketing Design', photo: titus, linkedin: 'https://www.linkedin.com/in/tituscreative/' },
+  { name: 'Tyler Lukey', role: 'Systems & Product Design', photo: tyler, linkedin: 'https://www.linkedin.com/in/tylerlukey/' },
+  {
+    name: 'Stacey Cuzzacrea',
+    role: 'Creative Production Coordinator',
+    photo: stacey,
+    linkedin: 'https://www.linkedin.com/in/stacey-cuzzacrea-1ab16421b/',
+  },
+  { name: 'Sasha Beck', role: 'Senior Designer', photo: sasha, linkedin: 'https://www.linkedin.com/in/sashambeck/' },
+  { name: 'Jamie Caceres', role: 'Marketing Director', photo: jamie, linkedin: 'https://www.linkedin.com/in/jamie-caceres-lukey/' },
+  { name: 'Blake Hickey', role: 'Account Executive', photo: blake, linkedin: 'https://www.linkedin.com/in/blakehickey/' },
 ];
 
 const values = [
@@ -26,6 +35,15 @@ const values = [
   { title: 'Creative systems', text: 'Always building together to drive outcomes' },
   { title: 'Founding energy', text: 'Every project is a chance for something big' },
 ];
+
+// The builder illustration is inlined so its line work can draw itself in.
+// Its class names are prefixed so its embedded styles can't touch the page,
+// and pathLength="1" lets one dash animation fit every stroke.
+const builder = builderSvg
+  .replace(/<\?xml[^>]*>\s*/, '')
+  .replace(/\bcls-/g, 'builder-')
+  .replace(/<path class="builder-3"/g, '<path pathLength="1" class="builder-3"')
+  .replace('<svg ', '<svg class="about-hero__art" aria-hidden="true" focusable="false" ');
 
 const description =
   'Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business.';
@@ -37,7 +55,12 @@ const jsonLd = {
   url: new URL('/about-us/', Astro.site).href,
   mainEntity: {
     '@id': `${Astro.site}#organization`,
-    employee: team.map((person) => ({ '@type': 'Person', name: person.name, jobTitle: person.role })),
+    employee: team.map((person) => ({
+      '@type': 'Person',
+      name: person.name,
+      jobTitle: person.role,
+      sameAs: person.linkedin,
+    })),
   },
 };
 ---
@@ -50,157 +73,431 @@ const jsonLd = {
   ogImageAlt="Josh Titus, Brand & Marketing Design at Founding Creative"
   jsonLd={jsonLd}
 >
-  <section class="about-hero holo-bg">
-    <div class="container about-hero__grid">
-      <div>
-        <h1 class="holo-text">About us</h1>
-        <p class="section__lead about-hero__lead">Sustainable growth begins with a solid foundation.</p>
-        <p>
-          Brought together from a desire to offer up the missing middle ground. A ground where holistic creative strategies
-          are developed not just as one-offs, but as one-mores.
-        </p>
-        <p class="about-hero__statement">
-          Every initiative is one more step towards foundational creative systems that scale with your business.
+  <!-- Hero: the homepage's four-color gradient under the wave and a dark veil -->
+  <section class="about-hero under-header" aria-labelledby="about-title">
+    <div class="about-hero__bg" aria-hidden="true">
+      <div class="about-hero__wave"><img src={wave.src} alt="" width={wave.width} height={wave.height} /></div>
+      <div class="about-hero__veil"></div>
+    </div>
+    <div class="container">
+      <div class="about-hero__head" data-intro>
+        <h1 id="about-title">About us</h1>
+        <p class="about-hero__lead">Sustainable growth begins with a solid foundation.</p>
+      </div>
+      <div class="about-hero__grid">
+        <div data-reveal="left">
+          <p class="about-hero__intro">
+            Brought together from a desire to offer up the missing middle ground. A ground where holistic creative strategies
+            are developed not just as one-offs, but as one-mores.
+          </p>
+          <p class="about-hero__statement">
+            Every initiative is one more step towards foundational creative systems that scale with your business.
+          </p>
+        </div>
+        <div class="about-hero__builder" data-reveal="right" set:html={builder} />
+      </div>
+    </div>
+  </section>
+
+  <!-- White band: the team, what we stand for, and who we've worked with -->
+  <div class="about-light curve-top curve-bottom">
+    <section class="container section" aria-labelledby="team-heading">
+      <div class="section__intro about-light__intro">
+        <p class="eyebrow">Our <em>team</em></p>
+        <h2 id="team-heading">Built by creatives. Backed by strategy.</h2>
+        <p class="section__lead">
+          With too many businesses stuck between bloated agencies and scattered freelancers, we built the creative agency we
+          always wished existed.
         </p>
       </div>
-      <Image class="about-hero__art" src={builder} alt="" loading="eager" />
-    </div>
-  </section>
+      <ul class="team" data-reveal-stagger>
+        {
+          team.map((person) => (
+            <li class="person">
+              <div class="person__photo">
+                <Image
+                  src={person.photo}
+                  alt={`${person.name}, ${person.role}`}
+                  widths={[320, 640]}
+                  sizes="(max-width: 600px) 80vw, 300px"
+                />
+                <a class="person__linkedin" href={person.linkedin}>
+                  <Icon name="linkedin" size={20} />
+                  <span class="visually-hidden">{person.name} on LinkedIn</span>
+                </a>
+              </div>
+              <h3>{person.name}</h3>
+              <p>{person.role}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
 
-  <section class="container section" aria-labelledby="team-heading">
-    <div class="section__intro">
-      <p class="eyebrow">Our <em>team</em></p>
-      <h2 id="team-heading">Built by creatives. Backed by strategy.</h2>
-      <p class="section__lead">
-        With too many businesses stuck between bloated agencies and scattered freelancers, we built the creative agency we
-        always wished existed.
-      </p>
-    </div>
-    <ul class="team">
-      {
-        team.map((person) => (
-          <li class="person">
-            <Image
-              src={person.photo}
-              alt={`${person.name}, ${person.role}`}
-              widths={[280, 560]}
-              sizes="(max-width: 600px) 45vw, 260px"
-            />
-            <h3>{person.name}</h3>
-            <p>{person.role}</p>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+    <section class="container section values-section" aria-labelledby="values-heading">
+      <h2 id="values-heading" class="values__heading" data-reveal>What we stand for</h2>
+      <dl class="values" data-reveal-stagger>
+        {
+          values.map((value, i) => (
+            <div class="value">
+              <span class="value__index" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <dt>{value.title}</dt>
+              <dd>{value.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
 
-  <section class="container section" aria-labelledby="values-heading">
-    <h2 id="values-heading" class="values__heading">What we stand for</h2>
-    <dl class="values">
-      {
-        values.map((value) => (
-          <div>
-            <dt>{value.title}</dt>
-            <dd>{value.text}</dd>
-          </div>
-        ))
-      }
-    </dl>
-  </section>
-
-  <section class="container section" aria-label="Brands we've worked with">
-    <ClientLogos />
-  </section>
+    <section class="about-light__logos" aria-label="Brands we've worked with">
+      <ClientLogos />
+    </section>
+  </div>
 
   <CtaSection heading="Let's build your foundation" text="Tell us where you're headed and we'll help you get there." />
 </BaseLayout>
 
 <style>
+  /* ===== Hero ===== */
   .about-hero {
-    padding-block: var(--space-3xl) var(--space-2xl);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: calc(var(--header-height) + 4rem) var(--space-2xl);
+    background: linear-gradient(
+        -45deg,
+        var(--color-hero-indigo),
+        var(--color-hero-magenta),
+        var(--color-hero-teal),
+        var(--color-hero-azure)
+      )
+      0% 50% / 400% 400%;
   }
 
-  .about-hero__grid {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-xl);
-    align-items: center;
+  @media (prefers-reduced-motion: no-preference) {
+    .about-hero {
+      animation: about-gradient 15s ease infinite;
+    }
+  }
+
+  @keyframes about-gradient {
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .about-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .about-hero__wave {
+    position: absolute;
+    inset: 0 -25%;
+    background: linear-gradient(var(--color-black), transparent 80%);
+  }
+
+  .about-hero__wave img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .about-hero__wave {
+        animation: about-parallax linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+    }
+  }
+
+  @keyframes about-parallax {
+    to {
+      transform: translate3d(-4%, 18%, 0);
+    }
+  }
+
+  .about-hero__veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgb(0 4 7 / 0.5), var(--color-night));
+  }
+
+  .about-hero__head {
+    margin-bottom: var(--space-2xl);
+    text-align: center;
+  }
+
+  .about-hero h1 {
+    margin-bottom: var(--space-sm);
+    text-shadow: var(--text-glow);
   }
 
   .about-hero__lead {
-    color: var(--color-text);
+    margin: 0;
+    font-size: var(--font-size-eyebrow);
     font-weight: var(--font-weight-semibold);
   }
 
-  .about-hero__statement {
-    margin-top: var(--space-lg);
-    font-family: var(--font-display);
-    font-size: var(--font-size-h5);
-    line-height: var(--line-height-snug);
+  .about-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-2xl);
   }
 
-  .about-hero__art {
-    width: 100%;
-    max-width: 28rem;
+  .about-hero__intro {
+    margin-bottom: var(--space-lg);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .about-hero__statement {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--line-height-snug);
+    text-wrap: balance;
+  }
+
+  .about-hero__builder {
     justify-self: center;
+    width: min(100%, 25rem);
+  }
+
+  .about-hero__builder :global(.about-hero__art) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* The line work draws itself in once the illustration is revealed, and the
+   * solid shapes fade in behind it */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .about-hero__builder :global(.builder-3) {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    :global(.js) .about-hero__builder :global(:is(.builder-1, .builder-2)) {
+      opacity: 0;
+      transition: opacity 1.2s var(--ease-out) 1.2s;
+    }
+
+    :global(.js) .about-hero__builder.is-revealed :global(.builder-3) {
+      animation: builder-draw 2.6s var(--ease-out) 0.3s forwards;
+    }
+
+    :global(.js) .about-hero__builder.is-revealed :global(:is(.builder-1, .builder-2)) {
+      opacity: 1;
+    }
+  }
+
+  @keyframes builder-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* ===== White band ===== */
+  .about-light {
+    --curve-color: var(--color-white);
+    background-color: var(--color-white);
+    color: var(--color-night);
+  }
+
+  .about-light__intro {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .about-light .section__lead {
+    margin-inline: auto;
+    color: var(--color-neutral-dark);
+  }
+
+  /* The white eyebrow and its pearl accent word vanish on white, so here
+   * they go ink with a deep mint accent */
+  .about-light .eyebrow {
+    color: var(--color-night);
+  }
+
+  .about-light .eyebrow :global(em) {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    color: var(--color-mint-darker);
+    text-shadow: none;
   }
 
   .team {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-    gap: var(--space-md);
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2xl) var(--space-xl);
     margin: 0;
     padding: 0;
     list-style: none;
+    text-align: center;
   }
 
-  .person img {
+  .person__photo {
+    position: relative;
+    max-width: 18.75rem;
+    margin-inline: auto;
+  }
+
+  .person__photo img {
+    display: block;
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-2xl);
+    transition:
+      transform 600ms var(--ease-out),
+      box-shadow 600ms var(--ease-out);
+  }
+
+  .person:hover .person__photo img {
+    box-shadow: 0 1.5rem 3rem rgb(0 4 7 / 0.18);
+    transform: translateY(-4px);
+  }
+
+  /* The LinkedIn tab notched into the photo's corner, as on the live page.
+   * The two small curves either side make the white flow into the cut. */
+  .person__linkedin {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-bottom-left-radius: var(--radius-lg);
+    background-color: var(--color-white);
+    color: var(--color-neutral);
+    transition: color var(--transition-fast);
+  }
+
+  .person__linkedin::before,
+  .person__linkedin::after {
+    content: '';
+    position: absolute;
+    width: var(--radius-lg);
+    height: var(--radius-lg);
+    background: radial-gradient(circle at 0 100%, transparent var(--radius-lg), var(--color-white) calc(var(--radius-lg) + 0.5px));
+  }
+
+  .person__linkedin::before {
+    top: 0;
+    right: 100%;
+  }
+
+  .person__linkedin::after {
+    top: 100%;
+    right: 0;
+  }
+
+  .person__linkedin:hover {
+    color: var(--color-night);
   }
 
   .person h3 {
-    margin: var(--space-sm) 0 0;
-    font-family: var(--font-body);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
+    margin: var(--space-md) 0 var(--space-3xs);
+    color: var(--color-night);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-regular);
   }
 
   .person p {
     margin: 0;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
+    color: var(--color-neutral-dark);
+  }
+
+  /* What we stand for: four numbered columns on hairlines */
+  .values-section {
+    padding-top: 0;
   }
 
   .values__heading {
+    margin-bottom: var(--space-lg);
     font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-regular);
   }
 
   .values {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: var(--space-md);
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
     margin: 0;
   }
 
-  .values div {
-    padding: var(--space-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-surface);
+  .value {
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-neutral-lighter);
   }
 
-  .values dt {
-    color: var(--color-mint);
+  .value__index {
+    display: block;
+    margin-bottom: var(--space-sm);
+    color: var(--color-neutral);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.1em;
+  }
+
+  .value dt {
+    margin-bottom: var(--space-2xs);
     font-family: var(--font-display);
     font-size: var(--font-size-h6);
+    line-height: var(--line-height-heading);
   }
 
-  .values dd {
-    margin: var(--space-3xs) 0 0;
-    color: var(--color-text-muted);
+  .value dd {
+    margin: 0;
+    color: var(--color-neutral-dark);
+  }
+
+  /* The gray logos sit on white as they do on the live service pages */
+  .about-light__logos {
+    padding-bottom: var(--space-2xl);
+  }
+
+  .about-light__logos :global(.clients img) {
+    filter: none;
+  }
+
+  .about-light__logos :global(.clients__toggle) {
+    border-color: var(--color-neutral-lighter);
+    background-color: var(--color-white);
+    color: var(--color-neutral-dark);
+  }
+
+  /* ===== Small screens ===== */
+  @media (max-width: 977px) {
+    .about-hero__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+
+    .team {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .values {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .team,
+    .values {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
