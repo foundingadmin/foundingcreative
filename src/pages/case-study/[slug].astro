@@ -2,26 +2,27 @@
 import { Image } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Prose from '../../components/Prose.astro';
-import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import OurWork from '../../components/OurWork.astro';
+import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import { getCaseStudies, caseStudyUrl, type CaseStudy } from '../../lib/content';
-import { letsTalkHref } from '../../data/navigation';
 
 export async function getStaticPaths() {
   const studies = await getCaseStudies();
-  return studies.map((study) => ({ params: { slug: study.id }, props: { study, studies } }));
+  return studies.map((study) => ({ params: { slug: study.id }, props: { study } }));
 }
 
 interface Props {
   study: CaseStudy;
-  studies: CaseStudy[];
 }
 
-const { study, studies } = Astro.props;
+const { study } = Astro.props;
 const { Content } = await render(study);
 const { data } = study;
 
-const more = studies.filter((s) => s.id !== study.id).slice(0, 2);
+// Each study's colors (from the live page) drive the hero gradient and the
+// story's bands. Studies without a theme fall back to brand navy.
+const theme = data.theme ?? { accent: '#001441', dark: '#000a20', light: '#e5fde9' };
+const themeStyle = `--case-accent: ${theme.accent}; --case-dark: ${theme.dark}; --case-light: ${theme.light};`;
 const facts = [
   { label: 'Client', value: data.clients.join(', ') },
   { label: 'Sector', value: data.sectors.join(', ') },
@@ -66,9 +67,9 @@ const jsonLd = [
   article={{ published: data.date, section: 'Case Studies', tags: [...data.services, ...data.sectors] }}
   jsonLd={jsonLd}
 >
-  <article>
+  <article style={themeStyle}>
     <header class="case-hero">
-      <div class="container case-hero__text">
+      <div class="container case-hero__text" data-intro>
         <nav aria-label="Breadcrumb" class="case-hero__breadcrumb">
           <a href="/case-studies/">Case Studies</a>
         </nav>
@@ -76,7 +77,7 @@ const jsonLd = [
         <h1 class="case-hero__title">{data.headline}</h1>
         <p class="case-hero__subtitle">{data.subheadline}</p>
       </div>
-      <div class="container">
+      <div class="container" data-intro>
         <div class="case-hero__media">
           <Image
             class="case-hero__image"
@@ -104,28 +105,28 @@ const jsonLd = [
       </div>
     </header>
 
-    <div class="case-body">
-      <div class="container">
-        <Prose><Content /></Prose>
-      </div>
+    <div class="case-story">
+      <Content />
     </div>
   </article>
 
-  <section class="container case-next" aria-labelledby="case-next-heading">
-    <div class="case-next__header">
-      <h2 id="case-next-heading">More case studies</h2>
-      <a class="case-next__cta" href={letsTalkHref}>Let's talk about your project</a>
-    </div>
-    <div class="case-next__grid">
-      {more.map((s) => <CaseStudyCard study={s} headingLevel={3} />)}
-    </div>
-  </section>
+  {data.showSiteLaunch && <SiteLaunchSection />}
+  <OurWork exclude={study.id} />
 </BaseLayout>
 
 <style>
+  /* Hero: the live page's slowly shifting gradient in the study's colors */
   .case-hero {
     padding-top: var(--space-2xl);
-    background: radial-gradient(ellipse at top, var(--color-navy), var(--color-black) 70%);
+    background: linear-gradient(-45deg, var(--color-black), var(--case-accent), var(--case-dark), var(--color-black))
+      0 0 / 400% 400%;
+    animation: case-gradient 15s ease infinite;
+  }
+
+  @keyframes case-gradient {
+    50% {
+      background-position: 100% 100%;
+    }
   }
 
   .case-hero__text {
@@ -168,6 +169,8 @@ const jsonLd = [
 
   .case-hero__media {
     position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 
   .case-hero__media::after {
@@ -193,7 +196,6 @@ const jsonLd = [
     height: auto;
     max-height: 40rem;
     object-fit: cover;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   }
 
   .case-facts {
@@ -218,37 +220,311 @@ const jsonLd = [
     margin: 0;
   }
 
-  .case-body {
+  /* The story: bands built by src/lib/rehype-case-study.mjs */
+  .case-story {
     margin-top: var(--space-2xl);
+  }
+
+  .case-story :global(.case-band) {
+    --band-text: var(--color-neutral-darker);
+    --band-heading: var(--color-black);
+    --band-kicker: var(--color-neutral-dark);
+    --band-link: var(--color-black);
     padding-block: var(--space-2xl);
     background-color: var(--color-white);
+    color: var(--band-text);
+    font-size: var(--font-size-base);
+    line-height: 1.7;
   }
 
-  .case-next {
-    padding-block: var(--space-2xl);
+  .case-story :global(.case-band[data-tone='light']) {
+    background-color: var(--case-light);
   }
 
-  .case-next__header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
+  .case-story :global(.case-band[data-tone='neutral']) {
+    background-color: var(--color-neutral-lighter);
   }
 
-  .case-next__header h2 {
-    margin: 0;
+  .case-story :global(.case-band:is([data-tone='accent'], [data-tone='dark'])) {
+    --band-text: var(--color-neutral-lightest);
+    --band-heading: var(--color-white);
+    --band-kicker: var(--color-mint);
+    --band-link: var(--color-mint);
+    background-color: var(--case-accent);
+  }
+
+  .case-story :global(.case-band[data-tone='dark']) {
+    background-color: var(--case-dark);
+  }
+
+  .case-story :global(.case-band__inner) {
+    display: grid;
+    gap: var(--space-xl);
+    width: 100%;
+    max-width: calc(var(--container-max) + 2 * var(--container-gutter));
+    margin-inline: auto;
+    padding-inline: var(--container-gutter);
+  }
+
+  .case-story :global(:is(h2, h3, h4)) {
+    margin: 0 0 var(--space-xs);
+    color: var(--band-heading);
+  }
+
+  .case-story :global(h2) {
     font-size: var(--font-size-h3);
   }
 
-  .case-next__cta {
+  .case-story :global(h3) {
+    font-size: var(--font-size-h5);
+  }
+
+  .case-story :global(h4) {
+    font-size: var(--font-size-h6);
+  }
+
+  .case-story :global(p),
+  .case-story :global(ul) {
+    margin: 0 0 var(--space-sm);
+  }
+
+  .case-story :global(:is(p, ul, ol):last-child) {
+    margin-bottom: 0;
+  }
+
+  .case-story :global(strong) {
+    color: var(--band-heading);
+  }
+
+  .case-story :global(a) {
+    color: var(--band-link);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: underline;
+  }
+
+  .case-story :global(:focus-visible) {
+    outline-color: currentColor;
+  }
+
+  .case-story :global(ul) {
+    padding-left: 1.2em;
+  }
+
+  .case-story :global(li + li) {
+    margin-top: var(--space-2xs);
+  }
+
+  .case-story :global(img),
+  .case-story :global(video) {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Band header: kicker, heading, lead */
+  .case-story :global(.case-header) {
+    max-width: 46rem;
+  }
+
+  .case-story :global(.case-kicker) {
+    margin-bottom: var(--space-2xs);
+    color: var(--band-kicker);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .case-story :global(.case-header > p:not(.case-kicker)) {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Intro: the big centered opener */
+  .case-story :global(.case-header--intro) {
+    max-width: 52rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .case-story :global(.case-header--intro p) {
+    color: var(--band-heading);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-snug);
+  }
+
+  /* Statement band */
+  .case-story :global(.case-band--statement) {
+    padding-block: var(--space-3xl);
+  }
+
+  .case-story :global(.statement) {
+    max-width: 52rem;
+    margin: 0 auto;
+    color: var(--band-heading);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-snug);
+    text-align: center;
+  }
+
+  /* Galleries */
+  .case-story :global(.case-gallery) {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+    gap: var(--space-md);
+    align-items: start;
+  }
+
+  .case-story :global(.case-gallery[data-count='3']) {
+    --cols: 3;
+  }
+
+  .case-story :global(.case-gallery[data-count='4']) {
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  }
+
+  .case-story :global(.case-gallery > p) {
+    margin: 0;
+  }
+
+  .case-story :global(.case-gallery img) {
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .case-story :global(.case-gallery img:hover) {
+    transform: scale(1.02);
+  }
+
+  /* Text and media side by side */
+  .case-story :global(.case-feature) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .case-story :global(.case-feature--reverse .case-feature__text) {
+    order: 2;
+  }
+
+  .case-story :global(.case-feature__media) {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .case-story :global(.case-feature__media .case-gallery) {
+    --cols: 2;
+  }
+
+  .case-story :global(.case-block) {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .case-story :global(.case-block > :is(p, ul, h3, h4)) {
+    max-width: 46rem;
+    margin: 0;
+  }
+
+  /* Cards: runs of short subsections, and the challenge beside the approach */
+  .case-story :global(.case-panels) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-md);
+  }
+
+  .case-story :global(.case-panel) {
+    padding: var(--space-lg);
+    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+    border-radius: var(--radius-lg);
+    background-color: color-mix(in srgb, currentColor 5%, transparent);
+  }
+
+  .case-story :global(.case-band[data-tone='white'] .case-panel) {
+    background-color: var(--case-light);
+    border-color: transparent;
+  }
+
+  .case-story :global(.case-panels--split .case-panel) {
+    background-color: var(--color-white);
+    border-color: transparent;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.08);
+  }
+
+  /* Process steps: numbered cards */
+  .case-story :global(ol) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .case-story :global(ol > li) {
+    margin: 0;
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    background-color: color-mix(in srgb, var(--case-light) 60%, var(--color-white));
+    counter-increment: step;
+  }
+
+  .case-story :global(ol > li::before) {
+    content: counter(step, decimal-leading-zero);
+    display: block;
+    margin-bottom: var(--space-2xs);
+    color: var(--case-accent);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+    line-height: 1;
+  }
+
+  /* Partner credits */
+  .case-story :global(.case-credits) {
+    font-size: var(--font-size-sm);
+  }
+
+  .case-story :global(.case-credits p) {
+    margin-bottom: var(--space-3xs);
     font-weight: var(--font-weight-semibold);
   }
 
-  .case-next__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: var(--space-md);
+  .case-story :global(.case-credits ul) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Light line art made for dark backgrounds */
+  .case-story :global(.on-dark) {
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-black);
+  }
+
+  .case-story :global(.on-dark img) {
+    border-radius: 0;
+  }
+
+  @media (max-width: 977px) {
+    .case-story :global(.case-feature) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .case-story :global(.case-feature--reverse .case-feature__text) {
+      order: 0;
+    }
+
+    .case-story :global(.case-gallery[data-count='3']) {
+      --cols: 2;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .case-story :global(.case-gallery) {
+      --cols: 1;
+    }
   }
 </style>

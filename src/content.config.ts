@@ -31,6 +31,8 @@ const posts = defineCollection({
     }),
 });
 
+const hex = /^#[0-9a-f]{6}$/i;
+
 const caseStudies = defineCollection({
   loader: glob({ pattern: '*/index.md', base: './src/content/case-studies', generateId: slugFromFolder }),
   schema: ({ image }) =>
@@ -49,6 +51,16 @@ const caseStudies = defineCollection({
       // White client logo, shown over the hero photo.
       logo: image().optional(),
       logoAlt: z.string().min(1).optional(),
+      // Section colors from the live case study (see src/lib/case-study-bands.mjs).
+      theme: z
+        .object({
+          accent: z.string().regex(hex),
+          dark: z.string().regex(hex),
+          light: z.string().regex(hex),
+        })
+        .optional(),
+      // Show the SiteLaunch packages after the story (web projects).
+      showSiteLaunch: z.boolean().default(false),
     }),
 });
 

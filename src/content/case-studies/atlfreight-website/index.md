@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "man on laptop outside by freight truck with mockup of ATLFreight website"
 logo: "./logo.png"
 logoAlt: "ATL Freight logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#5a0000"
+  dark: "#330808"
+  light: "#c3c3c3"
 ---
 
 Built on service, backed by integrity.
@@ -43,9 +48,7 @@ user journey mapping
 
 ![ATLFreight website sitemap](./image-4.svg)
 
-##
-
-## One of the east coast’s premier freight companies with a talented and hard-working staff.
+<p class="statement">One of the east coast’s premier freight companies with a talented and hard-working staff.</p>
 
 ## Unique & Bold
 

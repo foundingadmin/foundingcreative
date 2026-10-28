@@ -15,6 +15,12 @@ cover: "./cover.webp"
 coverAlt: "Engineer in a factory holding a laptop showing the redesigned Turntide motor product page"
 logo: "./logo.svg"
 logoAlt: "Turntide logo"
+# Colors from the live case study: statement band, dark band, light band
+showSiteLaunch: true
+theme:
+  accent: "#0d5b97"
+  dark: "#003464"
+  light: "#edf8ff"
 ---
 
 Turntide needed a digital shift that would better support sales and speak directly to their engineering customers.
@@ -41,43 +47,17 @@ Founding Creative reimagined the Turntide digital presence from the ground up fo
 
 The blueprint that turned a new website strategy into impactful outcomes, one step at a time.
 
-01
+1. Reposition the **brand strategy** from investor-focused to product-first
+2. **UX copywriting** focused on speed, clarity, and an engineering audience
+3. Create a **design system** that scales across digital presence and marketing needs
+4. Develop a **custom website** using modular components tied to the new design system
+5. Connect **Salesforce workflows** to user actions and lead-gen funnels across the site
+6. Create **governance roles** to enable internal teams to manage content in sync
+7. Strategize a **content engine** with tags, filtering, and hierarchy for enhanced SEO.
+8. Design and develop 'Current and Wave' as a **sub-branded content hub** within the site
+9. Implement **gated marketing content** capabilities for increased lead generation
 
-Reposition the **brand strategy** from investor-focused to product-first
-
-02
-
-**UX copywriting** focused on speed, clarity, and an engineering audience
-
-03
-
-Create a **design system** that scales across digital presence and marketing needs
-
-04
-
-Develop a **custom website** using modular components tied to the new design system
-
-05
-
-Connect **Salesforce workflows** to user actions and lead-gen funnels across the site
-
-06
-
-Create **governance roles** to enable internal teams to manage content in sync
-
-07
-
-Strategize a **content engine** with tags, filtering, and hierarchy for enhanced SEO.
-
-08
-
-Design and develop 'Current and Wave' as a **sub-branded content hub** within the site
-
-09
-
-Implement **gated marketing content** capabilities for increased lead generation
-
-We made the Turntide site more discoverable, usable, and effective for their actual buyers.
+<p class="statement">We made the Turntide site more discoverable, usable, and effective for their actual buyers.</p>
 
 ### The website
 
@@ -161,7 +141,7 @@ Tagging, categorization, and hierarchy systems keep content organized and aligne
 
 Enabled seamless gated downloads to convert traffic into qualified leads, fueling pipeline and email list growth.
 
-What started as a simple site refresh turned into a full transformation of how Turntide tells their story, supports their buyers, and drives growth across teams.
+<p class="statement">What started as a simple site refresh turned into a full transformation of how Turntide tells their story, supports their buyers, and drives growth across teams.</p>
 
 ## A platform for conversion, content, and collaboration
 
@@ -183,30 +163,3 @@ Today, their product-first website drives discovery and conversion, their intern
 In collaboration with:
 
 -   Client acquisition and production: [Multi Image Group](https://www.mig.cc)
-
-## Find the right launch for your next move
-
-Not sure if this SiteLaunch™ is the right fit? Explore our other options tailored for different goals, audiences, and growth stages.
-
-[
-
-Prism
-SiteLaunch™
-
-For brands ready to make an unforgettable entrance.
-
-](/prism-sitelaunch)[
-
-Rocket
-SiteLaunch™
-
-For growth-focused brands ready to fuel conversions.
-
-](/rocket-sitelaunch)[
-
-Orbit
-SiteLaunch™
-
-For scaling companies needing clarity, structure, and alignment.
-
-](/orbit-sitelaunch)

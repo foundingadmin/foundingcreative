@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "Woman standing with Aprilaire app on tablet"
 logo: "./logo.svg"
 logoAlt: "AprilAire logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#011648"
+  dark: "#121346"
+  light: "#88d4ff"
 ---
 
 Aprilaire needs an attractive and easy-to-use app to pair customers with their vast array of products as well as inform their team of the potential sale.
@@ -52,7 +57,7 @@ user journey mapping
 
 ![Aprilaire app user flow from attractor and scratch-off game through location, climate, products, and checkout](./image-4.png)
 
-## Aprilaire produces machines to turn air clean. They specialize in humidifiers, dehumidifiers, air filters, and more.
+<p class="statement">Aprilaire produces machines to turn air clean. They specialize in humidifiers, dehumidifiers, air filters, and more.</p>
 
 ## Goals
 

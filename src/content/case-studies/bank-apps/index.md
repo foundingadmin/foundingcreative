@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "Bank of America touchscreen at event with two people standing next to it"
 logo: "./logo.png"
 logoAlt: "Merrill, a Bank of America company, logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#011648"
+  dark: "#040f1e"
+  light: "#88d4ff"
 ---
 
 Bank of America has a lot of content that isn't particularly accessible or digestible to the average person, business, or investor.
@@ -47,7 +52,7 @@ user journey mapping
 4. The app is downloaded or visited on a browser
 5. Content is explored and downloaded
 
-## Global insights and smart solutions at your fingertip
+<p class="statement">Global insights and smart solutions at your fingertip</p>
 
 App 1
 

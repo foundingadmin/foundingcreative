@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "Man touching Tata interactive wall"
 logo: "./logo.svg"
 logoAlt: "Tata logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#a83028"
+  dark: "#0c1d34"
+  light: "#ffd388"
 ---
 
 Tata provided a 44-page company info document to educate customers at a large event, we made it an experience
@@ -47,7 +52,7 @@ user journey mapping
 4. User would tap and mural would change based on interaction
 5. Content is explored and user learns about aspects of business
 
-## Tata is an Indian multinational conglomerate holding company with $100+ billion revenue
+<p class="statement">Tata is an Indian multinational conglomerate holding company with $100+ billion revenue</p>
 
 ## Fine-tuning
 

@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "Two attendees with lanyards chatting at the Mastercard LAC Innovation Forum under warm orange lighting"
 logo: "./logo.svg"
 logoAlt: "Mastercard logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#eb6824"
+  dark: "#1f0303"
+  light: "#e4e4e4"
 ---
 
 Seeking to immerse their brightest minds in a world of innovation and creativity, Mastercard needed help translating their vision into a tangible experience for attendees from start to finish.
@@ -51,7 +56,7 @@ step-by-step from idea to impact
 8. Implement feedback loops for real-time adjustments.
 9. Finalize and polish all creative deliverables for the event.
 
-## The culmination of design and strategy that transformed the Mastercard LAC Innovation Forum into a breakthrough event.
+<p class="statement">The culmination of design and strategy that transformed the Mastercard LAC Innovation Forum into a breakthrough event.</p>
 
 ## Branding
 
@@ -77,8 +82,7 @@ From pre-communications to registration to post-communications, each step of the
 
 ![Attendee journey map of Mastercard event emails, site pages, and screens charted along an engagement line](./image-8.webp)
 
-## Powerful
-print design
+## Powerful print design
 
 Anything but dead, print has the immense power to transform an experience instantly.
 
