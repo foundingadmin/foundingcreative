@@ -45,6 +45,10 @@
   --color-hero-magenta: #c807d3;
   --color-hero-teal: #40bf97;
   --color-hero-azure: #2672f9;
+  /* Service page hero: a slow drift through near-blacks with olive and plum */
+  --color-olive-night: #0f140a;
+  --color-olive-dusk: #13190b;
+  --color-plum-night: #120e1c;
 
   /* Holographic gradients (live site): the pearl sweep used on headlines,
    * primary buttons, and accent words */

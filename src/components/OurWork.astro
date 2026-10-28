@@ -4,27 +4,37 @@ import CaseStudyCard from './CaseStudyCard.astro';
 import Icon from './Icon.astro';
 import { getCaseStudies } from '../lib/content';
 
-// "Our work": every case study in a slider, on the homepage and at the end of
-// each case study (leaving out the one being read), as on the live site.
+// "Our work": case studies in a slider, as on the live site. The homepage and
+// the end of each case study (leaving out the one being read) list them all;
+// service pages pick their own few and their own heading.
 
 interface Props {
   /** Case study id to leave out. */
   exclude?: string;
+  /** Only these case studies, in this order. */
+  only?: string[];
+  heading?: string;
+  intro?: string;
 }
 
-const { exclude } = Astro.props;
-const studies = (await getCaseStudies()).filter((study) => study.id !== exclude);
+const {
+  exclude,
+  only,
+  heading = 'Creative foundations worth showing off',
+  intro = 'A look inside the projects where strategy, structure, and design all came together to drive meaningful business outcomes.',
+} = Astro.props;
+const all = await getCaseStudies();
+const studies = only
+  ? only.map((id) => all.find((study) => study.id === id)).filter((study) => study !== undefined)
+  : all.filter((study) => study.id !== exclude);
 ---
 
 <section class="container section our-work" aria-labelledby="work-heading">
   <div class="section__intro section__intro--split">
     <div>
       <p class="eyebrow">Our <em>work</em></p>
-      <h2 id="work-heading">Creative foundations worth showing off</h2>
-      <p class="section__lead">
-        A look inside the projects where strategy, structure, and design all came together to drive meaningful business
-        outcomes.
-      </p>
+      <h2 id="work-heading">{heading}</h2>
+      <p class="section__lead">{intro}</p>
     </div>
     <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
   </div>

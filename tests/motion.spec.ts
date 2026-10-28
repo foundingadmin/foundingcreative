@@ -34,6 +34,33 @@ test('service sliders move with their buttons', async ({ page }) => {
   await expect(prev).toBeEnabled();
 });
 
+test('service hero images wipe from one to the next', async ({ page }) => {
+  await page.goto('/services/design-services/');
+  const slider = page.getByRole('region', { name: 'Design Services examples' });
+  const active = slider.locator('.wipe__slide.is-active');
+  await expect(active).toHaveCount(1);
+  await expect(active).toHaveAttribute('aria-label', '1 of 3');
+  await slider.getByRole('button', { name: 'Next image' }).click();
+  await expect(active).toHaveAttribute('aria-label', '2 of 3');
+  await expect(slider.locator('[data-wipe-current]')).toHaveText('02');
+  await expect(slider.getByRole('button', { name: 'Show image 2' })).toHaveAttribute('aria-current', 'true');
+  // Back past the first image wraps around to the last.
+  await slider.getByRole('button', { name: 'Previous image' }).click();
+  await slider.getByRole('button', { name: 'Previous image' }).click();
+  await expect(active).toHaveAttribute('aria-label', '3 of 3');
+  // Only the showing image is exposed to screen readers.
+  await expect(slider.locator('.wipe__slide:not([aria-hidden])')).toHaveCount(1);
+  const pause = slider.getByRole('button', { name: 'Pause slideshow' });
+  await pause.click();
+  await expect(pause).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('service pages show their own case studies', async ({ page }) => {
+  await page.goto('/services/design-services/');
+  await expect(page.locator('#work-slider > li')).toHaveCount(3);
+  await expect(page.locator('h1')).toHaveCount(1);
+});
+
 test('our work slider lists every case study', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#work-slider > li')).toHaveCount(10);
