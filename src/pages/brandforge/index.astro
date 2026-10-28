@@ -1,16 +1,21 @@
 ---
-import { Image } from 'astro:assets';
-import { getEntries } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CaseStudyCard from '../../components/CaseStudyCard.astro';
+import OurWork from '../../components/OurWork.astro';
+import WipeSlider from '../../components/WipeSlider.astro';
 import Icon from '../../components/Icon.astro';
 import wave from '../../assets/brand/wave-black.svg';
 import strategyLaptop from '../../assets/services/brand-strategy-laptop.webp';
 import workshopLaptop from '../../assets/services/brand-workshop-laptop.webp';
 import workshopNotes from '../../assets/services/brand-workshop-blue-notes.webp';
 
-// BrandForge is the "Branding and Strategy" offering in the main menu.
-const pillars = ['Research-Backed Strategy', 'Built for Humans and AI', 'Launch-Ready in Weeks'];
+// BrandForge is the "Branding and Strategy" offering in the main menu. The
+// layout follows the live page: the homepage's gradient hero, then deep teal
+// sections with a bright cyan accent, fading back to black at the end.
+const pillars = [
+  { label: 'Research-Backed Strategy', icon: 'flag' },
+  { label: 'Built for Humans and AI', icon: 'target' },
+  { label: 'Launch-Ready in Weeks', icon: 'rocket' },
+] as const;
 
 const audience = [
   'Founders launching a product or company and need to look legitimate from day one',
@@ -30,36 +35,41 @@ const stats = [
 const features = [
   {
     title: 'Research-Backed Strategy',
+    icon: 'search',
     text: 'We pressure-test your assumptions before a single mark is made. Stakeholder interviews, competitor audits, and audience personas ensure your brand is built on market reality.',
   },
   {
     title: 'Four Distinct Creative Directions',
+    icon: 'mouse-pointer',
     text: "We don't present one option and ask you to bless it. We develop four strategic directions so you can make a real decision backed by real reasoning.",
   },
   {
     title: 'Scalable Visual Identity',
+    icon: 'circle-check',
     text: 'Logo systems, color strategy, and typography built to stay consistent across every screen, every asset, and every team member for years to come.',
   },
   {
     title: 'AI-Ready Brand System',
+    icon: 'laptop',
     text: 'We structure your creative foundation so every tool in your stack, from design AI to marketing automation, knows exactly what your brand is and how to use it.',
   },
   {
     title: 'Curated Activation Assets',
+    icon: 'package',
     text: 'From social toolkits and investor decks to packaging and web UI frameworks, we build what you need most to enter the market with confidence.',
   },
   {
     title: 'The Brand Guide',
+    icon: 'book-open',
     text: 'Your master source of truth. Delivered so your team, your partners, and your AI tools never have to guess what on-brand looks like.',
   },
-];
+] as const;
 
-const caseStudies = await getEntries(
-  ['bell-bird-atm', 'plant-nursery-ecommerce', 'genpact-grow-event', 'safezone-product-and-branding'].map((id) => ({
-    collection: 'caseStudies' as const,
-    id,
-  })),
-);
+const workshopImages = [
+  { src: strategyLaptop, alt: 'Laptop showing a brand strategy framework and color wheel' },
+  { src: workshopLaptop, alt: 'Laptop with a brand workshop board of green sticky notes' },
+  { src: workshopNotes, alt: 'Brand workshop board of blue sticky notes answering where the brand is going' },
+];
 
 const description =
   'BrandForge delivers research-backed brand strategy, four creative directions, and an AI-ready brand system, launch-ready in weeks, not months.';
@@ -94,170 +104,324 @@ const jsonLd = [
   ogImageAlt="Laptop showing a brand strategy framework and color wheel"
   jsonLd={jsonLd}
 >
-  <section class="hero holo-bg" aria-labelledby="brandforge-title">
-    <Image class="hero__wave" src={wave} alt="" loading="eager" />
-    <div class="container hero__content">
-      <p class="eyebrow">BrandForge™</p>
-      <ul class="pillars">
-        {pillars.map((pillar) => <li>{pillar}</li>)}
-      </ul>
-      <h1 id="brandforge-title" class="holo-text">From zero to market-ready, without the wait</h1>
-      <p class="section__lead hero__lead">
-        High-fidelity branding built on market reality, not founder intuition. Your identity, your systems, your flag in the
-        ground.
-      </p>
-      <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
+  <!-- Hero: the homepage's four-color gradient under the wave and a dark veil -->
+  <section class="forge-hero under-header" aria-labelledby="brandforge-title">
+    <div class="forge-hero__bg" aria-hidden="true">
+      <div class="forge-hero__wave"><img src={wave.src} alt="" width={wave.width} height={wave.height} /></div>
+      <div class="forge-hero__veil"></div>
     </div>
-  </section>
-
-  <section class="container section audience" aria-labelledby="audience-heading">
-    <div>
-      <p class="eyebrow">Who is <em>BrandForge</em> for</p>
-      <h2 id="audience-heading">Built for brands that mean business</h2>
-      <p class="section__lead">Your window to make a first impression is shorter than you think.</p>
-      <ul class="audience__list">
+    <div class="container forge-hero__content" data-intro>
+      <p class="forge-hero__eyebrow"><span class="forge-name">Brand</span>Forge™</p>
+      <ul class="pillars">
         {
-          audience.map((item) => (
+          pillars.map((pillar) => (
             <li>
-              <Icon name="check" size={18} />
-              {item}
+              <Icon name={pillar.icon} size={16} />
+              {pillar.label}
             </li>
           ))
         }
       </ul>
-    </div>
-    <dl class="stats">
-      {
-        stats.map((stat) => (
-          <div>
-            <dt>{stat.value}</dt>
-            <dd>
-              {stat.label}
-              {stat.source && (
-                <>
-                  {' '}
-                  (<a href={stat.source}>source</a>)
-                </>
-              )}
-            </dd>
-          </div>
-        ))
-      }
-    </dl>
-  </section>
-
-  <section class="container section why" aria-labelledby="why-heading">
-    <ul class="why__images">
-      <li><Image src={strategyLaptop} alt="Laptop showing a brand strategy framework and color wheel" widths={[400, 800]} sizes="(max-width: 700px) 80vw, 360px" /></li>
-      <li><Image src={workshopLaptop} alt="Laptop with a brand workshop board of green sticky notes" widths={[400, 800]} sizes="(max-width: 700px) 80vw, 360px" /></li>
-      <li><Image src={workshopNotes} alt="Brand workshop board of blue sticky notes answering where the brand is going" widths={[400, 800]} sizes="(max-width: 700px) 80vw, 360px" /></li>
-    </ul>
-    <div class="why__text">
-      <p class="eyebrow">Why <em>BrandForge?</em></p>
-      <h2 id="why-heading">Low-cost design is the most expensive thing you can buy</h2>
-      <p class="section__lead">Most startups die in the gap between ambition and execution.</p>
-      <p>
-        Traditional agencies are too slow and too expensive. In-house teams are too narrow. BrandForge is the third option:
-        high-fidelity branding and a launch-ready creative system delivered in weeks, not months. Built on research. Built
-        to last.
+      <h1 id="brandforge-title" class="holo-text">From zero to market-ready, without the wait</h1>
+      <p class="forge-lead forge-hero__lead">
+        High-fidelity <span class="forge-name">branding</span> built on market reality, not founder intuition. Your identity,
+        your systems, your flag in the ground.
       </p>
-    </div>
-  </section>
-
-  <section class="container section" aria-labelledby="features-heading">
-    <div class="section__intro">
-      <p class="eyebrow">BrandForge <em>features</em></p>
-      <h2 id="features-heading">A brand only humans can use is half a brand</h2>
-      <p class="section__lead">
-        BrandForge is built for brands that need to move fast without cutting corners. Every deliverable is crafted to give
-        your team and your tools a shared creative language. From logo systems to AI-ready design kits, this is the
-        foundation your business will build on for years.
-      </p>
-      <p>Your brand is the source of truth. We build it right the first time.</p>
-    </div>
-    <ol class="features">
-      {
-        features.map((feature) => (
-          <li>
-            <h3>{feature.title}</h3>
-            <p>{feature.text}</p>
-          </li>
-        ))
-      }
-    </ol>
-    <p class="section__more">
       <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
-    </p>
+    </div>
   </section>
 
-  <section class="container section" aria-labelledby="work-heading">
-    <div class="section__intro section__intro--split">
-      <div>
-        <p class="eyebrow">Our <em>work</em></p>
-        <h2 id="work-heading">From vision to victory</h2>
-        <p class="section__lead">
-          A look inside the branding projects where strategy, structure, and design all came together to drive meaningful
-          business outcomes.
+  <!-- One teal backdrop runs under every section below the hero, so no seams show between them -->
+  <div class="forge-body">
+  <!-- Who it's for: the list beside four glass stat cards -->
+  <section aria-labelledby="audience-heading">
+    <div class="container section audience">
+      <div data-reveal="left">
+        <p class="forge-kicker">Who is <span class="forge-name">Brand</span>Forge for</p>
+        <h2 id="audience-heading">Built for brands that mean business</h2>
+        <p class="forge-lead">Your window to make a first impression is shorter than you think.</p>
+        <ul class="audience__list">
+          {
+            audience.map((item) => (
+              <li>
+                <Icon name="check" size={16} />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <dl class="stats" data-reveal-stagger>
+        {
+          stats.map((stat) => (
+            <div class="stat">
+              <dt class="stat__value" data-count={stat.value}>
+                {stat.value}
+              </dt>
+              <dd class="stat__label">{stat.label}</dd>
+              {stat.source && (
+                <dd class="stat__source">
+                  <a href={stat.source}>
+                    Source<span class="visually-hidden">: Stanford Web Credibility Research</span>
+                  </a>
+                </dd>
+              )}
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Why: workshop images in the wipe slider beside the argument -->
+  <section aria-labelledby="why-heading">
+    <div class="container section why">
+      <WipeSlider id="workshop-images" label="BrandForge workshop examples" images={workshopImages} class="why__slider" />
+      <div data-reveal="right">
+        <p class="forge-kicker">Why <span class="forge-name">Brand</span>Forge?</p>
+        <h2 id="why-heading">Low-cost design is the most expensive thing you can buy</h2>
+        <p class="forge-lead">Most startups die in the gap between ambition and execution.</p>
+        <p class="forge-copy">
+          Traditional agencies are too slow and too expensive. In-house teams are too narrow. BrandForge is the third option:
+          high-fidelity branding and a launch-ready creative system delivered in weeks, not months. Built on research. Built
+          to last.
         </p>
       </div>
-      <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
-    </div>
-    <div class="card-grid">
-      {caseStudies.map((study) => <CaseStudyCard study={study} headingLevel={3} />)}
     </div>
   </section>
+
+  <!-- Features: the pitch stays put while the six cards scroll past -->
+  <section aria-labelledby="features-heading">
+    <div class="container section features-layout">
+      <div class="features-layout__intro">
+        <p class="forge-kicker"><span class="forge-name">Brand</span>Forge features</p>
+        <h2 id="features-heading">A brand only humans can use is half a brand</h2>
+        <p class="forge-copy">
+          BrandForge is built for brands that need to move fast without cutting corners. Every deliverable is crafted to give
+          your team and your tools a shared creative language. From logo systems to AI-ready design kits, this is the
+          foundation your business will build on for years.
+        </p>
+        <p class="forge-lead">Your brand is the source of truth. We build it right the first time.</p>
+        <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
+      </div>
+      <ol class="features" data-reveal-stagger>
+        {
+          features.map((feature) => (
+            <li class="feature">
+              <div class="feature__head">
+                <h3>{feature.title}</h3>
+                <span class="feature__icon">
+                  <Icon name={feature.icon} size={26} class="icon--draw" />
+                </span>
+              </div>
+              <p>{feature.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <OurWork
+      only={['bell-bird-atm', 'plant-nursery-ecommerce', 'genpact-grow-event', 'safezone-product-and-branding']}
+      heading="From vision to victory"
+      intro="A look inside the branding projects where strategy, structure, and design all came together to drive meaningful business outcomes."
+    />
+  </div>
 </BaseLayout>
 
+<script>
+  // The stat numbers count up once, the first time their card is revealed.
+  // The real value is in the HTML; this only animates toward it.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!reduceMotion.matches && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          observer.unobserve(entry.target);
+          const el = entry.target as HTMLElement;
+          const [, number, suffix] = el.dataset.count!.match(/^(\d+)(.*)$/) ?? [];
+          if (!number) continue;
+          const target = Number(number);
+          const start = performance.now();
+          const duration = 1400;
+          const tick = (now: number) => {
+            const t = Math.min(1, (now - start) / duration);
+            const eased = 1 - (1 - t) ** 3;
+            el.textContent = `${Math.round(target * eased)}${suffix}`;
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      },
+      { rootMargin: '0px 0px -15% 0px' },
+    );
+    document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => observer.observe(el));
+  }
+</script>
+
 <style>
-  .hero {
-    padding-block: var(--space-3xl) var(--space-2xl);
+  /* ===== Hero ===== */
+  .forge-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: calc(var(--header-height) + 4.5rem) var(--space-2xl);
+    border-bottom: 1px solid var(--color-border);
+    background: linear-gradient(
+        -45deg,
+        var(--color-hero-indigo),
+        var(--color-hero-magenta),
+        var(--color-hero-teal),
+        var(--color-hero-azure)
+      )
+      0% 50% / 400% 400%;
   }
 
-  .hero__wave {
+  @media (prefers-reduced-motion: no-preference) {
+    .forge-hero {
+      animation: forge-gradient 15s ease infinite;
+    }
+  }
+
+  @keyframes forge-gradient {
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .forge-hero__bg {
     position: absolute;
+    inset: 0;
     z-index: -1;
-    inset: auto 0 0 auto;
-    width: 70%;
-    max-width: 60rem;
-    opacity: 0.6;
-    pointer-events: none;
   }
 
-  .hero__content {
+  .forge-hero__wave {
+    position: absolute;
+    inset: 0 -25%;
+    background: linear-gradient(var(--color-black), transparent 80%);
+  }
+
+  .forge-hero__wave img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .forge-hero__wave {
+        animation: forge-parallax linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+    }
+  }
+
+  @keyframes forge-parallax {
+    to {
+      transform: translate3d(-4%, 18%, 0);
+    }
+  }
+
+  .forge-hero__veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgb(0 4 7 / 0.5), var(--color-night));
+  }
+
+  .forge-hero__content {
     position: relative;
   }
 
-  .hero h1 {
-    max-width: 16ch;
+  .forge-hero__eyebrow {
+    margin: 0 0 var(--space-md);
+    font-size: var(--font-size-eyebrow);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.5;
   }
 
-  .hero__lead {
-    max-width: 36rem;
-    color: var(--color-text);
+  .forge-name {
+    color: var(--color-forge-cyan);
   }
 
   .pillars {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2xs);
+    gap: var(--space-sm);
     margin: 0 0 var(--space-md);
     padding: 0;
     list-style: none;
   }
 
   .pillars li {
-    padding: 2px var(--space-sm);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    background-color: rgb(0 0 0 / 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs);
+    border: 1px solid rgb(255 255 255 / 0.39);
+    border-radius: var(--radius-sm);
+    background-color: rgb(0 4 7 / 0.22);
+    backdrop-filter: blur(6px);
     font-size: var(--font-size-sm);
   }
 
+  .pillars .icon {
+    margin-inline: var(--space-3xs);
+    color: var(--color-forge-cyan);
+  }
+
+  .forge-hero h1 {
+    max-width: 11em;
+    margin-bottom: var(--space-md);
+  }
+
+  .forge-lead {
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-eyebrow);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.5;
+  }
+
+  .forge-hero__lead {
+    max-width: 42rem;
+    margin-bottom: var(--space-lg);
+  }
+
+  /* ===== Teal backdrop: rises out of the dark hero, holds, then settles back
+   * to black before the footer ===== */
+  .forge-body {
+    background: linear-gradient(
+      var(--color-forge-night),
+      var(--color-forge-teal) 18%,
+      var(--color-forge-teal) 78%,
+      var(--color-black)
+    );
+  }
+
+  .forge-kicker {
+    margin-bottom: var(--space-xs);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .forge-body h2 {
+    margin-bottom: var(--space-md);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .forge-copy {
+    color: var(--color-forge-muted);
+    font-size: var(--font-size-lg);
+  }
+
+  /* ===== Who it's for ===== */
   .audience {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-xl);
+    grid-template-columns: 1fr 1fr;
     align-items: center;
+    gap: var(--space-2xl);
   }
 
   .audience__list {
@@ -270,108 +434,175 @@ const jsonLd = [
 
   .audience__list li {
     display: flex;
-    gap: var(--space-2xs);
+    gap: var(--space-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.65;
   }
 
   .audience__list .icon {
     margin-top: 0.3em;
-    color: var(--color-mint);
+    color: var(--color-forge-cyan);
   }
 
   .stats {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
     margin: 0;
   }
 
-  .stats div {
+  /* Glass cards, as on the live page */
+  .stat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     padding: var(--space-lg);
-    border: 1px solid var(--color-border);
+    border: 1px solid rgb(255 255 255 / 0.2);
     border-radius: var(--radius-lg);
-    background-color: var(--color-surface);
+    background-color: rgb(28 28 30 / 0.5);
+    backdrop-filter: blur(10px);
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
   }
 
-  .stats dt {
-    color: var(--color-mint);
-    font-family: var(--font-display);
+  .stat:hover {
+    border-color: rgb(255 255 255 / 0.45);
+  }
+
+  .stat__value {
+    color: var(--color-forge-cyan);
     font-size: var(--font-size-h2);
-    line-height: 1;
+    font-weight: var(--font-weight-light);
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 24px rgb(6 230 230 / 0.35);
   }
 
-  .stats dd {
-    margin: var(--space-2xs) 0 0;
+  .stat__label {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    line-height: 1.6;
+  }
+
+  .stat__source {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    margin: 0;
+    font-size: var(--font-size-xs);
+  }
+
+  .stat__source a {
     color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
   }
 
+  .stat__source a:hover {
+    color: var(--color-white);
+  }
+
+  /* ===== Why ===== */
   .why {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-xl);
+    grid-template-columns: 1fr 1fr;
     align-items: center;
+    gap: var(--space-2xl);
   }
 
-  .why__images {
+  /* ===== Features ===== */
+  .features-layout {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-sm);
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    grid-template-columns: 5fr 7fr;
+    align-items: start;
+    gap: var(--space-2xl);
   }
 
-  .why__images img {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    border-radius: var(--radius-lg);
-  }
-
-  .why__text p:last-child {
-    color: var(--color-text-muted);
+  .features-layout__intro {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-lg));
   }
 
   .features {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: var(--space-md);
     margin: 0;
     padding: 0;
     list-style: none;
-    counter-reset: feature;
   }
 
-  .features li {
+  .feature {
     padding: var(--space-lg);
-    border: 1px solid var(--color-border);
+    border: 1px solid rgb(255 255 255 / 0.2);
     border-radius: var(--radius-lg);
-    background-color: var(--color-surface);
-    counter-increment: feature;
+    background-color: rgb(28 28 30 / 0.5);
+    backdrop-filter: blur(10px);
+    transition:
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
-  .features li::before {
-    content: counter(feature, decimal-leading-zero);
-    color: var(--color-mint);
-    font-weight: var(--font-weight-bold);
+  .feature:hover {
+    border-color: rgb(6 230 230 / 0.6);
+    box-shadow: 0 0 24px rgb(6 230 230 / 0.15);
   }
 
-  .features h3 {
-    margin-top: var(--space-2xs);
+  .feature__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .feature h3 {
+    margin: 0;
     font-family: var(--font-body);
     font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: normal;
+    line-height: 1.6;
   }
 
-  .features p {
+  .feature__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-glass);
+    transition: color var(--transition-fast);
+  }
+
+  .feature:hover .feature__icon {
+    color: var(--color-forge-cyan);
+  }
+
+  .feature p {
     margin: 0;
-    color: var(--color-text-muted);
+    color: var(--color-forge-muted);
     font-size: var(--font-size-sm);
   }
 
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: var(--space-md);
+  /* ===== Small screens ===== */
+  @media (max-width: 977px) {
+    .audience,
+    .why,
+    .features-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+
+    .features-layout__intro {
+      position: static;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .stats,
+    .features {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

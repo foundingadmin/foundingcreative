@@ -61,6 +61,15 @@ test('service pages show their own case studies', async ({ page }) => {
   await expect(page.locator('h1')).toHaveCount(1);
 });
 
+test('BrandForge shows its workshop slider and branding work', async ({ page }) => {
+  await page.goto('/brandforge/');
+  await expect(page.getByRole('region', { name: 'BrandForge workshop examples' })).toBeVisible();
+  await expect(page.locator('#work-slider > li')).toHaveCount(4);
+  await expect(page.locator('.feature')).toHaveCount(6);
+  // Stat numbers are real text in the page, whatever the count-up does.
+  await expect(page.locator('.stat__value').first()).toHaveAttribute('data-count', '75%');
+});
+
 test('our work slider lists every case study', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#work-slider > li')).toHaveCount(10);
