@@ -146,3 +146,36 @@ test('case studies are laid out in colored bands', async ({ page }) => {
   // The other case studies follow, not this one.
   await expect(page.locator('#work-slider > li')).toHaveCount(9);
 });
+
+test('selected works rolls through the three featured projects', async ({ page }) => {
+  await page.goto('/');
+  const section = page.locator('[data-selected-works]');
+  const names = section.getByRole('list', { name: 'Featured projects' }).getByRole('button');
+  await expect(names).toHaveText(['Turntide', 'Bank of America', 'Tata']);
+  await section.scrollIntoViewIfNeeded();
+
+  // Hovering pauses the autoplay, so the buttons alone decide what shows.
+  await section.hover();
+  await expect(names.nth(0)).toHaveAttribute('aria-current', 'true');
+  const active = section.locator('.selected-works__slide.is-active');
+  await expect(active).toHaveAttribute('href', '/case-study/turntide-website/');
+
+  await section.getByRole('button', { name: 'Next' }).click();
+  await expect(names.nth(1)).toHaveAttribute('aria-current', 'true');
+  await expect(active).toHaveAttribute('href', '/case-study/bank-apps/');
+  await expect(section.locator('[data-current]')).toHaveText('02');
+
+  await names.nth(2).click();
+  await expect(active).toHaveAttribute('href', '/case-study/interactive-learning-mural/');
+  // Only the showing project's links can take focus.
+  await expect(section.locator('.selected-works__slide:not(.is-active)').first()).toHaveJSProperty('inert', true);
+  await expect(section.getByRole('link', { name: /View case study for Tata/ })).toBeVisible();
+});
+
+test('selected works can be paused', async ({ page }) => {
+  await page.goto('/');
+  const pause = page.locator('[data-selected-works] [data-pause]');
+  await pause.click();
+  await expect(pause).toHaveAttribute('aria-pressed', 'true');
+  await expect(pause).toHaveAccessibleName('Play slideshow');
+});
