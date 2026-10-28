@@ -35,6 +35,16 @@ export default defineConfig({
       subsets: ['latin', 'latin-ext'],
       fallbacks: ['system-ui', 'sans-serif'],
     },
+    // Case study kickers ("USER JOURNEY MAPPING"), as on the live site.
+    {
+      provider: fontProviders.google(),
+      name: 'Ubuntu Mono',
+      cssVariable: '--font-ubuntu-mono',
+      weights: [400],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['monospace'],
+    },
   ],
   env: {
     schema: {

@@ -130,6 +130,44 @@ function withCredits(nodes) {
   return out;
 }
 
+// Small line icons for the challenge cards (Lucide circle-x and check).
+const svgIcon = (paths) => ({
+  type: 'element',
+  tagName: 'svg',
+  properties: {
+    viewBox: '0 0 24 24',
+    width: '28',
+    height: '28',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: '1.5',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    ariaHidden: 'true',
+  },
+  children: paths.map(([tagName, properties]) => ({ type: 'element', tagName, properties, children: [] })),
+});
+const ICON_PROBLEM = () => svgIcon([['circle', { cx: '12', cy: '12', r: '10' }], ['path', { d: 'm15 9-6 6' }], ['path', { d: 'm9 9 6 6' }]]);
+const ICON_WIN = () => svgIcon([['path', { d: 'M20 6 9 17l-5-5' }]]);
+
+/**
+ * One challenge row, as on the live pages: a label column (heading and
+ * paragraph) beside a card per list item, pink with an x for problems and
+ * green with a check for the approach.
+ */
+function challengeRow(label, list, kind) {
+  const items = (list?.children ?? []).filter((li) => isElement(li, 'li'));
+  const cards = items.map((li) =>
+    el('li', ['case-point', `case-point--${kind}`], [
+      el('span', 'case-point__icon', [kind === 'problem' ? ICON_PROBLEM() : ICON_WIN()]),
+      el('p', null, li.children.filter((child) => !isBlank(child))),
+    ]),
+  );
+  const row = el('div', 'case-challenge__row', [el('div', 'case-challenge__label', label)]);
+  if (cards.length) row.children.push(el('ul', 'case-challenge__cards', cards));
+  return row;
+}
+
 function layoutBand(band) {
   const nodes = band.nodes;
   const h2 = nodes.find((node) => isElement(node, 'h2'));
@@ -144,7 +182,7 @@ function layoutBand(band) {
   const header = [];
   if (hasClass(nodes[0], 'case-kicker')) header.push(nodes[i++]);
   if (h2 && nodes[i] === h2) header.push(nodes[i++]);
-  // (The challenge keeps its paragraphs for the side-by-side panels.)
+  // (The challenge keeps its paragraphs for its label column.)
   if ((header.length || !h2) && !band.challenge) {
     while (isElement(nodes[i], 'p') && !isMedia(nodes[i]) && !isCredits(nodes[i])) header.push(nodes[i++]);
   }
@@ -160,58 +198,118 @@ function layoutBand(band) {
   }
 
   const out = [];
-  if (header.length) out.push(el('div', h2 ? 'case-header' : 'case-header case-header--intro', header));
+  const media = [];
 
   if (band.challenge) {
-    // The challenge and each approach-style subsection, side by side.
-    const cards = [el('div', 'case-panel', withCredits(loose.filter((n) => !isMedia(n))))];
-    const media = loose.filter(isMedia);
-    let g = 0;
-    while (g < groups.length && groups[g].heading.tagName === 'h3') {
-      const { heading, items } = groups[g++];
-      cards.push(el('div', 'case-panel', [heading, ...items.filter((n) => !isMedia(n))]));
+    // Problems, then the approach, each as a row of cards.
+    const rows = [];
+    const list = loose.find((n) => isElement(n, 'ul'));
+    rows.push(challengeRow([...header, ...loose.filter((n) => isElement(n, 'p') && !isMedia(n))], list, 'problem'));
+    media.push(...loose.filter(isMedia));
+    if (groups[0]?.heading.tagName === 'h3') {
+      const { heading, items } = groups.shift();
+      const approachList = items.find((n) => isElement(n, 'ul'));
+      rows.push(challengeRow([heading, ...items.filter((n) => isElement(n, 'p') && !isMedia(n))], approachList, 'win'));
       media.push(...items.filter(isMedia));
     }
-    if (cards[0].children.length === 0) cards.shift();
-    out.push(el('div', 'case-panels case-panels--split', cards));
-    out.push(...withGalleries(media));
-    groups.splice(0, g);
-  } else {
-    out.push(...withCredits(withGalleries(loose)));
+    out.push(el('div', 'case-challenge', rows));
+  } else if (band.conclusion) {
+    // The closing image card, the closing line, then Conclusion beside Key
+    // outcomes, with partner credits underneath.
+    out.push(el('div', 'case-closing'));
+    if (header.length) out.push(el('div', 'case-header case-header--center', header));
+    const columns = [];
+    const credits = [];
+    for (const group of groups) {
+      if (group.heading.tagName === 'h3') columns.push([group.heading]);
+      else columns.at(-1)?.push(group.heading);
+      for (const item of withCredits(group.items)) {
+        if (hasClass(item, 'case-credits')) credits.push(item);
+        else (columns.at(-1) ?? columns[columns.push([]) - 1]).push(item);
+      }
+    }
+    out.push(el('div', 'case-conclusion', columns.map((col) => el('div', 'case-conclusion__col', col))));
+    // Several studies repeat the same credit; show each once.
+    const seen = new Set();
+    for (const credit of credits) {
+      const key = textOf(credit);
+      if (!seen.has(key)) out.push(credit);
+      seen.add(key);
+    }
+    return out;
   }
 
-  // Groups: features for one or two pieces of media, cards for runs of short
-  // text-only subsections at the same level, plain blocks otherwise.
-  let run = [];
-  const flushRun = () => {
-    if (run.length > 1) out.push(el('div', 'case-panels', run.map((g) => el('div', 'case-panel', [g.heading, ...g.items]))));
-    else for (const g of run) out.push(el('div', 'case-block', [g.heading, ...withCredits(g.items)]));
-    run = [];
+  if (header.length && !band.challenge) {
+    const centered = hasClass(header[0], 'case-kicker');
+    out.push(el('div', h2 ? ['case-header', centered ? 'case-header--center' : ''].filter(Boolean) : 'case-header case-header--intro', header));
+  }
+  if (!band.challenge) out.push(...withCredits(withGalleries(loose)));
+
+  // Groups. Runs of short text-only subsections become columns; subsections
+  // with one or two images become image cards, two to a row (or a
+  // side-by-side feature when there's only one); many images get a gallery.
+  let textRun = [];
+  let cardRun = [];
+  const flushText = () => {
+    if (textRun.length > 1) out.push(el('div', 'case-columns', textRun.map((g) => el('div', 'case-column', [g.heading, ...g.items]))));
+    else for (const g of textRun) out.push(el('div', 'case-block', [g.heading, ...withCredits(g.items)]));
+    textRun = [];
   };
-  let side = 0;
-  for (const group of groups) {
-    const media = group.items.filter(isMedia);
-    const text = group.items.filter((n) => !isMedia(n));
-    const textOnly = media.length === 0 && text.length > 0 && !text.some(isCredits);
-    if (textOnly && (!run.length || run[0].heading.tagName === group.heading.tagName)) {
-      run.push(group);
-      continue;
-    }
-    flushRun();
-    if (textOnly) {
-      run.push(group);
-    } else if (media.length > 0 && media.length <= 2) {
-      const feature = el('div', ['case-feature', side++ % 2 ? 'case-feature--reverse' : ''].filter(Boolean), [
-        el('div', 'case-feature__text', [group.heading, ...withCredits(text)]),
-        el('div', 'case-feature__media', withGalleries(media)),
-      ]);
-      out.push(feature);
+  const flushCards = () => {
+    if (cardRun.length > 1) {
+      out.push(
+        el(
+          'div',
+          'case-cards',
+          cardRun.map((g) =>
+            el('div', 'case-card', [el('div', 'case-card__media', withGalleries(g.media)), g.heading, ...withCredits(g.text)]),
+          ),
+        ),
+      );
     } else {
-      // Many images: text first, then a full-width gallery.
+      for (const g of cardRun) {
+        out.push(
+          el('div', ['case-feature', out.filter((n) => hasClass(n, 'case-feature')).length % 2 ? 'case-feature--reverse' : ''].filter(Boolean), [
+            el('div', 'case-feature__text', [g.heading, ...withCredits(g.text)]),
+            el('div', 'case-feature__media', withGalleries(g.media)),
+          ]),
+        );
+      }
+    }
+    cardRun = [];
+  };
+
+  // Leftover challenge media and the subsections after it (Hypothesis,
+  // Approach) share one feature: text stacked beside the image.
+  if (band.challenge) {
+    const text = groups.flatMap((g) => [g.heading, ...g.items.filter((n) => !isMedia(n))]);
+    media.push(...groups.flatMap((g) => g.items.filter(isMedia)));
+    if (text.length && media.length) {
+      out.push(el('div', 'case-feature', [el('div', 'case-feature__text', text), el('div', 'case-feature__media', withGalleries(media))]));
+    } else if (text.length || media.length) out.push(...text, ...withGalleries(media));
+    return out;
+  }
+
+  for (const group of groups) {
+    const groupMedia = group.items.filter(isMedia);
+    const text = group.items.filter((n) => !isMedia(n));
+    const textOnly = groupMedia.length === 0 && text.length > 0 && !text.some(isCredits);
+    if (textOnly) {
+      flushCards();
+      if (textRun.length && textRun[0].heading.tagName !== group.heading.tagName) flushText();
+      textRun.push(group);
+    } else if (groupMedia.length > 0 && groupMedia.length <= 2) {
+      flushText();
+      cardRun.push({ heading: group.heading, text, media: groupMedia });
+    } else {
+      flushText();
+      flushCards();
+      // Many images (or a heading on its own): text first, then a gallery.
       out.push(el('div', 'case-block', [group.heading, ...withCredits(withGalleries(group.items))]));
     }
   }
-  flushRun();
+  flushText();
+  flushCards();
   return out;
 }
 
@@ -256,9 +354,13 @@ function toBands(children) {
     else tone = NEXT_TONE[previous] ?? 'white';
     previous = tone;
 
-    const section = el('section', ['case-band', band.statement ? 'case-band--statement' : ''].filter(Boolean), [
-      el('div', 'case-band__inner', content),
-    ]);
+    const section = el(
+      'section',
+      ['case-band', band.statement ? 'case-band--statement' : '', band.conclusion ? 'case-band--conclusion' : ''].filter(Boolean),
+      [
+        el('div', 'case-band__inner', content),
+      ],
+    );
     section.properties.dataTone = tone;
     return section;
   });
