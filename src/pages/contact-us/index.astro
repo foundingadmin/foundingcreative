@@ -1,11 +1,18 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactForm from '../../components/ContactForm.astro';
+import HeroBackdrop from '../../components/HeroBackdrop.astro';
+import LineArt from '../../components/LineArt.astro';
+import TeamFaces from '../../components/TeamFaces.astro';
 import Icon from '../../components/Icon.astro';
-import illustration from '../../assets/pages/contact-illustration.svg';
+import illustrationSvg from '../../assets/pages/contact-illustration.svg?raw';
 import shareImage from '../../assets/home/services/web-4.webp';
 import { letsTalkHref, linkedInHref } from '../../data/navigation';
+
+// Contact, laid out as on the live page: a centered title, the form on the
+// left and the conversation illustration on the right, here over the Field
+// Notes aurora with the form in a frosted card. The form itself is the shared
+// ContactForm, unchanged.
 
 // Title and OG title match the WordPress crawl. The live meta description is
 // broken plugin text ("Please enable JavaScript..."), so it is rewritten here.
@@ -29,52 +36,95 @@ const jsonLd = {
   ogImageAlt="Bank of America app on a tablet, designed by Founding Creative"
   jsonLd={jsonLd}
 >
-  <section class="container contact">
-    <div class="contact__intro">
-      <p class="eyebrow">We are here to <em>hear</em></p>
-      <h1>Send us a message.</h1>
-      <p class="section__lead">
-        Tell us about your brand, website, or project, and we'll get back to you soon.
-      </p>
-      <Image class="contact__art" src={illustration} alt="" />
-      <ul class="contact__ways">
-        <li>
-          <Icon name="arrow-up-right" size={16} />
-          <span>Prefer to talk? <a href={letsTalkHref}>Book a time with us</a></span>
-        </li>
-        <li>
-          <Icon name="arrow-up-right" size={16} />
-          <span>Local to Denver, CO or Chattanooga, TN? Let's meet up, free coffee on the house.</span>
-        </li>
-        <li>
-          <Icon name="linkedin" size={16} />
-          <span><a href={linkedInHref}>Follow us on LinkedIn</a></span>
-        </li>
-      </ul>
-    </div>
-    <div class="contact__form">
-      <ContactForm variant="full" />
+  <section class="contact under-header" aria-labelledby="contact-title">
+    <HeroBackdrop variant="aurora" />
+    <div class="container">
+      <div class="contact__head" data-intro>
+        <p class="eyebrow">We are here to <em>hear</em></p>
+        <h1 id="contact-title">Send us a message.</h1>
+      </div>
+
+      <div class="contact__grid">
+        <div class="contact__card" data-reveal="left">
+          <p class="contact__prompt">Tell us about your brand, website, or project, and we'll get back to you soon.</p>
+          <ContactForm variant="full" />
+        </div>
+
+        <div class="contact__side">
+          <LineArt svg={illustrationSvg} class="contact__art" />
+          <ul class="contact__ways" data-reveal-stagger>
+            <li>
+              <span class="contact__icon"><Icon name="arrow-up-right" size={18} /></span>
+              <span>Prefer to talk? <a href={letsTalkHref}>Book a time with us</a></span>
+            </li>
+            <li>
+              <span class="contact__icon"><Icon name="map-pin" size={18} /></span>
+              <span>Local to Denver, CO or Chattanooga, TN? Let's meet up, free coffee on the house.</span>
+            </li>
+            <li>
+              <span class="contact__icon"><Icon name="linkedin" size={18} /></span>
+              <span><a href={linkedInHref}>Follow us on LinkedIn</a></span>
+            </li>
+          </ul>
+          <TeamFaces class="contact__faces" />
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
   .contact {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-xl);
-    padding-block: var(--space-2xl);
+    position: relative;
+    overflow: hidden;
+    padding-block: calc(var(--header-height) + 4rem) var(--space-3xl);
   }
 
-  .contact__art {
-    width: 100%;
-    max-width: 18rem;
-    margin-block: var(--space-lg);
+  .contact__head {
+    margin-bottom: var(--space-2xl);
+    text-align: center;
+  }
+
+  .contact h1 {
+    font-weight: var(--font-weight-regular);
+    text-shadow: var(--text-glow);
+  }
+
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    align-items: start;
+    gap: var(--space-2xl);
+  }
+
+  /* The form in a frosted card with the live site's thin rule */
+  .contact__card {
+    padding: var(--space-lg);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: var(--radius-lg);
+    background-color: rgb(28 28 30 / 0.5);
+    box-shadow: 0 4px 8px rgb(0 0 0 / 0.2);
+    backdrop-filter: blur(10px);
+  }
+
+  .contact__prompt {
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-lg);
+  }
+
+  .contact__side {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .contact :global(.contact__art) {
+    justify-self: center;
+    width: min(100%, 27.5rem);
   }
 
   .contact__ways {
     display: grid;
-    gap: var(--space-xs);
+    gap: var(--space-sm);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -83,19 +133,33 @@ const jsonLd = {
 
   .contact__ways li {
     display: flex;
-    gap: var(--space-2xs);
+    align-items: center;
+    gap: var(--space-sm);
   }
 
-  .contact__ways .icon {
-    margin-top: 0.3em;
-    color: var(--color-mint);
+  /* Small frosted icon squares, like the feature cards */
+  .contact__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-glass);
+    color: var(--color-cyan);
   }
 
-  .contact__form {
-    padding: var(--space-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    background-color: var(--color-surface);
-    align-self: start;
+  .contact__ways a {
+    color: var(--color-white);
+  }
+
+  .contact__ways a:hover {
+    color: var(--color-cyan);
+  }
+
+  @media (max-width: 977px) {
+    .contact__grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
