@@ -7,8 +7,13 @@ import Testimonials from '../components/Testimonials.astro';
 import OurWork from '../components/OurWork.astro';
 import Carousel from '../components/Carousel.astro';
 import Icon from '../components/Icon.astro';
-import { letsTalkHref } from '../data/navigation';
 import wave from '../assets/brand/wave-black.svg';
+import tyler from '../assets/team/tyler.webp';
+import stacey from '../assets/team/stacey.webp';
+import jamie from '../assets/team/jamie.webp';
+import titus from '../assets/team/titus.webp';
+import sasha from '../assets/team/sasha.webp';
+import blake from '../assets/team/blake.webp';
 import shareImage from '../assets/home/services/web-5.webp';
 
 // Service sliders
@@ -83,6 +88,7 @@ const services = [
 const engagements = [
   {
     title: 'Fixed projects',
+    icon: 'target',
     points: ['Clear scope', 'Defined timelines', 'Focused engagement'],
     text: 'Straightforward path from idea to launch through clearly defined scopes.',
     href: '/contact-us/',
@@ -90,6 +96,7 @@ const engagements = [
   },
   {
     title: 'Fractional creative',
+    icon: 'layers',
     featured: true,
     points: ['Priority access', 'Multiple work streams', 'Sliding scale cost'],
     text: 'Designed to reduce expenses for teams in need of regular creative support.',
@@ -98,6 +105,7 @@ const engagements = [
   },
   {
     title: 'Custom fit',
+    icon: 'puzzle',
     points: ['Creative ops guidance', 'Adapted to your systems', 'Built around your org'],
     text: 'Co-create the right structure for your unique goals, constraints, and vision.',
     href: '/contact-us/',
@@ -106,6 +114,16 @@ const engagements = [
 ];
 
 const trustpilot = 'https://www.trustpilot.com/review/foundingcreative.com';
+// Team portraits in the live site's order
+const team = [
+  { photo: tyler, name: 'Tyler Lukey' },
+  { photo: stacey, name: 'Stacey Cuzzacrea' },
+  { photo: jamie, name: 'Jamie Caceres' },
+  { photo: titus, name: 'Josh Titus' },
+  { photo: sasha, name: 'Sasha Beck' },
+  { photo: blake, name: 'Blake Hickey' },
+];
+
 const values = [
   { title: 'Clarity over chaos', text: 'Solutions rooted in structure and strategy' },
   { title: 'Relationships first', text: 'We work with people, not logos' },
@@ -149,11 +167,15 @@ const jsonLd = [
   ogImageAlt="Turntide website designed by Founding Creative, shown on an iMac"
   jsonLd={jsonLd}
 >
-  <!-- Hero -->
-  <section class="hero holo-bg">
-    <Image class="hero__wave" src={wave} alt="" loading="eager" />
+  <!-- Hero: the live site's animated four-color gradient, a drifting wave
+       layer, and a dark veil, with the pearl headline glowing on top -->
+  <section class="hero under-header">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="hero__wave"><img src={wave.src} alt="" width={wave.width} height={wave.height} /></div>
+      <div class="hero__veil"></div>
+    </div>
     <div class="container hero__content" data-intro>
-      <p class="eyebrow">Brand &amp; Web Creative Marketing Agency</p>
+      <p class="hero__eyebrow">Brand &amp; Web Creative Marketing Agency</p>
       <h1 class="hero__title holo-text">Creative foundations for brands of all sizes</h1>
       <p class="hero__lead">
         <a href="/services/website-services/">Web</a>, <a href="/services/branding-services/">brand</a>,{' and '}
@@ -167,138 +189,171 @@ const jsonLd = [
   </section>
 
   <!-- Services -->
-  <section class="container section" id="services" aria-labelledby="services-heading">
-    <div class="section__intro">
-      <p class="eyebrow">Our <em>services</em></p>
-      <h2 id="services-heading">What we do</h2>
-      <p class="section__lead">Our services fuse strategy, structure, and design to deliver impactful business results.</p>
-    </div>
+  <section class="services curve-bottom" id="services" aria-labelledby="services-heading">
+    <div class="container section">
+      <div class="section__intro">
+        <p class="eyebrow">Our <em>services</em></p>
+        <h2 id="services-heading">What we do</h2>
+        <p class="section__lead">Our services fuse strategy, structure, and design to deliver impactful business results.</p>
+      </div>
 
-    {
-      services.map((service, i) => (
-        <article class:list={['service', { 'service--reverse': i % 2 === 1 }]} aria-labelledby={`service-${i}`} data-reveal>
-          <div class="service__text">
-            <span class="service__icon">
-              <Icon name={service.icon} size={24} class="icon--draw" />
-            </span>
-            <h3 id={`service-${i}`}>{service.title}</h3>
-            <p class="service__lead">{service.lead}</p>
-            <p>{service.text}</p>
-            <a class="button" href={service.href}>
-              {service.cta} <Icon name="arrow-up-right" size={16} />
-            </a>
-          </div>
-          <div class="service__media">
-            <ul class="tags" aria-label={`${service.title}: what's included`}>
-              {service.tags.map((tag) => (
-                <li>{tag}</li>
-              ))}
-            </ul>
-            <Carousel id={`service-${i}-work`} label={`${service.title}: example work`} class="service__gallery">
-              {service.images.map((image) => (
-                <li>
-                  <Image src={image.src} alt={image.alt} widths={[300, 600]} sizes="244px" />
-                </li>
-              ))}
-            </Carousel>
-          </div>
-        </article>
-      ))
-    }
+      {
+        services.map((service, i) => (
+          <article class="service" aria-labelledby={`service-${i}`} data-reveal>
+            <div class="service__text">
+              <div>
+                <span class="service__icon">
+                  <Icon name={service.icon} size={40} class="icon--draw" />
+                </span>
+                <h3 id={`service-${i}`}>{service.title}</h3>
+                <p class="service__lead">{service.lead}</p>
+                <p class="service__body">{service.text}</p>
+              </div>
+              <a class="button" href={service.href}>
+                {service.cta} <Icon name="arrow-up-right" size={16} />
+              </a>
+            </div>
+            <div class="service__media">
+              <ul class="service__tags" aria-label={`${service.title}: what's included`}>
+                {service.tags.map((tag) => (
+                  <li class="pill">{tag}</li>
+                ))}
+              </ul>
+              <Carousel id={`service-${i}-work`} label={`${service.title}: example work`} class="service__gallery">
+                {service.images.map((image) => (
+                  <li>
+                    <Image src={image.src} alt={image.alt} widths={[300, 600]} sizes="244px" />
+                  </li>
+                ))}
+              </Carousel>
+            </div>
+          </article>
+        ))
+      }
+    </div>
   </section>
 
   <SiteLaunchSection />
 
   <!-- How we work -->
-  <section class="container section" aria-labelledby="engagement-heading">
-    <div class="section__intro">
-      <p class="eyebrow">How we <em>work</em></p>
-      <h2 id="engagement-heading">Built to fit your process</h2>
-      <p class="section__lead">
-        Every team works differently. Which is why we designed our engagement models to match. Whether you need a scoped
-        project, ongoing support, or something totally unique, we'll meet you where you are.
-      </p>
-      <a class="button" href="/contact-us/">Find the right fit <Icon name="arrow-up-right" size={16} /></a>
+  <section class="engagement-band curve-top" aria-labelledby="engagement-heading">
+    <div class="container section">
+      <div class="section__intro section__intro--split">
+        <div>
+          <p class="eyebrow">How we <em>work</em></p>
+          <h2 id="engagement-heading">Built to fit your process</h2>
+          <p class="section__lead">
+            Every team works differently. Which is why we designed our engagement models to match. Whether you need a
+            scoped project, ongoing support, or something totally unique, we'll meet you where you are.
+          </p>
+        </div>
+        <a class="button" href="/contact-us/">Find the right fit <Icon name="arrow-up-right" size={16} /></a>
+      </div>
+      <ul class="engagements" data-reveal-stagger>
+        {
+          engagements.map((model) => (
+            <li class:list={['engagement', { 'engagement--featured': model.featured }]}>
+              <div class="engagement__top">
+                <span class="engagement__icon">
+                  <Icon name={model.icon as 'target'} size={32} />
+                </span>
+                {model.featured && <p class="engagement__badge">Most popular</p>}
+              </div>
+              <h3>{model.title}</h3>
+              <ul class="engagement__points">
+                {model.points.map((point) => (
+                  <li>
+                    <Icon name="check" size={16} />
+                    {point}
+                  </li>
+                ))}
+              </ul>
+              <p class="engagement__text">{model.text}</p>
+              <a class="engagement__link" href={model.href}>
+                {model.cta}
+                <span class="visually-hidden"> about {model.title.toLowerCase()}</span>
+                <Icon name="arrow-up-right" size={16} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
-    <ul class="engagements" data-reveal-stagger>
-      {
-        engagements.map((model) => (
-          <li class:list={['engagement', { 'engagement--featured': model.featured }]}>
-            {model.featured && <p class="engagement__badge">Most popular</p>}
-            <h3>{model.title}</h3>
-            <ul class="engagement__points">
-              {model.points.map((point) => (
-                <li>
-                  <Icon name="check" size={16} />
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <p>{model.text}</p>
-            <a class:list={['button', { 'button--primary': model.featured }]} href={model.href}>
-              {model.cta}
-              <span class="visually-hidden"> about {model.title.toLowerCase()}</span>
-              <Icon name="arrow-up-right" size={16} />
-            </a>
-          </li>
-        ))
-      }
-    </ul>
   </section>
 
   <!-- Testimonials -->
-  <section class="container section" aria-labelledby="testimonials-heading">
-    <div class="section__intro section__intro--center">
-      <p class="eyebrow">Partner <em>testimonials</em></p>
-      <h2 id="testimonials-heading">Proof is better than a pitch</h2>
-      <p class="section__lead">See what it's like to work with a creative team that builds for the long run.</p>
+  <section class="testimonials-band" aria-labelledby="testimonials-heading">
+    <div class="container section">
+      <div class="section__intro section__intro--center section__intro--wide">
+        <p class="eyebrow">Partner <em>testimonials</em></p>
+        <h2 id="testimonials-heading">Proof is better than a pitch</h2>
+        <p class="section__lead">See what it's like to work with a creative team that builds for the long run.</p>
+      </div>
+      <ClientLogos />
+      <Testimonials />
+      <p class="section__more">
+        <a class="button button--primary" href={trustpilot}>
+          View all testimonials <Icon name="arrow-up-right" size={16} />
+        </a>
+      </p>
     </div>
-    <ClientLogos />
-    <Testimonials />
-    <p class="section__more">
-      <a class="button" href={trustpilot}>View all testimonials on Trustpilot <Icon name="arrow-up-right" size={16} /></a>
-    </p>
   </section>
 
   <!-- Our work -->
   <OurWork />
 
   <!-- Who we are -->
-  <section class="container section about" aria-labelledby="about-heading">
-    <div data-reveal>
-      <p class="eyebrow">Who <em>we are</em></p>
-      <h2 id="about-heading">Built by creatives. Backed by strategy.</h2>
-      <p class="section__lead">
-        With too many businesses stuck between bloated agencies and scattered freelancers, we built the creative agency we
-        always wished existed.
-      </p>
-      <a class="button" href="/about-us/">Meet the team <Icon name="arrow-up-right" size={16} /></a>
+  <section class="about-band curve-top" aria-labelledby="about-heading">
+    <div class="container section about">
+      <ul class="team" aria-label="The Founding Creative team" data-reveal-stagger>
+        {
+          team.map((person) => (
+            <li>
+              <Image src={person.photo} alt={person.name} widths={[240, 480]} sizes="(max-width: 700px) 30vw, 180px" />
+            </li>
+          ))
+        }
+      </ul>
+      <div data-reveal>
+        <p class="eyebrow">Who <em>we are</em></p>
+        <h2 id="about-heading">Built by creatives. Backed by strategy.</h2>
+        <p class="section__lead">
+          With too many businesses stuck between bloated agencies and scattered freelancers, we built the creative agency we
+          always wished existed.
+        </p>
+        <ul class="values">
+          {
+            values.map((value) => (
+              <li>
+                <Icon name="check" size={16} />
+                <span>
+                  <strong>{value.title}:</strong> {value.text}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <a class="button" href="/about-us/">Meet the team <Icon name="arrow-up-right" size={16} /></a>
+      </div>
     </div>
-    <dl class="values" data-reveal-stagger>
-      {
-        values.map((value) => (
-          <div>
-            <dt>{value.title}</dt>
-            <dd>{value.text}</dd>
-          </div>
-        ))
-      }
-    </dl>
   </section>
 
-  <!-- Closing call to action -->
-  <section class="cta holo-bg" aria-labelledby="cta-heading">
-    <video class="bg-video" src="/media/home/holographic.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
-    ></video>
-    <div class="container cta__content" data-reveal-stagger>
-      <p class="eyebrow">We launch <em>websites</em></p>
-      <h2 id="cta-heading">Your custom website starts here.</h2>
-      <p class="section__lead">Tailored web packages designed to match your goals.</p>
-      <div class="hero__actions">
-        <a class="button button--primary" href="/services/website-services/">
-          Find the right fit <Icon name="arrow-up-right" size={16} />
-        </a>
-        <a class="button" href={letsTalkHref}>Let's talk</a>
+  <!-- Closing call to action: the live site's holographic card -->
+  <section class="container cta-wrap" aria-labelledby="cta-heading">
+    <div class="cta" data-reveal="zoom">
+      <video class="cta__video" src="/media/home/holographic.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
+      ></video>
+      <div class="cta__content">
+        <div>
+          <p class="cta__eyebrow">We launch websites</p>
+          <h2 id="cta-heading">Your custom website starts here.</h2>
+          <p class="cta__lead">Tailored web packages designed to match your goals.</p>
+        </div>
+        <div class="cta__actions">
+          <a class="button button--dark" href="/services/website-services/">
+            Find the right fit <Icon name="arrow-up-right" size={16} />
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -307,38 +362,104 @@ const jsonLd = [
 <style>
   /* Hero */
   .hero {
-    padding-block: var(--space-3xl) var(--space-2xl);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: calc(var(--header-height) + 4.5rem) var(--space-xl);
+    background: linear-gradient(
+        -45deg,
+        var(--color-hero-indigo),
+        var(--color-hero-magenta),
+        var(--color-hero-teal),
+        var(--color-hero-azure)
+      )
+      0% 50% / 400% 400%;
+    animation: hero-gradient 15s ease infinite;
   }
 
+  @keyframes hero-gradient {
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  /* Wave layer: wider than the screen, fading out toward the bottom, and
+   * drifting slower than the page as you scroll */
   .hero__wave {
     position: absolute;
-    z-index: -1;
-    inset: auto 0 0 auto;
-    width: 70%;
-    max-width: 60rem;
-    opacity: 0.6;
-    pointer-events: none;
+    inset: 0 -25%;
+    background: linear-gradient(var(--color-black), transparent 80%);
+  }
+
+  .hero__wave img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero__wave {
+        animation: hero-parallax linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+    }
+  }
+
+  @keyframes hero-parallax {
+    to {
+      transform: translate3d(-4%, 18%, 0);
+    }
+  }
+
+  .hero__veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgb(0 4 7 / 0.5), var(--color-night));
   }
 
   .hero__content {
     position: relative;
   }
 
+  .hero__eyebrow {
+    margin: 0 0 var(--space-2xs);
+    font-size: var(--font-size-eyebrow);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.5;
+  }
+
   .hero__title {
-    max-width: 14ch;
+    max-width: 10.6em;
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-medium);
   }
 
   .hero__lead {
-    max-width: 30rem;
-    font-size: var(--font-size-lg);
+    max-width: 40rem;
+    font-size: clamp(1.25rem, 1rem + 0.6vw, 1.5rem);
   }
 
   .hero__lead a {
     text-decoration: none;
+    transition: text-shadow var(--transition-fast);
+  }
+
+  .hero__lead a:hover {
+    text-shadow: var(--text-glow);
   }
 
   .hero__lead a:nth-of-type(1) {
-    color: var(--color-cyan);
+    color: var(--color-holo-cyan);
   }
 
   .hero__lead a:nth-of-type(2) {
@@ -346,70 +467,79 @@ const jsonLd = [
   }
 
   .hero__lead a:nth-of-type(3) {
-    color: var(--color-lavender-light);
+    color: var(--color-lavender);
   }
 
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
     margin-top: var(--space-lg);
   }
 
-  /* Services */
-  .service {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    gap: var(--space-xl);
-    align-items: center;
-    padding-block: var(--space-xl);
-    border-top: 1px solid var(--color-border);
+  /* Services: rows split by hairlines, like the live site */
+  .services {
+    --curve-color: var(--color-night);
+    z-index: 2;
+    background-color: var(--color-night);
   }
 
-  .service--reverse .service__text {
-    order: 2;
+  .service {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
+    gap: var(--space-2xl);
+    padding-block: var(--space-xl);
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .service__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-lg);
   }
 
   .service__icon {
     display: inline-grid;
     place-items: center;
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: var(--space-md);
-    border: 1px solid var(--color-border);
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-bottom: var(--space-lg);
     border-radius: var(--radius-md);
-    background-color: var(--color-surface);
-    color: var(--color-mint);
+    background-color: var(--color-glass);
+    color: var(--color-white);
   }
 
   .service h3 {
-    font-size: var(--font-size-h4);
+    margin-bottom: var(--space-3xs);
+    font-family: var(--font-body);
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: normal;
+    line-height: 1.4;
   }
 
   .service__lead {
     font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
   }
 
-  .service__text p:not(.service__lead) {
+  .service__body {
     color: var(--color-text-muted);
   }
 
-  .tags {
+  /* The service icon beats like the live site's animated icons */
+  .service:hover .service__icon .icon {
+    animation: heart-beat 1.3s ease-in-out;
+  }
+
+  .service__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2xs);
-    margin: 0 0 var(--space-md);
+    gap: 0.7rem;
+    margin: 0 0 var(--space-sm);
     padding: 0;
     list-style: none;
-  }
-
-  .tags li {
-    padding: 2px var(--space-xs);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
   }
 
   /* Carousel class lands outside this page's style scope */
@@ -425,16 +555,16 @@ const jsonLd = [
     pointer-events: none;
   }
 
-  /* The service icon beats like the live site's animated icons */
-  .service:hover .service__icon .icon {
-    animation: heart-beat 1.3s ease-in-out;
+  /* How we work */
+  .engagement-band {
+    --curve-color: var(--color-night);
+    background-color: var(--color-night);
   }
 
-  /* How we work */
   .engagements {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--space-md);
+    gap: var(--space-xl);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -443,31 +573,67 @@ const jsonLd = [
   .engagement {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: var(--space-sm);
     padding: var(--space-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    background-color: var(--color-surface);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: var(--radius-lg);
+    background-color: rgb(28 28 30 / 0.5);
+    box-shadow: 0 4px 8px rgb(0 0 0 / 0.2);
+    transition:
+      transform var(--transition-fast),
+      border-color var(--transition-fast);
   }
 
+  .engagement:hover {
+    border-color: rgb(255 255 255 / 0.5);
+    transform: translateY(-4px);
+  }
+
+  /* The featured model sits on the SiteLaunch conic glow */
   .engagement--featured {
-    border-color: var(--color-mint);
+    border-color: var(--color-white);
+    background: conic-gradient(
+      from 90deg,
+      var(--color-navy),
+      var(--color-teal) 90deg,
+      var(--color-navy) 180deg,
+      var(--color-plum) 270deg,
+      var(--color-navy)
+    );
   }
 
-  .engagement h3 {
-    margin: 0;
-    font-size: var(--font-size-h5);
+  .engagement__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+  }
+
+  .engagement__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-glass);
   }
 
   .engagement__badge {
     margin: 0;
     padding: 2px var(--space-xs);
     border-radius: var(--radius-pill);
-    background-color: var(--color-mint);
+    background: var(--holo-gradient);
     color: var(--color-black);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .engagement h3 {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
   }
 
   .engagement__points {
@@ -476,84 +642,183 @@ const jsonLd = [
     margin: 0;
     padding: 0;
     list-style: none;
+    font-size: 0.9rem;
   }
 
   .engagement__points li {
     display: flex;
     align-items: center;
-    gap: var(--space-2xs);
+    gap: var(--space-xs);
   }
 
-  .engagement__points .icon {
-    color: var(--color-mint);
-  }
-
-  .engagement > p:not(.engagement__badge) {
+  .engagement__text {
     flex: 1;
     margin: 0;
     color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .engagement__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin-top: var(--space-md);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .engagement__link:hover {
+    color: var(--color-mint);
+  }
+
+  .engagement__link .icon {
+    transition: transform var(--transition-fast);
+  }
+
+  .engagement__link:hover .icon {
+    transform: translate(2px, -2px);
+  }
+
+  /* Testimonials band */
+  .testimonials-band {
+    background-color: var(--color-coal);
+  }
+
+  .section__intro--wide {
+    max-width: 56rem;
   }
 
   /* Who we are */
+  .about-band {
+    --curve-color: var(--color-night);
+    background-color: var(--color-night);
+  }
+
   .about {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-    gap: var(--space-xl);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-2xl);
     align-items: center;
+  }
+
+  .team {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Portraits in black and white, warming to color on hover */
+  .team img {
+    width: 100%;
+    aspect-ratio: 169 / 250;
+    object-fit: cover;
+    border: 1px solid var(--color-text-muted);
+    border-radius: var(--radius-lg);
+    background-color: rgb(255 255 255 / 0.5);
+    filter: grayscale(1);
+    transition:
+      filter 600ms var(--ease-out),
+      transform 600ms var(--ease-out);
+  }
+
+  .team li:hover img {
+    filter: grayscale(0);
+    transform: translateY(-4px);
   }
 
   .values {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    gap: var(--space-md);
-    margin: 0;
+    gap: var(--space-2xs);
+    margin: 0 0 var(--space-lg);
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
   }
 
-  .values div {
-    padding: var(--space-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+  .values li {
+    display: flex;
+    gap: var(--space-xs);
   }
 
-  .values dt {
-    color: var(--color-mint);
-    font-family: var(--font-display);
-    font-size: var(--font-size-h6);
+  .values .icon {
+    margin-top: 0.35em;
+    color: var(--color-white);
   }
 
-  .values dd {
-    margin: var(--space-3xs) 0 0;
-    color: var(--color-text-muted);
+  .values strong {
+    font-weight: var(--font-weight-bold);
   }
 
-  /* Closing CTA */
+  /* Closing CTA: a holographic card */
+  .cta-wrap {
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
   .cta {
-    padding-block: var(--space-3xl);
-    text-align: center;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(var(--space-lg), 6vw, 5rem);
+    border-radius: var(--radius-card);
+    background: conic-gradient(
+      from 90deg,
+      var(--color-cyan),
+      var(--color-mint-pale) 90deg,
+      var(--color-white) 180deg,
+      var(--color-lavender-light) 270deg,
+      var(--color-cyan)
+    );
+    color: var(--color-night);
   }
 
-  /* The holographic video sits under the veil from .holo-bg */
-  .cta .bg-video {
+  .cta__video {
+    position: absolute;
+    inset: 0;
     z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     opacity: 0.55;
+    mix-blend-mode: multiply;
   }
 
   .cta__content {
-    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-lg);
   }
 
-  .cta .hero__actions {
-    justify-content: center;
+  .cta__eyebrow {
+    margin-bottom: var(--space-2xs);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .cta h2 {
+    max-width: 12em;
+    margin-bottom: var(--space-sm);
+    color: var(--color-night);
+  }
+
+  .cta__lead {
+    margin: 0;
+    font-size: var(--font-size-lg);
+  }
+
+  .cta :focus-visible {
+    outline-color: var(--color-night);
   }
 
   @media (max-width: 977px) {
-    .service {
-      grid-template-columns: 1fr;
-    }
-
-    .service--reverse .service__text {
-      order: 0;
+    .service,
+    .about {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-xl);
     }
   }
-
 </style>

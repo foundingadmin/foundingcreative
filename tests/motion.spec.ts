@@ -7,7 +7,7 @@ test.use({ viewport: { width: 1440, height: 900 } });
 
 test('content fades in as it scrolls into view', async ({ page }) => {
   await page.goto('/');
-  const intro = page.locator('#engagement-heading').locator('xpath=..');
+  const intro = page.locator('.section__intro', { has: page.locator('#engagement-heading') });
   await expect(intro).not.toHaveClass(/is-revealed/);
   await intro.scrollIntoViewIfNeeded();
   await expect(intro).toHaveClass(/is-revealed/);

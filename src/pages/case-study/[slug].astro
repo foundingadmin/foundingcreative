@@ -1,28 +1,74 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OurWork from '../../components/OurWork.astro';
 import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
+import Icon from '../../components/Icon.astro';
 import { getCaseStudies, caseStudyUrl, type CaseStudy } from '../../lib/content';
 
 export async function getStaticPaths() {
   const studies = await getCaseStudies();
-  return studies.map((study) => ({ params: { slug: study.id }, props: { study } }));
+  // Each study links on to the next one, wrapping around at the end.
+  return studies.map((study, i) => ({
+    params: { slug: study.id },
+    props: { study, next: studies[(i + 1) % studies.length] },
+  }));
 }
 
 interface Props {
   study: CaseStudy;
+  next: CaseStudy;
 }
 
-const { study } = Astro.props;
+const { study, next } = Astro.props;
 const { Content } = await render(study);
 const { data } = study;
 
 // Each study's colors (from the live page) drive the hero gradient and the
 // story's bands. Studies without a theme fall back to brand navy.
-const theme = data.theme ?? { accent: '#001441', dark: '#000a20', light: '#e5fde9' };
-const themeStyle = `--case-accent: ${theme.accent}; --case-dark: ${theme.dark}; --case-light: ${theme.light};`;
+const fallbackTheme = { accent: '#001441', dark: '#000a20', light: '#e5fde9' };
+const theme = data.theme ?? fallbackTheme;
+const nextTheme = next.data.theme ?? fallbackTheme;
+
+// Headings on the white and light bands use the accent, but a bright accent
+// (Innovation Forum's orange) can fall under AA's 3:1 for large text on the
+// light and neutral bands. Blend it toward the study's dark color only as far
+// as needed.
+const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const luminance = (c: number[]) =>
+  c
+    .map((v) => v / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+    .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+const contrast = (a: number[], b: number[]) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+const headingInk = (() => {
+  const [accent, dark, light] = [theme.accent, theme.dark, theme.light].map(rgb);
+  for (let t = 0; t <= 1; t += 0.05) {
+    const mix = accent.map((v, i) => Math.round(v + (dark[i] - v) * t));
+    if ([light, [216, 216, 216], [255, 255, 255]].every((bg) => contrast(mix, bg) >= 3)) return `rgb(${mix.join(' ')})`;
+  }
+  return theme.dark;
+})();
+
+// The closing image card near the end of the story reuses the cover and
+// logo, drawn by CSS (it is decorative), so pass them in as variables.
+const closingCover = await getImage({ src: data.cover, width: 1600, format: 'webp' });
+const closingLogo = data.logo ? await getImage({ src: data.logo }) : undefined;
+const themeStyle = [
+  `--case-accent: ${theme.accent}`,
+  `--case-heading: ${headingInk}`,
+  `--case-dark: ${theme.dark}`,
+  `--case-light: ${theme.light}`,
+  `--case-cover: url(${closingCover.src})`,
+  closingLogo ? `--case-logo: url(${closingLogo.src})` : '',
+]
+  .filter(Boolean)
+  .join('; ');
+const nextStyle = `--next-accent: ${nextTheme.accent}; --next-dark: ${nextTheme.dark};`;
 const facts = [
   { label: 'Client', value: data.clients.join(', ') },
   { label: 'Sector', value: data.sectors.join(', ') },
@@ -68,7 +114,8 @@ const jsonLd = [
   jsonLd={jsonLd}
 >
   <article style={themeStyle}>
-    <header class="case-hero">
+    <!-- Hero: the live page's shifting gradient in the study's colors -->
+    <header class="case-hero under-header">
       <div class="container case-hero__text" data-intro>
         <nav aria-label="Breadcrumb" class="case-hero__breadcrumb">
           <a href="/case-studies/">Case Studies</a>
@@ -77,19 +124,24 @@ const jsonLd = [
         <h1 class="case-hero__title">{data.headline}</h1>
         <p class="case-hero__subtitle">{data.subheadline}</p>
       </div>
-      <div class="container" data-intro>
-        <div class="case-hero__media">
+    </header>
+
+    <!-- Cover card: overlaps the hero, black and white until it scrolls into
+         view, the photo drifting slower than the page, logo wiping in -->
+    <div class="case-cover curve-top">
+      <div class="container">
+        <figure class="case-cover__card" data-reveal="color">
           <Image
-            class="case-hero__image"
+            class="case-cover__image"
             src={data.cover}
             alt={data.coverAlt}
             widths={[640, 1280, 1920]}
-            sizes="(max-width: 1200px) 100vw, 1140px"
+            sizes="(max-width: 1240px) 100vw, 1200px"
             loading="eager"
             fetchpriority="high"
           />
-          {data.logo && <Image class="case-hero__logo" src={data.logo} alt={data.logoAlt ?? ''} height={64} />}
-        </div>
+          {data.logo && <Image class="case-cover__logo" src={data.logo} alt={data.logoAlt ?? ''} height={96} />}
+        </figure>
         {
           facts.length > 0 && (
             <dl class="case-facts">
@@ -103,7 +155,7 @@ const jsonLd = [
           )
         }
       </div>
-    </header>
+    </div>
 
     <div class="case-story">
       <Content />
@@ -111,21 +163,41 @@ const jsonLd = [
   </article>
 
   {data.showSiteLaunch && <SiteLaunchSection />}
+
+  <!-- Next case study, set in the next client's colors -->
+  <section class="case-next curve-top" style={nextStyle} aria-labelledby="case-next-heading">
+    <div class="container case-next__inner">
+      <div class="case-next__text">
+        <p class="case-next__label">Next case study</p>
+        <h2 id="case-next-heading" class="case-next__title">
+          <a href={caseStudyUrl(next)}>
+            <span>{next.data.headline}</span>
+            <Icon name="arrow-up-right" size={40} />
+          </a>
+        </h2>
+        <p class="case-next__client">{next.data.clients.join(', ')}</p>
+      </div>
+      <div class="case-next__media">
+        <Image src={next.data.cover} alt={next.data.coverAlt} widths={[480, 960]} sizes="(max-width: 977px) 100vw, 560px" />
+      </div>
+    </div>
+  </section>
+
   <OurWork exclude={study.id} />
 </BaseLayout>
 
 <style>
-  /* Hero: the live page's slowly shifting gradient in the study's colors */
+  /* Hero */
   .case-hero {
-    padding-top: var(--space-2xl);
-    background: linear-gradient(-45deg, var(--color-black), var(--case-accent), var(--case-dark), var(--color-black))
-      0 0 / 400% 400%;
-    animation: case-gradient 15s ease infinite;
+    position: relative;
+    padding-block: calc(var(--header-height) + 5rem) 12rem;
+    background: linear-gradient(-45deg, var(--color-black), var(--case-accent), var(--case-dark)) 0% 50% / 400% 400%;
+    animation: case-gradient 7s ease infinite;
   }
 
   @keyframes case-gradient {
     50% {
-      background-position: 100% 100%;
+      background-position: 100% 50%;
     }
   }
 
@@ -133,108 +205,175 @@ const jsonLd = [
     display: grid;
     justify-items: center;
     gap: var(--space-sm);
-    padding-bottom: var(--space-xl);
     text-align: center;
   }
 
-  .case-hero__breadcrumb a,
-  .case-hero__eyebrow {
-    margin: 0;
-    color: var(--color-mint);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+  .case-hero__breadcrumb a {
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
     text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .case-hero__breadcrumb a:hover {
+    color: var(--color-white);
   }
 
   .case-hero__eyebrow {
-    color: var(--color-neutral-lighter);
-    letter-spacing: 0.06em;
-    text-transform: none;
-    font-size: var(--font-size-sm);
-  }
-
-  .case-hero__title {
-    max-width: 20ch;
-    margin: 0;
-    font-size: var(--font-size-h2);
-  }
-
-  .case-hero__subtitle {
-    max-width: 40rem;
     margin: 0;
     font-size: var(--font-size-lg);
   }
 
-  .case-hero__media {
+  .case-hero__title {
+    max-width: 14em;
+    margin: 0;
+    font-weight: var(--font-weight-regular);
+    text-shadow: var(--text-glow);
+  }
+
+  .case-hero__subtitle {
+    max-width: 48rem;
+    margin: 0;
+    font-size: clamp(1.25rem, 1rem + 0.8vw, 1.6rem);
+  }
+
+  /* Cover card */
+  .case-cover {
+    --curve-color: var(--color-white);
+    z-index: 2;
+    padding-bottom: var(--space-xl);
+    background-color: var(--color-white);
+  }
+
+  .case-cover__card {
     position: relative;
+    display: grid;
+    place-items: center;
+    margin: -8rem 0 0;
+    aspect-ratio: 1200 / 632;
     overflow: hidden;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    isolation: isolate;
+    border: 2px solid var(--color-white);
+    border-radius: var(--radius-card);
+    background-color: var(--case-dark);
+    box-shadow: 0 30px 60px rgb(0 0 0 / 0.25);
   }
 
-  .case-hero__media::after {
-    content: '';
+  .case-cover__image {
     position: absolute;
-    inset: 50% 0 0;
-    background: linear-gradient(transparent, rgb(0 0 0 / 0.6));
-    pointer-events: none;
-  }
-
-  .case-hero__logo {
-    position: absolute;
-    z-index: 1;
-    bottom: var(--space-lg);
-    left: var(--space-lg);
-    width: auto;
-    height: clamp(2rem, 5vw, 4rem);
-    max-width: 50%;
-  }
-
-  .case-hero__image {
+    inset: -8% 0;
+    z-index: -2;
     width: 100%;
-    height: auto;
-    max-height: 40rem;
+    height: 116%;
     object-fit: cover;
   }
 
+  /* Study color veil over the photo */
+  .case-cover__card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: color-mix(in srgb, var(--case-dark) 70%, transparent);
+  }
+
+  .case-cover__logo {
+    width: auto;
+    max-width: min(22rem, 50%);
+    height: auto;
+    max-height: 9rem;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .case-cover__image {
+        animation: cover-parallax linear both;
+        animation-timeline: view();
+      }
+    }
+  }
+
+  @keyframes cover-parallax {
+    from {
+      transform: translateY(-6%);
+    }
+    to {
+      transform: translateY(6%);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Black and white until it scrolls into view, then full color */
+    :global(.js) .case-cover__card {
+      filter: grayscale(1);
+      transition: filter 1.2s var(--ease-out);
+    }
+
+    :global(.js) .case-cover__card:global(.is-revealed) {
+      filter: none;
+    }
+
+    /* The logo wipes in left to right */
+    :global(.js) .case-cover__logo {
+      -webkit-mask: linear-gradient(90deg, #000 0 40%, transparent 60% 100%) 100% 0 / 250% 100% no-repeat;
+      mask: linear-gradient(90deg, #000 0 40%, transparent 60% 100%) 100% 0 / 250% 100% no-repeat;
+      transition:
+        -webkit-mask-position 1.8s var(--ease-out) 0.25s,
+        mask-position 1.8s var(--ease-out) 0.25s;
+    }
+
+    :global(.js) .case-cover__card:global(.is-revealed) .case-cover__logo {
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+  }
+
+  /* Facts strip: hairline-divided cells */
   .case-facts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-    gap: var(--space-md);
-    margin: 0;
-    padding: var(--space-md) var(--space-lg);
-    background-color: var(--color-surface);
-    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    display: flex;
+    flex-wrap: wrap;
+    margin: var(--space-lg) 0 0;
+    border-block: 1px solid color-mix(in srgb, var(--case-dark) 20%, transparent);
+    color: var(--case-dark);
+  }
+
+  .case-facts div {
+    display: flex;
+    flex: 1 1 12rem;
+    gap: var(--space-xs);
+    align-items: baseline;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .case-facts div + div {
+    border-left: 1px solid color-mix(in srgb, var(--case-dark) 20%, transparent);
   }
 
   .case-facts dt {
-    color: var(--color-mint);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.06em;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
+    opacity: 0.75;
   }
 
   .case-facts dd {
     margin: 0;
+    font-weight: var(--font-weight-semibold);
   }
 
-  /* The story: bands built by src/lib/rehype-case-study.mjs */
-  .case-story {
-    margin-top: var(--space-2xl);
-  }
-
+  /* ===== The story: bands built by src/lib/case-study-bands.mjs ===== */
   .case-story :global(.case-band) {
-    --band-text: var(--color-neutral-darker);
-    --band-heading: var(--color-black);
-    --band-kicker: var(--color-neutral-dark);
-    --band-link: var(--color-black);
-    padding-block: var(--space-2xl);
+    --band-text: var(--case-dark);
+    --band-heading: var(--case-heading);
+    --band-strong: var(--case-dark);
+    --band-link: var(--case-dark);
+    position: relative;
+    padding-block: clamp(4rem, 3rem + 4vw, 6.3rem);
     background-color: var(--color-white);
     color: var(--band-text);
-    font-size: var(--font-size-base);
-    line-height: 1.7;
   }
 
   .case-story :global(.case-band[data-tone='light']) {
@@ -246,9 +385,9 @@ const jsonLd = [
   }
 
   .case-story :global(.case-band:is([data-tone='accent'], [data-tone='dark'])) {
-    --band-text: var(--color-neutral-lightest);
+    --band-text: rgb(255 255 255 / 0.85);
     --band-heading: var(--color-white);
-    --band-kicker: var(--color-mint);
+    --band-strong: var(--color-white);
     --band-link: var(--color-mint);
     background-color: var(--case-accent);
   }
@@ -259,28 +398,33 @@ const jsonLd = [
 
   .case-story :global(.case-band__inner) {
     display: grid;
-    gap: var(--space-xl);
+    gap: clamp(3rem, 2rem + 3vw, 5rem);
     width: 100%;
     max-width: calc(var(--container-max) + 2 * var(--container-gutter));
     margin-inline: auto;
     padding-inline: var(--container-gutter);
   }
 
-  .case-story :global(:is(h2, h3, h4)) {
-    margin: 0 0 var(--space-xs);
-    color: var(--band-heading);
-  }
-
   .case-story :global(h2) {
-    font-size: var(--font-size-h3);
+    margin: 0;
+    color: var(--band-heading);
+    font-weight: 200;
   }
 
   .case-story :global(h3) {
-    font-size: var(--font-size-h5);
+    margin: 0 0 var(--space-xs);
+    color: var(--band-strong);
+    font-size: clamp(1.75rem, 1.3rem + 1.5vw, 2.5rem);
+    font-weight: var(--font-weight-medium);
   }
 
   .case-story :global(h4) {
-    font-size: var(--font-size-h6);
+    margin: 0 0 var(--space-2xs);
+    color: var(--band-strong);
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: normal;
   }
 
   .case-story :global(p),
@@ -293,13 +437,13 @@ const jsonLd = [
   }
 
   .case-story :global(strong) {
-    color: var(--band-heading);
+    color: var(--band-strong);
+    font-weight: var(--font-weight-semibold);
   }
 
   .case-story :global(a) {
     color: var(--band-link);
     font-weight: var(--font-weight-semibold);
-    text-decoration: underline;
   }
 
   .case-story :global(:focus-visible) {
@@ -318,54 +462,223 @@ const jsonLd = [
   .case-story :global(video) {
     width: 100%;
     height: auto;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-card);
   }
 
-  /* Band header: kicker, heading, lead */
+  /* Band headers */
   .case-story :global(.case-header) {
-    max-width: 46rem;
+    display: grid;
+    gap: var(--space-sm);
+    max-width: 50rem;
   }
 
-  .case-story :global(.case-kicker) {
-    margin-bottom: var(--space-2xs);
-    color: var(--band-kicker);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
+  .case-story :global(.case-header--center) {
+    justify-items: center;
+    margin-inline: auto;
+    text-align: center;
   }
 
   .case-story :global(.case-header > p:not(.case-kicker)) {
     font-size: var(--font-size-lg);
   }
 
-  /* Intro: the big centered opener */
+  .case-story :global(.case-kicker) {
+    margin: 0;
+    color: var(--band-strong);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Intro: the big opening question, in the study's color */
   .case-story :global(.case-header--intro) {
-    max-width: 52rem;
-    margin-inline: auto;
+    max-width: none;
     text-align: center;
   }
 
-  .case-story :global(.case-header--intro p) {
+  .case-story :global(.case-header.case-header--intro > p) {
     color: var(--band-heading);
     font-family: var(--font-display);
-    font-size: var(--font-size-h4);
-    line-height: var(--line-height-snug);
+    font-size: clamp(2.25rem, 1.5rem + 3vw, 4rem);
+    font-weight: 200;
+    letter-spacing: var(--tracking-display);
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  .case-story :global(.case-band:first-child) {
+    padding-top: 0;
   }
 
   /* Statement band */
   .case-story :global(.case-band--statement) {
-    padding-block: var(--space-3xl);
+    padding-block: clamp(3.5rem, 2.5rem + 3vw, 4.5rem);
   }
 
   .case-story :global(.statement) {
-    max-width: 52rem;
+    max-width: 50rem;
     margin: 0 auto;
-    color: var(--band-heading);
+    color: var(--color-white);
     font-family: var(--font-display);
-    font-size: var(--font-size-h4);
-    line-height: var(--line-height-snug);
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3.75rem);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.05;
     text-align: center;
+    text-wrap: balance;
+  }
+
+  /* Challenge rows: a label column beside problem and approach cards */
+  .case-story :global(.case-challenge) {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .case-story :global(.case-challenge__row) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    gap: var(--space-md);
+  }
+
+  .case-story :global(.case-challenge__label :is(h2, h3)) {
+    margin: 0 0 var(--space-xs);
+    color: var(--band-strong);
+    font-family: var(--font-body);
+    font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.625rem);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
+  }
+
+  .case-story :global(.case-challenge__label p) {
+    font-size: var(--font-size-lg);
+  }
+
+  .case-story :global(.case-challenge__cards) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-story :global(.case-point) {
+    --point-bg: var(--color-problem-bg);
+    --point-line: var(--color-problem-line);
+    --point-icon: var(--color-problem-icon);
+    --point-text: var(--color-problem-text);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-md);
+    min-height: 11.875rem;
+    margin: 0;
+    padding: var(--space-sm);
+    border: 1px solid var(--point-line);
+    border-radius: var(--radius-lg);
+    background-color: var(--point-bg);
+    color: var(--point-text);
+    transition:
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .case-story :global(.case-point:hover) {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px color-mix(in srgb, var(--point-line) 30%, transparent);
+  }
+
+  .case-story :global(.case-point--win) {
+    --point-bg: var(--color-win-bg);
+    --point-line: var(--color-win-line);
+    --point-icon: var(--color-win-text);
+    --point-text: var(--color-win-text);
+  }
+
+  .case-story :global(.case-point__icon) {
+    display: grid;
+    place-items: center;
+    align-self: flex-end;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid var(--point-line);
+    border-radius: var(--radius-md);
+    background-color: var(--color-white);
+    color: var(--point-icon);
+  }
+
+  .case-story :global(.case-point__icon svg) {
+    border-radius: 0;
+  }
+
+  .case-story :global(.case-point p) {
+    color: inherit;
+    font-size: var(--font-size-lg);
+    line-height: 1.6;
+  }
+
+  /* Text beside media */
+  .case-story :global(.case-feature) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 1rem + 4vw, 4rem);
+    align-items: center;
+  }
+
+  .case-story :global(.case-feature--reverse .case-feature__text) {
+    order: 2;
+  }
+
+  .case-story :global(.case-feature__text > :is(h3, h4):not(:first-child)) {
+    margin-top: var(--space-lg);
+  }
+
+  .case-story :global(.case-feature__media) {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  /* Image cards, two to a row: picture, heading, words */
+  .case-story :global(.case-cards) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2xl) var(--space-xl);
+  }
+
+  .case-story :global(.case-card__media) {
+    display: grid;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+
+  .case-story :global(.case-card__media img) {
+    transition: transform 800ms var(--ease-out);
+  }
+
+  .case-story :global(.case-card:hover .case-card__media img) {
+    transform: scale(1.02);
+  }
+
+  /* Short text subsections as columns with hairline tops */
+  .case-story :global(.case-columns) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-xl);
+  }
+
+  .case-story :global(.case-column) {
+    padding-top: var(--space-md);
+    border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  }
+
+  .case-story :global(.case-block) {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .case-story :global(.case-block > :is(p, ul, h3, h4)) {
+    max-width: 46rem;
+    margin: 0;
   }
 
   /* Galleries */
@@ -388,75 +701,11 @@ const jsonLd = [
     margin: 0;
   }
 
-  .case-story :global(.case-gallery img) {
-    transition: transform 600ms var(--ease-out);
-  }
-
-  .case-story :global(.case-gallery img:hover) {
-    transform: scale(1.02);
-  }
-
-  /* Text and media side by side */
-  .case-story :global(.case-feature) {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-xl);
-    align-items: center;
-  }
-
-  .case-story :global(.case-feature--reverse .case-feature__text) {
-    order: 2;
-  }
-
-  .case-story :global(.case-feature__media) {
-    display: grid;
-    gap: var(--space-md);
-  }
-
-  .case-story :global(.case-feature__media .case-gallery) {
-    --cols: 2;
-  }
-
-  .case-story :global(.case-block) {
-    display: grid;
-    gap: var(--space-sm);
-  }
-
-  .case-story :global(.case-block > :is(p, ul, h3, h4)) {
-    max-width: 46rem;
-    margin: 0;
-  }
-
-  /* Cards: runs of short subsections, and the challenge beside the approach */
-  .case-story :global(.case-panels) {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--space-md);
-  }
-
-  .case-story :global(.case-panel) {
-    padding: var(--space-lg);
-    border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
-    border-radius: var(--radius-lg);
-    background-color: color-mix(in srgb, currentColor 5%, transparent);
-  }
-
-  .case-story :global(.case-band[data-tone='white'] .case-panel) {
-    background-color: var(--case-light);
-    border-color: transparent;
-  }
-
-  .case-story :global(.case-panels--split .case-panel) {
-    background-color: var(--color-white);
-    border-color: transparent;
-    box-shadow: 0 12px 32px rgb(0 0 0 / 0.08);
-  }
-
-  /* Process steps: numbered cards */
+  /* Process steps: rounded gray cells with big serif numbers */
   .case-story :global(ol) {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-    gap: var(--space-md);
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-sm);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -464,26 +713,81 @@ const jsonLd = [
   }
 
   .case-story :global(ol > li) {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: var(--space-sm);
+    align-items: center;
     margin: 0;
-    padding: var(--space-md);
-    border-radius: var(--radius-lg);
-    background-color: color-mix(in srgb, var(--case-light) 60%, var(--color-white));
+    padding: var(--space-sm) var(--space-md) var(--space-sm) var(--space-sm);
+    border-radius: var(--radius-card);
+    background-color: var(--color-step);
+    color: var(--color-black);
+    font-size: 0.9rem;
+    line-height: 1.5;
     counter-increment: step;
+    transition:
+      background-color var(--transition-fast),
+      transform var(--transition-fast);
+  }
+
+  .case-story :global(ol > li:hover) {
+    background-color: var(--case-light);
+    transform: translateY(-2px);
   }
 
   .case-story :global(ol > li::before) {
     content: counter(step, decimal-leading-zero);
-    display: block;
-    margin-bottom: var(--space-2xs);
-    color: var(--case-accent);
     font-family: var(--font-display);
-    font-size: var(--font-size-h4);
+    font-size: 3.75rem;
+    font-weight: var(--font-weight-light);
+    letter-spacing: var(--tracking-display);
     line-height: 1;
+    text-align: center;
+  }
+
+  .case-story :global(ol strong) {
+    color: inherit;
+  }
+
+  /* Conclusion */
+  .case-story :global(.case-closing) {
+    position: relative;
+    aspect-ratio: 1200 / 632;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    background:
+      linear-gradient(color-mix(in srgb, var(--case-dark) 70%, transparent), color-mix(in srgb, var(--case-dark) 70%, transparent)),
+      var(--case-cover) center / cover;
+  }
+
+  .case-story :global(.case-closing::after) {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--case-logo) center / min(22rem, 50%) auto no-repeat;
+  }
+
+  .case-story :global(.case-conclusion) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: var(--space-2xl);
+  }
+
+  .case-story :global(.case-conclusion h3) {
+    margin-bottom: var(--space-md);
+    font-family: var(--font-body);
+    font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.625rem);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
+  }
+
+  .case-story :global(.case-conclusion h4) {
+    margin-top: var(--space-md);
   }
 
   /* Partner credits */
   .case-story :global(.case-credits) {
-    font-size: var(--font-size-sm);
+    font-size: 0.9rem;
   }
 
   .case-story :global(.case-credits p) {
@@ -500,7 +804,7 @@ const jsonLd = [
   /* Light line art made for dark backgrounds */
   .case-story :global(.on-dark) {
     padding: var(--space-lg);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-card);
     background-color: var(--color-black);
   }
 
@@ -508,8 +812,94 @@ const jsonLd = [
     border-radius: 0;
   }
 
+  /* Next case study */
+  .case-next {
+    --curve-color: var(--next-dark);
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 85% 30%, color-mix(in srgb, var(--next-accent) 70%, transparent), transparent 60%),
+      var(--next-dark);
+  }
+
+  .case-next__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-2xl);
+    align-items: center;
+    padding-block: clamp(4rem, 3rem + 4vw, 6.3rem);
+  }
+
+  .case-next__label,
+  .case-next__client {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .case-next__title {
+    margin: var(--space-sm) 0;
+    font-size: var(--font-size-h2);
+  }
+
+  .case-next__title a {
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  /* Underline draws in from the left on hover */
+  .case-next__title span {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 2px no-repeat;
+    transition: background-size 500ms var(--ease-out);
+  }
+
+  .case-next__title a:hover span,
+  .case-next__title a:focus-visible span {
+    background-size: 100% 2px;
+  }
+
+  .case-next__title .icon {
+    display: inline-block;
+    margin-left: var(--space-2xs);
+    transition: transform 500ms var(--ease-out);
+  }
+
+  .case-next__title a:hover .icon {
+    transform: translate(6px, -6px);
+  }
+
+  /* The whole band is the link */
+  .case-next__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .case-next {
+    position: relative;
+  }
+
+  .case-next__media {
+    overflow: hidden;
+    border-radius: var(--radius-card);
+  }
+
+  .case-next__media img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .case-next:hover .case-next__media img {
+    transform: scale(1.03);
+  }
+
   @media (max-width: 977px) {
-    .case-story :global(.case-feature) {
+    .case-story :global(:is(.case-feature, .case-cards, .case-challenge__row)),
+    .case-next__inner {
       grid-template-columns: minmax(0, 1fr);
     }
 

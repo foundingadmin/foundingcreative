@@ -12,6 +12,7 @@
 :root {
   /* Color: neutrals */
   --color-black: #000000;
+  --color-night: #000407; /* the live site's page black, a hair of navy */
   --color-white: #ffffff;
   --color-ink: #1c1c1e; /* card backgrounds, elevated surfaces */
   --color-neutral-darker: #252424;
@@ -39,19 +40,60 @@
   --color-orchid: #e2a8ff; /* from the live site, used for form errors */
   --color-magenta: #ff7ad9; /* end of the holo glow cycle */
 
+  /* Color: the homepage hero's animated gradient, from the live site */
+  --color-hero-indigo: #433fff;
+  --color-hero-magenta: #c807d3;
+  --color-hero-teal: #40bf97;
+  --color-hero-azure: #2672f9;
+
+  /* Holographic gradients (live site): the pearl sweep used on headlines,
+   * primary buttons, and accent words */
+  --holo-gradient: linear-gradient(
+    to right,
+    var(--color-cyan),
+    var(--color-mint-pale),
+    var(--color-white),
+    var(--color-lavender-light),
+    var(--color-cyan)
+  );
+  --holo-radial: radial-gradient(
+    circle,
+    var(--color-cyan),
+    var(--color-mint-pale),
+    var(--color-white),
+    var(--color-lavender-light)
+  );
+
+  /* Color: case study challenge cards (live site) */
+  --color-problem-bg: #fff2f5;
+  --color-problem-line: #f091a6;
+  --color-problem-icon: #d42045;
+  --color-problem-text: #9a0b28;
+  --color-win-bg: #f0ffe7;
+  --color-win-line: #8dc469;
+  --color-win-text: #2c6904;
+  --color-step: #c0c0c0;
+
   /* Color: SiteLaunch card anchors */
   --color-navy: #001441; /* Prism */
   --color-teal: #003329; /* Rocket */
   --color-plum: #230035; /* Orbit */
+  --color-rocket: #00363d; /* Rocket card on the homepage */
+  --color-sky: #55cfff; /* Prism outline */
 
   /* Color: roles */
-  --color-bg: var(--color-black);
+  --color-bg: var(--color-night);
   --color-surface: var(--color-ink);
   --color-text: var(--color-white);
-  --color-text-muted: var(--color-neutral-light);
+  --color-text-muted: rgb(255 255 255 / 0.714); /* live body copy on dark */
   --color-link: var(--color-mint);
   --color-link-hover: var(--color-mint-light);
   --color-border: rgb(255 255 255 / 0.1);
+  --color-hairline: #494949; /* thin dividers between rows */
+  --color-stroke: #7e7e7e; /* 1px outline on secondary buttons */
+  --color-glass: rgb(255 255 255 / 0.1); /* frosted fills on dark */
+  --color-coal: #101010; /* testimonials band */
+  --color-chip: rgb(28 28 30 / 0.69); /* tag pill fill */
   --color-focus: var(--color-mint);
 
   /* Typography: families
@@ -60,9 +102,10 @@
    * BaseLayout, as Adobe's license requires. */
   --font-display: 'gelica', Georgia, 'Times New Roman', serif;
   --font-body: var(--font-manrope), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: var(--font-ubuntu-mono), ui-monospace, 'SF Mono', Menlo, monospace; /* case study kickers */
 
   /* Typography: weights */
-  --font-weight-light: 300;
+  --font-weight-light: 300; /* live body copy */
   --font-weight-regular: 400;
   --font-weight-medium: 500; /* Gelica display default */
   --font-weight-semibold: 600; /* UI labels and links */
@@ -72,9 +115,10 @@
    * from a phone size up to the desktop scale (H1 84, H2 60 ... H6 26). */
   --font-size-xs: 0.75rem; /* 12: legal, meta */
   --font-size-sm: 1rem; /* 16: UI labels, nav, captions */
-  --font-size-base: 1.125rem; /* 18: body */
+  --font-size-base: 1rem; /* 16: body, as on the live site */
   --font-size-md: 1.125rem;
-  --font-size-lg: 1.25rem; /* 20: lead text */
+  --font-size-lg: 1.2rem; /* 19.2: lead text and buttons, as on the live site */
+  --font-size-eyebrow: clamp(1.25rem, 1rem + 0.8vw, 1.625rem); /* 26 */
   --font-size-h6: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
   --font-size-h5: clamp(1.5rem, 1.25rem + 0.9vw, 2rem);
   --font-size-h4: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
@@ -89,7 +133,8 @@
   --line-height-tight: 1; /* H1 */
   --line-height-heading: 1.2;
   --line-height-snug: 1.3;
-  --line-height-base: 1.5;
+  --line-height-base: 1.7;
+  --tracking-display: -0.01em;
 
   /* Spacing: 8pt grid (s-1 4 ... s-13 150) */
   --space-3xs: 0.25rem; /* 4 */
@@ -118,11 +163,14 @@
   --radius-pill: 999px;
   --focus-ring-width: 2px;
   --focus-ring-offset: 3px;
-  --transition-fast: 150ms ease;
+  --transition-fast: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.4, 0, 0.2, 1); /* the live site's reveal curve */
   --reveal-duration: 1000ms;
   --reveal-distance: 1rem;
   --glow-mint: 0 0 1.5rem rgb(110 255 182 / 0.45);
+  --glow-white: 0 0 12px rgb(255 255 255 / 0.6); /* live primary button */
+  --text-glow: 0 0 12px rgb(255 255 255 / 0.3); /* live hero headline */
+  --radius-card: 32px; /* big image and feature cards */
 }
 
 /* Reset */
@@ -152,7 +200,7 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-light);
   line-height: var(--line-height-base);
   -webkit-font-smoothing: antialiased;
 }
@@ -186,6 +234,7 @@ h6 {
   font-family: var(--font-display);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-heading);
+  letter-spacing: var(--tracking-display);
 }
 
 h1 {
@@ -195,6 +244,8 @@ h1 {
 
 h2 {
   font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-tight);
 }
 
 h3 {
@@ -289,7 +340,7 @@ button {
 
 /* Page sections: vertical rhythm plus the eyebrow, heading, lead intro */
 .section {
-  padding-block: var(--space-2xl);
+  padding-block: clamp(4rem, 3rem + 4vw, 6.3rem); /* live: 100.8px */
 }
 
 .section__intro {
@@ -325,92 +376,166 @@ button {
   text-align: center;
 }
 
-/* Section eyebrow: the small label above a section heading */
+/* Section eyebrow: the label above a section heading. The emphasized word
+ * shimmers in the holographic gradient, as on the live site. */
 .eyebrow {
   margin: 0 0 var(--space-xs);
   color: var(--color-text);
   font-family: var(--font-body);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-eyebrow);
   font-weight: var(--font-weight-semibold);
+  letter-spacing: normal;
+  line-height: 1.5;
 }
 
 .eyebrow em {
-  color: var(--color-mint);
+  background: var(--holo-radial);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   font-style: normal;
 }
 
-/* Buttons (links styled as buttons) */
+/* Buttons (links styled as buttons), matched to the live site: a frosted
+ * pill with a thin gray outline and holographic label, or the glowing
+ * holographic primary pill. */
 .button {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2xs);
-  padding: var(--space-xs) var(--space-md);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background-color: var(--color-surface);
-  color: var(--color-text);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
+  gap: var(--space-xs);
+  padding: 10px var(--space-md);
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--radius-card);
+  background-image: var(--holo-gradient), linear-gradient(var(--color-glass), var(--color-glass));
+  background-clip: text, padding-box;
+  -webkit-background-clip: text, padding-box;
+  color: transparent;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-light);
+  line-height: 1.7;
   text-decoration: none;
   transition:
     border-color var(--transition-fast),
-    background-color var(--transition-fast),
-    color var(--transition-fast);
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.button .icon {
+  color: var(--color-white);
+  transition: transform var(--transition-fast);
 }
 
 .button:hover {
-  border-color: var(--color-mint);
-  color: var(--color-text);
+  border-color: var(--color-white);
+  color: transparent;
+  box-shadow: var(--glow-white);
 }
 
 /* The trailing arrow nudges toward where the link goes */
-.button .icon {
-  transition: transform 250ms var(--ease-out);
-}
-
 .button:hover .icon,
 .button:focus-visible .icon {
   transform: translate(2px, -2px);
 }
 
-/* Primary: the holographic pill, with the gradient slowly sweeping across
- * it like the live site's animated buttons, and a glow on hover. */
 .button--primary {
   border-color: transparent;
-  background: linear-gradient(
-      90deg,
-      var(--color-cyan),
-      var(--color-holo-mint),
-      var(--color-lavender-light),
-      var(--color-cyan)
-    )
-    0 0 / 300% 100%;
-  color: var(--color-black);
-  animation: holo-sweep 6s linear infinite;
-  transition:
-    box-shadow 250ms var(--ease-out),
-    transform 250ms var(--ease-out);
+  background: var(--holo-gradient) 0 0 / 200% 100%;
+  color: var(--color-night);
+  box-shadow: var(--glow-white);
+  animation: holo-sweep 8s linear infinite;
+}
+
+.button--primary .icon {
+  color: var(--color-night);
 }
 
 .button--primary:hover {
   border-color: transparent;
-  color: var(--color-black);
-  box-shadow: var(--glow-mint);
+  color: var(--color-night);
+  box-shadow: 0 0 24px rgb(255 255 255 / 0.75);
   transform: translateY(-1px);
 }
 
 @keyframes holo-sweep {
   to {
-    background-position: 300% 0;
+    background-position: 200% 0;
   }
 }
 
-/* Gradient text for marquee headings */
+/* A hero that runs up under the transparent header. The hero still sets
+ * its own top padding; add var(--header-height) to it. */
+.under-header {
+  margin-top: calc(-1 * var(--header-height));
+}
+
+/* Dark pill for light backgrounds (holographic cards, light case bands) */
+.button--dark {
+  border-color: transparent;
+  background: var(--color-night);
+  color: var(--color-white);
+}
+
+.button--dark:hover {
+  border-color: transparent;
+  color: var(--color-white);
+  box-shadow: 0 8px 24px rgb(0 4 7 / 0.35);
+}
+
+/* Tag pill */
+.pill {
+  display: inline-block;
+  padding: 4px var(--space-sm);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 80px;
+  background-color: var(--color-chip);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+/* Curved section edges, like the live site's "curve in" separators. Put
+ * .curve-top on a section to make the section above it look rounded at the
+ * bottom (this section's color rises at the sides), or .curve-bottom to make
+ * the section below bulge up into this one. --curve-color is this section's
+ * background. */
+.curve-top,
+.curve-bottom {
+  --curve-height: clamp(2rem, 4vw, 3.75rem);
+  position: relative;
+}
+
+.curve-top::before,
+.curve-bottom::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  height: var(--curve-height);
+  background-color: var(--curve-color, var(--color-night));
+  pointer-events: none;
+}
+
+.curve-top::before {
+  bottom: calc(100% - 1px); /* overlap a pixel so no seam shows */
+  -webkit-mask: radial-gradient(ellipse 50% 100% at 50% 0, transparent 99%, #000 100%);
+  mask: radial-gradient(ellipse 50% 100% at 50% 0, transparent 99%, #000 100%);
+}
+
+.curve-bottom::after {
+  top: calc(100% - 1px);
+  -webkit-mask: radial-gradient(ellipse 50% 100% at 50% 100%, transparent 99%, #000 100%);
+  mask: radial-gradient(ellipse 50% 100% at 50% 100%, transparent 99%, #000 100%);
+}
+
+/* Gradient text for marquee headings: the pearl holographic sweep with a
+ * soft white glow, exactly as the live hero headline. */
 .holo-text {
-  background: linear-gradient(90deg, var(--color-cyan), var(--color-holo-mint), var(--color-lavender-light));
+  background: var(--holo-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  text-shadow: var(--text-glow);
 }
 
 /* Holographic signature background (design system): slow conic gradient
@@ -509,7 +634,21 @@ button {
   }
 
   .js [data-reveal='left'] {
-    transform: translateX(calc(-1 * var(--reveal-distance)));
+    transform: translateX(calc(-2 * var(--reveal-distance)));
+  }
+
+  .js [data-reveal='right'] {
+    transform: translateX(calc(2 * var(--reveal-distance)));
+  }
+
+  .js [data-reveal='up'] {
+    transform: translateY(calc(2 * var(--reveal-distance)));
+  }
+
+  /* Color reveal: stays in place, only loses its grayscale (set per use) */
+  .js [data-reveal='color'] {
+    opacity: 1;
+    transform: none;
   }
 
   .js [data-reveal='zoom'] {

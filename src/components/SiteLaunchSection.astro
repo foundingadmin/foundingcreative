@@ -1,20 +1,23 @@
 ---
 import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
 import prismArt from '../assets/home/sitelaunch/flare-1.png';
 import rocketArt from '../assets/home/sitelaunch/rocket-1.png';
 import orbitArt from '../assets/home/sitelaunch/orbit-1.png';
 
 // The three SiteLaunch website packages, shared by the homepage and the
-// website services page.
+// website services page. Styled after the live section: the light-speed
+// video under a conic navy, teal, and plum veil, and three cards with thin
+// colored outlines that slide in from the left, below, and the right.
 const packages = [
-  { name: 'Prism', href: '/prism-sitelaunch/', tagline: 'For brands ready to make an unforgettable entrance.', art: prismArt, tone: 'prism' },
-  { name: 'Rocket', href: '/rocket-sitelaunch/', tagline: 'For growth-focused brands ready to fuel conversions.', art: rocketArt, tone: 'rocket' },
-  { name: 'Orbit', href: '/orbit-sitelaunch/', tagline: 'For scaling companies needing clarity, structure, and alignment.', art: orbitArt, tone: 'orbit' },
+  { name: 'Prism', href: '/prism-sitelaunch/', tagline: 'For brands ready to make an unforgettable entrance.', art: prismArt, tone: 'prism', from: 'left' },
+  { name: 'Rocket', href: '/rocket-sitelaunch/', tagline: 'For growth-focused brands ready to fuel conversions.', art: rocketArt, tone: 'rocket', from: 'up' },
+  { name: 'Orbit', href: '/orbit-sitelaunch/', tagline: 'For scaling companies needing clarity, structure, and alignment.', art: orbitArt, tone: 'orbit', from: 'right' },
 ];
 ---
 
 <section class="sitelaunch" aria-labelledby="sitelaunch-heading">
-  <video class="bg-video" src="/media/home/light-speed.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
+  <video class="sitelaunch__video" src="/media/home/light-speed.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
   ></video>
   <div class="container section">
     <div class="section__intro section__intro--center">
@@ -24,11 +27,12 @@ const packages = [
         SiteLaunch™ breaks the one-size-fits-all web model with three unique packages designed for your unique needs
       </p>
     </div>
-    <ul class="packages" data-reveal-stagger>
+    <ul class="packages">
       {
         packages.map((pkg) => (
-          <li class:list={['package', `package--${pkg.tone}`]}>
-            <Image class="package__art" src={pkg.art} alt="" widths={[360, 720]} sizes="360px" />
+          <li class:list={['package', `package--${pkg.tone}`]} data-reveal={pkg.from}>
+            <Image class="package__art" src={pkg.art} alt="" widths={[400, 800]} sizes="(max-width: 977px) 90vw, 380px" />
+            <Icon name="arrow-up-right" size={18} class="package__arrow" />
             <h3 class="package__name">
               <a href={pkg.href}>
                 {pkg.name}
@@ -44,13 +48,20 @@ const packages = [
 </section>
 
 <style>
-  /* SiteLaunch */
-  /* Light-speed video behind a plum glow, like the live section */
   .sitelaunch {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background-color: var(--color-black);
+    background-color: var(--color-night);
+  }
+
+  .sitelaunch__video {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .sitelaunch::before {
@@ -58,100 +69,109 @@ const packages = [
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: radial-gradient(
-      ellipse at 50% 0%,
-      color-mix(in srgb, var(--color-plum) 75%, transparent),
-      color-mix(in srgb, var(--color-black) 85%, transparent) 65%
+    background: conic-gradient(
+      color-mix(in srgb, var(--color-navy) 92%, transparent),
+      color-mix(in srgb, var(--color-teal) 92%, transparent),
+      color-mix(in srgb, var(--color-navy) 92%, transparent),
+      color-mix(in srgb, var(--color-plum) 92%, transparent),
+      color-mix(in srgb, var(--color-navy) 92%, transparent)
     );
   }
 
-  .sitelaunch .bg-video {
-    z-index: -2;
+  .sitelaunch .section {
+    padding-bottom: calc(var(--space-2xl) + var(--space-xl));
+  }
+
+  .sitelaunch .section__intro {
+    max-width: 44rem;
   }
 
   .packages {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--space-md);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2xl);
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   .package {
+    --line: var(--color-sky);
     position: relative;
-    display: grid;
-    align-content: end;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     gap: var(--space-2xs);
-    min-height: 22rem;
+    min-height: 25rem;
     padding: var(--space-lg);
     overflow: hidden;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
     isolation: isolate;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-navy);
+    transition:
+      box-shadow 400ms var(--ease-out),
+      translate 400ms var(--ease-out);
   }
 
-  .package {
-    transition:
-      border-color 300ms var(--ease-out),
-      transform 400ms var(--ease-out),
-      box-shadow 400ms var(--ease-out);
+  /* The middle card sits a little lower, as on the live site */
+  .package--rocket {
+    --line: var(--color-mint);
+    margin-top: var(--space-lg);
+    background-color: var(--color-rocket);
+  }
+
+  .package--orbit {
+    --line: var(--color-orchid);
+    background-color: var(--color-plum);
   }
 
   .package:hover,
   .package:focus-within {
-    border-color: var(--color-mint);
-    box-shadow: var(--glow-mint);
-    transform: translateY(-6px);
+    box-shadow: 0 0 32px color-mix(in srgb, var(--line) 45%, transparent);
+    translate: 0 -6px;
   }
 
   .package__art {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: -1;
+    width: 100%;
+    height: 72%;
+    object-fit: contain;
+    object-position: center top;
     transition: transform 800ms var(--ease-out);
   }
 
   .package:hover .package__art,
   .package:focus-within .package__art {
-    transform: scale(1.06);
+    transform: scale(1.05) translateY(-4px);
   }
 
-  .package--prism {
-    background-color: var(--color-navy);
-  }
-
-  .package--rocket {
-    background-color: var(--color-teal);
-  }
-
-  .package--orbit {
-    background-color: var(--color-plum);
-  }
-
-  /* Keep the text readable over bright artwork */
-  .package::before {
-    content: '';
+  .package :global(.package__arrow) {
     position: absolute;
-    inset: 40% 0 0;
-    z-index: -1;
-    background: linear-gradient(transparent, rgb(0 0 0 / 0.75));
+    top: var(--space-lg);
+    left: var(--space-lg);
+    color: var(--line);
+    transition: transform var(--transition-fast);
   }
 
-  .package__art {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.85;
+  .package:hover :global(.package__arrow) {
+    transform: translate(2px, -2px);
   }
 
   .package__name {
     margin: 0;
-    font-size: var(--font-size-h3);
+    color: var(--line);
+    font-family: var(--font-body);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
+    line-height: 1.2;
   }
 
   .package__name a {
-    color: var(--color-text);
+    color: inherit;
     text-decoration: none;
   }
 
@@ -161,16 +181,35 @@ const packages = [
     inset: 0;
   }
 
+  .package__name a:focus-visible {
+    outline: none;
+  }
+
+  .package:has(a:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
   .package__name span {
     display: block;
-    font-family: var(--font-body);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    color: var(--color-white);
   }
 
   .package p {
+    max-width: 13rem;
     margin: 0;
+    color: var(--color-neutral-light);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 977px) {
+    .packages {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-md);
+    }
+
+    .package--rocket {
+      margin-top: 0;
+    }
   }
 </style>
