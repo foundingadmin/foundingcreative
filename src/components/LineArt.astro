@@ -1,0 +1,106 @@
+---
+// A line illustration, inlined so it can animate in when it scrolls into view:
+//   draw:     stroked art draws its lines in, then any solid shapes fade up
+//             (the About builder).
+//   assemble: art made of filled outlines puts itself together, each piece
+//             fading up a beat after the last (Fractional's idea and chart).
+// Reduced-motion visitors, and pages without scripts, see it finished.
+// Decorative: hidden from screen readers.
+
+interface Props {
+  /** The SVG source, imported with ?raw. */
+  svg: string;
+  mode?: 'draw' | 'assemble';
+  class?: string;
+}
+
+const { svg, mode = 'assemble', class: className } = Astro.props;
+
+// Prefix the illustration's own class names so its embedded styles can't
+// reach the rest of the page, and tag its shapes for the animation:
+// pathLength="1" lets one dash length fit every stroke, and --i staggers
+// the pieces.
+const prefix = `art-${Math.random().toString(36).slice(2, 7)}-`;
+
+// Which classes are strokes? Read the illustration's embedded styles: a rule
+// that sets a stroke (and not stroke-width 0) marks its classes as line work.
+const strokeClasses = new Set<string>();
+for (const [, selectors, body] of svg.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+  if (/stroke\s*:/.test(body) && !/stroke-width\s*:\s*0/.test(body)) {
+    for (const [, name] of selectors.matchAll(/\.([\w-]+)/g)) strokeClasses.add(name);
+  }
+}
+
+let index = 0;
+const markup = svg
+  .replace(/<\?xml[^>]*>\s*/, '')
+  .replace(/<(path|line|polyline|polygon|circle|rect|ellipse)\b([^>]*)/g, (_, tag, attrs) => {
+    const classes = (attrs.match(/class="([^"]*)"/)?.[1] ?? '').split(/\s+/);
+    const kind = classes.some((c: string) => strokeClasses.has(c)) ? 'data-stroke' : 'data-fill';
+    return `<${tag} pathLength="1" ${kind} style="--i:${index++}"${attrs}`;
+  })
+  .replace(/\bcls-/g, prefix)
+  .replace('<svg ', '<svg class="line-art__svg" aria-hidden="true" focusable="false" ');
+---
+
+<div class:list={['line-art', `line-art--${mode}`, className]} data-reveal set:html={markup} />
+
+<style>
+  .line-art :global(.line-art__svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* The wrapper itself shouldn't fade or slide; its pieces do the work */
+    :global(.js) .line-art {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* draw: lines draw in, then the solid shapes fade up behind them */
+    :global(.js) .line-art--draw :global([data-stroke]) {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    :global(.js) .line-art--draw.is-revealed :global([data-stroke]) {
+      animation: line-art-draw 2.6s var(--ease-out) 0.3s forwards;
+    }
+
+    :global(.js) .line-art--draw :global([data-fill]) {
+      opacity: 0;
+      transition: opacity 1.2s var(--ease-out) 1.2s;
+    }
+
+    :global(.js) .line-art--draw.is-revealed :global([data-fill]) {
+      opacity: 1;
+    }
+
+    /* assemble: each piece fades up a beat after the last */
+    :global(.js) .line-art--assemble :global([data-stroke], [data-fill]) {
+      opacity: 0;
+      transform: translateY(6px);
+      transform-box: fill-box;
+    }
+
+    :global(.js) .line-art--assemble.is-revealed :global([data-stroke], [data-fill]) {
+      animation: line-art-assemble 700ms var(--ease-out) forwards;
+      animation-delay: calc(var(--i) * 18ms + 150ms);
+    }
+  }
+
+  @keyframes line-art-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes line-art-assemble {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

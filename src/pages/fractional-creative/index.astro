@@ -1,13 +1,20 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CtaSection from '../../components/CtaSection.astro';
+import HeroBackdrop from '../../components/HeroBackdrop.astro';
+import LineArt from '../../components/LineArt.astro';
+import FlagMark from '../../components/FlagMark.astro';
 import Icon from '../../components/Icon.astro';
-import wave from '../../assets/brand/wave-black.svg';
-import idea from '../../assets/pages/idea-illustration.svg';
+import ideaSvg from '../../assets/pages/idea-illustration.svg?raw';
+import growthSvg from '../../assets/pages/growth-chart-illustration.svg?raw';
 import buckitLogo from '../../assets/pages/buckit-logo-white.svg';
-import growth from '../../assets/pages/growth-chart-illustration.svg';
 import shareImage from '../../assets/home/services/brand-2.webp';
+import { letsTalkHref } from '../../data/navigation';
+
+// Fractional Creative, laid out as on the live page: the spectrum hero with
+// the frosted benefit cards and the BucKit portal, a light band on the
+// problem and the payoff, the model comparison table on white, and a pearl
+// call to action.
 
 const offers = [
   'Flexible engagement tailored to your needs.',
@@ -24,11 +31,11 @@ const portal = [
 ];
 
 const benefits = [
-  { title: 'Priority access', text: 'Lower MLT for fast business acceleration' },
-  { title: 'Strategic focus', text: 'Creative strategy workshop and guidance' },
-  { title: 'Brand equity building', text: 'Centralize your creative execution' },
-  { title: 'Roll-over benefits', text: 'Reduce business over-expenditure' },
-];
+  { title: 'Priority access', text: 'Lower MLT for fast business acceleration', icon: 'settings' },
+  { title: 'Strategic focus', text: 'Creative strategy workshop and guidance', icon: 'arrow-left-right' },
+  { title: 'Brand equity building', text: 'Centralize your creative execution', icon: 'blocks' },
+  { title: 'Roll-over benefits', text: 'Reduce business over-expenditure', icon: 'piggy-bank' },
+] as const;
 
 const dilemmas = [
   'Inconsistent branding across platforms.',
@@ -50,6 +57,7 @@ const models = [
   'Large Agency Partners',
   'In-House Creative Teams',
 ];
+const ours = 2;
 const comparison: [string, boolean[]][] = [
   ['Cost-Effective', [true, true, true, false, false]],
   ['Scalability', [true, true, true, false, false]],
@@ -91,342 +99,579 @@ const jsonLd = {
   ogImageAlt="ATL Freight website on a laptop"
   jsonLd={jsonLd}
 >
-  <section class="hero holo-bg">
-    <Image class="hero__wave" src={wave} alt="" loading="eager" />
-    <div class="container hero__grid">
-      <div>
-        <p class="eyebrow">Changing Brand Design <em>Agencies</em></p>
-        <h1 class="holo-text">In-house creative at fractional costs</h1>
-        <h2 class="hero__subhead">A new era of brand design agencies</h2>
-        <p class="section__lead hero__lead">
-          Fractional creative service means having a dedicated creative team, but only when you need it.
-        </p>
-        <p>This model offers:</p>
-        <ul class="checks">
+  <!-- Hero: the spectrum backdrop behind the pitch, the benefits, and BucKit -->
+  <section class="fc-hero under-header" aria-labelledby="fc-title">
+    <HeroBackdrop />
+    <div class="container">
+      <div class="fc-hero__head" data-intro>
+        <p class="fc-hero__eyebrow">Changing Brand Design Agencies</p>
+        <h1 id="fc-title">In-house creative at fractional costs</h1>
+      </div>
+
+      <div class="fc-intro">
+        <div data-reveal="left">
+          <h2 class="fc-intro__heading">A new era of brand design agencies</h2>
+          <p class="fc-intro__lead">
+            Fractional creative service means having a dedicated creative team, but only when you need it.
+          </p>
+          <p>This model offers:</p>
+          <ul class="fc-list">{offers.map((item) => <li>{item}</li>)}</ul>
+        </div>
+        <LineArt svg={ideaSvg} class="fc-intro__art" />
+      </div>
+
+      <div class="fc-perks">
+        <ul class="fc-benefits" data-reveal-stagger>
           {
-            offers.map((item) => (
-              <li>
-                <Icon name="check" size={18} />
-                {item}
+            benefits.map((benefit) => (
+              <li class="fc-card fc-benefit">
+                <Icon name={benefit.icon} size={28} class="icon--draw" />
+                <h3>{benefit.title}</h3>
+                <p>{benefit.text}</p>
               </li>
             ))
           }
         </ul>
+
+        <div class="fc-card fc-portal" data-reveal="right">
+          <Image class="fc-portal__logo" src={buckitLogo} alt="BucKit by Founding" height={80} />
+          <h3>Creative system</h3>
+          <p>We build your team an all-in-one project and toolkit portal to easily access your branding and creative.</p>
+          <ul class="fc-list">{portal.map((item) => <li>{item}</li>)}</ul>
+          <a class="fc-portal__button" href="/buckit/">
+            Learn more about BucKit <Icon name="arrow-up-right" size={16} />
+          </a>
+        </div>
       </div>
-      <Image class="hero__art" src={idea} alt="" loading="eager" />
     </div>
   </section>
 
-  <section class="container section portal" aria-labelledby="portal-heading">
-    <div class="portal__card">
-      <Image class="portal__logo" src={buckitLogo} alt="BucKit by Founding" height={48} />
-      <h2 id="portal-heading">Creative system</h2>
-      <p>We build your team an all-in-one project and toolkit portal to easily access your branding and creative.</p>
-      <ul class="checks">
-        {
-          portal.map((item) => (
-            <li>
-              <Icon name="check" size={18} />
-              {item}
-            </li>
-          ))
-        }
-      </ul>
-      <a class="button" href="/buckit/">Learn more about BucKit <Icon name="arrow-up-right" size={16} /></a>
-    </div>
-    <dl class="benefits">
-      {
-        benefits.map((benefit) => (
-          <div>
-            <dt>{benefit.title}</dt>
-            <dd>{benefit.text}</dd>
-          </div>
-        ))
-      }
-    </dl>
-  </section>
+  <!-- The problem and the payoff, on a light band -->
+  <section class="fc-light curve-top" aria-labelledby="experts-heading">
+    <div class="container section">
+      <div class="fc-columns" data-reveal-stagger>
+        <div>
+          <h2 id="experts-heading">Creative system experts</h2>
+          <p>
+            At Founding Creative, we're not just designers and strategists; we're creative system experts. We bring a wealth
+            of industry experience, infused with foresight to build creative solutions that scale with your business.
+            There's science in the art of developing creative systems that grow and evolve as you do. This is different from
+            most Brand Design Agencies.
+          </p>
+        </div>
+        <div>
+          <h2>Solving the dilemma</h2>
+          <p>Many business leaders face:</p>
+          <ul class="fc-list fc-list--cross">{dilemmas.map((item) => <li>{item}</li>)}</ul>
+          <p>
+            These challenges restrict growth, dilute brand, and drain resources. Our fractional service is the key to turning
+            these pain points into growth opportunities.
+          </p>
+        </div>
+      </div>
 
-  <section class="container section split" aria-labelledby="experts-heading">
-    <div>
-      <h2 id="experts-heading">Creative system experts</h2>
-      <p>
-        At Founding Creative, we're not just designers and strategists; we're creative system experts. We bring a wealth of
-        industry experience, infused with foresight to build creative solutions that scale with your business. There's
-        science in the art of developing creative systems that grow and evolve as you do. This is different from most Brand
-        Design Agencies.
-      </p>
-      <h2>Solving the dilemma</h2>
-      <p>Many business leaders face:</p>
-      <ul class="crosses">
-        {dilemmas.map((item) => <li>{item}</li>)}
-      </ul>
-      <p>
-        These challenges restrict growth, dilute brand, and drain resources. Our fractional service is the key to turning
-        these pain points into growth opportunities.
-      </p>
-    </div>
-    <div>
-      <Image class="split__art" src={growth} alt="" />
-      <h2>Your path to sustained creative excellence</h2>
-      <p>Choosing Founding Creative's fractional services means you gain:</p>
-      <ul class="checks">
-        {
-          gains.map((item) => (
-            <li>
-              <Icon name="check" size={18} />
-              {item}
-            </li>
-          ))
-        }
-      </ul>
+      <div class="fc-payoff">
+        <LineArt svg={growthSvg} class="fc-payoff__art" />
+        <div data-reveal="right">
+          <h2>Your path to sustained creative excellence</h2>
+          <p>Choosing Founding Creative's fractional services means you gain:</p>
+          <ul class="fc-list fc-list--check">{gains.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="container section" aria-labelledby="models-heading">
-    <div class="section__intro">
-      <p class="eyebrow">Finding your <em>best fit</em></p>
-      <h2 id="models-heading">Brand design agency models</h2>
-      <p class="section__lead">
-        Choosing the right creative path for your business is key. Founding is setting out to bring the missing middle
-        ground to the playing field. A new time calls for a new solution that marries affordability, quality, and
-        flexibility. Perfect for businesses of all sizes, from "we don't even have a logo yet" to "we need to pivot our
-        entire brand strategy." We are your creative guru in the corner helping you stand out and attract your tribe. Ready
-        to raise your flag?
-      </p>
-    </div>
-    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="models-heading">
-      <table class="comparison">
-        <caption class="visually-hidden">How creative service models compare</caption>
-        <thead>
-          <tr>
-            <td></td>
-            {models.map((model, i) => <th scope="col" class:list={{ featured: i === 2 }}>{model}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {
-            comparison.map(([criterion, marks]) => (
-              <tr>
-                <th scope="row">{criterion}</th>
-                {marks.map((yes, i) => (
-                  <td class:list={{ featured: i === 2, yes, no: !yes }}>
-                    <span aria-hidden="true">{yes ? '✓' : '✕'}</span>
-                    <span class="visually-hidden">{yes ? 'Yes' : 'No'}</span>
-                  </td>
-                ))}
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+  <!-- The models compared, on white -->
+  <section class="fc-models" aria-labelledby="models-heading">
+    <div class="container section">
+      <div class="fc-models__intro" data-reveal>
+        <p class="fc-kicker">Finding your best fit</p>
+        <h2 id="models-heading">Brand design agency models</h2>
+        <p>
+          Choosing the right creative path for your business is key. Founding is setting out to bring the missing middle
+          ground to the playing field. A new time calls for a new solution that marries affordability, quality, and
+          flexibility. Perfect for businesses of all sizes, from "we don't even have a logo yet" to "we need to pivot our
+          entire brand strategy." We are your creative guru in the corner helping you stand out and attract your tribe.
+          Ready to raise your flag?
+        </p>
+      </div>
+      <div class="table-wrap" tabindex="0" role="region" aria-labelledby="models-heading" data-reveal>
+        <table class="comparison">
+          <caption class="visually-hidden">How creative service models compare</caption>
+          <thead>
+            <tr>
+              <td></td>
+              {models.map((model, i) => (
+                <th scope="col">{i === ours ? <span class="ours">{model}</span> : model}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {
+              comparison.map(([criterion, marks]) => (
+                <tr>
+                  <th scope="row">{criterion}</th>
+                  {marks.map((yes, i) => (
+                    <td class:list={{ yes, no: !yes, ours: i === ours }}>
+                      <Icon name={yes ? 'check' : 'x'} size={16} />
+                      <span class="visually-hidden">{yes ? 'Yes' : 'No'}</span>
+                    </td>
+                  ))}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
-  <CtaSection
-    eyebrow="Empower your creative starting today"
-    heading="Let's explore a partnership that grows with you."
-    text="Our Fractional Creative partnership is ideal for businesses ready to elevate their brand without overextending resources."
-  >
-    <ul class="checks checks--center">
-      {
-        partnership.map((item) => (
-          <li>
-            <Icon name="check" size={18} />
-            {item}
-          </li>
-        ))
-      }
-    </ul>
-  </CtaSection>
+  <!-- Call to action on the pearl gradient -->
+  <section class="fc-cta" aria-labelledby="cta-heading">
+    <div class="container">
+      <div class="fc-cta__card" data-reveal>
+        <div>
+          <p class="fc-kicker">Empower your creative starting today</p>
+          <h2 id="cta-heading">Ready to transform creative strategy?</h2>
+        </div>
+        <div>
+          <p>
+            Our Fractional Creative partnership is ideal for businesses ready to elevate their brand without overextending
+            resources.
+          </p>
+          <ul class="fc-list fc-list--check">{partnership.map((item) => <li>{item}</li>)}</ul>
+        </div>
+      </div>
+      <div class="fc-cta__close" data-reveal>
+        <FlagMark class="fc-cta__flag" />
+        <p class="fc-cta__statement">Let's explore a partnership that grows with you.</p>
+        <div class="fc-cta__actions">
+          <a class="button button--dark" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
+          <a class="button fc-cta__secondary" href="/contact-us/">Send us a message</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .hero {
-    padding-block: var(--space-3xl) var(--space-2xl);
-  }
-
-  .hero__wave {
-    position: absolute;
-    z-index: -1;
-    inset: auto 0 0 auto;
-    width: 70%;
-    max-width: 60rem;
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  .hero__grid {
+  /* ===== Hero ===== */
+  .fc-hero {
     position: relative;
+    padding-block: calc(var(--header-height) + 4rem) var(--space-2xl);
+  }
+
+  .fc-hero__head {
+    margin-bottom: var(--space-2xl);
+    text-align: center;
+  }
+
+  .fc-hero__eyebrow {
+    margin-bottom: var(--space-sm);
+    font-size: var(--font-size-eyebrow);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .fc-hero h1 {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-regular);
+    text-shadow: var(--text-glow);
+  }
+
+  .fc-intro {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-xl);
+    grid-template-columns: 1fr 1fr;
     align-items: center;
+    gap: var(--space-2xl);
+    margin-bottom: var(--space-2xl);
   }
 
-  .hero h1 {
-    max-width: 14ch;
+  .fc-intro__heading {
+    max-width: 12em;
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-medium);
   }
 
-  .hero__subhead {
-    font-size: var(--font-size-h5);
+  .fc-intro__lead {
+    font-size: var(--font-size-lg);
   }
 
-  .hero__lead {
-    color: var(--color-text);
-  }
-
-  .hero__art {
-    width: 100%;
-    max-width: 26rem;
+  .fc-hero :global(.fc-intro__art) {
     justify-self: center;
+    width: min(100%, 32rem);
   }
 
-  .checks,
-  .crosses {
+  /* Bullets: small holographic dots by default, checks and crosses when
+   * the list makes a point */
+  .fc-list {
     display: grid;
-    gap: var(--space-xs);
+    gap: var(--space-2xs);
     margin: 0 0 var(--space-md);
     padding: 0;
     list-style: none;
   }
 
-  .checks li {
-    display: flex;
-    gap: var(--space-2xs);
+  .fc-list li {
+    position: relative;
+    padding-left: var(--space-md);
   }
 
-  .checks .icon {
-    margin-top: 0.3em;
-    color: var(--color-mint);
+  .fc-list li::before {
+    content: '';
+    position: absolute;
+    top: 0.7em;
+    left: 0.15em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-image: var(--holo-radial);
   }
 
-  :global(.cta) .checks--center {
-    width: fit-content;
-    margin-inline: auto;
-    text-align: left;
+  .fc-list--check li::before,
+  .fc-list--cross li::before {
+    top: 0.35em;
+    width: 1em;
+    height: 1em;
+    border-radius: 0;
+    background: currentColor;
+    -webkit-mask: var(--mark) center / contain no-repeat;
+    mask: var(--mark) center / contain no-repeat;
   }
 
-  .crosses li::before {
-    content: '✕';
-    margin-right: var(--space-2xs);
-    color: var(--color-orchid);
+  .fc-list--check li::before {
+    --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
   }
 
-  .portal {
+  .fc-list--cross li::before {
+    --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M18 6 6 18M6 6l12 12'/%3E%3C/svg%3E");
+  }
+
+  .fc-list--check li {
+    padding-left: var(--space-lg);
+  }
+
+  .fc-list--cross li {
+    padding-left: var(--space-lg);
+  }
+
+  /* Frosted cards with the live site's 2px white rule */
+  .fc-perks {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-xl);
-    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
   }
 
-  .portal__card {
+  .fc-card {
     padding: var(--space-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    background-color: var(--color-surface);
+    border: 2px solid var(--color-white);
+    border-radius: var(--radius-lg);
+    background-color: rgb(0 0 0 / 0.2);
+    backdrop-filter: blur(6px);
   }
 
-  .portal__logo {
-    width: auto;
-    height: 3rem;
-    margin-bottom: var(--space-md);
-  }
-
-  .portal h2 {
-    font-size: var(--font-size-h4);
-  }
-
-  .benefits {
+  .fc-benefits {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-md);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .fc-benefit {
+    display: flex;
+    flex-direction: column;
+    transition:
+      background-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .fc-benefit:hover {
+    background-color: rgb(255 255 255 / 0.06);
+    box-shadow: var(--glow-white);
+  }
+
+  .fc-benefit h3 {
+    margin: var(--space-lg) 0 var(--space-sm);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .fc-benefit p {
     margin: 0;
   }
 
-  .benefits div {
-    padding: var(--space-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-  }
-
-  .benefits dt {
-    color: var(--color-mint);
-    font-family: var(--font-display);
-    font-size: var(--font-size-h6);
-  }
-
-  .benefits dd {
-    margin: var(--space-3xs) 0 0;
-    color: var(--color-text-muted);
-  }
-
-  .split {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: var(--space-xl);
-  }
-
-  .split h2 {
+  .fc-portal h3 {
+    margin-bottom: var(--space-sm);
     font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-regular);
   }
 
-  .split p {
-    color: var(--color-text-muted);
-  }
-
-  .split__art {
-    width: 100%;
-    max-width: 20rem;
+  .fc-portal :global(.fc-portal__logo) {
+    width: auto;
+    height: 5rem;
     margin-bottom: var(--space-md);
+  }
+
+  .fc-portal .fc-list li {
+    font-weight: var(--font-weight-regular);
+  }
+
+  /* BucKit's rainbow button, the gradient slowly sliding through it */
+  .fc-portal__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+    padding: 10px var(--space-lg);
+    border-radius: var(--radius-card);
+    background: linear-gradient(
+        90deg,
+        var(--color-buckit-blue),
+        var(--color-buckit-pink),
+        var(--color-buckit-yellow),
+        var(--color-buckit-blue)
+      )
+      0 0 / 300% 100%;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.25);
+    color: var(--color-white);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+    text-decoration: none;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.35);
+    transition:
+      background-position 1.2s var(--ease-out),
+      box-shadow var(--transition-fast);
+  }
+
+  .fc-portal__button:hover {
+    background-position: 100% 0;
+    box-shadow: 0 0 18px rgb(244 65 165 / 0.45);
+  }
+
+  /* ===== Light band ===== */
+  .fc-light {
+    --curve-color: var(--color-neutral-lightest);
+    background-color: var(--color-neutral-lightest);
+    color: var(--color-night);
+  }
+
+  .fc-light h2 {
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .fc-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .fc-list--cross li::before {
+    color: var(--color-problem-icon);
+  }
+
+  .fc-light .fc-list--check li::before {
+    color: var(--color-win-text);
+  }
+
+  .fc-payoff {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-2xl);
+  }
+
+  .fc-light :global(.fc-payoff__art) {
+    justify-self: center;
+    width: min(100%, 26rem);
+  }
+
+  /* ===== Models table ===== */
+  .fc-models {
+    background-color: var(--color-white);
+    color: var(--color-night);
+  }
+
+  .fc-models__intro {
+    max-width: 53rem;
+    margin: 0 auto var(--space-xl);
+    text-align: center;
+  }
+
+  .fc-kicker {
+    margin-bottom: var(--space-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  .fc-models h2 {
+    margin-bottom: var(--space-md);
+    font-weight: var(--font-weight-regular);
   }
 
   .table-wrap {
     overflow-x: auto;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    box-shadow: 0 0 20px rgb(0 0 0 / 0.1);
   }
 
   .comparison {
     width: 100%;
-    min-width: 44rem;
+    min-width: 46rem;
     border-collapse: collapse;
-    font-size: var(--font-size-sm);
   }
 
-  .comparison th,
-  .comparison td {
+  .comparison :is(th, td) {
     padding: var(--space-xs) var(--space-sm);
-    border-bottom: 1px solid var(--color-border);
+    border: 1px solid var(--color-neutral-darker);
     text-align: center;
   }
 
+  /* Dark header row and first column, as on the live table */
+  .comparison thead :is(th, td),
+  .comparison tbody th {
+    background-color: rgb(0 0 0 / 0.85);
+    color: var(--color-white);
+  }
+
   .comparison thead th {
+    padding-block: var(--space-sm) var(--space-xs);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h6);
+    font-weight: var(--font-weight-light);
+    line-height: 1.1;
     vertical-align: bottom;
-    font-weight: var(--font-weight-semibold);
+  }
+
+  /* Our column's name in the pearl gradient */
+  .comparison thead .ours {
+    background-image: var(--holo-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .comparison tbody th {
+    font-weight: var(--font-weight-light);
     text-align: left;
-    font-weight: var(--font-weight-regular);
   }
 
-  .comparison .featured {
-    background-color: var(--color-mint-darkest);
+  .comparison td.yes {
+    background-color: color-mix(in srgb, var(--color-holo-mint) 80%, transparent);
+    color: var(--color-night);
   }
 
-  .comparison thead .featured {
-    color: var(--color-mint);
+  .comparison td.no {
+    background-color: color-mix(in srgb, var(--color-neutral) 40%, transparent);
+    color: var(--color-night);
   }
 
-  .comparison .yes {
-    color: var(--color-mint);
+  /* A subtle lift on the row you're reading */
+  .comparison tbody tr {
+    transition: filter var(--transition-fast);
   }
 
-  .comparison .no {
-    color: var(--color-neutral);
+  .comparison tbody tr:hover {
+    filter: brightness(1.06);
   }
 
-  .comparison tr:last-child > * {
-    border-bottom: 0;
+  /* ===== Call to action ===== */
+  .fc-cta {
+    padding-block: var(--space-2xl) var(--space-3xl);
+    background: var(--holo-gradient) 0 0 / 300% 100%;
+    color: var(--color-night);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fc-cta {
+      animation: fc-pearl 18s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes fc-pearl {
+    to {
+      background-position: 100% 0;
+    }
+  }
+
+  .fc-cta__card {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: var(--space-xl);
+    padding: var(--space-lg);
+    border: 2px solid var(--color-white);
+    border-radius: var(--radius-card);
+    background-color: rgb(255 255 255 / 0.25);
+    backdrop-filter: blur(8px);
+  }
+
+  .fc-cta__card h2 {
+    margin: 0;
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .fc-cta__card .fc-list {
+    margin-bottom: 0;
+  }
+
+  .fc-cta__close {
+    margin-top: var(--space-2xl);
+    text-align: center;
+  }
+
+  .fc-cta :global(.fc-cta__flag) {
+    margin: 0 auto var(--space-lg);
+  }
+
+  .fc-cta__statement {
+    max-width: 14em;
+    margin: 0 auto;
+    font-family: var(--font-display);
+    font-size: var(--font-size-h2);
+    letter-spacing: var(--tracking-display);
+    line-height: 1;
+    text-wrap: balance;
+  }
+
+  .fc-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+  }
+
+  .fc-cta__secondary {
+    border-color: var(--color-night);
+    background: none;
+    color: var(--color-night);
+  }
+
+  .fc-cta__secondary:hover {
+    background-color: var(--color-night);
+    color: var(--color-white);
+  }
+
+  /* ===== Small screens ===== */
+  @media (max-width: 977px) {
+    .fc-intro,
+    .fc-perks,
+    .fc-columns,
+    .fc-payoff,
+    .fc-cta__card {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .fc-benefits {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

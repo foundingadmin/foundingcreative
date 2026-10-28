@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import OurWork from '../../components/OurWork.astro';
 import WipeSlider from '../../components/WipeSlider.astro';
 import Icon from '../../components/Icon.astro';
-import wave from '../../assets/brand/wave-black.svg';
+import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import strategyLaptop from '../../assets/services/brand-strategy-laptop.webp';
 import workshopLaptop from '../../assets/services/brand-workshop-laptop.webp';
 import workshopNotes from '../../assets/services/brand-workshop-blue-notes.webp';
@@ -106,10 +106,7 @@ const jsonLd = [
 >
   <!-- Hero: the homepage's four-color gradient under the wave and a dark veil -->
   <section class="forge-hero under-header" aria-labelledby="brandforge-title">
-    <div class="forge-hero__bg" aria-hidden="true">
-      <div class="forge-hero__wave"><img src={wave.src} alt="" width={wave.width} height={wave.height} /></div>
-      <div class="forge-hero__veil"></div>
-    </div>
+    <HeroBackdrop />
     <div class="container forge-hero__content" data-intro>
       <p class="forge-hero__eyebrow"><span class="forge-name">Brand</span>Forge™</p>
       <ul class="pillars">
@@ -265,71 +262,9 @@ const jsonLd = [
   /* ===== Hero ===== */
   .forge-hero {
     position: relative;
-    isolation: isolate;
     overflow: hidden;
     padding-block: calc(var(--header-height) + 4.5rem) var(--space-2xl);
     border-bottom: 1px solid var(--color-border);
-    background: linear-gradient(
-        -45deg,
-        var(--color-hero-indigo),
-        var(--color-hero-magenta),
-        var(--color-hero-teal),
-        var(--color-hero-azure)
-      )
-      0% 50% / 400% 400%;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .forge-hero {
-      animation: forge-gradient 15s ease infinite;
-    }
-  }
-
-  @keyframes forge-gradient {
-    50% {
-      background-position: 100% 50%;
-    }
-  }
-
-  .forge-hero__bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-  }
-
-  .forge-hero__wave {
-    position: absolute;
-    inset: 0 -25%;
-    background: linear-gradient(var(--color-black), transparent 80%);
-  }
-
-  .forge-hero__wave img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.4;
-  }
-
-  @supports (animation-timeline: scroll()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .forge-hero__wave {
-        animation: forge-parallax linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 100vh;
-      }
-    }
-  }
-
-  @keyframes forge-parallax {
-    to {
-      transform: translate3d(-4%, 18%, 0);
-    }
-  }
-
-  .forge-hero__veil {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgb(0 4 7 / 0.5), var(--color-night));
   }
 
   .forge-hero__content {

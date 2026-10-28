@@ -1,0 +1,123 @@
+---
+import wave from '../assets/brand/wave-black.svg';
+
+// The animated backdrop behind the site's dark heroes, from the live site: a
+// gradient drifting over 15 seconds under the brand wave.
+//   spectrum: the homepage's indigo, magenta, teal, and azure, the wave fading
+//             out toward the bottom and drifting as you scroll, under a veil
+//             that settles into the page's night.
+//   aurora:   the near-black aurora behind Field Notes, wave only.
+//
+// Put it first inside a positioned section. It clips itself and stays out of
+// the way of stacking (no z-index), so a card in the section can still rise
+// over the next section's curve; whatever follows it is lifted above it.
+
+interface Props {
+  variant?: 'spectrum' | 'aurora';
+}
+
+const { variant = 'spectrum' } = Astro.props;
+---
+
+<div class:list={['backdrop', `backdrop--${variant}`]} style={`--backdrop-wave: url(${wave.src})`} aria-hidden="true">
+  <div class="backdrop__wave"></div>
+</div>
+
+<style>
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background-position: 0% 50%;
+    background-size: 400% 400%;
+    pointer-events: none;
+  }
+
+  /* Content after the backdrop paints above it. Zero specificity, so a
+   * sibling with its own positioning (an absolutely placed cover) keeps it. */
+  :global(:where(.backdrop ~ *)) {
+    position: relative;
+  }
+
+  .backdrop--spectrum {
+    background-image: linear-gradient(
+      -45deg,
+      var(--color-hero-indigo),
+      var(--color-hero-magenta),
+      var(--color-hero-teal),
+      var(--color-hero-azure)
+    );
+  }
+
+  .backdrop--aurora {
+    background-image: linear-gradient(
+      -45deg,
+      var(--color-black),
+      var(--color-aurora-navy),
+      var(--color-black),
+      var(--color-aurora-indigo),
+      var(--color-aurora-plum),
+      var(--color-black),
+      var(--color-aurora-ember),
+      var(--color-black)
+    );
+  }
+
+  .backdrop__wave {
+    position: absolute;
+    inset: 0 -25%;
+  }
+
+  .backdrop__wave::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--backdrop-wave) center / cover no-repeat;
+  }
+
+  /* Spectrum: the wave rides a black fade and the veil settles into night */
+  .backdrop--spectrum .backdrop__wave {
+    background: linear-gradient(var(--color-black), transparent 80%);
+  }
+
+  .backdrop--spectrum .backdrop__wave::before {
+    opacity: 0.4;
+  }
+
+  .backdrop--spectrum::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgb(0 4 7 / 0.5), var(--color-night));
+  }
+
+  .backdrop--aurora .backdrop__wave::before {
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .backdrop {
+      animation: backdrop-drift 15s ease infinite;
+    }
+
+    @supports (animation-timeline: scroll()) {
+      .backdrop--spectrum .backdrop__wave {
+        animation: backdrop-parallax linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+    }
+  }
+
+  @keyframes backdrop-drift {
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes backdrop-parallax {
+    to {
+      transform: translate3d(-4%, 18%, 0);
+    }
+  }
+</style>

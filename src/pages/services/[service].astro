@@ -8,6 +8,7 @@ import ClientLogos from '../../components/ClientLogos.astro';
 import OurWork from '../../components/OurWork.astro';
 import WipeSlider from '../../components/WipeSlider.astro';
 import Icon from '../../components/Icon.astro';
+import FlagMark from '../../components/FlagMark.astro';
 import { letsTalkHref } from '../../data/navigation';
 
 export async function getStaticPaths() {
@@ -193,22 +194,7 @@ const jsonLd = [
       <ClientLogos />
     </div>
     <div class="container closing" data-reveal>
-      <svg class="closing__flag" viewBox="0 0 179 197" width="64" height="70" aria-hidden="true" focusable="false">
-        <defs>
-          <filter id="flag-wave" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="1" seed="4" result="noise">
-              <animate attributeName="baseFrequency" dur="6s" values="0.012 0.03;0.016 0.04;0.012 0.03" repeatCount="indefinite"
-              ></animate>
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G"
-            ></feDisplacementMap>
-          </filter>
-        </defs>
-        <path
-          fill="currentColor"
-          d="M178.032,86.045c-.268-4.377-.493-8.053-.781-12.761-.174-2.838-1.674-5.46-4.097-6.947-28.897-17.738-54.836-4.29-81.11,5.621-.847.32-1.675-.52-1.351-1.366l6.684-17.416c.665-1.732,2.03-3.107,3.763-3.77,20.883-7.994,41.931-14.24,64.803-1.272,2.502,1.419,5.581-.443,5.405-3.314-.268-4.376-.493-8.051-.781-12.757-.179-2.923-1.803-5.555-4.304-7.077-19.61-11.942-37.859-9.54-55.779-3.672-.843.276-1.63-.541-1.312-1.369l5.6-14.591c1.267-3.3-2.121-6.466-5.324-4.971-20.467,9.552-49.735,22.549-77.915,12.393-2.401-.865-4.215-2.892-4.908-5.349-.058-.207-.108-.383-.15-.528-.979-3.435-3.2-4.989-6.247-4.989-3.303,0-4.965,1.008-12.06,4.035C3.274,8.069-.834,8.805.146,12.24c.56,1.962,2.533,2.944,4.568,3.845,3.267,1.063,6.512,2.944,7.585,6.706l39.173,153.539c1.189,4.17,1.514,7.688-1.608,11.287-1.236,1.309-3.803,2.699-2.916,5.807.583,2.045,2.281,3.845,6.345,3.845,5.419,0,11.775-.41,16.855-.41,4.148,0,9.43.41,13.155.41,4.572,0,5.437-1.718,4.76-4.09-.909-3.19-3.844-3.681-6.82-5.807-3.147-2.126-5.323-4.417-6.933-10.061l-19.265-67.56c-.904-3.17-2.239-7.925-3.846-13.683-1.979-7.091,3.078-14.243,10.428-14.654,7.722-.432,15.31-2.283,22.839-4.748.843-.276,1.63.541,1.312,1.369l-6.219,16.203c-1.183,3.082,1.735,6.184,4.873,5.157,28.821-9.429,56.789-27.843,88.194-10.036,2.502,1.419,5.581-.443,5.405-3.314ZM38.282,49.503c-.853-3.084-1.692-6.119-2.506-9.062-.32-1.158.734-2.226,1.897-1.921,22.705,5.953,43.859-4.437,65.234-12.499.847-.32,1.675.521,1.351,1.366l-6.684,17.416c-.665,1.732-2.03,3.107-3.763,3.77-15.864,6.069-31.825,11.114-48.607,7.506-3.347-.72-6.009-3.276-6.922-6.575Z"
-        ></path>
-      </svg>
+      <FlagMark class="closing__flag" />
       <h2 id="cta-heading">{data.cta.heading}</h2>
       <p class="closing__text">{data.cta.text}</p>
       <div class="closing__actions">
@@ -549,17 +535,8 @@ const jsonLd = [
     text-align: center;
   }
 
-  .closing__flag {
-    display: block;
-    width: 4rem;
-    height: auto;
+  .closing :global(.closing__flag) {
     margin: 0 auto var(--space-lg);
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .closing__flag path {
-      filter: url(#flag-wave);
-    }
   }
 
   .closing h2 {
