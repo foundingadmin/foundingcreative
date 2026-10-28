@@ -49,6 +49,11 @@
   --color-olive-night: #0f140a;
   --color-olive-dusk: #13190b;
   --color-plum-night: #120e1c;
+  /* BrandForge: deep teal sections with a bright cyan accent */
+  --color-forge-cyan: #06e6e6;
+  --color-forge-teal: #003b3e;
+  --color-forge-night: #020207;
+  --color-forge-muted: #b8b8b8; /* body copy on teal */
 
   /* Holographic gradients (live site): the pearl sweep used on headlines,
    * primary buttons, and accent words */
