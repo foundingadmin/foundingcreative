@@ -1,0 +1,527 @@
+---
+import { Image } from 'astro:assets';
+import FlagMark from './FlagMark.astro';
+import Icon from './Icon.astro';
+import { caseStudyUrl, getCaseStudies } from '../lib/content';
+import mountain from '../assets/home/mountain.png';
+
+// "Selected works": three featured case studies, after the Davies template's
+// showcase. Client names roll in a column on the left, the project photo
+// crossfades on the right, and a mountain range rises over the bottom with
+// the Founding flag waving on its peak. Advances on its own every few
+// seconds (paused on hover, focus, off screen, and for reduced motion).
+
+interface Props {
+  /** Case study ids, in order. */
+  only?: string[];
+}
+
+const { only = ['turntide-website', 'bank-apps', 'interactive-learning-mural'] } = Astro.props;
+const all = await getCaseStudies();
+const studies = only.map((id) => all.find((study) => study.id === id)).filter((study) => study !== undefined);
+const count = studies.length;
+const pad = (n: number) => String(n).padStart(2, '0');
+// Each name's place in the rolling column: -1 above, 0 current, 1 below.
+const place = (i: number) => ((i + 1) % count) - 1;
+---
+
+<section class="selected-works" aria-labelledby="selected-works-heading" data-selected-works>
+  <div class="container selected-works__grid">
+    <div class="selected-works__side">
+      <h2 id="selected-works-heading" class="selected-works__label">Selected works</h2>
+      <ul class="selected-works__names" aria-label="Featured projects">
+        {
+          studies.map((study, i) => (
+            <li style={`--place: ${place(i)}`} data-place={place(i)}>
+              <button type="button" aria-controls="selected-works-stage" aria-current={i === 0 ? 'true' : undefined}>
+                {study.data.clients.join(', ')}
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="selected-works__stage" id="selected-works-stage" aria-live="off">
+      {
+        studies.map((study, i) => (
+          <a
+            class:list={['selected-works__slide', { 'is-active': i === 0 }]}
+            href={caseStudyUrl(study)}
+            inert={i !== 0}
+            aria-hidden={i !== 0 ? 'true' : undefined}
+          >
+            <Image
+              src={study.data.cover}
+              alt={study.data.coverAlt}
+              widths={[480, 800, 1200]}
+              sizes="(max-width: 768px) 100vw, 680px"
+            />
+            <span class="visually-hidden">
+              {study.data.clients.join(', ')}: {study.data.headline}. View case study.
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="selected-works__range" aria-hidden="true">
+    <Image class="selected-works__mountain" src={mountain} alt="" widths={[720, 1440]} sizes="100vw" />
+    <FlagMark class="selected-works__flag" size={3.5} />
+  </div>
+
+  <div class="container selected-works__footer">
+    <div class="selected-works__details">
+      {
+        studies.map((study, i) => (
+          <div class="selected-works__detail" hidden={i !== 0}>
+            <ul class="selected-works__tags" aria-label={`${study.data.clients.join(', ')}: services`}>
+              {study.data.services.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+            <a class="selected-works__more" href={caseStudyUrl(study)}>
+              View case study
+              <span class="visually-hidden"> for {study.data.clients.join(', ')}</span>
+              <Icon name="arrow-up-right" size={16} />
+            </a>
+          </div>
+        ))
+      }
+    </div>
+    <div class="selected-works__controls" data-controls hidden>
+      <button type="button" class="selected-works__control" aria-controls="selected-works-stage" data-prev>
+        <Icon name="chevron-left" size={16} /> Prev
+      </button>
+      <button type="button" class="selected-works__control" aria-controls="selected-works-stage" data-next>
+        Next <Icon name="chevron-right" size={16} />
+      </button>
+      <button type="button" class="selected-works__control selected-works__pause" aria-pressed="false" data-pause>
+        <Icon name="pause" size={14} class="selected-works__pause-icon" />
+        <Icon name="play" size={14} class="selected-works__play-icon" />
+        <span class="visually-hidden">Pause slideshow</span>
+      </button>
+    </div>
+    <p class="selected-works__count" aria-hidden="true">
+      <span data-current>{pad(1)}</span><span class="selected-works__total">/{pad(count)}</span>
+    </p>
+  </div>
+</section>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const INTERVAL = 5000;
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-selected-works]')) {
+    const names = [...root.querySelectorAll<HTMLLIElement>('.selected-works__names li')];
+    const slides = [...root.querySelectorAll<HTMLAnchorElement>('.selected-works__slide')];
+    const details = [...root.querySelectorAll<HTMLElement>('.selected-works__detail')];
+    const stage = root.querySelector<HTMLElement>('.selected-works__stage')!;
+    const current = root.querySelector<HTMLElement>('[data-current]')!;
+    const pauseButton = root.querySelector<HTMLButtonElement>('[data-pause]')!;
+    const count = slides.length;
+    let active = 0;
+    let timer: number | undefined;
+    let pausedByUser = false;
+    let hovered = false;
+    let focused = false;
+    let onScreen = false;
+
+    root.querySelector<HTMLElement>('[data-controls]')!.hidden = false;
+
+    const show = (index: number, announce: boolean) => {
+      active = (index + count) % count;
+      // Only announce changes the visitor asked for, not the autoplay.
+      stage.setAttribute('aria-live', announce ? 'polite' : 'off');
+
+      names.forEach((li, i) => {
+        const before = Number(li.dataset.place);
+        const place = ((i - active + count + 1) % count) - 1;
+        // A name that wraps from one end of the column to the other jumps
+        // there unseen, then fades back in.
+        li.classList.remove('is-wrapping');
+        if (Math.abs(place - before) > 1) {
+          void li.offsetWidth; // restart the fade if it wrapped last time too
+          li.classList.add('is-wrapping');
+        }
+        li.dataset.place = String(place);
+        li.style.setProperty('--place', String(place));
+        const button = li.querySelector('button')!;
+        if (place === 0) button.setAttribute('aria-current', 'true');
+        else button.removeAttribute('aria-current');
+      });
+
+      slides.forEach((slide, i) => {
+        const on = i === active;
+        slide.classList.toggle('is-active', on);
+        slide.inert = !on;
+        if (on) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+      });
+
+      details.forEach((detail, i) => (detail.hidden = i !== active));
+      current.textContent = String(active + 1).padStart(2, '0');
+    };
+
+    const stop = () => {
+      window.clearInterval(timer);
+      timer = undefined;
+    };
+    const sync = () => {
+      const run = !pausedByUser && !hovered && !focused && onScreen && !reduceMotion.matches;
+      if (run && timer === undefined) timer = window.setInterval(() => show(active + 1, false), INTERVAL);
+      if (!run) stop();
+    };
+
+    // Restart the countdown after a manual change so the next slide doesn't
+    // arrive a moment later.
+    const go = (index: number) => {
+      stop();
+      show(index, true);
+      sync();
+    };
+
+    names.forEach((li, i) => li.querySelector('button')!.addEventListener('click', () => go(i)));
+    root.querySelector('[data-prev]')!.addEventListener('click', () => go(active - 1));
+    root.querySelector('[data-next]')!.addEventListener('click', () => go(active + 1));
+
+    pauseButton.addEventListener('click', () => {
+      pausedByUser = !pausedByUser;
+      pauseButton.setAttribute('aria-pressed', String(pausedByUser));
+      pauseButton.querySelector('.visually-hidden')!.textContent = pausedByUser ? 'Play slideshow' : 'Pause slideshow';
+      sync();
+    });
+
+    // Nothing moves on its own for reduced-motion visitors, so there's
+    // nothing to pause.
+    const updateMotion = () => {
+      pauseButton.hidden = reduceMotion.matches;
+      sync();
+    };
+    reduceMotion.addEventListener('change', updateMotion);
+    updateMotion();
+
+    root.addEventListener('pointerenter', () => ((hovered = true), sync()));
+    root.addEventListener('pointerleave', () => ((hovered = false), sync()));
+    root.addEventListener('focusin', () => ((focused = true), sync()));
+    root.addEventListener('focusout', (event) => {
+      if (!root.contains(event.relatedTarget as Node | null)) (focused = false), sync();
+    });
+
+    new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      sync();
+    }).observe(root);
+  }
+</script>
+
+<style>
+  .selected-works {
+    --name-size: clamp(2rem, 1.2rem + 2.6vw, 3.5rem);
+    --name-step: calc(var(--name-size) * 1.25);
+    position: relative;
+    isolation: isolate;
+    /* The footer tucks up over the photo, so the photo can reach past the
+       bottom edge; the mountain covers it, and this keeps it from showing
+       below */
+    overflow: clip;
+    padding-top: var(--space-2xl);
+    background-color: var(--color-night);
+  }
+
+  .selected-works__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-lg);
+    align-items: start;
+  }
+
+  .selected-works__label {
+    margin: 0 0 var(--space-lg);
+    color: var(--color-text-muted);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.12em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  /* Rolling names: the current one in the middle, its neighbors dimmed
+     above and below */
+  .selected-works__names {
+    position: relative;
+    height: calc(var(--name-step) * 3);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    list-style: none;
+    mask-image: linear-gradient(transparent, var(--color-black) 30%, var(--color-black) 70%, transparent);
+  }
+
+  .selected-works__names li {
+    position: absolute;
+    top: var(--name-step);
+    left: 0;
+    right: 0;
+    transform: translateY(calc(var(--place) * var(--name-step)));
+    transition:
+      transform 700ms var(--ease-out),
+      opacity 700ms var(--ease-out);
+  }
+
+  .selected-works__names li.is-wrapping {
+    opacity: 0;
+    transition: none;
+    animation: name-return 700ms var(--ease-out) forwards;
+  }
+
+  @keyframes name-return {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .selected-works__names button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: var(--name-size);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.25;
+    text-align: left;
+    white-space: nowrap;
+    opacity: 0.25;
+    cursor: pointer;
+    transition: opacity 700ms var(--ease-out);
+  }
+
+  .selected-works__names button:hover {
+    opacity: 0.5;
+  }
+
+  .selected-works__names button[aria-current='true'] {
+    opacity: 1;
+  }
+
+  /* Project photos stacked in one cell, crossfading with a slow settle */
+  .selected-works__stage {
+    display: grid;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-ink);
+    box-shadow: inset 0 0 0 1px var(--color-border);
+  }
+
+  .selected-works__slide {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity 900ms var(--ease-out);
+  }
+
+  .selected-works__slide.is-active {
+    opacity: 1;
+  }
+
+  .selected-works__slide img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transform: scale(1.06);
+    transition: transform 1800ms var(--ease-out);
+  }
+
+  .selected-works__slide.is-active img {
+    transform: scale(1);
+  }
+
+  .selected-works__slide:focus-visible {
+    outline-offset: calc(-1 * var(--focus-ring-width) - 2px);
+  }
+
+  .selected-works__stage:has(.selected-works__slide:focus-visible) {
+    overflow: visible;
+  }
+
+  /* The mountain range rises over the bottom of the section, with the flag
+     planted on the right-hand peak (1192, 409 in the 1440 by 720 art) */
+  .selected-works__range {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    aspect-ratio: 2 / 1;
+    pointer-events: none;
+  }
+
+  .selected-works__mountain {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* The rock fades into the page black so the next section meets it cleanly */
+  .selected-works__range::after {
+    content: '';
+    position: absolute;
+    inset: 70% 0 0;
+    background: linear-gradient(transparent, var(--color-night));
+  }
+
+  .selected-works__range :global(.selected-works__flag) {
+    position: absolute;
+    top: 56.8%;
+    left: 82.8%;
+    width: clamp(2rem, 4.2vw, 4rem);
+    color: var(--color-mint);
+    filter: drop-shadow(var(--glow-mint));
+    /* The pole's foot sits about 40% in from the flag's left edge */
+    transform: translate(-40%, -97%);
+  }
+
+  .selected-works__footer {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+    gap: var(--space-md);
+    align-items: center;
+    margin-top: calc(-1 * clamp(3rem, 8vw, 7rem));
+    padding-bottom: var(--space-xl);
+  }
+
+  .selected-works__detail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs) var(--space-sm);
+  }
+
+  .selected-works__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .selected-works__tags li {
+    padding: 4px var(--space-sm);
+    border: 1px solid var(--color-stroke);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-chip);
+    backdrop-filter: blur(6px);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .selected-works__more {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    color: var(--color-mint);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+  }
+
+  .selected-works__more .icon {
+    transition: transform var(--transition-fast);
+  }
+
+  .selected-works__more:hover .icon {
+    transform: translate(2px, -2px);
+  }
+
+  .selected-works__controls {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
+  .selected-works__control {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    padding: var(--space-3xs) var(--space-2xs);
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .selected-works__control:hover {
+    color: var(--color-mint);
+  }
+
+  .selected-works__pause[aria-pressed='false'] :global(.selected-works__play-icon),
+  .selected-works__pause[aria-pressed='true'] :global(.selected-works__pause-icon) {
+    display: none;
+  }
+
+  .selected-works__count {
+    margin: 0;
+    color: var(--color-mint);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-medium);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--tracking-display);
+    line-height: 1;
+    text-align: right;
+  }
+
+  .selected-works__total {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 767px) {
+    .selected-works__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .selected-works__label {
+      margin-bottom: var(--space-sm);
+    }
+
+    .selected-works__footer {
+      grid-template-columns: minmax(0, 1fr) auto;
+      margin-top: var(--space-md);
+    }
+
+    .selected-works__details {
+      grid-column: 1 / -1;
+    }
+
+    .selected-works__controls {
+      justify-content: flex-start;
+    }
+
+    /* A wider range on phones so the peaks read, with the flagged peak
+       still on screen at the right */
+    .selected-works__range {
+      right: auto;
+      left: -42%;
+      width: 150%;
+    }
+
+    .selected-works__count {
+      display: none;
+    }
+  }
+</style>
