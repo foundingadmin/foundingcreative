@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { getCollection, getEntries, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import FieldNotes from '../../components/FieldNotes.astro';
 import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
 import OurWork from '../../components/OurWork.astro';
@@ -186,23 +186,7 @@ const jsonLd = [
 
   {data.showSiteLaunch && <SiteLaunchSection />}
 
-  {
-    posts.length > 0 && (
-      <section class="container section" aria-labelledby="posts-heading">
-        <div class="section__intro section__intro--split">
-          <h2 id="posts-heading">From Field Notes</h2>
-          <a class="button" href="/blog/">
-            All posts <Icon name="arrow-up-right" size={16} />
-          </a>
-        </div>
-        <div class="card-grid" data-reveal-stagger>
-          {posts.map((post) => (
-            <PostCard post={post} headingLevel={3} />
-          ))}
-        </div>
-      </section>
-    )
-  }
+  {posts.length > 0 && <FieldNotes posts={posts} heading="From Field Notes" />}
 
   <section class:list={['closing-band', { 'curve-top': darkMiddle }]} aria-labelledby="cta-heading">
     <div class="closing-band__logos" aria-label="Brands we've worked with" role="group">
@@ -528,13 +512,6 @@ const jsonLd = [
     to {
       transform: translateY(-3.5rem);
     }
-  }
-
-  /* ===== Posts (Website Services) ===== */
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: var(--space-md);
   }
 
   /* ===== White closing band: logos, waving flag, call to action ===== */

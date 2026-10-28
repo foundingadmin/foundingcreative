@@ -54,6 +54,11 @@
   --color-forge-teal: #003b3e;
   --color-forge-night: #020207;
   --color-forge-muted: #b8b8b8; /* body copy on teal */
+  /* Field Notes: the live "aurora" of near-blacks behind each post */
+  --color-aurora-navy: #030a0f;
+  --color-aurora-indigo: #0b0a23;
+  --color-aurora-plum: #1c061b;
+  --color-aurora-ember: #110504;
 
   /* Holographic gradients (live site): the pearl sweep used on headlines,
    * primary buttons, and accent words */
@@ -102,6 +107,7 @@
   --color-stroke: #7e7e7e; /* 1px outline on secondary buttons */
   --color-glass: rgb(255 255 255 / 0.1); /* frosted fills on dark */
   --color-coal: #101010; /* testimonials band */
+  --color-panel: #181818; /* Field Notes module */
   --color-chip: rgb(28 28 30 / 0.69); /* tag pill fill */
   --color-focus: var(--color-mint);
 
@@ -134,6 +140,8 @@
   --font-size-h3: clamp(2rem, 1.5rem + 2vw, 3rem);
   --font-size-h2: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
   --font-size-h1: clamp(2.75rem, 1.5rem + 5vw, 5.25rem);
+  --font-size-title: clamp(2.25rem, 1.25rem + 3.6vw, 4.5rem); /* 72: post titles, live */
+  --font-size-article: clamp(1.125rem, 1rem + 0.5vw, 1.4rem); /* 22.4: post body copy, live */
   /* Older names, kept for components that already use them */
   --font-size-xl: var(--font-size-h5);
   --font-size-2xl: var(--font-size-h2);
@@ -180,6 +188,12 @@
   --glow-white: 0 0 12px rgb(255 255 255 / 0.6); /* live primary button */
   --text-glow: 0 0 12px rgb(255 255 255 / 0.3); /* live hero headline */
   --radius-card: 32px; /* big image and feature cards */
+
+  /* Curved section edges (see .curve-top). Cards that rise over a curve lift
+   * by more than this, so the curve's lowest point tucks under them. */
+  --curve-height: clamp(2rem, 4vw, 3.75rem);
+  --cover-lift: calc(var(--curve-height) + 2.25rem); /* live: 85px over a 50px curve */
+  --curve-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50' preserveAspectRatio='none'%3E%3Cpath d='M0 0v50h50C22.4 50 0 0 0 0zM50 50h50V0C100 0 77.6 50 50 50z'/%3E%3C/svg%3E");
 }
 
 /* Reset */
@@ -502,14 +516,15 @@ button {
   line-height: 1.7;
 }
 
-/* Curved section edges, like the live site's "curve in" separators. Put
- * .curve-top on a section to make the section above it look rounded at the
- * bottom (this section's color rises at the sides), or .curve-bottom to make
- * the section below bulge up into this one. --curve-color is this section's
- * background. */
+/* Curved section edges: the live site's "curve in" separator, masked with
+ * its exact SVG paths (--curve-mask) so the edge stays crisp at any width.
+ * Put .curve-top on a section to make the section above it look rounded at
+ * the bottom (this section's color rises at the sides), or .curve-bottom to
+ * make the section below bulge up into this one. --curve-color is this
+ * section's background. The curve sits at z-index 1; anything meant to rise
+ * over it (a cover card) takes z-index 2. */
 .curve-top,
 .curve-bottom {
-  --curve-height: clamp(2rem, 4vw, 3.75rem);
   position: relative;
 }
 
@@ -523,18 +538,18 @@ button {
   height: var(--curve-height);
   background-color: var(--curve-color, var(--color-night));
   pointer-events: none;
+  -webkit-mask: var(--curve-mask) 0 0 / 100% 100% no-repeat;
+  mask: var(--curve-mask) 0 0 / 100% 100% no-repeat;
 }
 
 .curve-top::before {
   bottom: calc(100% - 1px); /* overlap a pixel so no seam shows */
-  -webkit-mask: radial-gradient(ellipse 50% 100% at 50% 0, transparent 99%, #000 100%);
-  mask: radial-gradient(ellipse 50% 100% at 50% 0, transparent 99%, #000 100%);
 }
 
+/* The same curve, flipped */
 .curve-bottom::after {
   top: calc(100% - 1px);
-  -webkit-mask: radial-gradient(ellipse 50% 100% at 50% 100%, transparent 99%, #000 100%);
-  mask: radial-gradient(ellipse 50% 100% at 50% 100%, transparent 99%, #000 100%);
+  transform: scaleY(-1);
 }
 
 /* Gradient text for marquee headings: the pearl holographic sweep with a

@@ -1,8 +1,16 @@
 ---
 // Wraps rendered Markdown. Light, like the article area on the live site.
+// The "article" variant is the Field Notes reading size from the live posts:
+// a 900px column of 22.4px copy with Gelica section heads.
+
+interface Props {
+  variant?: 'default' | 'article';
+}
+
+const { variant = 'default' } = Astro.props;
 ---
 
-<div class="prose"><slot /></div>
+<div class:list={['prose', { 'prose--article': variant === 'article' }]}><slot /></div>
 
 <style>
   .prose {
@@ -140,5 +148,71 @@
 
   .prose :global(:focus-visible) {
     outline-color: var(--color-black);
+  }
+
+  /* ===== Field Notes article ===== */
+  .prose--article {
+    max-width: 56.25rem;
+    color: var(--color-night);
+    font-size: var(--font-size-article);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .prose--article :global(> * + *) {
+    margin-top: 1.3em;
+  }
+
+  .prose--article :global(h2),
+  .prose--article :global(h3),
+  .prose--article :global(h4) {
+    margin-top: 2.6em;
+    color: var(--color-night);
+    font-weight: var(--font-weight-regular);
+    text-wrap: balance;
+    /* Clear the sticky header when jumped to from the contents */
+    scroll-margin-top: calc(var(--header-height) + var(--space-lg));
+  }
+
+  .prose--article :global(h2) {
+    font-size: var(--font-size-h3);
+    line-height: 1;
+  }
+
+  .prose--article :global(h3) {
+    font-size: var(--font-size-h5);
+    line-height: var(--line-height-heading);
+  }
+
+  .prose--article :global(h4) {
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: normal;
+  }
+
+  .prose--article :global(:is(h2, h3, h4) + *) {
+    margin-top: 0.8em;
+  }
+
+  /* The live pull quote: big Manrope set in from a holographic rule */
+  .prose--article :global(blockquote) {
+    margin-block: 2em;
+    padding: 0.2em 0 0.2em 1.5em;
+    border: 0;
+    border-radius: 0;
+    background: linear-gradient(var(--color-cyan), var(--color-mint-pale), var(--color-lavender-light)) left / 3px 100%
+      no-repeat;
+    font-family: var(--font-body);
+    font-size: var(--font-size-h5);
+    line-height: 1.3;
+  }
+
+  .prose--article :global(blockquote strong) {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .prose--article :global(img),
+  .prose--article :global(video) {
+    border-radius: var(--radius-lg);
   }
 </style>
