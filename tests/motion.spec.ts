@@ -82,6 +82,15 @@ test('About team members link to their own LinkedIn profiles', async ({ page }) 
   );
 });
 
+test('line illustrations finish drawing in and stay hidden from screen readers', async ({ page }) => {
+  await page.goto('/fractional-creative/');
+  const art = page.locator('.line-art').first();
+  await expect(art.locator('svg')).toHaveAttribute('aria-hidden', 'true');
+  await expect(art).toHaveClass(/is-revealed/);
+  // Every piece ends fully visible.
+  await expect.poll(() => art.locator('[data-fill]').last().evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
+});
+
 test('our work slider lists every case study', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#work-slider > li')).toHaveCount(10);

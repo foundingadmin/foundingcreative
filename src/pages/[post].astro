@@ -5,7 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Prose from '../components/Prose.astro';
 import PostToc from '../components/PostToc.astro';
 import FieldNotes from '../components/FieldNotes.astro';
-import wave from '../assets/brand/wave-black.svg';
+import HeroBackdrop from '../components/HeroBackdrop.astro';
 import { getPosts, postUrl, formatDate, isoDate, type Post } from '../lib/content';
 
 // Every Field Notes post renders through this one template, at the site root
@@ -75,8 +75,8 @@ const jsonLd = [
 >
   <article class="post">
     <!-- The aurora band: decoration only, the card below rises into it -->
-    <div class="post-aurora under-header" style={`--aurora-wave: url(${wave.src})`} aria-hidden="true">
-      <div class="post-aurora__wave"></div>
+    <div class="post-aurora under-header">
+      <HeroBackdrop variant="aurora" />
     </div>
 
     <div class="post-page curve-top curve-bottom">
@@ -131,38 +131,6 @@ const jsonLd = [
   .post-aurora {
     position: relative;
     height: calc(var(--header-height) + 8.75rem + var(--post-lift));
-    overflow: hidden;
-    background: linear-gradient(
-        -45deg,
-        var(--color-black),
-        var(--color-aurora-navy),
-        var(--color-black),
-        var(--color-aurora-indigo),
-        var(--color-aurora-plum),
-        var(--color-black),
-        var(--color-aurora-ember),
-        var(--color-black)
-      )
-      0% 50% / 400% 400%;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .post-aurora {
-      animation: post-aurora 15s ease infinite;
-    }
-  }
-
-  @keyframes post-aurora {
-    50% {
-      background-position: 100% 50%;
-    }
-  }
-
-  .post-aurora__wave {
-    position: absolute;
-    inset: 0 -25%;
-    background: var(--aurora-wave) center / cover no-repeat;
-    opacity: 0.55;
   }
 
   /* ===== White page and the cover card ===== */

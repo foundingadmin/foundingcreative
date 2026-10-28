@@ -4,7 +4,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/CtaSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
 import Icon from '../../components/Icon.astro';
-import wave from '../../assets/brand/wave-black.svg';
+import LineArt from '../../components/LineArt.astro';
+import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import builderSvg from '../../assets/pages/about-builder-illustration.svg?raw';
 import titus from '../../assets/team/titus.webp';
 import tyler from '../../assets/team/tyler.webp';
@@ -36,15 +37,6 @@ const values = [
   { title: 'Founding energy', text: 'Every project is a chance for something big' },
 ];
 
-// The builder illustration is inlined so its line work can draw itself in.
-// Its class names are prefixed so its embedded styles can't touch the page,
-// and pathLength="1" lets one dash animation fit every stroke.
-const builder = builderSvg
-  .replace(/<\?xml[^>]*>\s*/, '')
-  .replace(/\bcls-/g, 'builder-')
-  .replace(/<path class="builder-3"/g, '<path pathLength="1" class="builder-3"')
-  .replace('<svg ', '<svg class="about-hero__art" aria-hidden="true" focusable="false" ');
-
 const description =
   'Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business.';
 const jsonLd = {
@@ -75,10 +67,7 @@ const jsonLd = {
 >
   <!-- Hero: the homepage's four-color gradient under the wave and a dark veil -->
   <section class="about-hero under-header" aria-labelledby="about-title">
-    <div class="about-hero__bg" aria-hidden="true">
-      <div class="about-hero__wave"><img src={wave.src} alt="" width={wave.width} height={wave.height} /></div>
-      <div class="about-hero__veil"></div>
-    </div>
+    <HeroBackdrop />
     <div class="container">
       <div class="about-hero__head" data-intro>
         <h1 id="about-title">About us</h1>
@@ -94,7 +83,7 @@ const jsonLd = {
             Every initiative is one more step towards foundational creative systems that scale with your business.
           </p>
         </div>
-        <div class="about-hero__builder" data-reveal="right" set:html={builder} />
+        <LineArt svg={builderSvg} mode="draw" class="about-hero__builder" />
       </div>
     </div>
   </section>
@@ -163,70 +152,8 @@ const jsonLd = {
   /* ===== Hero ===== */
   .about-hero {
     position: relative;
-    isolation: isolate;
     overflow: hidden;
     padding-block: calc(var(--header-height) + 4rem) var(--space-2xl);
-    background: linear-gradient(
-        -45deg,
-        var(--color-hero-indigo),
-        var(--color-hero-magenta),
-        var(--color-hero-teal),
-        var(--color-hero-azure)
-      )
-      0% 50% / 400% 400%;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .about-hero {
-      animation: about-gradient 15s ease infinite;
-    }
-  }
-
-  @keyframes about-gradient {
-    50% {
-      background-position: 100% 50%;
-    }
-  }
-
-  .about-hero__bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-  }
-
-  .about-hero__wave {
-    position: absolute;
-    inset: 0 -25%;
-    background: linear-gradient(var(--color-black), transparent 80%);
-  }
-
-  .about-hero__wave img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.4;
-  }
-
-  @supports (animation-timeline: scroll()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .about-hero__wave {
-        animation: about-parallax linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 100vh;
-      }
-    }
-  }
-
-  @keyframes about-parallax {
-    to {
-      transform: translate3d(-4%, 18%, 0);
-    }
-  }
-
-  .about-hero__veil {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgb(0 4 7 / 0.5), var(--color-night));
   }
 
   .about-hero__head {
@@ -267,43 +194,9 @@ const jsonLd = {
     text-wrap: balance;
   }
 
-  .about-hero__builder {
+  .about-hero :global(.about-hero__builder) {
     justify-self: center;
     width: min(100%, 25rem);
-  }
-
-  .about-hero__builder :global(.about-hero__art) {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  /* The line work draws itself in once the illustration is revealed, and the
-   * solid shapes fade in behind it */
-  @media (prefers-reduced-motion: no-preference) {
-    :global(.js) .about-hero__builder :global(.builder-3) {
-      stroke-dasharray: 1;
-      stroke-dashoffset: 1;
-    }
-
-    :global(.js) .about-hero__builder :global(:is(.builder-1, .builder-2)) {
-      opacity: 0;
-      transition: opacity 1.2s var(--ease-out) 1.2s;
-    }
-
-    :global(.js) .about-hero__builder.is-revealed :global(.builder-3) {
-      animation: builder-draw 2.6s var(--ease-out) 0.3s forwards;
-    }
-
-    :global(.js) .about-hero__builder.is-revealed :global(:is(.builder-1, .builder-2)) {
-      opacity: 1;
-    }
-  }
-
-  @keyframes builder-draw {
-    to {
-      stroke-dashoffset: 0;
-    }
   }
 
   /* ===== White band ===== */

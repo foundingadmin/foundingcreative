@@ -108,6 +108,10 @@
   --color-glass: rgb(255 255 255 / 0.1); /* frosted fills on dark */
   --color-coal: #101010; /* testimonials band */
   --color-panel: #181818; /* Field Notes module */
+  /* BucKit, the client portal brand: its rainbow button */
+  --color-buckit-blue: #03a9f4;
+  --color-buckit-pink: #f441a5;
+  --color-buckit-yellow: #ffeb3b;
   --color-chip: rgb(28 28 30 / 0.69); /* tag pill fill */
   --color-focus: var(--color-mint);
 
