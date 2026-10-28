@@ -261,6 +261,37 @@ main:focus {
   outline: none;
 }
 
+/* Footer reveal: a page that fills BaseLayout's page-end slot (the homepage's
+ * closing CTA) gets that and the footer tucked underneath it. The page lifts
+ * away like a sheet while the page-end rises from behind it at half speed,
+ * so the CTA is what shows first, then it scrolls on as usual once fully
+ * uncovered. (The page-end is taller than the screen, so holding it fully
+ * still would uncover the footer's form before the CTA.) Without
+ * scroll-driven animations, or for reduced motion, it simply scrolls. */
+body:has(> .page-end) main {
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-bg);
+  box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.6);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view(0px)) {
+    .page-end {
+      animation: page-end-reveal linear both;
+      /* Zero inset: the header's scroll padding must not shorten the run */
+      animation-timeline: view(0px);
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes page-end-reveal {
+  from {
+    transform: translateY(-50vh);
+  }
+}
+
 img,
 picture,
 svg,
