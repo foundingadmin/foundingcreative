@@ -1,0 +1,200 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+// "In this article": the post's section headings (its h2s), like the live
+// site's table of contents. A sticky sidebar on wide screens that highlights
+// the section being read; a collapsible list above the article on smaller
+// ones.
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const sections = Astro.props.headings.filter((heading) => heading.depth === 2);
+---
+
+{
+  sections.length > 1 && (
+    <nav class="toc" aria-labelledby="toc-heading" data-toc>
+      <details class="toc__details" open>
+        <summary class="toc__summary">
+          <h2 id="toc-heading" class="toc__heading">
+            In this article
+          </h2>
+        </summary>
+        <ol class="toc__list">
+          {sections.map((section) => (
+            <li>
+              <a href={`#${section.slug}`}>{section.text}</a>
+            </li>
+          ))}
+        </ol>
+      </details>
+    </nav>
+  )
+}
+
+<script>
+  for (const toc of document.querySelectorAll<HTMLElement>('[data-toc]')) {
+    const links = [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+    const targets = links
+      .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!targets.length || !('IntersectionObserver' in window)) continue;
+
+    // The current section is the last heading that has scrolled past the top
+    // third of the screen.
+    const setCurrent = () => {
+      const line = window.innerHeight / 3;
+      let current = targets[0];
+      for (const target of targets) {
+        if (target.getBoundingClientRect().top <= line) current = target;
+      }
+      for (const link of links) {
+        const on = link.hash.slice(1) === current.id;
+        if (on) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      }
+    };
+    const observer = new IntersectionObserver(setCurrent, { rootMargin: '0px 0px -66% 0px' });
+    for (const target of targets) observer.observe(target);
+    setCurrent();
+
+    // On wide screens the list is a sidebar and stays open. Above the article
+    // on smaller screens it starts folded away (it's open in the HTML, so it
+    // still shows if scripts don't run).
+    const wide = window.matchMedia('(min-width: 1200px)');
+    const details = toc.querySelector('details')!;
+    const sync = () => {
+      details.open = wide.matches;
+    };
+    wide.addEventListener('change', sync);
+    sync();
+  }
+</script>
+
+<style>
+  .toc {
+    color: var(--color-night);
+  }
+
+  .toc__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .toc__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* A chevron that turns when the list opens */
+  .toc__summary::after {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform var(--transition-fast);
+  }
+
+  .toc__details[open] .toc__summary::after {
+    transform: rotate(-135deg);
+  }
+
+  .toc__heading {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .toc__list {
+    display: grid;
+    gap: var(--space-3xs);
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: toc;
+  }
+
+  .toc__list li {
+    counter-increment: toc;
+  }
+
+  .toc__list a {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.75rem 1fr;
+    padding: var(--space-2xs) 0 var(--space-2xs) var(--space-sm);
+    color: var(--color-neutral-dark);
+    font-size: var(--font-size-sm);
+    line-height: 1.4;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .toc__list a::before {
+    content: counter(toc, decimal-leading-zero);
+    color: var(--color-neutral);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    line-height: 1.9;
+  }
+
+  /* A thin rail; the current section's segment lights up */
+  .toc__list a::after {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background-color: var(--color-neutral-lighter);
+    transition: background-color var(--transition-fast);
+  }
+
+  .toc__list a:hover {
+    color: var(--color-night);
+  }
+
+  .toc__list a[aria-current='true'] {
+    color: var(--color-night);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .toc__list a[aria-current='true']::after {
+    background: linear-gradient(var(--color-cyan), var(--color-lavender));
+  }
+
+  /* Above the article on smaller screens: a bordered, collapsible box */
+  @media (max-width: 1199px) {
+    .toc {
+      max-width: 56.25rem;
+      margin: 0 auto var(--space-xl);
+      padding: var(--space-md) var(--space-lg);
+      border: 1px solid var(--color-neutral-lighter);
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  /* A sticky sidebar on wide screens */
+  @media (min-width: 1200px) {
+    .toc {
+      position: sticky;
+      top: calc(var(--header-height) + var(--space-lg));
+    }
+
+    .toc__summary {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .toc__summary::after {
+      display: none;
+    }
+  }
+</style>

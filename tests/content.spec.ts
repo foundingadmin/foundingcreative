@@ -26,6 +26,51 @@ test('a post has its hero, body, structured data, and related posts', async ({ p
   await expect(page.locator('meta[property="article:published_time"]')).toHaveAttribute('content', /^2025-10-30/);
 });
 
+test('every post uses the same header, contents, and Field Notes module', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const boxes: number[][] = [];
+  for (const slug of [
+    '5-website-truths-for-marketers',
+    '10-key-factors-to-consider-when-choosing-the-best-web-design-company-for-your-business',
+    'the-missing-middle-ground-why-your-ai-needs-a-human-driven-creative-foundation',
+  ]) {
+    await page.goto(`/${slug}/`);
+    const card = await page.locator('.post-card').boundingBox();
+    boxes.push([Math.round(card!.y), Math.round(card!.height)]);
+    // The contents list links to each section heading.
+    const toc = page.getByRole('navigation', { name: 'In this article' });
+    for (const href of await toc.locator('a').evaluateAll((links) => links.map((a) => a.getAttribute('href')))) {
+      await expect(page.locator(`[id="${href!.slice(1)}"]`)).toHaveCount(1);
+    }
+    // The shared module: a featured post and four more, never this post.
+    const more = page.getByRole('region', { name: 'More Field Notes' });
+    await expect(more.locator('.field-notes__item')).toHaveCount(4);
+    await expect(more.locator(`a[href="/${slug}/"]`)).toHaveCount(0);
+  }
+  // Headers are the same size whatever the title's length.
+  expect(new Set(boxes.map((b) => b.join('x'))).size).toBe(1);
+});
+
+test('cover cards rise over the curve so its dip tucks under them', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const [path, band] of [
+    ['/case-study/bell-bird-atm/', '.case-cover'],
+    ['/5-website-truths-for-marketers/', '.post-page'],
+  ]) {
+    await page.goto(path);
+    const { cardTop, curveTop } = await page.evaluate((sel) => {
+      const section = document.querySelector(sel)!;
+      const card = section.querySelector('.case-cover__card, .post-card')!;
+      const curve = getComputedStyle(section, '::before');
+      return {
+        cardTop: card.getBoundingClientRect().top,
+        curveTop: section.getBoundingClientRect().top - parseFloat(curve.height) + 1,
+      };
+    }, band);
+    expect(cardTop).toBeLessThan(curveTop);
+  }
+});
+
 test('case studies index and a case study page', async ({ page }) => {
   await page.goto('/case-studies/');
   await expect(page.getByRole('main').getByRole('article')).toHaveCount(10);

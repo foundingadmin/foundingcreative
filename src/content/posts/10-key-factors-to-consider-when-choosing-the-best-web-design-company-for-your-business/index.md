@@ -25,8 +25,8 @@ And that’s what actually grows a business.
 
 ---
 
-> **The quick answer  
-> **A top web design company does more than make things look good. It aligns your website with your brand’s strategy, creates consistency across channels, and delivers a user-first experience that builds trust and drives business results.
+> **The quick answer**  
+> A top web design company does more than make things look good. It aligns your website with your brand’s strategy, creates consistency across channels, and delivers a user-first experience that builds trust and drives business results.
 
 ---
 

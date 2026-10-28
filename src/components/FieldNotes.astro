@@ -1,0 +1,280 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { formatDate, isoDate, postUrl, type Post } from '../lib/content';
+
+// The "Field Notes: Latest" module from the live posts: one featured post as a
+// tall image card beside a list of the next few, each with a small offset
+// thumbnail. Used at the end of every post and on service pages, so it only
+// ever changes here.
+
+interface Props {
+  /** Posts in display order: the first is featured, up to four more are listed. */
+  posts: Post[];
+  heading?: string;
+}
+
+const { posts, heading = 'Field Notes: Latest' } = Astro.props;
+const [featured, ...rest] = posts;
+const listed = rest.slice(0, 4);
+const id = `field-notes-${heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+---
+
+{
+  featured && (
+    <section class="container section field-notes" aria-labelledby={id}>
+      <div class="field-notes__panel" data-reveal>
+        <div class="field-notes__list">
+          <div class="field-notes__head">
+            <h2 id={id}>{heading}</h2>
+            <a class="field-notes__all" href="/blog/">
+              See all
+              <Icon name="arrow-right" size={14} />
+            </a>
+          </div>
+          <ul>
+            {listed.map((post) => (
+              <li>
+                <a class="field-notes__item" href={postUrl(post)}>
+                  <span class="field-notes__item-title">{post.data.title}</span>
+                  <span class="field-notes__thumb">
+                    <Image src={post.data.cover} alt={post.data.coverAlt} widths={[160, 320]} sizes="160px" />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <article class="field-notes__featured">
+          <Image
+            class="field-notes__featured-image"
+            src={featured.data.cover}
+            alt={featured.data.coverAlt}
+            widths={[560, 1120]}
+            sizes="(max-width: 977px) 92vw, 540px"
+          />
+          <div class="field-notes__featured-text">
+            <time datetime={isoDate(featured.data.date)}>{formatDate(featured.data.date)}</time>
+            <h3>
+              <a href={postUrl(featured)}>{featured.data.title}</a>
+            </h3>
+          </div>
+        </article>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .field-notes__panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-panel);
+  }
+
+  /* Featured: the cover fills a tall card, darkened toward the title */
+  .field-notes__featured {
+    position: relative;
+    display: grid;
+    min-height: 32rem;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: var(--radius-lg);
+  }
+
+  .field-notes__featured-image {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 900ms var(--ease-out);
+  }
+
+  .field-notes__featured::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(rgb(18 18 18 / 0.35), rgb(18 18 18 / 0.85));
+  }
+
+  .field-notes__featured:hover .field-notes__featured-image {
+    transform: scale(1.04);
+  }
+
+  .field-notes__featured-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .field-notes__featured time {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .field-notes__featured h3 {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--font-size-h5);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: normal;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  .field-notes__featured a {
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  /* The whole card is the link */
+  .field-notes__featured a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .field-notes__featured a:focus-visible {
+    outline: none;
+  }
+
+  .field-notes__featured:has(a:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* The list comes first in the markup, so its heading leads the section,
+   * but sits on the right as on the live module */
+  .field-notes__list {
+    order: 2;
+  }
+
+  .field-notes__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px dashed var(--color-hairline);
+  }
+
+  .field-notes__head h2 {
+    margin: 0;
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .field-notes__all {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color var(--transition-fast);
+  }
+
+  .field-notes__all:hover {
+    color: var(--color-white);
+  }
+
+  .field-notes__all .icon {
+    transition: transform var(--transition-fast);
+  }
+
+  .field-notes__all:hover .icon {
+    transform: translateX(3px);
+  }
+
+  .field-notes__list ul {
+    display: grid;
+    gap: var(--space-2xs);
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .field-notes__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    padding: var(--space-sm);
+    border-radius: var(--radius-lg);
+    color: var(--color-neutral-light);
+    text-decoration: none;
+    transition:
+      background-color var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+  .field-notes__item:hover {
+    background-color: var(--color-glass);
+    color: var(--color-white);
+  }
+
+  .field-notes__item-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.35;
+  }
+
+  /* Thumbnails sit on a small offset shadow, as on the live module */
+  .field-notes__thumb {
+    flex: none;
+    width: 10rem;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-black);
+    box-shadow: 5px 5px 0 rgb(255 255 255 / 0.06);
+    transition: transform var(--transition-fast);
+  }
+
+  .field-notes__item:hover .field-notes__thumb {
+    transform: translate(-2px, -2px);
+  }
+
+  .field-notes__thumb img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 5 / 3;
+    object-fit: cover;
+  }
+
+  @media (max-width: 977px) {
+    .field-notes__panel {
+      grid-template-columns: 1fr;
+    }
+
+    .field-notes__list {
+      order: 0;
+    }
+
+    .field-notes__featured {
+      min-height: 22rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .field-notes__panel {
+      padding: var(--space-sm);
+    }
+
+    .field-notes__thumb {
+      width: 6.5rem;
+    }
+  }
+</style>

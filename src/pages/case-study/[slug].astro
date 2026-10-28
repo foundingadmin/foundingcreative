@@ -190,7 +190,7 @@ const jsonLd = [
   /* Hero */
   .case-hero {
     position: relative;
-    padding-block: calc(var(--header-height) + 5rem) 12rem;
+    padding-block: calc(var(--header-height) + 5rem) calc(var(--cover-lift) + 4rem);
     background: linear-gradient(-45deg, var(--color-black), var(--case-accent), var(--case-dark)) 0% 50% / 400% 400%;
     animation: case-gradient 7s ease infinite;
   }
@@ -240,9 +240,13 @@ const jsonLd = [
   }
 
   /* Cover card */
+  /* The cover card rises out of the white band over the hero, starting
+   * above the curve so the curve's lowest point tucks under it, as on the
+   * live site. flow-root keeps the card's negative margin from collapsing
+   * through to the band (which would drag the curve up with it). */
   .case-cover {
     --curve-color: var(--color-white);
-    z-index: 2;
+    display: flow-root;
     padding-bottom: var(--space-xl);
     background-color: var(--color-white);
   }
@@ -251,7 +255,8 @@ const jsonLd = [
     position: relative;
     display: grid;
     place-items: center;
-    margin: -8rem 0 0;
+    z-index: 2;
+    margin: calc(-1 * var(--cover-lift)) 0 0;
     aspect-ratio: 1200 / 632;
     overflow: hidden;
     isolation: isolate;
