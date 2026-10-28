@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "Woman using her phone beside a glowing green Bell Bird ATM on a wooden pedestal"
 logo: "./logo.svg"
 logoAlt: "Bell Bird logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#0e471d"
+  dark: "#022b0c"
+  light: "#99f39b"
 ---
 
 How can we shift the ATM experience to slash expenses, boost security, and ditch the outdated card system? Can we skip the screen and opt instead for an entirely new approach to a dated machine?
@@ -78,7 +83,7 @@ user journey mapping
 
 </div>
 
-## Birds encode data inside every chirp, so why can’t we?
+<p class="statement">Birds encode data inside every chirp, so why can’t we?</p>
 
 ### Designed by nature
 
@@ -149,8 +154,6 @@ His cash is dispensed, slot glows to show money is there
 App disconnects from ATM, top acrylic light turns off so he knows he is no longer paired with the ATM
 
 The ATM machine clamps down on the withdrawn cash when dispensed. An alert is sent through the app if they leave a 5 foot radius of the ATM without the cash. If a 10 foot radius is left, the ATM retracts the money and gives credit back to the account.
-
-### Interact by clicking below
 
 ## An entirely new ATM experience that sings
 

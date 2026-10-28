@@ -1,11 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CaseStudyCard from '../components/CaseStudyCard.astro';
 import SiteLaunchSection from '../components/SiteLaunchSection.astro';
 import ClientLogos from '../components/ClientLogos.astro';
+import Testimonials from '../components/Testimonials.astro';
+import OurWork from '../components/OurWork.astro';
+import Carousel from '../components/Carousel.astro';
 import Icon from '../components/Icon.astro';
-import { getCaseStudies } from '../lib/content';
 import { letsTalkHref } from '../data/navigation';
 import wave from '../assets/brand/wave-black.svg';
 import shareImage from '../assets/home/services/web-5.webp';
@@ -105,46 +106,12 @@ const engagements = [
 ];
 
 const trustpilot = 'https://www.trustpilot.com/review/foundingcreative.com';
-const testimonials = [
-  {
-    quote:
-      'Founding Creative is truly a wonderful partner who combines great creative along with a strategic team. Josh, Tyler, and the team not only are a creative powerhouse, but also think about the project and needs at hand as well as how the creative project has legs outside of the immediate need. If you need a dynamic partner who will bring great creative and can truly get to know you and your brand look no further than Founding Creative!',
-    name: 'Diana Hustedt',
-    role: 'Senior Event Producer, MGME',
-  },
-  {
-    quote: 'Very responsive, amazing skills, and super easy to work with! Highly recommended.',
-    name: 'Dean Davasia',
-    role: 'CTO, TEN Leasing',
-  },
-  { quote: 'Truly incredible minds and humans here.', name: 'Justin Guld', role: 'Co-Founder, MODL' },
-  {
-    quote:
-      "I've worked on two brand identity projects now with Founding Creative with technology startups. Josh and Tyler are creative, collaborative, honest, professional, and fast, and their output is exceptional. I would absolutely hire them again in a heartbeat.",
-    name: 'Eric Meyerson',
-    role: 'Fractional CMO, Turntide / Mashgin / Coach Bank',
-  },
-  {
-    quote: 'Their expertise and creativity brought our vision to life, resulting in a stunning website.',
-    name: 'Brooke McPoyle',
-    role: 'Founder, Musical Breathwork',
-  },
-  {
-    quote:
-      'Working with Founding showed us what we had been missing in previous rebrands. [...] The end result was better than we imagined.',
-    name: 'DeAnna Miller',
-    role: 'Managing Director of Experiential Marketing, 82 South',
-  },
-];
-
 const values = [
   { title: 'Clarity over chaos', text: 'Solutions rooted in structure and strategy' },
   { title: 'Relationships first', text: 'We work with people, not logos' },
   { title: 'Creative systems', text: 'Always building together to drive outcomes' },
   { title: 'Founding energy', text: 'Every project is a chance for something big' },
 ];
-
-const studies = (await getCaseStudies()).slice(0, 4);
 
 const description =
   'Founding Creative is a brand and web creative agency for brands of all sizes. Brand strategy, website design, and design systems that drive real growth.';
@@ -185,7 +152,7 @@ const jsonLd = [
   <!-- Hero -->
   <section class="hero holo-bg">
     <Image class="hero__wave" src={wave} alt="" loading="eager" />
-    <div class="container hero__content">
+    <div class="container hero__content" data-intro>
       <p class="eyebrow">Brand &amp; Web Creative Marketing Agency</p>
       <h1 class="hero__title holo-text">Creative foundations for brands of all sizes</h1>
       <p class="hero__lead">
@@ -209,10 +176,10 @@ const jsonLd = [
 
     {
       services.map((service, i) => (
-        <article class:list={['service', { 'service--reverse': i % 2 === 1 }]} aria-labelledby={`service-${i}`}>
+        <article class:list={['service', { 'service--reverse': i % 2 === 1 }]} aria-labelledby={`service-${i}`} data-reveal>
           <div class="service__text">
             <span class="service__icon">
-              <Icon name={service.icon} size={24} />
+              <Icon name={service.icon} size={24} class="icon--draw" />
             </span>
             <h3 id={`service-${i}`}>{service.title}</h3>
             <p class="service__lead">{service.lead}</p>
@@ -227,13 +194,13 @@ const jsonLd = [
                 <li>{tag}</li>
               ))}
             </ul>
-            <ul class="service__gallery" aria-label={`${service.title}: example work`} tabindex="0">
+            <Carousel id={`service-${i}-work`} label={`${service.title}: example work`} class="service__gallery">
               {service.images.map((image) => (
                 <li>
-                  <Image src={image.src} alt={image.alt} widths={[300, 600]} sizes="280px" />
+                  <Image src={image.src} alt={image.alt} widths={[300, 600]} sizes="244px" />
                 </li>
               ))}
-            </ul>
+            </Carousel>
           </div>
         </article>
       ))
@@ -253,7 +220,7 @@ const jsonLd = [
       </p>
       <a class="button" href="/contact-us/">Find the right fit <Icon name="arrow-up-right" size={16} /></a>
     </div>
-    <ul class="engagements">
+    <ul class="engagements" data-reveal-stagger>
       {
         engagements.map((model) => (
           <li class:list={['engagement', { 'engagement--featured': model.featured }]}>
@@ -287,49 +254,18 @@ const jsonLd = [
       <p class="section__lead">See what it's like to work with a creative team that builds for the long run.</p>
     </div>
     <ClientLogos />
-    <ul class="testimonials">
-      {
-        testimonials.map((t) => (
-          <li>
-            <figure class="testimonial">
-              <blockquote>
-                <p>“{t.quote}”</p>
-              </blockquote>
-              <figcaption>
-                <strong>{t.name}</strong>
-                <span>{t.role}</span>
-              </figcaption>
-            </figure>
-          </li>
-        ))
-      }
-    </ul>
+    <Testimonials />
     <p class="section__more">
       <a class="button" href={trustpilot}>View all testimonials on Trustpilot <Icon name="arrow-up-right" size={16} /></a>
     </p>
   </section>
 
   <!-- Our work -->
-  <section class="container section" aria-labelledby="work-heading">
-    <div class="section__intro section__intro--split">
-      <div>
-        <p class="eyebrow">Our <em>work</em></p>
-        <h2 id="work-heading">Creative foundations worth showing off</h2>
-        <p class="section__lead">
-          A look inside the projects where strategy, structure, and design all came together to drive meaningful business
-          outcomes.
-        </p>
-      </div>
-      <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
-    </div>
-    <div class="work-grid">
-      {studies.map((study) => <CaseStudyCard study={study} headingLevel={3} />)}
-    </div>
-  </section>
+  <OurWork />
 
   <!-- Who we are -->
   <section class="container section about" aria-labelledby="about-heading">
-    <div>
+    <div data-reveal>
       <p class="eyebrow">Who <em>we are</em></p>
       <h2 id="about-heading">Built by creatives. Backed by strategy.</h2>
       <p class="section__lead">
@@ -338,7 +274,7 @@ const jsonLd = [
       </p>
       <a class="button" href="/about-us/">Meet the team <Icon name="arrow-up-right" size={16} /></a>
     </div>
-    <dl class="values">
+    <dl class="values" data-reveal-stagger>
       {
         values.map((value) => (
           <div>
@@ -352,7 +288,9 @@ const jsonLd = [
 
   <!-- Closing call to action -->
   <section class="cta holo-bg" aria-labelledby="cta-heading">
-    <div class="container cta__content">
+    <video class="bg-video" src="/media/home/holographic.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
+    ></video>
+    <div class="container cta__content" data-reveal-stagger>
       <p class="eyebrow">We launch <em>websites</em></p>
       <h2 id="cta-heading">Your custom website starts here.</h2>
       <p class="section__lead">Tailored web packages designed to match your goals.</p>
@@ -474,27 +412,22 @@ const jsonLd = [
     font-size: var(--font-size-xs);
   }
 
-  /* Horizontal scroll strip; swipe or scroll, no script needed */
-  .service__gallery {
-    display: flex;
-    gap: var(--space-sm);
-    margin: 0;
-    padding: 0 0 var(--space-xs);
-    list-style: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+  /* Carousel class lands outside this page's style scope */
+  .service__media :global(.service__gallery) {
+    --slide-width: 15.25rem;
   }
 
-  .service__gallery li {
-    flex: 0 0 min(17.5rem, 70%);
-    scroll-snap-align: start;
-  }
-
-  .service__gallery img {
+  .service__media :global(.service__gallery) img {
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 61 / 80;
     object-fit: cover;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
+    pointer-events: none;
+  }
+
+  /* The service icon beats like the live site's animated icons */
+  .service:hover .service__icon .icon {
+    animation: heart-beat 1.3s ease-in-out;
   }
 
   /* How we work */
@@ -561,49 +494,6 @@ const jsonLd = [
     color: var(--color-text-muted);
   }
 
-  /* Testimonials */
-  .testimonials {
-    columns: 3 18rem;
-    column-gap: var(--space-md);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .testimonials li {
-    break-inside: avoid;
-    margin-bottom: var(--space-md);
-  }
-
-  .testimonial {
-    margin: 0;
-    padding: var(--space-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-surface);
-  }
-
-  .testimonial blockquote {
-    margin: 0 0 var(--space-md);
-    font-size: var(--font-size-base);
-  }
-
-  .testimonial figcaption {
-    display: grid;
-    font-size: var(--font-size-sm);
-  }
-
-  .testimonial figcaption span {
-    color: var(--color-text-muted);
-  }
-
-  /* Our work */
-  .work-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: var(--space-md);
-  }
-
   /* Who we are */
   .about {
     display: grid;
@@ -642,6 +532,12 @@ const jsonLd = [
     text-align: center;
   }
 
+  /* The holographic video sits under the veil from .holo-bg */
+  .cta .bg-video {
+    z-index: -1;
+    opacity: 0.55;
+  }
+
   .cta__content {
     position: relative;
   }
@@ -660,9 +556,4 @@ const jsonLd = [
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .service__gallery {
-      scroll-behavior: auto;
-    }
-  }
 </style>

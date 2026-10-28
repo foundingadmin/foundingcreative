@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "Laptop showing the Genpact GROW18 event site announcing the event is five weeks away"
 logo: "./logo.png"
 logoAlt: "Genpact logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#0d5b97"
+  dark: "#003464"
+  light: "#edf8ff"
 ---
 
 Taking on the mission to reimagine Genpact's Grow, we set out to do more than just execute an event. We aimed to elevate it into a fresh new experience that sticks.
@@ -48,7 +53,7 @@ user journey mapping
 5. Oversaw the production of all design elements, ensuring quality and consistency.
 6. Managed art and design aspects during the event, ensuring an immersive experience.
 
-## Securing success with Grow was not just a goal. It was imperative to redefining foundations towards a new standard for their future events to engage and inspire.
+<p class="statement">Securing success with Grow was not just a goal. It was imperative to redefining foundations towards a new standard for their future events to engage and inspire.</p>
 
 ## Building brand
 

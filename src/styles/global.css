@@ -119,6 +119,10 @@
   --focus-ring-width: 2px;
   --focus-ring-offset: 3px;
   --transition-fast: 150ms ease;
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1); /* the live site's reveal curve */
+  --reveal-duration: 1000ms;
+  --reveal-distance: 1rem;
+  --glow-mint: 0 0 1.5rem rgb(110 255 182 / 0.45);
 }
 
 /* Reset */
@@ -155,6 +159,8 @@ body {
 
 main {
   flex: 1;
+  /* Sliders that run to the window edge must not widen the page */
+  overflow-x: clip;
 }
 
 main:focus {
@@ -357,17 +363,46 @@ button {
   color: var(--color-text);
 }
 
-/* Primary: the holographic pill */
+/* The trailing arrow nudges toward where the link goes */
+.button .icon {
+  transition: transform 250ms var(--ease-out);
+}
+
+.button:hover .icon,
+.button:focus-visible .icon {
+  transform: translate(2px, -2px);
+}
+
+/* Primary: the holographic pill, with the gradient slowly sweeping across
+ * it like the live site's animated buttons, and a glow on hover. */
 .button--primary {
   border-color: transparent;
-  background: linear-gradient(90deg, var(--color-cyan), var(--color-holo-mint), var(--color-lavender-light));
+  background: linear-gradient(
+      90deg,
+      var(--color-cyan),
+      var(--color-holo-mint),
+      var(--color-lavender-light),
+      var(--color-cyan)
+    )
+    0 0 / 300% 100%;
   color: var(--color-black);
+  animation: holo-sweep 6s linear infinite;
+  transition:
+    box-shadow 250ms var(--ease-out),
+    transform 250ms var(--ease-out);
 }
 
 .button--primary:hover {
   border-color: transparent;
-  background: var(--color-mint);
   color: var(--color-black);
+  box-shadow: var(--glow-mint);
+  transform: translateY(-1px);
+}
+
+@keyframes holo-sweep {
+  to {
+    background-position: 300% 0;
+  }
 }
 
 /* Gradient text for marquee headings */
@@ -414,5 +449,104 @@ button {
 @keyframes holo-spin {
   to {
     transform: rotate(1turn);
+  }
+}
+
+/* Background video (decorative, muted, looping) behind a section's content */
+.bg-video {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Page-load intro for heroes: children of [data-intro] fade up in turn. Pure
+ * CSS, so above-the-fold content never waits on a script to appear. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-intro] > * {
+    animation: intro-up var(--reveal-duration) var(--ease-out) both;
+  }
+
+  [data-intro] > :nth-child(2) {
+    animation-delay: 120ms;
+  }
+
+  [data-intro] > :nth-child(3) {
+    animation-delay: 240ms;
+  }
+
+  [data-intro] > :nth-child(4) {
+    animation-delay: 360ms;
+  }
+
+  [data-intro] > :nth-child(n + 5) {
+    animation-delay: 480ms;
+  }
+}
+
+@keyframes intro-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-distance));
+  }
+}
+
+/* Scroll reveal, like the live site: content fades up into place once, the
+ * first time it scrolls into view (see src/scripts/motion.ts). The `js` class
+ * is set in the page head, so nothing is hidden when scripts don't run, and
+ * reduced-motion visitors see everything in place. */
+@media (prefers-reduced-motion: no-preference) {
+  .js :is([data-reveal], [data-reveal-stagger] > *, .section__intro, .case-band__inner > *) {
+    opacity: 0;
+    transform: translateY(var(--reveal-distance));
+    transition:
+      opacity var(--reveal-duration) var(--ease-out),
+      transform var(--reveal-duration) var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .js [data-reveal='left'] {
+    transform: translateX(calc(-1 * var(--reveal-distance)));
+  }
+
+  .js [data-reveal='zoom'] {
+    transform: scale(0.96);
+  }
+
+  .js :is([data-reveal], [data-reveal-stagger] > *, .section__intro, .case-band__inner > *).is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Line icons draw themselves in when their block is revealed */
+  .js .is-revealed .icon--draw :is(path, circle, rect, line, polyline) {
+    stroke-dasharray: 1;
+    animation: icon-draw 1.4s var(--ease-out) both;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 200ms);
+  }
+}
+
+@keyframes icon-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The live site's heartBeat effect, used on icon hover */
+@keyframes heart-beat {
+  0%,
+  28%,
+  70% {
+    transform: scale(1);
+  }
+  14%,
+  42% {
+    transform: scale(1.15);
   }
 }

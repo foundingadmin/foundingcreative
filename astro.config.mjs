@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig, envField, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { satteri } from '@astrojs/markdown-satteri';
+import caseStudyBands from './src/lib/case-study-bands.mjs';
 
 // Pages that set `noindex` in BaseLayout; keep this list in sync.
 const NOINDEX = ['/404/'];
@@ -15,6 +17,10 @@ export default defineConfig({
   },
   // sitemap-index.xml for search engines (listed in public/robots.txt).
   // Pages marked noindex in BaseLayout are left out here too.
+  // Case studies get the live site's banded section layout at build time.
+  markdown: {
+    processor: satteri({ hastPlugins: [caseStudyBands] }),
+  },
   integrations: [sitemap({ filter: (page) => !NOINDEX.some((path) => page.endsWith(path)) })],
   // Manrope is downloaded at build time and served from this site, so
   // visitors never request Google Fonts. Gelica is Adobe Fonts and has to

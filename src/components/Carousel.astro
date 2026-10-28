@@ -1,0 +1,246 @@
+---
+import Icon from './Icon.astro';
+
+// A horizontal slider, like the live site's Cornerstone sliders: swipe on
+// touch, drag with a mouse, arrow keys when focused, and round previous/next
+// buttons. Slides snap into place and the scrollbar is hidden. The slot takes
+// <li> elements. Without JavaScript it is still a scrollable, snapping row.
+
+interface Props {
+  /** Unique on the page; ties the buttons to the list. */
+  id: string;
+  /** Accessible name for the list, like "Website services: example work". */
+  label: string;
+  /** Where the buttons sit: under the slides (right aligned) or on either side. */
+  controls?: 'below' | 'sides';
+  /** Let the slides run out to the right edge of the window. */
+  bleed?: boolean;
+  class?: string;
+}
+
+const { id, label, controls = 'below', bleed = false, class: className } = Astro.props;
+---
+
+<div class:list={['carousel', `carousel--${controls}`, { 'carousel--bleed': bleed }, className]} data-carousel>
+  <ul class="carousel__track" id={id} aria-label={label} tabindex="0">
+    <slot />
+  </ul>
+  <div class="carousel__controls" data-carousel-controls hidden>
+    <button class="carousel__button carousel__button--prev" type="button" aria-controls={id} data-carousel-prev>
+      <Icon name="chevron-left" size={18} />
+      <span class="visually-hidden">Previous slides</span>
+    </button>
+    <button class="carousel__button carousel__button--next" type="button" aria-controls={id} data-carousel-next>
+      <Icon name="chevron-right" size={18} />
+      <span class="visually-hidden">Next slides</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (const carousel of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
+    const track = carousel.querySelector<HTMLElement>('.carousel__track')!;
+    const controls = carousel.querySelector<HTMLElement>('[data-carousel-controls]')!;
+    const prev = carousel.querySelector<HTMLButtonElement>('[data-carousel-prev]')!;
+    const next = carousel.querySelector<HTMLButtonElement>('[data-carousel-next]')!;
+
+    // One "page" is as many whole slides as fit in view.
+    const step = () => {
+      const slide = track.firstElementChild as HTMLElement | null;
+      if (!slide) return track.clientWidth;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      const size = slide.getBoundingClientRect().width + gap;
+      return Math.max(1, Math.floor((track.clientWidth + gap) / size)) * size;
+    };
+    const go = (direction: 1 | -1) =>
+      track.scrollBy({ left: direction * step(), behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      controls.hidden = max <= 1;
+      prev.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft >= max - 1;
+    };
+    track.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(track);
+    update();
+
+    // Mouse drag. Touch already swipes natively.
+    let startX = 0;
+    let startScroll = 0;
+    let dragged = false;
+    let pointerId: number | null = null;
+
+    track.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      pointerId = event.pointerId;
+      startX = event.clientX;
+      startScroll = track.scrollLeft;
+      dragged = false;
+    });
+
+    track.addEventListener('pointermove', (event) => {
+      if (event.pointerId !== pointerId) return;
+      const dx = event.clientX - startX;
+      if (!dragged && Math.abs(dx) < 5) return;
+      if (!dragged) {
+        dragged = true;
+        track.setPointerCapture(event.pointerId);
+        track.classList.add('is-dragging');
+      }
+      track.scrollLeft = startScroll - dx;
+    });
+
+    const endDrag = () => {
+      if (pointerId === null) return;
+      pointerId = null;
+      if (!dragged) return;
+      // Turning snapping back on settles the nearest slide into place.
+      const from = track.scrollLeft;
+      track.classList.remove('is-dragging');
+      const snapped = track.scrollLeft;
+      track.scrollLeft = from;
+      track.scrollTo({ left: snapped, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    };
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+
+    // A drag shouldn't count as a click on a link inside a slide.
+    track.addEventListener(
+      'click',
+      (event) => {
+        if (dragged) {
+          event.preventDefault();
+          event.stopPropagation();
+          dragged = false;
+        }
+      },
+      true,
+    );
+    track.addEventListener('dragstart', (event) => event.preventDefault());
+  }
+</script>
+
+<style>
+  /* Pages size the slides by setting --slide-width and --slide-gap on the
+   * carousel (through its class prop). */
+  .carousel {
+    position: relative;
+  }
+
+  .carousel__track {
+    display: flex;
+    gap: var(--slide-gap, var(--space-sm));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel__track > :global(*) {
+    flex: 0 0 var(--slide-width, 15.25rem);
+    max-width: 85%;
+    scroll-snap-align: start;
+  }
+
+  @media (pointer: fine) {
+    .carousel__track {
+      cursor: grab;
+    }
+  }
+
+  .carousel__track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+  }
+
+  .carousel__track:focus-visible {
+    outline-offset: var(--space-2xs);
+  }
+
+  /* Run the slides out to the window's right edge */
+  .carousel--bleed .carousel__track {
+    margin-right: calc(50% - 50vw);
+    padding-right: var(--container-gutter);
+  }
+
+  .carousel__controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2xs);
+    margin-top: var(--space-sm);
+  }
+
+  .carousel__button {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-white);
+    color: var(--color-black);
+    cursor: pointer;
+    transition:
+      opacity var(--transition-fast),
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .carousel__button:hover:not(:disabled) {
+    box-shadow: var(--glow-mint);
+    transform: scale(1.06);
+  }
+
+  .carousel__button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  /* Buttons on either side, vertically centered on the slides */
+  .carousel--sides .carousel__controls {
+    position: absolute;
+    inset: 50% calc(-1 * var(--space-md)) auto;
+    justify-content: space-between;
+    margin: 0;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .carousel--sides .carousel__button {
+    pointer-events: auto;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.4);
+  }
+
+  .carousel--sides .carousel__button:disabled {
+    opacity: 0;
+  }
+
+  @media (max-width: 977px) {
+    .carousel--sides .carousel__controls {
+      position: static;
+      justify-content: flex-end;
+      gap: var(--space-2xs);
+      margin-top: var(--space-sm);
+      transform: none;
+    }
+
+    .carousel--sides .carousel__button:disabled {
+      opacity: 0.4;
+    }
+  }
+</style>

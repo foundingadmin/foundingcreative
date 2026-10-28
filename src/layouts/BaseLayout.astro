@@ -72,6 +72,8 @@ const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Marks that scripts run, so scroll-reveal content only starts hidden when it can be revealed -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -120,5 +122,8 @@ const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
       <slot />
     </main>
     <Footer />
+    <script>
+      import '../scripts/motion';
+    </script>
   </body>
 </html>

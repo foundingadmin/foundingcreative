@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "Man standing in gun range with SafeZone app"
 logo: "./logo.svg"
 logoAlt: "SafeZone logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#002d18"
+  dark: "#022b0c"
+  light: "#ceffce"
 ---
 
 An innovative team of entrepreneurs went on a mission to create a gun safety product
@@ -48,7 +53,7 @@ user journey mapping
 5. Presentation decks were made to help inform customers and audiences.
 6. The SafeZone team was rewarded for all their hard work
 
-## SafeZone enables fingerprint authorization for the set users, while still having ease of accessibility in times of defense.
+<p class="statement">SafeZone enables fingerprint authorization for the set users, while still having ease of accessibility in times of defense.</p>
 
 ### Branding
 

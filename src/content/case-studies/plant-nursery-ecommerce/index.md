@@ -15,6 +15,11 @@ cover: "./cover.jpg"
 coverAlt: "Huckleberry Holler website mockup of two men standing in garden on laptop sunset"
 logo: "./logo.svg"
 logoAlt: "Huckleberry Holler logo"
+# Colors from the live case study: statement band, dark band, light band
+theme:
+  accent: "#0b2e09"
+  dark: "#1f3a26"
+  light: "#f1ffb7"
 ---
 
 Sustainable agriculture education on plants doesn't offer a path to purchase. Nurseries lose money when items are out of stock.
@@ -52,7 +57,7 @@ user journey mapping
 9. If not in stock links to plant on Amazon through API
 10. Nursery gets direct sale or Amazon Affiliate commission
 
-## Ecologically regenerative food forest nursery that specializes in unique edible plants as well as plants to fill specific functions in agroforestry and permaculture designs.
+<p class="statement">Ecologically regenerative food forest nursery that specializes in unique edible plants as well as plants to fill specific functions in agroforestry and permaculture designs.</p>
 
 ## Goals
 

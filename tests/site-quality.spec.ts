@@ -13,6 +13,9 @@ test('every sitemap page loads without console errors and passes axe (WCAG 2.1 A
   test.setTimeout(180_000);
   const paths = await sitemapPaths(page);
   expect(paths.length).toBeGreaterThan(40);
+  // Scan with reduced motion so nothing is mid-fade or still waiting to be
+  // scrolled into view: every element is checked in its final state.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
 
   const failures: string[] = [];
   for (const path of paths) {

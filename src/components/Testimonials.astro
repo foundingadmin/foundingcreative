@@ -1,0 +1,340 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Icon from './Icon.astro';
+import diana from '../assets/home/testimonials/diana-hustedt.jpg';
+import dean from '../assets/home/testimonials/dean-davasia.png';
+import tenBackground from '../assets/home/testimonials/ten-background.png';
+import tenLogo from '../assets/home/testimonials/ten-logo.svg';
+import justin from '../assets/home/testimonials/justin-guld.jpg';
+import eric from '../assets/home/testimonials/eric-meyerson.jpg';
+import brooke from '../assets/home/testimonials/brooke-mcpoyle.webp';
+import breathworkBackground from '../assets/home/testimonials/musical-breathwork-background.webp';
+import southLogo from '../assets/home/testimonials/82-south.jpg';
+import mossLogo from '../assets/home/testimonials/moss-logo.svg';
+
+// Partner testimonials as the live site's bento grid: holographic-edged
+// cards, photo-backed cards, a holographic card, and client logo tiles.
+
+type Quote = {
+  kind: 'quote';
+  area: string;
+  style: 'edge' | 'photo' | 'holo';
+  quote: string;
+  name: string;
+  role: string;
+  avatar: ImageMetadata;
+  background?: ImageMetadata;
+  /** Short quotes are set large in the display face. */
+  display?: boolean;
+  stars?: boolean;
+};
+type Logo = { kind: 'logo'; area: string; src: ImageMetadata; alt: string };
+
+const tiles: (Quote | Logo)[] = [
+  {
+    kind: 'quote',
+    area: 'dean',
+    style: 'photo',
+    quote: 'Very responsive, amazing skills, and super easy to work with! Highly recommended.',
+    name: 'Dean Davasia',
+    role: 'CTO, TEN Leasing',
+    avatar: dean,
+    background: tenBackground,
+    display: true,
+  },
+  {
+    kind: 'quote',
+    area: 'diana',
+    style: 'edge',
+    quote:
+      'Founding Creative is truly a wonderful partner who combines great creative along with a strategic team. Josh, Tyler, and the team not only are a creative powerhouse, but also think about the project and needs at hand as well as how the creative project has legs outside of the immediate need. If you need a dynamic partner who will bring great creative and can truly get to know you and your brand look no further than Founding Creative!',
+    name: 'Diana Hustedt',
+    role: 'Senior Event Producer, MGME',
+    avatar: diana,
+    stars: true,
+  },
+  {
+    kind: 'quote',
+    area: 'justin',
+    style: 'holo',
+    quote: 'Truly incredible minds and humans here.',
+    name: 'Justin Guld',
+    role: 'Co-Founder, MODL',
+    avatar: justin,
+    display: true,
+  },
+  { kind: 'logo', area: 'ten', src: tenLogo, alt: 'TEN, Transportation Equipment Network' },
+  {
+    kind: 'quote',
+    area: 'eric',
+    style: 'edge',
+    quote:
+      "I've worked on two brand identity projects now with Founding Creative with technology startups. Josh and Tyler are creative, collaborative, honest, professional, and fast, and their output is exceptional. I would absolutely hire them again in a heartbeat.",
+    name: 'Eric Meyerson',
+    role: 'Fractional CMO, Turntide / Mashgin / Coach Bank',
+    avatar: eric,
+    stars: true,
+  },
+  {
+    kind: 'quote',
+    area: 'brooke',
+    style: 'photo',
+    quote: 'Their expertise and creativity brought our vision to life, resulting in a stunning website.',
+    name: 'Brooke McPoyle',
+    role: 'Founder, Musical Breathwork',
+    avatar: brooke,
+    background: breathworkBackground,
+    display: true,
+  },
+  {
+    kind: 'quote',
+    area: 'deanna',
+    style: 'holo',
+    quote:
+      'Working with Founding showed us what we had been missing in previous rebrands. [...] The end result was better than we imagined.',
+    name: 'DeAnna Miller',
+    role: 'Managing Director of Experiential Marketing, 82 South',
+    avatar: southLogo,
+  },
+  { kind: 'logo', area: 'moss', src: mossLogo, alt: 'Moss' },
+];
+---
+
+<ul class="bento" data-reveal-stagger>
+  {
+    tiles.map((tile) =>
+      tile.kind === 'logo' ? (
+        <li class="tile tile--logo" style={`grid-area: ${tile.area}`}>
+          <Image src={tile.src} alt={tile.alt} height={64} />
+        </li>
+      ) : (
+        <li class:list={['tile', `tile--${tile.style}`]} style={`grid-area: ${tile.area}`}>
+          {tile.background && (
+            <Image class="tile__background" src={tile.background} alt="" widths={[600, 1200]} sizes="(max-width: 977px) 100vw, 600px" />
+          )}
+          <figure class="tile__figure">
+            {tile.stars && (
+              <p class="tile__stars" role="img" aria-label="Rated 5 out of 5 stars">
+                {[1, 2, 3, 4, 5].map(() => (
+                  <Icon name="star" size={22} />
+                ))}
+              </p>
+            )}
+            <blockquote class:list={['tile__quote', { 'tile__quote--display': tile.display }]}>
+              <p>“{tile.quote}”</p>
+            </blockquote>
+            <figcaption class="tile__person">
+              <Image class="tile__avatar" src={tile.avatar} alt="" width={48} height={48} densities={[1, 2]} />
+              <span>
+                <strong>{tile.name}</strong>
+                {tile.role}
+              </span>
+            </figcaption>
+          </figure>
+        </li>
+      ),
+    )
+  }
+</ul>
+
+<style>
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-areas:
+      'dean dean diana diana'
+      'justin ten diana diana'
+      'eric eric brooke brooke'
+      'eric eric deanna moss';
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tile {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    isolation: isolate;
+    min-height: 12rem;
+    border-radius: var(--radius-lg);
+    transition:
+      transform 400ms var(--ease-out),
+      box-shadow 400ms var(--ease-out);
+  }
+
+  .tile:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--glow-mint);
+  }
+
+  .tile__figure {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-md);
+    width: 100%;
+    margin: 0;
+    padding: var(--space-lg);
+  }
+
+  /* Dark card with a holographic edge */
+  .tile--edge {
+    border: 1px solid transparent;
+    background:
+      linear-gradient(var(--color-black), var(--color-black)) padding-box,
+      conic-gradient(
+          var(--color-cyan),
+          var(--color-mint-pale),
+          var(--color-white),
+          var(--color-lavender-light),
+          var(--color-cyan)
+        )
+        border-box;
+  }
+
+  /* Photo card: the client's work behind a dark veil */
+  .tile--photo {
+    border: 1px solid var(--color-border);
+    background-color: var(--color-black);
+  }
+
+  .tile__background {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 800ms var(--ease-out);
+  }
+
+  .tile--photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(100deg, rgb(0 0 0 / 0.92) 35%, rgb(0 0 0 / 0.55));
+  }
+
+  .tile--photo:hover .tile__background {
+    transform: scale(1.05);
+  }
+
+  /* Holographic card with dark text */
+  .tile--holo {
+    background: conic-gradient(
+      from 200deg,
+      var(--color-cyan),
+      var(--color-mint-pale),
+      var(--color-white),
+      var(--color-lavender-light),
+      var(--color-cyan)
+    );
+    color: var(--color-black);
+  }
+
+  .tile--logo {
+    display: grid;
+    place-items: center;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  .tile--logo img {
+    width: auto;
+    max-width: 80%;
+    height: auto;
+    max-height: 4rem;
+  }
+
+  .tile__stars {
+    display: flex;
+    gap: var(--space-3xs);
+    margin: 0;
+    color: var(--color-mint);
+  }
+
+  .tile__stars :global(.icon) {
+    fill: currentColor;
+  }
+
+  .tile__quote {
+    margin: 0;
+  }
+
+  .tile__quote p {
+    margin: 0;
+  }
+
+  .tile__quote--display {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h6);
+    font-style: italic;
+    line-height: var(--line-height-snug);
+  }
+
+  .tile--edge .tile__quote:not(.tile__quote--display) {
+    font-size: var(--font-size-lg);
+  }
+
+  .tile__person {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--font-size-sm);
+  }
+
+  .tile__person span {
+    display: grid;
+  }
+
+  .tile:not(.tile--holo) .tile__person span {
+    color: var(--color-text-muted);
+  }
+
+  .tile__person strong {
+    color: inherit;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .tile:not(.tile--holo) .tile__person strong {
+    color: var(--color-text);
+  }
+
+  .tile__avatar {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-pill);
+    object-fit: cover;
+    background-color: var(--color-white);
+  }
+
+  @media (max-width: 977px) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-areas:
+        'diana diana'
+        'dean dean'
+        'justin ten'
+        'eric eric'
+        'brooke brooke'
+        'deanna moss';
+    }
+  }
+
+  @media (max-width: 599px) {
+    .bento {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'diana' 'dean' 'justin' 'eric' 'brooke' 'deanna';
+    }
+
+    .tile--logo {
+      display: none;
+    }
+  }
+</style>
