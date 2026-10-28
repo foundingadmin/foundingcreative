@@ -122,7 +122,16 @@ const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer />
+    {
+      Astro.slots.has('page-end') ? (
+        <div class="page-end">
+          <slot name="page-end" />
+          <Footer />
+        </div>
+      ) : (
+        <Footer />
+      )
+    }
     <script>
       import '../scripts/motion';
     </script>

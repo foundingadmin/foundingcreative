@@ -155,10 +155,10 @@ const jsonLd = [
   ogImageAlt="Turntide website designed by Founding Creative, shown on an iMac"
   jsonLd={jsonLd}
 >
-  <!-- Hero: the live site's animated four-color gradient, a drifting wave
-       layer, and a dark veil, with the pearl headline glowing on top -->
+  <!-- Hero: a looping glowing-grid video under a dark veil, with the pearl
+       headline glowing on top -->
   <section class="hero under-header">
-    <HeroBackdrop />
+    <HeroBackdrop variant="video" video="/media/home/glowing-grid.mp4" />
     <div class="container hero__content" data-intro>
       <p class="hero__eyebrow">Brand &amp; Web Creative Marketing Agency</p>
       <h1 class="hero__title holo-text">Creative foundations for brands of all sizes</h1>
@@ -326,25 +326,28 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- Closing call to action: the live site's holographic card -->
-  <section class="container cta-wrap" aria-labelledby="cta-heading">
-    <div class="cta" data-reveal="zoom">
-      <video class="cta__video" src="/media/home/holographic.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
-      ></video>
-      <div class="cta__content">
-        <div>
-          <p class="cta__eyebrow">We launch websites</p>
-          <h2 id="cta-heading">Your custom website starts here.</h2>
-          <p class="cta__lead">Tailored web packages designed to match your goals.</p>
-        </div>
-        <div class="cta__actions">
-          <a class="button button--dark" href="/services/website-services/">
-            Find the right fit <Icon name="arrow-up-right" size={16} />
-          </a>
+  <!-- Closing call to action: the live site's holographic card. It rides
+       with the footer, uncovered as the page lifts away (see .page-end) -->
+  <Fragment slot="page-end">
+    <section class="container cta-wrap" aria-labelledby="cta-heading">
+      <div class="cta" data-reveal="zoom">
+        <video class="cta__video" src="/media/home/holographic.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
+        ></video>
+        <div class="cta__content">
+          <div>
+            <p class="cta__eyebrow">We launch websites</p>
+            <h2 id="cta-heading">Your custom website starts here.</h2>
+            <p class="cta__lead">Tailored web packages designed to match your goals.</p>
+          </div>
+          <div class="cta__actions">
+            <a class="button button--dark" href="/services/website-services/">
+              Find the right fit <Icon name="arrow-up-right" size={16} />
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </Fragment>
 </BaseLayout>
 
 <style>
@@ -618,9 +621,11 @@ const jsonLd = [
   }
 
   /* Who we are */
+  /* Who we are runs down into dark gray, so the page's lifting edge reads
+     clearly against the CTA and footer beneath it */
   .about-band {
     --curve-color: var(--color-night);
-    background-color: var(--color-night);
+    background: linear-gradient(var(--color-night), var(--color-ink));
   }
 
   .about {

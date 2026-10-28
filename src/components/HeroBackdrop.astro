@@ -10,24 +10,31 @@ import wave from '../assets/brand/wave-black.svg';
 //             that settles into the page's night.
 //   aurora:   the near-black aurora behind Field Notes, wave only.
 //   image:    a photo (the SiteLaunch heroes) under the same night veil.
+//   video:    a looping clip (the homepage's glowing grid) under the same
+//             veil. It plays only while on screen, and holds its first
+//             frame for reduced-motion visitors.
 //
 // Put it first inside a positioned section. It clips itself and stays out of
 // the way of stacking (no z-index), so a card in the section can still rise
 // over the next section's curve; whatever follows it is lifted above it.
 
 interface Props {
-  variant?: 'spectrum' | 'aurora' | 'image';
+  variant?: 'spectrum' | 'aurora' | 'image' | 'video';
   /** For the image variant. */
   image?: ImageMetadata;
+  /** For the video variant: a path under /public. */
+  video?: string;
 }
 
-const { variant = 'spectrum', image } = Astro.props;
+const { variant = 'spectrum', image, video } = Astro.props;
 ---
 
 <div class:list={['backdrop', `backdrop--${variant}`]} style={`--backdrop-wave: url(${wave.src})`} aria-hidden="true">
   {
     variant === 'image' && image ? (
       <Image class="backdrop__image" src={image} alt="" widths={[960, 1920]} sizes="100vw" loading="eager" />
+    ) : variant === 'video' && video ? (
+      <video class="backdrop__image" src={`${video}#t=0.1`} muted loop playsinline preload="auto" data-ambient />
     ) : (
       <div class="backdrop__wave" />
     )
@@ -104,7 +111,8 @@ const { variant = 'spectrum', image } = Astro.props;
   }
 
   .backdrop--spectrum::after,
-  .backdrop--image::after {
+  .backdrop--image::after,
+  .backdrop--video::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -116,7 +124,7 @@ const { variant = 'spectrum', image } = Astro.props;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .backdrop:not(.backdrop--image) {
+    .backdrop:not(.backdrop--image, .backdrop--video) {
       animation: backdrop-drift 15s ease infinite;
     }
 
