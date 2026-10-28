@@ -1,0 +1,46 @@
+---
+import Icon from './Icon.astro';
+
+// A bold list with checks in the theme's accent: who a package is for, and
+// what happens after you reach out.
+
+interface Props {
+  items: string[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<ul class:list={['checks', className]}>
+  {
+    items.map((item) => (
+      <li>
+        <Icon name="check" size={16} />
+        {item}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .checks {
+    display: grid;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .checks li {
+    display: flex;
+    gap: var(--space-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.65;
+  }
+
+  .checks :global(.icon) {
+    margin-top: 0.3em;
+    color: var(--accent, var(--color-mint));
+  }
+</style>

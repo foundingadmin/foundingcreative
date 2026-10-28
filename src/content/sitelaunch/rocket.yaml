@@ -7,7 +7,13 @@ ogDescription: Turn traffic into leads with a website engineered for speed, conv
 heroImage: ../../assets/sitelaunch/rocket-hero.webp
 shareImage: ../../assets/sitelaunch/rocket-share.webp
 shareImageAlt: "Rocket SiteLaunch: we launch sites that convert your visitors"
-pillars: [Conversion UX, Marketing Integrations, Analytics Tracking]
+pillars:
+  - label: Conversion UX
+    icon: target
+  - label: Marketing Integrations
+    icon: blocks
+  - label: Analytics Tracking
+    icon: chart-column
 title: Designed to sell. Built to convert.
 subtitle: Rocket visitors through your funnel with a website engineered for speed and conversion.
 audience:
@@ -40,16 +46,22 @@ features:
   lead: A revenue-ready tool that fuels your growth from first click.
   items:
     - title: Conversion-Optimized UX
+      icon: target
       text: Removes friction from user flows and guides visitors naturally toward key actions, resulting in higher conversion rates.
     - title: Custom Landing Page Templates
+      icon: layers
       text: Allows marketing and sales teams to quickly launch new campaigns without reinventing the wheel, accelerating time-to-market.
     - title: CRM-Integrated Lead Forms
+      icon: mail
       text: Pushes captured leads directly into your CRM, automating lead flow and improving sales team response times.
     - title: Built-in SEO and Analytics
+      icon: chart-column
       text: Drives organic traffic, improves site visibility, and provides actionable insights for ongoing marketing optimization.
     - title: Consistent Lead Capture Paths
+      icon: route
       text: Ensures calls-to-action are always visible and accessible, increasing user engagement without relying on disruptive tactics.
     - title: Fast-Loading Performance
+      icon: zap
       text: Reduces bounce rates, increases mobile engagement, and enhances the overall user experience to directly impact lead volume.
 process:
   heading: Engineered for speed and traction

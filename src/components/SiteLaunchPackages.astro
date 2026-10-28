@@ -1,0 +1,194 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import prismArt from '../assets/home/sitelaunch/flare-1.png';
+import rocketArt from '../assets/home/sitelaunch/rocket-1.png';
+import orbitArt from '../assets/home/sitelaunch/orbit-1.png';
+
+// The three SiteLaunch package cards, as on the live site: thin colored
+// outlines, the package art at the top, and the middle card set lower. They
+// slide in from the left, below, and the right. On a package's own page, the
+// current card is marked and the other two lead on.
+
+interface Props {
+  /** The package whose page this is. */
+  current?: 'prism' | 'rocket' | 'orbit';
+}
+
+const { current } = Astro.props;
+
+const packages = [
+  { name: 'Prism', href: '/prism-sitelaunch/', tagline: 'For brands ready to make an unforgettable entrance.', art: prismArt, tone: 'prism', from: 'left' },
+  { name: 'Rocket', href: '/rocket-sitelaunch/', tagline: 'For growth-focused brands ready to fuel conversions.', art: rocketArt, tone: 'rocket', from: 'up' },
+  { name: 'Orbit', href: '/orbit-sitelaunch/', tagline: 'For scaling companies needing clarity, structure, and alignment.', art: orbitArt, tone: 'orbit', from: 'right' },
+];
+---
+
+<ul class="packages">
+  {
+    packages.map((pkg) => (
+      <li class:list={['package', `package--${pkg.tone}`, { 'is-current': pkg.tone === current }]} data-reveal={pkg.from}>
+        <Image class="package__art" src={pkg.art} alt="" widths={[400, 800]} sizes="(max-width: 977px) 90vw, 380px" />
+        {pkg.tone === current ? (
+          <span class="package__here">You're here</span>
+        ) : (
+          <Icon name="arrow-up-right" size={18} class="package__arrow" />
+        )}
+        <h3 class="package__name">
+          <a href={pkg.href} aria-current={pkg.tone === current ? 'page' : undefined}>
+            {pkg.name}
+            <span>SiteLaunch</span>
+          </a>
+        </h3>
+        <p>{pkg.tagline}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .packages {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2xl);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .package {
+    --line: var(--color-sky);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--space-2xs);
+    min-height: 25rem;
+    padding: var(--space-lg);
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-navy);
+    transition:
+      box-shadow 400ms var(--ease-out),
+      translate 400ms var(--ease-out);
+  }
+
+  /* The middle card sits a little lower, as on the live site */
+  .package--rocket {
+    --line: var(--color-mint);
+    margin-top: var(--space-lg);
+    background-color: var(--color-rocket);
+  }
+
+  .package--orbit {
+    --line: var(--color-orchid);
+    background-color: var(--color-plum);
+  }
+
+  .package:hover,
+  .package:focus-within {
+    box-shadow: 0 0 32px color-mix(in srgb, var(--line) 45%, transparent);
+    translate: 0 -6px;
+  }
+
+  .package__art {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: -1;
+    width: 100%;
+    height: 72%;
+    object-fit: contain;
+    object-position: center top;
+    transition: transform 800ms var(--ease-out);
+  }
+
+  .package:hover .package__art,
+  .package:focus-within .package__art {
+    transform: scale(1.05) translateY(-4px);
+  }
+
+  .package :global(.package__arrow) {
+    position: absolute;
+    top: var(--space-lg);
+    left: var(--space-lg);
+    color: var(--line);
+    transition: transform var(--transition-fast);
+  }
+
+  .package:hover :global(.package__arrow) {
+    transform: translate(2px, -2px);
+  }
+
+  .package__name {
+    margin: 0;
+    color: var(--line);
+    font-family: var(--font-body);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
+    line-height: 1.2;
+  }
+
+  .package__name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .package__name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .package__name a:focus-visible {
+    outline: none;
+  }
+
+  .package:has(a:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .package__name span {
+    display: block;
+    color: var(--color-white);
+  }
+
+  .package p {
+    max-width: 13rem;
+    margin: 0;
+    color: var(--color-neutral-light);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 977px) {
+    .packages {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-md);
+    }
+
+    .package--rocket {
+      margin-top: 0;
+    }
+  }
+
+  /* The current package on its own page: quieter, labeled */
+  .package.is-current {
+    opacity: 0.75;
+  }
+
+  .package__here {
+    position: absolute;
+    top: var(--space-lg);
+    left: var(--space-lg);
+    padding: 2px var(--space-xs);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-pill);
+    color: var(--line);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>

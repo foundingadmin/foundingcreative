@@ -1,0 +1,124 @@
+---
+// Four frosted stat cards, as on the live BrandForge and SiteLaunch pages.
+// The numbers count up the first time they're revealed; the real value is in
+// the HTML, so search engines, screen readers, and reduced-motion visitors
+// get it as is.
+
+interface Props {
+  stats: { value: string; label: string; source?: string }[];
+}
+
+const { stats } = Astro.props;
+---
+
+<dl class="stats" data-reveal-stagger>
+  {
+    stats.map((stat) => (
+      <div class="stat">
+        <dt class="stat__value" data-count={stat.value}>
+          {stat.value}
+        </dt>
+        <dd class="stat__label">{stat.label}</dd>
+        {stat.source && (
+          <dd class="stat__source">
+            <a href={stat.source}>
+              Source<span class="visually-hidden"> for {stat.value} {stat.label}</span>
+            </a>
+          </dd>
+        )}
+      </div>
+    ))
+  }
+</dl>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!reduceMotion.matches && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          observer.unobserve(entry.target);
+          const el = entry.target as HTMLElement;
+          // "75%", "2x", "1000+": count the number, keep what follows it.
+          const [, number, suffix] = el.dataset.count!.match(/^(\d+)(.*)$/) ?? [];
+          if (!number) continue;
+          const target = Number(number);
+          const start = performance.now();
+          const duration = 1400;
+          const tick = (now: number) => {
+            const t = Math.min(1, (now - start) / duration);
+            const eased = 1 - (1 - t) ** 3;
+            el.textContent = `${Math.round(target * eased)}${suffix}`;
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      },
+      { rootMargin: '0px 0px -15% 0px' },
+    );
+    document.querySelectorAll<HTMLElement>('.stat__value[data-count]').forEach((el) => observer.observe(el));
+  }
+</script>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    margin: 0;
+  }
+
+  .stat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: var(--radius-lg);
+    background-color: rgb(28 28 30 / 0.5);
+    backdrop-filter: blur(10px);
+    transition: border-color var(--transition-fast);
+  }
+
+  .stat:hover {
+    border-color: rgb(255 255 255 / 0.45);
+  }
+
+  .stat__value {
+    color: var(--accent);
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-light);
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  .stat__label {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    line-height: 1.6;
+  }
+
+  .stat__source {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    margin: 0;
+    font-size: var(--font-size-xs);
+  }
+
+  .stat__source a {
+    color: var(--color-text-muted);
+  }
+
+  .stat__source a:hover {
+    color: var(--color-white);
+  }
+
+  @media (max-width: 600px) {
+    .stats {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

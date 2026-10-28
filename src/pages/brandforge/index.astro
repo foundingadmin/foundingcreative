@@ -2,6 +2,10 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OurWork from '../../components/OurWork.astro';
 import WipeSlider from '../../components/WipeSlider.astro';
+import PillarPills from '../../components/PillarPills.astro';
+import CheckList from '../../components/CheckList.astro';
+import StatCards from '../../components/StatCards.astro';
+import FeatureGrid from '../../components/FeatureGrid.astro';
 import Icon from '../../components/Icon.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import strategyLaptop from '../../assets/services/brand-strategy-laptop.webp';
@@ -104,159 +108,75 @@ const jsonLd = [
   ogImageAlt="Laptop showing a brand strategy framework and color wheel"
   jsonLd={jsonLd}
 >
-  <!-- Hero: the homepage's four-color gradient under the wave and a dark veil -->
-  <section class="forge-hero under-header" aria-labelledby="brandforge-title">
-    <HeroBackdrop />
-    <div class="container forge-hero__content" data-intro>
-      <p class="forge-hero__eyebrow"><span class="forge-name">Brand</span>Forge™</p>
-      <ul class="pillars">
-        {
-          pillars.map((pillar) => (
-            <li>
-              <Icon name={pillar.icon} size={16} />
-              {pillar.label}
-            </li>
-          ))
-        }
-      </ul>
-      <h1 id="brandforge-title" class="holo-text">From zero to market-ready, without the wait</h1>
-      <p class="forge-lead forge-hero__lead">
-        High-fidelity <span class="forge-name">branding</span> built on market reality, not founder intuition. Your identity,
-        your systems, your flag in the ground.
-      </p>
-      <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
-    </div>
-  </section>
-
-  <!-- One teal backdrop runs under every section below the hero, so no seams show between them -->
-  <div class="forge-body">
-  <!-- Who it's for: the list beside four glass stat cards -->
-  <section aria-labelledby="audience-heading">
-    <div class="container section audience">
-      <div data-reveal="left">
-        <p class="forge-kicker">Who is <span class="forge-name">Brand</span>Forge for</p>
-        <h2 id="audience-heading">Built for brands that mean business</h2>
-        <p class="forge-lead">Your window to make a first impression is shorter than you think.</p>
-        <ul class="audience__list">
-          {
-            audience.map((item) => (
-              <li>
-                <Icon name="check" size={16} />
-                {item}
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <dl class="stats" data-reveal-stagger>
-        {
-          stats.map((stat) => (
-            <div class="stat">
-              <dt class="stat__value" data-count={stat.value}>
-                {stat.value}
-              </dt>
-              <dd class="stat__label">{stat.label}</dd>
-              {stat.source && (
-                <dd class="stat__source">
-                  <a href={stat.source}>
-                    Source<span class="visually-hidden">: Stanford Web Credibility Research</span>
-                  </a>
-                </dd>
-              )}
-            </div>
-          ))
-        }
-      </dl>
-    </div>
-  </section>
-
-  <!-- Why: workshop images in the wipe slider beside the argument -->
-  <section aria-labelledby="why-heading">
-    <div class="container section why">
-      <WipeSlider id="workshop-images" label="BrandForge workshop examples" images={workshopImages} class="why__slider" />
-      <div data-reveal="right">
-        <p class="forge-kicker">Why <span class="forge-name">Brand</span>Forge?</p>
-        <h2 id="why-heading">Low-cost design is the most expensive thing you can buy</h2>
-        <p class="forge-lead">Most startups die in the gap between ambition and execution.</p>
-        <p class="forge-copy">
-          Traditional agencies are too slow and too expensive. In-house teams are too narrow. BrandForge is the third option:
-          high-fidelity branding and a launch-ready creative system delivered in weeks, not months. Built on research. Built
-          to last.
+  <div class="theme-forge">
+    <!-- Hero: the homepage's four-color gradient under the wave and a dark veil -->
+    <section class="forge-hero under-header" aria-labelledby="brandforge-title">
+      <HeroBackdrop />
+      <div class="container forge-hero__content" data-intro>
+        <p class="forge-hero__eyebrow"><span class="accent">Brand</span>Forge™</p>
+        <PillarPills pillars={pillars} />
+        <h1 id="brandforge-title" class="holo-text">From zero to market-ready, without the wait</h1>
+        <p class="tone-lead forge-hero__lead">
+          High-fidelity <span class="accent">branding</span> built on market reality, not founder intuition. Your identity,
+          your systems, your flag in the ground.
         </p>
+        <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Features: the pitch stays put while the six cards scroll past -->
-  <section aria-labelledby="features-heading">
-    <div class="container section features-layout">
-      <div class="features-layout__intro">
-        <p class="forge-kicker"><span class="forge-name">Brand</span>Forge features</p>
+    <!-- One teal backdrop runs under every section below the hero, so no seams show between them -->
+    <div class="tone-backdrop">
+      <!-- Who it's for: the list beside four glass stat cards -->
+      <section aria-labelledby="audience-heading">
+        <div class="container section audience">
+          <div data-reveal="left">
+            <p class="tone-kicker">Who is <span class="accent">Brand</span>Forge for</p>
+            <h2 id="audience-heading">Built for brands that mean business</h2>
+            <p class="tone-lead">Your window to make a first impression is shorter than you think.</p>
+            <CheckList items={audience} />
+          </div>
+          <StatCards stats={stats} />
+        </div>
+      </section>
+
+      <!-- Why: workshop images in the wipe slider beside the argument -->
+      <section aria-labelledby="why-heading">
+        <div class="container section why">
+          <WipeSlider id="workshop-images" label="BrandForge workshop examples" images={workshopImages} class="why__slider" />
+          <div data-reveal="right">
+            <p class="tone-kicker">Why <span class="accent">Brand</span>Forge?</p>
+            <h2 id="why-heading">Low-cost design is the most expensive thing you can buy</h2>
+            <p class="tone-lead">Most startups die in the gap between ambition and execution.</p>
+            <p class="tone-copy">
+              Traditional agencies are too slow and too expensive. In-house teams are too narrow. BrandForge is the third option:
+              high-fidelity branding and a launch-ready creative system delivered in weeks, not months. Built on research. Built
+              to last.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features: the pitch stays put while the six cards scroll past -->
+      <FeatureGrid labelledby="features-heading" items={features}>
+        <p class="tone-kicker"><span class="accent">Brand</span>Forge features</p>
         <h2 id="features-heading">A brand only humans can use is half a brand</h2>
-        <p class="forge-copy">
+        <p class="tone-copy">
           BrandForge is built for brands that need to move fast without cutting corners. Every deliverable is crafted to give
           your team and your tools a shared creative language. From logo systems to AI-ready design kits, this is the
           foundation your business will build on for years.
         </p>
-        <p class="forge-lead">Your brand is the source of truth. We build it right the first time.</p>
+        <p class="tone-lead">Your brand is the source of truth. We build it right the first time.</p>
         <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
-      </div>
-      <ol class="features" data-reveal-stagger>
-        {
-          features.map((feature) => (
-            <li class="feature">
-              <div class="feature__head">
-                <h3>{feature.title}</h3>
-                <span class="feature__icon">
-                  <Icon name={feature.icon} size={26} class="icon--draw" />
-                </span>
-              </div>
-              <p>{feature.text}</p>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-  </section>
+      </FeatureGrid>
 
-  <OurWork
-      only={['bell-bird-atm', 'plant-nursery-ecommerce', 'genpact-grow-event', 'safezone-product-and-branding']}
-      heading="From vision to victory"
-      intro="A look inside the branding projects where strategy, structure, and design all came together to drive meaningful business outcomes."
-    />
+      <OurWork
+        only={['bell-bird-atm', 'plant-nursery-ecommerce', 'genpact-grow-event', 'safezone-product-and-branding']}
+        heading="From vision to victory"
+        intro="A look inside the branding projects where strategy, structure, and design all came together to drive meaningful business outcomes."
+      />
+    </div>
   </div>
 </BaseLayout>
-
-<script>
-  // The stat numbers count up once, the first time their card is revealed.
-  // The real value is in the HTML; this only animates toward it.
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (!reduceMotion.matches && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          observer.unobserve(entry.target);
-          const el = entry.target as HTMLElement;
-          const [, number, suffix] = el.dataset.count!.match(/^(\d+)(.*)$/) ?? [];
-          if (!number) continue;
-          const target = Number(number);
-          const start = performance.now();
-          const duration = 1400;
-          const tick = (now: number) => {
-            const t = Math.min(1, (now - start) / duration);
-            const eased = 1 - (1 - t) ** 3;
-            el.textContent = `${Math.round(target * eased)}${suffix}`;
-            if (t < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-        }
-      },
-      { rootMargin: '0px 0px -15% 0px' },
-    );
-    document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => observer.observe(el));
-  }
-</script>
 
 <style>
   /* ===== Hero ===== */
@@ -267,10 +187,6 @@ const jsonLd = [
     border-bottom: 1px solid var(--color-border);
   }
 
-  .forge-hero__content {
-    position: relative;
-  }
-
   .forge-hero__eyebrow {
     margin: 0 0 var(--space-md);
     font-size: var(--font-size-eyebrow);
@@ -278,46 +194,9 @@ const jsonLd = [
     line-height: 1.5;
   }
 
-  .forge-name {
-    color: var(--color-forge-cyan);
-  }
-
-  .pillars {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin: 0 0 var(--space-md);
-    padding: 0;
-    list-style: none;
-  }
-
-  .pillars li {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs);
-    border: 1px solid rgb(255 255 255 / 0.39);
-    border-radius: var(--radius-sm);
-    background-color: rgb(0 4 7 / 0.22);
-    backdrop-filter: blur(6px);
-    font-size: var(--font-size-sm);
-  }
-
-  .pillars .icon {
-    margin-inline: var(--space-3xs);
-    color: var(--color-forge-cyan);
-  }
-
   .forge-hero h1 {
     max-width: 11em;
     margin-bottom: var(--space-md);
-  }
-
-  .forge-lead {
-    margin-bottom: var(--space-md);
-    font-size: var(--font-size-eyebrow);
-    font-weight: var(--font-weight-semibold);
-    line-height: 1.5;
   }
 
   .forge-hero__lead {
@@ -325,118 +204,8 @@ const jsonLd = [
     margin-bottom: var(--space-lg);
   }
 
-  /* ===== Teal backdrop: rises out of the dark hero, holds, then settles back
-   * to black before the footer ===== */
-  .forge-body {
-    background: linear-gradient(
-      var(--color-forge-night),
-      var(--color-forge-teal) 18%,
-      var(--color-forge-teal) 78%,
-      var(--color-black)
-    );
-  }
-
-  .forge-kicker {
-    margin-bottom: var(--space-xs);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  .forge-body h2 {
-    margin-bottom: var(--space-md);
-    font-weight: var(--font-weight-regular);
-  }
-
-  .forge-copy {
-    color: var(--color-forge-muted);
-    font-size: var(--font-size-lg);
-  }
-
-  /* ===== Who it's for ===== */
-  .audience {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: var(--space-2xl);
-  }
-
-  .audience__list {
-    display: grid;
-    gap: var(--space-xs);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .audience__list li {
-    display: flex;
-    gap: var(--space-sm);
-    font-weight: var(--font-weight-semibold);
-    line-height: 1.65;
-  }
-
-  .audience__list .icon {
-    margin-top: 0.3em;
-    color: var(--color-forge-cyan);
-  }
-
-  .stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
-    margin: 0;
-  }
-
-  /* Glass cards, as on the live page */
-  .stat {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    padding: var(--space-lg);
-    border: 1px solid rgb(255 255 255 / 0.2);
-    border-radius: var(--radius-lg);
-    background-color: rgb(28 28 30 / 0.5);
-    backdrop-filter: blur(10px);
-    transition:
-      border-color var(--transition-fast),
-      transform var(--transition-fast);
-  }
-
-  .stat:hover {
-    border-color: rgb(255 255 255 / 0.45);
-  }
-
-  .stat__value {
-    color: var(--color-forge-cyan);
-    font-size: var(--font-size-h2);
-    font-weight: var(--font-weight-light);
-    line-height: 1.5;
-    font-variant-numeric: tabular-nums;
-    text-shadow: 0 0 24px rgb(6 230 230 / 0.35);
-  }
-
-  .stat__label {
-    margin: 0;
-    font-size: var(--font-size-lg);
-    line-height: 1.6;
-  }
-
-  .stat__source {
-    position: absolute;
-    top: var(--space-md);
-    right: var(--space-md);
-    margin: 0;
-    font-size: var(--font-size-xs);
-  }
-
-  .stat__source a {
-    color: var(--color-text-muted);
-  }
-
-  .stat__source a:hover {
-    color: var(--color-white);
-  }
-
-  /* ===== Why ===== */
+  /* ===== Who it's for, and why: two columns ===== */
+  .audience,
   .why {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -444,100 +213,11 @@ const jsonLd = [
     gap: var(--space-2xl);
   }
 
-  /* ===== Features ===== */
-  .features-layout {
-    display: grid;
-    grid-template-columns: 5fr 7fr;
-    align-items: start;
-    gap: var(--space-2xl);
-  }
-
-  .features-layout__intro {
-    position: sticky;
-    top: calc(var(--header-height) + var(--space-lg));
-  }
-
-  .features {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-md);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .feature {
-    padding: var(--space-lg);
-    border: 1px solid rgb(255 255 255 / 0.2);
-    border-radius: var(--radius-lg);
-    background-color: rgb(28 28 30 / 0.5);
-    backdrop-filter: blur(10px);
-    transition:
-      border-color var(--transition-fast),
-      box-shadow var(--transition-fast);
-  }
-
-  .feature:hover {
-    border-color: rgb(6 230 230 / 0.6);
-    box-shadow: 0 0 24px rgb(6 230 230 / 0.15);
-  }
-
-  .feature__head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-sm);
-  }
-
-  .feature h3 {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-regular);
-    letter-spacing: normal;
-    line-height: 1.6;
-  }
-
-  .feature__icon {
-    display: grid;
-    flex: none;
-    place-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: var(--radius-md);
-    background-color: var(--color-glass);
-    transition: color var(--transition-fast);
-  }
-
-  .feature:hover .feature__icon {
-    color: var(--color-forge-cyan);
-  }
-
-  .feature p {
-    margin: 0;
-    color: var(--color-forge-muted);
-    font-size: var(--font-size-sm);
-  }
-
-  /* ===== Small screens ===== */
   @media (max-width: 977px) {
     .audience,
-    .why,
-    .features-layout {
+    .why {
       grid-template-columns: 1fr;
       gap: var(--space-xl);
-    }
-
-    .features-layout__intro {
-      position: static;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .stats,
-    .features {
-      grid-template-columns: 1fr;
     }
   }
 </style>

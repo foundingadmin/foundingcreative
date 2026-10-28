@@ -117,7 +117,8 @@ const sitelaunch = defineCollection({
       heroImage: image(),
       shareImage: image(),
       shareImageAlt: z.string().min(1),
-      pillars: z.array(z.string()).length(3),
+      // Icon names are from src/components/Icon.astro (the build fails on an unknown one).
+      pillars: z.array(z.object({ label: z.string(), icon: z.string() })).length(3),
       title: z.string(),
       subtitle: z.string(),
       audience: z.object({ heading: z.string(), lead: z.string(), points: z.array(z.string()).min(1) }),
@@ -127,7 +128,7 @@ const sitelaunch = defineCollection({
         heading: z.string(),
         text: z.string(),
         lead: z.string(),
-        items: z.array(z.object({ title: z.string(), text: z.string() })).length(6),
+        items: z.array(z.object({ title: z.string(), text: z.string(), icon: z.string() })).length(6),
       }),
       process: z.object({
         heading: z.string(),

@@ -8,12 +8,7 @@ import OurWork from '../components/OurWork.astro';
 import Carousel from '../components/Carousel.astro';
 import Icon from '../components/Icon.astro';
 import HeroBackdrop from '../components/HeroBackdrop.astro';
-import tyler from '../assets/team/tyler.webp';
-import stacey from '../assets/team/stacey.webp';
-import jamie from '../assets/team/jamie.webp';
-import titus from '../assets/team/titus.webp';
-import sasha from '../assets/team/sasha.webp';
-import blake from '../assets/team/blake.webp';
+import { team } from '../data/team';
 import shareImage from '../assets/home/services/web-5.webp';
 
 // Service sliders
@@ -114,14 +109,7 @@ const engagements = [
 
 const trustpilot = 'https://www.trustpilot.com/review/foundingcreative.com';
 // Team portraits in the live site's order
-const team = [
-  { photo: tyler, name: 'Tyler Lukey' },
-  { photo: stacey, name: 'Stacey Cuzzacrea' },
-  { photo: jamie, name: 'Jamie Caceres' },
-  { photo: titus, name: 'Josh Titus' },
-  { photo: sasha, name: 'Sasha Beck' },
-  { photo: blake, name: 'Blake Hickey' },
-];
+const crew = team(['tyler', 'stacey', 'jamie', 'titus', 'sasha', 'blake']);
 
 const values = [
   { title: 'Clarity over chaos', text: 'Solutions rooted in structure and strategy' },
@@ -303,7 +291,7 @@ const jsonLd = [
     <div class="container section about">
       <ul class="team" aria-label="The Founding Creative team" data-reveal-stagger>
         {
-          team.map((person) => (
+          crew.map((person) => (
             <li>
               <Image src={person.photo} alt={person.name} widths={[240, 480]} sizes="(max-width: 700px) 30vw, 180px" />
             </li>

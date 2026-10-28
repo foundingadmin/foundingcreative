@@ -1,0 +1,133 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+// A themed feature section, as on the live BrandForge and SiteLaunch pages:
+// the pitch (the default slot) stays pinned on the left while six frosted
+// cards scroll past, each with a line icon that draws in and takes the
+// theme's accent on hover.
+
+interface Props {
+  /** Ties the section to its heading in the slot. */
+  labelledby: string;
+  items: { title: string; text: string; icon: string }[];
+}
+
+const { labelledby, items } = Astro.props;
+---
+
+<section aria-labelledby={labelledby}>
+  <div class="container section feature-grid">
+    <div class="feature-grid__intro">
+      <slot />
+    </div>
+    <ol class="feature-grid__cards" data-reveal-stagger>
+      {
+        items.map((item) => (
+          <li class="feature">
+            <div class="feature__head">
+              <h3>{item.title}</h3>
+              <span class="feature__icon">
+                <Icon name={item.icon as IconName} size={26} class="icon--draw" />
+              </span>
+            </div>
+            <p>{item.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    align-items: start;
+    gap: var(--space-2xl);
+  }
+
+  .feature-grid__intro {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-lg));
+  }
+
+  .feature-grid__cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .feature {
+    padding: var(--space-lg);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: var(--radius-lg);
+    background-color: rgb(28 28 30 / 0.5);
+    backdrop-filter: blur(10px);
+    transition:
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .feature:hover {
+    border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 15%, transparent);
+  }
+
+  .feature__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+  }
+
+  .feature h3 {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: normal;
+    line-height: 1.6;
+  }
+
+  .feature__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: var(--radius-md);
+    background-color: var(--color-glass);
+    transition: color var(--transition-fast);
+  }
+
+  .feature:hover .feature__icon {
+    color: var(--accent);
+  }
+
+  .feature p {
+    margin: 0;
+    color: var(--color-forge-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  @media (max-width: 977px) {
+    .feature-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+
+    .feature-grid__intro {
+      position: static;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .feature-grid__cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
