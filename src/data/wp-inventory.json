@@ -3072,12 +3072,9 @@
       "type": "page",
       "inSitemap": true,
       "foundOn": null,
-      "port": "port",
-      "overrides": {
-        "description": "Resources for Founding Creative clients. Your project lead can give you access to your BucKit brand portal and project files.",
-        "og:description": "Resources for Founding Creative clients. Your project lead can give you access to your BucKit brand portal and project files."
-      },
-      "ported": true
+      "port": "drop",
+      "redirectTo": "/buckit/",
+      "ported": false
     },
     {
       "path": "/coffee",

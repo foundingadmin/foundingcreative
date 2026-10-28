@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from './Icon.astro';
+import ContactForm from './ContactForm.astro';
 import { siteLaunchBookingHref } from '../data/navigation';
 
 interface Props {
@@ -204,14 +205,12 @@ const jsonLd = [
             ))
           }
         </ul>
-        <div class="actions actions--center">
-          <a class="button button--primary" href="#get-in-touch">
-            Tell us about your brand <Icon name="arrow-up-right" size={16} />
-          </a>
-          <a class="button" href={siteLaunchBookingHref}>Book a meeting</a>
+        <div class="inquiry">
+          <h3 class="inquiry__heading">Tell us about your brand and your goals</h3>
+          <ContactForm variant="sitelaunch" sitelaunchPackage={data.name as 'Prism' | 'Rocket' | 'Orbit'} idPrefix="sitelaunch" />
         </div>
         <p class="cta__note">
-          Submitting an inquiry does not guarantee acceptance into the SiteLaunch™ program. All inquiries are reviewed for fit
+          Submitting this form does not guarantee acceptance into the SiteLaunch™ program. All inquiries are reviewed for fit
           with our services, process, and scheduling availability.
         </p>
       </div>
@@ -488,6 +487,20 @@ const jsonLd = [
   .cta .section__lead {
     max-width: 44rem;
     margin-inline: auto;
+  }
+
+  .inquiry {
+    max-width: 40rem;
+    margin: var(--space-xl) auto 0;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background-color: rgb(0 0 0 / 0.7);
+    text-align: left;
+  }
+
+  .inquiry__heading {
+    font-size: var(--font-size-h5);
   }
 
   .cta__note {

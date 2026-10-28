@@ -4,10 +4,10 @@ seoTitle: "Imprint - Founding Creative"
 description: "Legal information about Founding Creative LLC, the company that owns and operates foundingcreative.com, and how to contact us."
 ogDescription: "Legal information about Founding Creative LLC, the company that owns and operates foundingcreative.com, and how to contact us."
 ogTitle: "Imprint"
-updated: 2026-07-06
+updated: 2026-10-27
 ---
 
-_This imprint was last updated on July 6, 2026._
+_This imprint was last updated on October 27, 2026._
 
 ### The owner of this website is:
 
