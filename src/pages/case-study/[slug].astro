@@ -31,12 +31,36 @@ const fallbackTheme = { accent: '#001441', dark: '#000a20', light: '#e5fde9' };
 const theme = data.theme ?? fallbackTheme;
 const nextTheme = next.data.theme ?? fallbackTheme;
 
+// Headings on the white and light bands use the accent, but a bright accent
+// (Innovation Forum's orange) can fall under AA's 3:1 for large text on the
+// light and neutral bands. Blend it toward the study's dark color only as far
+// as needed.
+const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const luminance = (c: number[]) =>
+  c
+    .map((v) => v / 255)
+    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+    .reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+const contrast = (a: number[], b: number[]) => {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+};
+const headingInk = (() => {
+  const [accent, dark, light] = [theme.accent, theme.dark, theme.light].map(rgb);
+  for (let t = 0; t <= 1; t += 0.05) {
+    const mix = accent.map((v, i) => Math.round(v + (dark[i] - v) * t));
+    if ([light, [216, 216, 216], [255, 255, 255]].every((bg) => contrast(mix, bg) >= 3)) return `rgb(${mix.join(' ')})`;
+  }
+  return theme.dark;
+})();
+
 // The closing image card near the end of the story reuses the cover and
 // logo, drawn by CSS (it is decorative), so pass them in as variables.
 const closingCover = await getImage({ src: data.cover, width: 1600, format: 'webp' });
 const closingLogo = data.logo ? await getImage({ src: data.logo }) : undefined;
 const themeStyle = [
   `--case-accent: ${theme.accent}`,
+  `--case-heading: ${headingInk}`,
   `--case-dark: ${theme.dark}`,
   `--case-light: ${theme.light}`,
   `--case-cover: url(${closingCover.src})`,
@@ -154,7 +178,7 @@ const jsonLd = [
         <p class="case-next__client">{next.data.clients.join(', ')}</p>
       </div>
       <div class="case-next__media">
-        <Image src={next.data.cover} alt="" widths={[480, 960]} sizes="(max-width: 977px) 100vw, 560px" />
+        <Image src={next.data.cover} alt={next.data.coverAlt} widths={[480, 960]} sizes="(max-width: 977px) 100vw, 560px" />
       </div>
     </div>
   </section>
@@ -343,7 +367,7 @@ const jsonLd = [
   /* ===== The story: bands built by src/lib/case-study-bands.mjs ===== */
   .case-story :global(.case-band) {
     --band-text: var(--case-dark);
-    --band-heading: var(--case-accent);
+    --band-heading: var(--case-heading);
     --band-strong: var(--case-dark);
     --band-link: var(--case-dark);
     position: relative;
