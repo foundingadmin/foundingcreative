@@ -70,6 +70,18 @@ test('BrandForge shows its workshop slider and branding work', async ({ page }) 
   await expect(page.locator('.stat__value').first()).toHaveAttribute('data-count', '75%');
 });
 
+test('About team members link to their own LinkedIn profiles', async ({ page }) => {
+  await page.goto('/about-us/');
+  const links = page.locator('.person__linkedin');
+  await expect(links).toHaveCount(6);
+  const hrefs = await links.evaluateAll((els) => els.map((el) => el.getAttribute('href')));
+  expect(new Set(hrefs).size).toBe(6);
+  await expect(page.getByRole('link', { name: 'Tyler Lukey on LinkedIn' })).toHaveAttribute(
+    'href',
+    'https://www.linkedin.com/in/tylerlukey/',
+  );
+});
+
 test('our work slider lists every case study', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#work-slider > li')).toHaveCount(10);
