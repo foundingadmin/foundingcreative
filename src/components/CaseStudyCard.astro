@@ -1,6 +1,11 @@
 ---
 import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
 import { caseStudyUrl, type CaseStudy } from '../lib/content';
+
+// Case study card, styled after the live site's "Our work" cards: the
+// project photo with sector and service tags over it, then the client, the
+// headline, a one-line summary, and "View case study".
 
 interface Props {
   study: CaseStudy;
@@ -9,32 +14,44 @@ interface Props {
 
 const { study, headingLevel = 2 } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
-const tags = [...study.data.services, ...study.data.sectors];
+const { data } = study;
 ---
 
 <article class="case-card">
-  <Image
-    class="case-card__image"
-    src={study.data.cover}
-    alt={study.data.coverAlt}
-    widths={[480, 960]}
-    sizes="(max-width: 700px) 100vw, 540px"
-  />
-  <div class="case-card__body">
-    <p class="case-card__client">{study.data.clients.join(', ')}</p>
-    <Heading class="case-card__title">
-      <a href={caseStudyUrl(study)}>{study.data.title}</a>
-    </Heading>
-    <p class="case-card__summary">{study.data.headline}</p>
+  <div class="case-card__media">
+    <Image
+      class="case-card__image"
+      src={data.cover}
+      alt={data.coverAlt}
+      widths={[480, 960]}
+      sizes="(max-width: 700px) 85vw, 360px"
+    />
     {
-      tags.length > 0 && (
-        <ul class="case-card__tags" aria-label="Services and sectors">
-          {tags.map((tag) => (
+      data.sectors.length > 0 && (
+        <ul class="case-card__tags" aria-label="Sectors">
+          {data.sectors.map((tag) => (
             <li>{tag}</li>
           ))}
         </ul>
       )
     }
+    {
+      data.services.length > 0 && (
+        <ul class="case-card__tags case-card__tags--services" aria-label="Services">
+          {data.services.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+  <div class="case-card__body">
+    <p class="case-card__client">{data.clients.join(', ')}</p>
+    <Heading class="case-card__title">
+      <a href={caseStudyUrl(study)}>{data.headline}</a>
+    </Heading>
+    <p class="case-card__summary">{data.subheadline}</p>
+    <p class="case-card__more" aria-hidden="true">View case study <Icon name="arrow-up-right" size={16} /></p>
   </div>
 </article>
 
@@ -43,26 +60,79 @@ const tags = [...study.data.services, ...study.data.sectors];
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
     overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background-color: var(--color-surface);
-    transition: border-color var(--transition-fast);
+    transition:
+      border-color 300ms var(--ease-out),
+      transform 300ms var(--ease-out),
+      box-shadow 300ms var(--ease-out);
   }
 
   .case-card:hover,
   .case-card:focus-within {
     border-color: var(--color-mint);
+    box-shadow: var(--glow-mint);
+    transform: translateY(-4px);
+  }
+
+  .case-card__media {
+    position: relative;
+    overflow: hidden;
   }
 
   .case-card__image {
     width: 100%;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .case-card:hover .case-card__image,
+  .case-card:focus-within .case-card__image {
+    transform: scale(1.05);
+  }
+
+  /* Tags float over the photo: sectors top left, services bottom left */
+  .case-card__tags {
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-card__tags--services {
+    top: auto;
+    bottom: var(--space-sm);
+  }
+
+  .case-card__tags li {
+    padding: 2px var(--space-xs);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: var(--radius-pill);
+    background-color: rgb(0 0 0 / 0.65);
+    backdrop-filter: blur(6px);
+    color: var(--color-white);
+    font-size: var(--font-size-xs);
+  }
+
+  .case-card__tags--services li {
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   .case-card__body {
-    display: grid;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     gap: var(--space-2xs);
     padding: var(--space-md);
   }
@@ -73,12 +143,13 @@ const tags = [...study.data.services, ...study.data.sectors];
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
   }
 
   .case-card__title {
     margin: 0;
-    font-size: var(--font-size-h5);
+    font-size: var(--font-size-h6);
+    line-height: var(--line-height-snug);
   }
 
   .case-card__title a {
@@ -86,6 +157,7 @@ const tags = [...study.data.services, ...study.data.sectors];
     text-decoration: none;
   }
 
+  /* The whole card is the link */
   .case-card__title a::after {
     content: '';
     position: absolute;
@@ -102,25 +174,27 @@ const tags = [...study.data.services, ...study.data.sectors];
   }
 
   .case-card__summary {
+    flex: 1;
     margin: 0;
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
   }
 
-  .case-card__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2xs);
-    margin: var(--space-2xs) 0 0;
-    padding: 0;
-    list-style: none;
+  .case-card__more {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    margin: var(--space-xs) 0 0;
+    color: var(--color-mint);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
   }
 
-  .case-card__tags li {
-    padding: 2px var(--space-xs);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
+  .case-card__more .icon {
+    transition: transform 250ms var(--ease-out);
+  }
+
+  .case-card:hover .case-card__more .icon {
+    transform: translate(2px, -2px);
   }
 </style>

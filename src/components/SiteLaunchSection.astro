@@ -14,6 +14,8 @@ const packages = [
 ---
 
 <section class="sitelaunch" aria-labelledby="sitelaunch-heading">
+  <video class="bg-video" src="/media/home/light-speed.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
+  ></video>
   <div class="container section">
     <div class="section__intro section__intro--center">
       <p class="eyebrow">We build <em>websites</em></p>
@@ -22,7 +24,7 @@ const packages = [
         SiteLaunch™ breaks the one-size-fits-all web model with three unique packages designed for your unique needs
       </p>
     </div>
-    <ul class="packages">
+    <ul class="packages" data-reveal-stagger>
       {
         packages.map((pkg) => (
           <li class:list={['package', `package--${pkg.tone}`]}>
@@ -43,8 +45,28 @@ const packages = [
 
 <style>
   /* SiteLaunch */
+  /* Light-speed video behind a plum glow, like the live section */
   .sitelaunch {
-    background: radial-gradient(ellipse at 50% 0%, var(--color-plum), var(--color-black) 60%);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--color-black);
+  }
+
+  .sitelaunch::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in srgb, var(--color-plum) 75%, transparent),
+      color-mix(in srgb, var(--color-black) 85%, transparent) 65%
+    );
+  }
+
+  .sitelaunch .bg-video {
+    z-index: -2;
   }
 
   .packages {
@@ -67,12 +89,29 @@ const packages = [
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     isolation: isolate;
-    transition: border-color var(--transition-fast);
+  }
+
+  .package {
+    transition:
+      border-color 300ms var(--ease-out),
+      transform 400ms var(--ease-out),
+      box-shadow 400ms var(--ease-out);
   }
 
   .package:hover,
   .package:focus-within {
     border-color: var(--color-mint);
+    box-shadow: var(--glow-mint);
+    transform: translateY(-6px);
+  }
+
+  .package__art {
+    transition: transform 800ms var(--ease-out);
+  }
+
+  .package:hover .package__art,
+  .package:focus-within .package__art {
+    transform: scale(1.06);
   }
 
   .package--prism {

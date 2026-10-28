@@ -1,0 +1,53 @@
+---
+import Carousel from './Carousel.astro';
+import CaseStudyCard from './CaseStudyCard.astro';
+import Icon from './Icon.astro';
+import { getCaseStudies } from '../lib/content';
+
+// "Our work": every case study in a slider, on the homepage and at the end of
+// each case study (leaving out the one being read), as on the live site.
+
+interface Props {
+  /** Case study id to leave out. */
+  exclude?: string;
+}
+
+const { exclude } = Astro.props;
+const studies = (await getCaseStudies()).filter((study) => study.id !== exclude);
+---
+
+<section class="container section our-work" aria-labelledby="work-heading">
+  <div class="section__intro section__intro--split">
+    <div>
+      <p class="eyebrow">Our <em>work</em></p>
+      <h2 id="work-heading">Creative foundations worth showing off</h2>
+      <p class="section__lead">
+        A look inside the projects where strategy, structure, and design all came together to drive meaningful business
+        outcomes.
+      </p>
+    </div>
+    <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
+  </div>
+  <Carousel id="work-slider" label="Case studies" controls="sides" bleed class="our-work__slider">
+    {
+      studies.map((study) => (
+        <li>
+          <CaseStudyCard study={study} headingLevel={3} />
+        </li>
+      ))
+    }
+  </Carousel>
+</section>
+
+<style>
+  /* The class lands on the Carousel's root, outside this component's scope */
+  :global(.our-work__slider) {
+    --slide-width: 21.75rem;
+    --slide-gap: var(--space-md);
+  }
+
+  /* Room for the card hover lift and glow inside the scrolling row */
+  :global(.our-work__slider .carousel__track) {
+    padding-block: var(--space-sm) var(--space-lg);
+  }
+</style>
