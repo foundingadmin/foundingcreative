@@ -2,6 +2,10 @@
 import { Image } from 'astro:assets';
 import { formatDate, isoDate, postUrl, type Post } from '../lib/content';
 
+// A Field Notes card for the white index page, as on the live site: the cover
+// over a light offset "stack", a Gelica title, then the date and categories.
+// The whole card is one link, through the title.
+
 interface Props {
   post: Post;
   /** Heading level for the card title, so it fits the page outline. */
@@ -13,77 +17,83 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 <article class="post-card">
-  <Image
-    class="post-card__image"
-    src={post.data.cover}
-    alt={post.data.coverAlt}
-    widths={[400, 800]}
-    sizes="(max-width: 700px) 100vw, 400px"
-  />
-  <div class="post-card__body">
-    <p class="post-card__meta">
-      <span>{post.data.categories.join(', ')}</span>
-      <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
-    </p>
-    <Heading class="post-card__title">
-      <a href={postUrl(post)}>{post.data.title}</a>
-    </Heading>
-    <p class="post-card__excerpt">{post.data.excerpt}</p>
+  <div class="post-card__media">
+    <Image
+      src={post.data.cover}
+      alt={post.data.coverAlt}
+      widths={[480, 960, 1200]}
+      sizes="(max-width: 700px) 92vw, 560px"
+    />
   </div>
+  <Heading class="post-card__title">
+    <a href={postUrl(post)}>{post.data.title}</a>
+  </Heading>
+  <p class="post-card__meta">
+    <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
+    <span aria-hidden="true">/</span>
+    <span class="post-card__categories">{post.data.categories.join(', ')}</span>
+  </p>
 </article>
 
 <style>
   .post-card {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-surface);
-    transition: border-color var(--transition-fast);
+    color: var(--color-night);
   }
 
-  .post-card:hover,
-  .post-card:focus-within {
-    border-color: var(--color-mint);
+  /* The cover sits on a light offset card, and slides off it on hover */
+  .post-card__media {
+    position: relative;
+    margin: 0.75rem 0.75rem 0 0;
   }
 
-  .post-card__image {
+  .post-card__media::before {
+    content: '';
+    position: absolute;
+    inset: -0.75rem -0.75rem 0.75rem 0.75rem;
+    background-color: var(--color-neutral-lightest);
+    transition: background-color var(--transition-fast);
+  }
+
+  .post-card__media img {
+    position: relative;
+    display: block;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
+    background-color: var(--color-aurora-plum);
+    transition: transform 600ms var(--ease-out);
   }
 
-  .post-card__body {
-    display: grid;
-    gap: var(--space-xs);
-    padding: var(--space-md);
+  .post-card:hover .post-card__media img {
+    transform: translate(-0.375rem, 0.375rem);
   }
 
-  .post-card__meta {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: var(--space-2xs);
-    margin: 0;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+  .post-card:hover .post-card__media::before {
+    background-color: var(--color-cyan);
   }
 
   .post-card__title {
-    margin: 0;
-    font-size: var(--font-size-h6);
+    max-width: 14em;
+    margin: var(--space-md) 0 var(--space-xs);
+    font-size: var(--font-size-h5);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-snug);
+    text-wrap: balance;
+  }
+
+  .post-card__title a {
+    color: inherit;
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 500ms var(--ease-out);
+  }
+
+  .post-card:hover .post-card__title a {
+    background-size: 100% 1px;
   }
 
   /* The whole card is clickable through the title link. */
-  .post-card__title a {
-    color: var(--color-text);
-    text-decoration: none;
-  }
-
   .post-card__title a::after {
     content: '';
     position: absolute;
@@ -95,13 +105,21 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
   }
 
   .post-card:has(a:focus-visible) {
-    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline: var(--focus-ring-width) solid var(--color-night);
     outline-offset: var(--focus-ring-offset);
   }
 
-  .post-card__excerpt {
+  .post-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
     margin: 0;
-    color: var(--color-text-muted);
+    color: var(--color-neutral-dark);
     font-size: var(--font-size-sm);
+  }
+
+  .post-card__categories {
+    color: var(--color-rocket);
+    font-weight: var(--font-weight-semibold);
   }
 </style>

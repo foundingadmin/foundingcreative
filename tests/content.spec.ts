@@ -8,6 +8,10 @@ test('Field Notes index lists every post, newest first', async ({ page }) => {
   const cards = page.getByRole('main').getByRole('article');
   await expect(cards).toHaveCount(13);
   await expect(cards.first().getByRole('heading')).toHaveText('Marketing Agency, Creative Design Studio, or Something Else?');
+  // One h1, ahead of every other heading.
+  await expect(page.locator('h1')).toHaveCount(1);
+  const firstHeading = await page.locator('main :is(h1, h2, h3)').first().evaluate((el) => el.tagName);
+  expect(firstHeading).toBe('H1');
 });
 
 test('a post has its hero, body, structured data, and related posts', async ({ page }) => {
