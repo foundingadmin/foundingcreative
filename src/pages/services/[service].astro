@@ -2,10 +2,11 @@
 import { Image } from 'astro:assets';
 import { getCollection, getEntries, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CaseStudyCard from '../../components/CaseStudyCard.astro';
 import PostCard from '../../components/PostCard.astro';
 import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
+import OurWork from '../../components/OurWork.astro';
+import WipeSlider from '../../components/WipeSlider.astro';
 import Icon from '../../components/Icon.astro';
 import { letsTalkHref } from '../../data/navigation';
 
@@ -21,8 +22,19 @@ interface Props {
 const { service } = Astro.props;
 const { data } = service;
 
-const caseStudies = await getEntries(data.work.caseStudies.map((id) => ({ collection: 'caseStudies' as const, id })));
 const posts = await getEntries(data.relatedPosts.map((id) => ({ collection: 'posts' as const, id })));
+
+// The white statement band and the white closing band meet directly unless
+// dark sections (SiteLaunch, Field Notes) sit between them; then each white
+// band gets its own curved edge.
+const darkMiddle = data.showSiteLaunch || posts.length > 0;
+
+// The statement images stack in two staggered columns, as on the live site.
+const columns = [
+  data.statement.images.filter((_, i) => i % 2 === 0),
+  data.statement.images.filter((_, i) => i % 2 === 1),
+];
+const pad = (n: number) => String(n).padStart(2, '0');
 
 const url = new URL(data.path, Astro.site).href;
 const jsonLd = [
@@ -65,113 +77,110 @@ const jsonLd = [
   ogImageAlt={data.heroImages[0].alt}
   jsonLd={jsonLd}
 >
-  <section class="service-hero" aria-labelledby="service-title">
-    <div class="container">
-      <nav aria-label="Breadcrumb" class="service-hero__breadcrumb">
-        <a href="/services/">Services</a>
-      </nav>
-      <p class="eyebrow"><em>{data.eyebrow}</em></p>
-      <h1 id="service-title" class="service-hero__title">{data.title}</h1>
-      <p class="section__lead service-hero__intro">{data.intro}</p>
-      <a class="button button--primary" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
-    </div>
-    <ul class="container service-hero__images" aria-label={`${data.name} examples`} tabindex="0">
-      {
-        data.heroImages.map((image, i) => (
-          <li>
-            <Image
-              src={image.src}
-              alt={image.alt}
-              widths={[400, 800]}
-              sizes="(max-width: 700px) 80vw, 380px"
-              loading={i === 0 ? 'eager' : 'lazy'}
-            />
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-
-  <section class="container section" aria-labelledby="capabilities-heading">
-    <h2 id="capabilities-heading" class="capabilities__heading">Capabilities</h2>
-    <div class="capabilities">
-      {
-        data.capabilities.map((group) => (
-          <div class="capability">
-            <h3>{group.title}</h3>
-            <ul>
-              {group.items.map((item) => (
-                <li>
-                  <Icon name="check" size={16} />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="container section" aria-labelledby="work-heading">
-    <div class="section__intro section__intro--split">
-      <div>
-        <p class="eyebrow">Our <em>work</em></p>
-        <h2 id="work-heading">{data.work.heading}</h2>
-        <p class="section__lead">{data.work.intro}</p>
-      </div>
-      <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
-    </div>
-    <div class="card-grid">
-      {caseStudies.map((study) => <CaseStudyCard study={study} headingLevel={3} />)}
-    </div>
-  </section>
-
-  {
-    data.teams && (
-      <section class="container section" aria-labelledby="teams-heading">
-        <div class="section__intro">
-          <p class="eyebrow">
-            <em>{data.teams.eyebrow}</em>
-          </p>
-          <h2 id="teams-heading">{data.teams.heading}</h2>
-          <p class="section__lead">{data.teams.intro}</p>
+  <!-- One drifting gradient runs behind the hero, capabilities, and work, as on the live site -->
+  <div class="service-top under-header">
+    <section class="service-hero" aria-labelledby="service-title">
+      <div class="container service-hero__grid">
+        <div class="service-hero__text" data-intro>
+          <nav aria-label="Breadcrumb" class="service-hero__breadcrumb">
+            <a href="/services/">Services</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{data.name}</span>
+          </nav>
+          <p class="service-hero__eyebrow">{data.eyebrow}</p>
+          <h1 id="service-title" class="service-hero__title">{data.title}</h1>
+          <p class="section__lead service-hero__intro">{data.intro}</p>
+          <a class="button button--primary" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
         </div>
-        <div class="teams">
-          {data.teams.groups.map((group) => (
-            <article class="team">
-              <p class="team__label">{group.label}</p>
-              <h3>{group.heading}</h3>
-              <p>{group.text}</p>
+        <WipeSlider
+          id="service-images"
+          label={`${data.name} examples`}
+          images={data.heroImages}
+          class="service-hero__slider"
+        />
+      </div>
+    </section>
+
+    <section class="container section capabilities-section" aria-labelledby="capabilities-heading">
+      <h2 id="capabilities-heading" class="capabilities__heading" data-reveal>Capabilities</h2>
+      <div class="capabilities" data-reveal-stagger>
+        {
+          data.capabilities.map((group, i) => (
+            <div class="capability">
+              <span class="capability__index" aria-hidden="true">
+                {pad(i + 1)}
+              </span>
+              <h3>{group.title}</h3>
               <ul>
-                {group.points.map((point) => (
-                  <li>
-                    <Icon name="check" size={16} />
-                    {point}
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <OurWork only={data.work.caseStudies} heading={data.work.heading} intro={data.work.intro} />
+
+    {
+      data.teams && (
+        <section class="container section" aria-labelledby="teams-heading">
+          <div class="section__intro">
+            <p class="eyebrow">
+              <em>{data.teams.eyebrow}</em>
+            </p>
+            <h2 id="teams-heading">{data.teams.heading}</h2>
+            <p class="section__lead">{data.teams.intro}</p>
+          </div>
+          <div class="teams" data-reveal-stagger>
+            {data.teams.groups.map((group) => (
+              <article class="team">
+                <p class="team__label">{group.label}</p>
+                <h3>{group.heading}</h3>
+                <p>{group.text}</p>
+                <ul>
+                  {group.points.map((point) => (
+                    <li>
+                      <Icon name="check" size={16} />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
+
+  <section
+    class:list={['statement-band curve-top', { 'curve-bottom': darkMiddle }]}
+    aria-labelledby="statement-heading"
+  >
+    <div class="container section">
+      {data.statement.lead && <p class="statement__lead" data-reveal>{data.statement.lead}</p>}
+      <div class="statement__grid">
+        <div class="statement__images">
+          {
+            columns.map((column, c) => (
+              <ul class:list={['statement__column', `statement__column--${c + 1}`]} data-reveal={c ? 'up' : 'left'}>
+                {column.map((image, i) => (
+                  <li class:list={{ 'is-tall': (i + c) % 2 === 0 }}>
+                    <Image src={image.src} alt={image.alt} widths={[320, 640]} sizes="(max-width: 700px) 46vw, 290px" />
                   </li>
                 ))}
               </ul>
-            </article>
-          ))}
+            ))
+          }
         </div>
-      </section>
-    )
-  }
-
-  <section class="container section statement" aria-labelledby="statement-heading">
-    {data.statement.lead && <p class="statement__lead">{data.statement.lead}</p>}
-    <ul class="statement__images">
-      {
-        data.statement.images.map((image) => (
-          <li>
-            <Image src={image.src} alt={image.alt} widths={[400, 800]} sizes="(max-width: 700px) 50vw, 280px" />
-          </li>
-        ))
-      }
-    </ul>
-    <div class="statement__text">
-      <h2 id="statement-heading">{data.statement.heading}</h2>
-      {data.statement.body.map((paragraph) => <p>{paragraph}</p>)}
+        <div class="statement__text" data-reveal="right">
+          <h2 id="statement-heading">{data.statement.heading}</h2>
+          {data.statement.body.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </div>
     </div>
   </section>
 
@@ -186,7 +195,7 @@ const jsonLd = [
             All posts <Icon name="arrow-up-right" size={16} />
           </a>
         </div>
-        <div class="card-grid">
+        <div class="card-grid" data-reveal-stagger>
           {posts.map((post) => (
             <PostCard post={post} headingLevel={3} />
           ))}
@@ -195,132 +204,219 @@ const jsonLd = [
     )
   }
 
-  <section class="container section" aria-label="Brands we've worked with">
-    <ClientLogos />
-  </section>
-
-  <section class="cta holo-bg" aria-labelledby="cta-heading">
-    <div class="container cta__content">
+  <section class:list={['closing-band', { 'curve-top': darkMiddle }]} aria-labelledby="cta-heading">
+    <div class="closing-band__logos" aria-label="Brands we've worked with" role="group">
+      <ClientLogos />
+    </div>
+    <div class="container closing" data-reveal>
+      <svg class="closing__flag" viewBox="0 0 179 197" width="64" height="70" aria-hidden="true" focusable="false">
+        <defs>
+          <filter id="flag-wave" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="1" seed="4" result="noise">
+              <animate attributeName="baseFrequency" dur="6s" values="0.012 0.03;0.016 0.04;0.012 0.03" repeatCount="indefinite"
+              ></animate>
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G"
+            ></feDisplacementMap>
+          </filter>
+        </defs>
+        <path
+          fill="currentColor"
+          d="M178.032,86.045c-.268-4.377-.493-8.053-.781-12.761-.174-2.838-1.674-5.46-4.097-6.947-28.897-17.738-54.836-4.29-81.11,5.621-.847.32-1.675-.52-1.351-1.366l6.684-17.416c.665-1.732,2.03-3.107,3.763-3.77,20.883-7.994,41.931-14.24,64.803-1.272,2.502,1.419,5.581-.443,5.405-3.314-.268-4.376-.493-8.051-.781-12.757-.179-2.923-1.803-5.555-4.304-7.077-19.61-11.942-37.859-9.54-55.779-3.672-.843.276-1.63-.541-1.312-1.369l5.6-14.591c1.267-3.3-2.121-6.466-5.324-4.971-20.467,9.552-49.735,22.549-77.915,12.393-2.401-.865-4.215-2.892-4.908-5.349-.058-.207-.108-.383-.15-.528-.979-3.435-3.2-4.989-6.247-4.989-3.303,0-4.965,1.008-12.06,4.035C3.274,8.069-.834,8.805.146,12.24c.56,1.962,2.533,2.944,4.568,3.845,3.267,1.063,6.512,2.944,7.585,6.706l39.173,153.539c1.189,4.17,1.514,7.688-1.608,11.287-1.236,1.309-3.803,2.699-2.916,5.807.583,2.045,2.281,3.845,6.345,3.845,5.419,0,11.775-.41,16.855-.41,4.148,0,9.43.41,13.155.41,4.572,0,5.437-1.718,4.76-4.09-.909-3.19-3.844-3.681-6.82-5.807-3.147-2.126-5.323-4.417-6.933-10.061l-19.265-67.56c-.904-3.17-2.239-7.925-3.846-13.683-1.979-7.091,3.078-14.243,10.428-14.654,7.722-.432,15.31-2.283,22.839-4.748.843-.276,1.63.541,1.312,1.369l-6.219,16.203c-1.183,3.082,1.735,6.184,4.873,5.157,28.821-9.429,56.789-27.843,88.194-10.036,2.502,1.419,5.581-.443,5.405-3.314ZM38.282,49.503c-.853-3.084-1.692-6.119-2.506-9.062-.32-1.158.734-2.226,1.897-1.921,22.705,5.953,43.859-4.437,65.234-12.499.847-.32,1.675.521,1.351,1.366l-6.684,17.416c-.665,1.732-2.03,3.107-3.763,3.77-15.864,6.069-31.825,11.114-48.607,7.506-3.347-.72-6.009-3.276-6.922-6.575Z"
+        ></path>
+      </svg>
       <h2 id="cta-heading">{data.cta.heading}</h2>
-      <p class="section__lead">{data.cta.text}</p>
-      <div class="cta__actions">
-        <a class="button button--primary" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
-        <a class="button" href="/contact-us/">Send us a message</a>
+      <p class="closing__text">{data.cta.text}</p>
+      <div class="closing__actions">
+        <a class="button button--dark" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
+        <a class="button closing__secondary" href="/contact-us/">Send us a message</a>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* ===== Dark top: hero, capabilities, work ===== */
+  .service-top {
+    background: linear-gradient(
+        -45deg,
+        var(--color-black),
+        var(--color-olive-night),
+        var(--color-olive-dusk),
+        var(--color-black),
+        var(--color-plum-night)
+      )
+      0% 50% / 400% 400%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .service-top {
+      animation: service-gradient 15s ease infinite;
+    }
+  }
+
+  @keyframes service-gradient {
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
   .service-hero {
-    padding-block: var(--space-2xl);
-    background: radial-gradient(ellipse at 20% 0%, var(--color-teal), var(--color-black) 65%);
+    padding-block: calc(var(--header-height) + 4rem) var(--space-xl);
+  }
+
+  .service-hero__grid {
+    display: grid;
+    grid-template-columns: 7fr 6fr;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .service-hero__breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin-bottom: var(--space-md);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
   }
 
   .service-hero__breadcrumb a {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    color: var(--color-white);
     text-decoration: none;
   }
 
+  .service-hero__breadcrumb a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  /* The live eyebrow: Gelica, sentence case, above the headline */
+  .service-hero__eyebrow {
+    margin: 0 0 var(--space-2xs);
+    font-family: var(--font-display);
+    font-size: var(--font-size-eyebrow);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.1;
+  }
+
   .service-hero__title {
-    max-width: 16ch;
+    margin-bottom: var(--space-md);
+    font-weight: var(--font-weight-regular);
+    text-shadow: var(--text-glow);
+    text-wrap: balance;
   }
 
   .service-hero__intro {
-    max-width: 36rem;
+    max-width: 30rem;
+    margin-bottom: var(--space-lg);
   }
 
-  .service-hero__images {
-    display: flex;
-    gap: var(--space-sm);
-    margin-top: var(--space-xl);
-    padding-bottom: var(--space-xs);
-    list-style: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-  }
-
-  .service-hero__images li {
-    flex: 0 0 min(22rem, 80%);
-    scroll-snap-align: start;
-  }
-
-  .service-hero__images img {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    border-radius: var(--radius-lg);
+  /* ===== Capabilities: two columns of numbered groups on hairlines ===== */
+  .capabilities-section {
+    padding-bottom: 0;
   }
 
   .capabilities__heading {
-    font-size: var(--font-size-h3);
+    margin-bottom: var(--space-lg);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-regular);
   }
 
   .capabilities {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-    gap: var(--space-md);
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-2xl);
   }
 
-  .capability,
-  .team {
-    padding: var(--space-lg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-surface);
-  }
-
-  .capability h3,
-  .team h3 {
-    font-family: var(--font-body);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  .capability ul,
-  .team ul {
+  /* The hairline lights up white across a group on hover */
+  .capability {
     display: grid;
-    gap: var(--space-2xs);
+    grid-template-columns: 3rem 1fr;
+    padding-block: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--color-hairline);
+    background: linear-gradient(var(--color-white), var(--color-white)) 0 -1px / 0 1px no-repeat;
+    transition: background-size 600ms var(--ease-out);
+  }
+
+  .capability:hover {
+    background-size: 100% 1px;
+  }
+
+  .capability__index {
+    grid-row: span 2;
+    padding-top: 0.45em;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.1em;
+  }
+
+  .capability h3 {
+    margin: 0 0 var(--space-xs);
+    font-family: var(--font-body);
+    font-size: var(--font-size-h6);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
+  }
+
+  .capability ul {
+    display: grid;
+    gap: var(--space-3xs);
     margin: 0;
     padding: 0;
     list-style: none;
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
   }
 
-  .capability li,
-  .team li {
-    display: flex;
-    gap: var(--space-2xs);
+  /* Small holographic dots for bullets */
+  .capability li {
+    position: relative;
+    padding-left: var(--space-md);
   }
 
-  .capability .icon,
-  .team .icon {
-    margin-top: 0.25em;
-    color: var(--color-mint);
+  .capability li::before {
+    content: '';
+    position: absolute;
+    top: 0.7em;
+    left: 0.15em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-image: var(--holo-radial);
+    box-shadow: 0 0 6px rgb(255 255 255 / 0.5);
   }
 
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-    gap: var(--space-md);
-  }
-
+  /* ===== Teams (Website Services) ===== */
   .teams {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     gap: var(--space-md);
+  }
+
+  .team {
+    padding: var(--space-lg);
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: var(--radius-lg);
+    background-color: rgb(28 28 30 / 0.5);
+    backdrop-filter: blur(6px);
+  }
+
+  .team h3 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-h6);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
   }
 
   .team__label {
+    margin-bottom: var(--space-2xs);
     color: var(--color-mint);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: 0.1em;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.15em;
     text-transform: uppercase;
   }
 
@@ -328,53 +424,180 @@ const jsonLd = [
     color: var(--color-text-muted);
   }
 
-  .statement__lead {
-    max-width: 50rem;
-    margin-bottom: var(--space-xl);
-    font-family: var(--font-display);
-    font-size: var(--font-size-h5);
-    line-height: var(--line-height-snug);
-  }
-
-  .statement__images {
+  .team ul {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-sm);
-    margin: 0 0 var(--space-xl);
+    gap: var(--space-2xs);
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .statement__images img {
+  .team li {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .team .icon {
+    flex: none;
+    margin-top: 0.3em;
+    color: var(--color-mint);
+  }
+
+  /* ===== White statement band ===== */
+  .statement-band {
+    --curve-color: var(--color-white);
+    background-color: var(--color-white);
+    color: var(--color-night);
+  }
+
+  .statement__lead {
+    max-width: 62rem;
+    margin: 0 auto var(--space-2xl);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--line-height-snug);
+    text-align: center;
+    text-wrap: balance;
+  }
+
+  .statement__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-2xl);
+  }
+
+  .statement__images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+  }
+
+  .statement__column {
+    display: grid;
+    align-content: start;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .statement__column img {
+    display: block;
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 7 / 5;
     object-fit: cover;
     border-radius: var(--radius-lg);
   }
 
-  .statement__images li:nth-child(even) img {
-    aspect-ratio: 1;
-    margin-top: var(--space-xl);
+  .statement__column .is-tall img {
+    aspect-ratio: 7 / 10;
   }
 
-  .statement__text {
-    max-width: 44rem;
+  .statement__text h2 {
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-tight);
   }
 
   .statement__text p {
-    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.5;
   }
 
-  .cta {
-    padding-block: var(--space-3xl);
+  /* The second image column drifts against the scroll, like the live site's
+   * parallaxing boxes. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 701px) {
+      .statement__column--2 > li {
+        animation: statement-drift linear both;
+        animation-timeline: view();
+      }
+    }
+  }
+
+  @keyframes statement-drift {
+    from {
+      transform: translateY(3.5rem);
+    }
+
+    to {
+      transform: translateY(-3.5rem);
+    }
+  }
+
+  /* ===== Posts (Website Services) ===== */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--space-md);
+  }
+
+  /* ===== White closing band: logos, waving flag, call to action ===== */
+  .closing-band {
+    --curve-color: var(--color-white);
+    padding-block: var(--space-2xl) var(--space-3xl);
+    background-color: var(--color-white);
+    color: var(--color-night);
+  }
+
+  /* Straight after the white statement band: overlap a pixel so no seam of
+   * the dark page shows where the two meet on a fractional pixel. */
+  .statement-band + .closing-band {
+    margin-top: -1px;
+  }
+
+  /* The gray logos sit on white as they do on the live site */
+  .closing-band__logos :global(.clients img) {
+    filter: none;
+  }
+
+  .closing-band__logos :global(.clients__toggle) {
+    border-color: var(--color-neutral-lighter);
+    background-color: var(--color-white);
+    color: var(--color-neutral-dark);
+  }
+
+  .closing-band__logos :global(.clients__toggle:hover) {
+    color: var(--color-night);
+  }
+
+  .closing {
+    max-width: 40rem;
+    margin-top: var(--space-2xl);
     text-align: center;
   }
 
-  .cta__content {
-    position: relative;
+  .closing__flag {
+    display: block;
+    width: 4rem;
+    height: auto;
+    margin: 0 auto var(--space-lg);
   }
 
-  .cta__actions {
+  @media (prefers-reduced-motion: no-preference) {
+    .closing__flag path {
+      filter: url(#flag-wave);
+    }
+  }
+
+  .closing h2 {
+    margin-bottom: var(--space-sm);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .closing__text {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+    line-height: 1.4;
+  }
+
+  .closing__actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -382,9 +605,33 @@ const jsonLd = [
     margin-top: var(--space-lg);
   }
 
+  .closing__secondary {
+    border-color: var(--color-night);
+    background: none;
+    color: var(--color-night);
+  }
+
+  .closing__secondary:hover {
+    background-color: var(--color-night);
+    color: var(--color-white);
+  }
+
+  /* ===== Small screens ===== */
+  @media (max-width: 977px) {
+    .service-hero__grid,
+    .statement__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+
+    .capabilities {
+      grid-template-columns: 1fr;
+    }
+  }
+
   @media (max-width: 700px) {
-    .statement__images {
-      grid-template-columns: repeat(2, 1fr);
+    .capability {
+      grid-template-columns: 2.25rem 1fr;
     }
   }
 </style>
