@@ -2,29 +2,15 @@
 import { Image } from 'astro:assets';
 import ContactForm from './ContactForm.astro';
 import Icon from './Icon.astro';
+import TeamFaces from './TeamFaces.astro';
 import logo from '../assets/brand/founding-wordmark-white.svg';
 import wave from '../assets/brand/wave-black.svg';
-import tyler from '../assets/team/tyler.webp';
-import titus from '../assets/team/titus.webp';
-import stacey from '../assets/team/stacey.webp';
-import jamie from '../assets/team/jamie.webp';
-import sasha from '../assets/team/sasha.webp';
-import blake from '../assets/team/blake.webp';
 import { companyLinks, services, sitelaunch, legalLinks, linkedInHref } from '../data/navigation';
 import { getCaseStudies, getPosts, caseStudyUrl, postUrl } from '../lib/content';
 
 // Newest five case studies and three posts, as on the live footer.
 const latestWork = (await getCaseStudies()).slice(0, 5).map((s) => ({ label: s.data.title, href: caseStudyUrl(s) }));
 const latestPosts = (await getPosts()).slice(0, 3).map((p) => ({ label: p.data.title, href: postUrl(p) }));
-
-const team = [
-  { name: 'Tyler', photo: tyler },
-  { name: 'Titus', photo: titus },
-  { name: 'Stacey', photo: stacey },
-  { name: 'Jamie', photo: jamie },
-  { name: 'Sasha', photo: sasha },
-  { name: 'Blake', photo: blake },
-];
 
 // Column headings put one phrase in mint, as on the live footer.
 const columns = [
@@ -61,15 +47,7 @@ const year = new Date().getFullYear();
           Creative foundations for <br />brands of all sizes
         </h2>
         <p class="footer-contact__tagline">Brand and Web Creative Marketing Agency</p>
-        <ul class="footer-contact__team" aria-label="The Founding Creative team">
-          {
-            team.map(({ name, photo }) => (
-              <li>
-                <Image src={photo} alt={name} width={96} height={96} />
-              </li>
-            ))
-          }
-        </ul>
+        <TeamFaces class="footer-contact__team" />
       </div>
       <div class="footer-contact__card">
         <p class="footer-contact__prompt">From bold brands to smart websites, it starts with a message.</p>
@@ -180,23 +158,8 @@ const year = new Date().getFullYear();
     font-weight: var(--font-weight-bold);
   }
 
-  .footer-contact__team {
-    display: flex;
-    margin: var(--space-md) 0 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .footer-contact__team li + li {
-    margin-left: calc(-1 * var(--space-2xs));
-  }
-
-  .footer-contact__team img {
-    width: 3rem;
-    height: 3rem;
-    border: 2px solid var(--color-black);
-    border-radius: 50%;
-    object-fit: cover;
+  .footer-contact :global(.footer-contact__team) {
+    margin-top: var(--space-md);
   }
 
   .footer-contact__card {

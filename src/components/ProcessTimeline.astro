@@ -1,0 +1,161 @@
+---
+// The SiteLaunch process, as on the live pages: numbered rings in the
+// theme's accent strung on a thin line, each with its phase, a promise, and
+// the detail. Scrolling fills the line down to the step you're reading and
+// lights that step's ring; the last ring glows, as on live.
+
+interface Props {
+  steps: { phase: string; title: string; text: string }[];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="timeline" data-timeline>
+  {
+    steps.map((step, i) => (
+      <li class="timeline__step" data-reveal>
+        <span class="timeline__ring" aria-hidden="true">
+          {i + 1}
+        </span>
+        <h3>{step.phase}</h3>
+        <p class="timeline__title">{step.title}</p>
+        <p class="timeline__text">{step.text}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<script>
+  // Fill the line to the latest step that has crossed the middle of the
+  // screen, and mark that step's ring as reached.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  for (const timeline of document.querySelectorAll<HTMLElement>('[data-timeline]')) {
+    const steps = [...timeline.querySelectorAll<HTMLElement>('.timeline__step')];
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.55;
+      const top = timeline.getBoundingClientRect().top;
+      let fill = 0;
+      for (const step of steps) {
+        const ring = step.querySelector<HTMLElement>('.timeline__ring')!.getBoundingClientRect();
+        const reached = reduceMotion.matches || ring.top < line;
+        step.toggleAttribute('data-reached', reached);
+        if (reached) fill = ring.top + ring.height / 2 - top;
+      }
+      timeline.style.setProperty('--fill', `${fill}px`);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    update();
+  }
+</script>
+
+<style>
+  .timeline {
+    --ring: 3rem;
+    position: relative;
+    display: grid;
+    gap: var(--space-xl);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The thin line through the rings, and its accent fill */
+  .timeline::before,
+  .timeline::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--ring) / 2);
+    bottom: calc(var(--ring) / 2);
+    left: calc(var(--ring) / 2 - 0.5px);
+    width: 1px;
+    background-color: rgb(255 255 255 / 0.18);
+  }
+
+  .timeline::after {
+    bottom: auto;
+    height: max(0px, calc(var(--fill, 0px) - var(--ring) / 2));
+    background: linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 40%, transparent));
+    box-shadow: 0 0 8px var(--accent);
+    transition: height 300ms var(--ease-out);
+  }
+
+  .timeline__step {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--ring) 1fr;
+    column-gap: var(--space-xl);
+  }
+
+  .timeline__step > :not(.timeline__ring) {
+    grid-column: 2;
+  }
+
+  .timeline__ring {
+    position: relative;
+    z-index: 1;
+    grid-row: 1 / span 3;
+    display: grid;
+    place-items: center;
+    width: var(--ring);
+    height: var(--ring);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background-color: var(--deep);
+    font-family: var(--font-mono);
+    transition:
+      background-color 400ms var(--ease-out),
+      box-shadow 400ms var(--ease-out),
+      color 400ms var(--ease-out);
+  }
+
+  .timeline__step[data-reached] .timeline__ring {
+    background-color: var(--accent);
+    color: var(--color-night);
+  }
+
+  /* The last step glows, as on the live pages */
+  .timeline__step:last-child .timeline__ring {
+    background-color: rgb(255 255 255 / 0.1);
+    box-shadow: 0 0 15px var(--color-white);
+  }
+
+  .timeline__step:last-child[data-reached] .timeline__ring {
+    background-color: var(--accent);
+    box-shadow: 0 0 24px var(--accent);
+  }
+
+  .timeline h3 {
+    margin: 0.35rem 0 var(--space-2xs);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .timeline__title {
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-eyebrow);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.4;
+  }
+
+  .timeline__text {
+    margin: 0;
+    color: var(--color-forge-muted);
+  }
+
+  @media (max-width: 600px) {
+    .timeline {
+      --ring: 2.5rem;
+    }
+
+    .timeline__step {
+      column-gap: var(--space-md);
+    }
+  }
+</style>

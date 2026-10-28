@@ -1,0 +1,51 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+// The three frosted pills under a themed hero's eyebrow (BrandForge,
+// SiteLaunch), each with a line icon in the theme's accent.
+
+interface Props {
+  pillars: { label: string; icon: string }[];
+}
+
+const { pillars } = Astro.props;
+---
+
+<ul class="pillars">
+  {
+    pillars.map((pillar) => (
+      <li>
+        <Icon name={pillar.icon as IconName} size={16} />
+        {pillar.label}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .pillars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin: 0 0 var(--space-md);
+    padding: 0;
+    list-style: none;
+  }
+
+  .pillars li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-2xs) var(--space-sm) var(--space-2xs) var(--space-2xs);
+    border: 1px solid rgb(255 255 255 / 0.39);
+    border-radius: var(--radius-sm);
+    background-color: rgb(0 4 7 / 0.22);
+    backdrop-filter: blur(6px);
+    font-size: var(--font-size-sm);
+  }
+
+  .pillars :global(.icon) {
+    margin-inline: var(--space-3xs);
+    color: var(--accent);
+  }
+</style>

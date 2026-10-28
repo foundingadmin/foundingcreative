@@ -52,8 +52,27 @@
   /* BrandForge: deep teal sections with a bright cyan accent */
   --color-forge-cyan: #06e6e6;
   --color-forge-teal: #003b3e;
-  --color-forge-night: #020207;
   --color-forge-muted: #b8b8b8; /* body copy on teal */
+  /* SiteLaunch packages, from the live pages: each page's band tone, the
+   * deeper tone it settles into, its accent, and its glowing button */
+  --color-prism-tone: #00257a;
+  --color-prism-deep: #010113;
+  --color-prism-accent: #55cfff;
+  --color-prism-button: #6de4ff;
+  --color-prism-button-end: #0c79ff;
+  --color-prism-glow: #055dff;
+  --color-rocket-tone: #034852;
+  --color-rocket-deep: #010c0d;
+  --color-rocket-accent: #7ef893;
+  --color-rocket-button: #7ef893;
+  --color-rocket-button-end: #02cc1d;
+  --color-rocket-glow: #03d7a2;
+  --color-orbit-tone: #4b0074;
+  --color-orbit-deep: #12011b;
+  --color-orbit-accent: #d98cff;
+  --color-orbit-button: #e7c8ff;
+  --color-orbit-button-end: #7069ff;
+  --color-orbit-glow: #a305ff;
   /* Field Notes: the live "aurora" of near-blacks behind each post */
   --color-aurora-navy: #030a0f;
   --color-aurora-indigo: #0b0a23;
@@ -506,6 +525,110 @@ button {
   border-color: transparent;
   color: var(--color-white);
   box-shadow: 0 8px 24px rgb(0 4 7 / 0.35);
+}
+
+/* Themed pages: BrandForge and the SiteLaunch packages put a theme class on
+ * their outermost wrapper. Everything themed below, and the shared
+ * components (PillarPills, CheckList, StatCards, FeatureGrid,
+ * ProcessTimeline), read these variables, so a new theme is one block. */
+.theme-forge {
+  --tone: var(--color-forge-teal);
+  --deep: var(--color-forge-teal);
+  --accent: var(--color-forge-cyan);
+  --button-start: var(--color-cyan);
+  --button-end: var(--color-forge-cyan);
+  --button-glow: var(--color-forge-cyan);
+}
+
+.theme-prism {
+  --tone: var(--color-prism-tone);
+  --deep: var(--color-prism-deep);
+  --accent: var(--color-prism-accent);
+  --button-start: var(--color-prism-button);
+  --button-end: var(--color-prism-button-end);
+  --button-glow: var(--color-prism-glow);
+}
+
+.theme-rocket {
+  --tone: var(--color-rocket-tone);
+  --deep: var(--color-rocket-deep);
+  --accent: var(--color-rocket-accent);
+  --button-start: var(--color-rocket-button);
+  --button-end: var(--color-rocket-button-end);
+  --button-glow: var(--color-rocket-glow);
+}
+
+.theme-orbit {
+  --tone: var(--color-orbit-tone);
+  --deep: var(--color-orbit-deep);
+  --accent: var(--color-orbit-accent);
+  --button-start: var(--color-orbit-button);
+  --button-end: var(--color-orbit-button-end);
+  --button-glow: var(--color-orbit-glow);
+}
+
+/* A word in the theme's accent: "Brand"Forge, "Prism" SiteLaunch */
+.accent {
+  color: var(--accent);
+}
+
+/* The small bold line above a themed section heading */
+.tone-kicker {
+  margin-bottom: var(--space-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* The big bold sentence that follows a themed heading */
+.tone-lead {
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-eyebrow);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.5;
+}
+
+/* Section headings on a tone */
+.tone-backdrop h2 {
+  margin-bottom: var(--space-md);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Body copy on a tone */
+.tone-copy {
+  color: var(--color-forge-muted);
+  font-size: var(--font-size-lg);
+}
+
+/* The glowing primary button in the page's own colors */
+.button--tone {
+  border-color: transparent;
+  background: linear-gradient(90deg, var(--button-start), var(--button-end), var(--button-start)) 0 0 / 200% 100%;
+  box-shadow: 0 0 48px color-mix(in srgb, var(--button-glow) 70%, transparent);
+  color: var(--color-night);
+  font-weight: var(--font-weight-regular);
+  transition:
+    background-position 900ms var(--ease-out),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.button--tone:hover {
+  border-color: transparent;
+  background-position: 100% 0;
+  box-shadow: 0 0 64px var(--button-glow);
+  color: var(--color-night);
+}
+
+/* One backdrop under all of a themed page's sections, so no seams show:
+ * rises out of the night into the tone, settles into the deep tone, then
+ * back to the night before the footer */
+.tone-backdrop {
+  background: linear-gradient(
+    var(--color-night),
+    var(--tone) 14%,
+    var(--tone) 40%,
+    var(--deep) 72%,
+    var(--color-night)
+  );
 }
 
 /* Tag pill */

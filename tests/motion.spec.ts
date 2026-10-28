@@ -91,6 +91,31 @@ test('line illustrations finish drawing in and stay hidden from screen readers',
   await expect.poll(() => art.locator('[data-fill]').last().evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
 });
 
+test('SiteLaunch pages share the themed sections in their own colors', async ({ page }) => {
+  const accents = new Set<string>();
+  for (const id of ['prism', 'rocket', 'orbit']) {
+    await page.goto(`/${id}-sitelaunch/`);
+    await expect(page.locator(`.theme-${id}`)).toHaveCount(1);
+    await expect(page.locator('.feature')).toHaveCount(6);
+    await expect(page.locator('.timeline__step')).toHaveCount(4);
+    await expect(page.locator('.stat')).toHaveCount(4);
+    // The other packages lead on; this one is marked as the current page.
+    await expect(page.locator('.package')).toHaveCount(3);
+    await expect(page.locator('.package a[aria-current="page"]')).toHaveAttribute('href', `/${id}-sitelaunch/`);
+    accents.add(await page.locator('.stat__value').first().evaluate((el) => getComputedStyle(el).color));
+  }
+  expect(accents.size).toBe(3);
+});
+
+test('the process line fills as you scroll through the steps', async ({ page }) => {
+  await page.goto('/prism-sitelaunch/');
+  const steps = page.locator('.timeline__step');
+  await steps.first().scrollIntoViewIfNeeded();
+  await expect(steps.first()).toHaveAttribute('data-reached', '');
+  await steps.last().evaluate((el) => el.scrollIntoView({ block: 'center' }));
+  await expect(steps.last()).toHaveAttribute('data-reached', '');
+});
+
 test('our work slider lists every case study', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('#work-slider > li')).toHaveCount(10);

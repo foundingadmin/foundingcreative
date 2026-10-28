@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import wave from '../assets/brand/wave-black.svg';
 
 // The animated backdrop behind the site's dark heroes, from the live site: a
@@ -7,20 +9,29 @@ import wave from '../assets/brand/wave-black.svg';
 //             out toward the bottom and drifting as you scroll, under a veil
 //             that settles into the page's night.
 //   aurora:   the near-black aurora behind Field Notes, wave only.
+//   image:    a photo (the SiteLaunch heroes) under the same night veil.
 //
 // Put it first inside a positioned section. It clips itself and stays out of
 // the way of stacking (no z-index), so a card in the section can still rise
 // over the next section's curve; whatever follows it is lifted above it.
 
 interface Props {
-  variant?: 'spectrum' | 'aurora';
+  variant?: 'spectrum' | 'aurora' | 'image';
+  /** For the image variant. */
+  image?: ImageMetadata;
 }
 
-const { variant = 'spectrum' } = Astro.props;
+const { variant = 'spectrum', image } = Astro.props;
 ---
 
 <div class:list={['backdrop', `backdrop--${variant}`]} style={`--backdrop-wave: url(${wave.src})`} aria-hidden="true">
-  <div class="backdrop__wave"></div>
+  {
+    variant === 'image' && image ? (
+      <Image class="backdrop__image" src={image} alt="" widths={[960, 1920]} sizes="100vw" loading="eager" />
+    ) : (
+      <div class="backdrop__wave" />
+    )
+  }
 </div>
 
 <style>
@@ -84,7 +95,16 @@ const { variant = 'spectrum' } = Astro.props;
     opacity: 0.4;
   }
 
-  .backdrop--spectrum::after {
+  .backdrop__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .backdrop--spectrum::after,
+  .backdrop--image::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -96,8 +116,13 @@ const { variant = 'spectrum' } = Astro.props;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .backdrop {
+    .backdrop:not(.backdrop--image) {
       animation: backdrop-drift 15s ease infinite;
+    }
+
+    /* The photo eases in slowly as the page opens */
+    .backdrop__image {
+      animation: backdrop-settle 2.4s var(--ease-out) both;
     }
 
     @supports (animation-timeline: scroll()) {
@@ -112,6 +137,12 @@ const { variant = 'spectrum' } = Astro.props;
   @keyframes backdrop-drift {
     50% {
       background-position: 100% 50%;
+    }
+  }
+
+  @keyframes backdrop-settle {
+    from {
+      transform: scale(1.08);
     }
   }
 

@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import { team, type PersonKey } from '../data/team';
+
+// A row of overlapping round team photos, as in the footer and the SiteLaunch
+// call to action. --ring is the outline color, matching the background so
+// each face looks cut out of the one behind it.
+
+interface Props {
+  order?: PersonKey[];
+  /** Diameter in rem. */
+  size?: number;
+  class?: string;
+}
+
+const { order = ['tyler', 'titus', 'stacey', 'jamie', 'sasha', 'blake'], size = 3, class: className } = Astro.props;
+---
+
+<ul class:list={['faces', className]} style={`--face: ${size}rem`} aria-label="The Founding Creative team">
+  {
+    team(order).map((person) => (
+      <li>
+        <Image src={person.photo} alt={person.name} width={160} height={160} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .faces {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .faces li + li {
+    margin-left: calc(var(--face) * -0.22);
+  }
+
+  .faces img {
+    display: block;
+    width: var(--face);
+    height: var(--face);
+    border: 2px solid var(--ring, var(--color-black));
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform var(--transition-fast);
+  }
+
+  .faces li:hover img {
+    position: relative;
+    transform: translateY(-4px);
+  }
+</style>

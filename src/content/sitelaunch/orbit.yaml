@@ -7,7 +7,13 @@ ogDescription: Unify your brand, teams, and content under one modular, scalable 
 heroImage: ../../assets/sitelaunch/orbit-hero.webp
 shareImage: ../../assets/sitelaunch/orbit-share.webp
 shareImageAlt: "Orbit SiteLaunch: we launch sites your whole team can use"
-pillars: [Modular Architecture, User Permissions, Scalable Foundations]
+pillars:
+  - label: Modular Architecture
+    icon: blocks
+  - label: User Permissions
+    icon: users
+  - label: Scalable Foundations
+    icon: layers
 title: From fragmented to fully focused
 subtitle: For organizations that need a website to bring every page, platform, and person into a single orbit.
 audience:
@@ -41,16 +47,22 @@ features:
   lead: When your website works, so does your whole team.
   items:
     - title: Modular CMS Architecture
+      icon: blocks
       text: Give your teams the ability to create, edit, and launch content without breaking design systems or sending the site into a tailspin.
     - title: Role-Based User Permissions
+      icon: users
       text: Provide marketing, HR, product, and leadership teams controlled access to quickly and easily update what they own.
     - title: Strategic Info Architecture
+      icon: network
       text: A collaborative, stakeholder-driven site structure that reflects how your organization actually works, communicates, and grows.
     - title: Governance and Accessibility
+      icon: shield-check
       text: Protects your brand with WCAG-compliant builds, clear usage policies, and scalable documentation.
     - title: Stakeholder Alignment
+      icon: arrow-left-right
       text: Ensures your website serves real needs by aligning with stakeholders before the first pixel is even designed.
     - title: Scalable System Foundation
+      icon: layers
       text: Creates a future-proofed site that adapts as you grow (new divisions, new audiences, and new initiatives) without constant overhauls.
 process:
   heading: Built to align. Designed to scale.

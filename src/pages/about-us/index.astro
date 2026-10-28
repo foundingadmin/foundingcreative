@@ -4,31 +4,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/CtaSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
 import Icon from '../../components/Icon.astro';
+import { team } from '../../data/team';
 import LineArt from '../../components/LineArt.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import builderSvg from '../../assets/pages/about-builder-illustration.svg?raw';
-import titus from '../../assets/team/titus.webp';
-import tyler from '../../assets/team/tyler.webp';
-import stacey from '../../assets/team/stacey.webp';
-import sasha from '../../assets/team/sasha.webp';
-import jamie from '../../assets/team/jamie.webp';
-import blake from '../../assets/team/blake.webp';
 
-// LinkedIn profiles come from the photo links on the live page (the live
-// corner tabs all point to one profile by mistake).
-const team = [
-  { name: 'Josh Titus', role: 'Brand & Marketing Design', photo: titus, linkedin: 'https://www.linkedin.com/in/tituscreative/' },
-  { name: 'Tyler Lukey', role: 'Systems & Product Design', photo: tyler, linkedin: 'https://www.linkedin.com/in/tylerlukey/' },
-  {
-    name: 'Stacey Cuzzacrea',
-    role: 'Creative Production Coordinator',
-    photo: stacey,
-    linkedin: 'https://www.linkedin.com/in/stacey-cuzzacrea-1ab16421b/',
-  },
-  { name: 'Sasha Beck', role: 'Senior Designer', photo: sasha, linkedin: 'https://www.linkedin.com/in/sashambeck/' },
-  { name: 'Jamie Caceres', role: 'Marketing Director', photo: jamie, linkedin: 'https://www.linkedin.com/in/jamie-caceres-lukey/' },
-  { name: 'Blake Hickey', role: 'Account Executive', photo: blake, linkedin: 'https://www.linkedin.com/in/blakehickey/' },
-];
+const people = team();
 
 const values = [
   { title: 'Clarity over chaos', text: 'Solutions rooted in structure and strategy' },
@@ -47,7 +28,7 @@ const jsonLd = {
   url: new URL('/about-us/', Astro.site).href,
   mainEntity: {
     '@id': `${Astro.site}#organization`,
-    employee: team.map((person) => ({
+    employee: people.map((person) => ({
       '@type': 'Person',
       name: person.name,
       jobTitle: person.role,
@@ -61,7 +42,7 @@ const jsonLd = {
   title="About Us: The Team Behind Founding Creative"
   description={description}
   ogTitle="About Us"
-  ogImage={titus}
+  ogImage={people[0].photo}
   ogImageAlt="Josh Titus, Brand & Marketing Design at Founding Creative"
   jsonLd={jsonLd}
 >
@@ -101,7 +82,7 @@ const jsonLd = {
       </div>
       <ul class="team" data-reveal-stagger>
         {
-          team.map((person) => (
+          people.map((person) => (
             <li class="person">
               <div class="person__photo">
                 <Image

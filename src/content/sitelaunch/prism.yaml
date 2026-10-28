@@ -7,7 +7,13 @@ ogDescription: Elevate your brand with a high-impact website built for visual wo
 heroImage: ../../assets/sitelaunch/prism-hero.webp
 shareImage: ../../assets/sitelaunch/prism-share.webp
 shareImageAlt: "Prism SiteLaunch: we launch sites that captivate your users"
-pillars: [Premium Design, Immersive Interaction, Seamless Motion]
+pillars:
+  - label: Premium Design
+    icon: pen-tool
+  - label: Immersive Interaction
+    icon: mouse-pointer
+  - label: Seamless Motion
+    icon: play
 title: Push your brand into the spotlight
 subtitle: Stunning high-impact websites designed to send up a flare that just can't be ignored.
 audience:
@@ -40,16 +46,22 @@ features:
   lead: Scroll-stopping experiences make your brand impossible to ignore.
   items:
     - title: Complete Digital Design System
+      icon: pen-tool
       text: Tailored UI through art direction sets the tone for how your audience perceives your brand from the first click to every scroll.
     - title: Engaging Interactivity
+      icon: mouse-pointer
       text: Micro-interactions, motion layers, and depth create an immersive experience that keeps users engaged and elevates brand value.
     - title: On-Brand, On-Purpose
+      icon: target
       text: Every design choice from color systems to iconography is intentionally crafted to align with your voice, story, and market position.
     - title: Flawless Mobile Expression
+      icon: smartphone
       text: Responsive layouts and mobile-native design ensure your brand looks just as bold and beautiful in the palm of your audience's hand.
     - title: High-Impact Hero Sections
+      icon: layers
       text: Dynamic, above-the-fold moments that instantly inspire confidence and interest, setting the tone before a word is even read.
     - title: Strategic Motion That Sticks
+      icon: play
       text: Thoughtful animation creates emotional touchpoints without distracting from your message to leave a lasting impression.
 process:
   heading: Designed to dazzle. Built to resonate.
