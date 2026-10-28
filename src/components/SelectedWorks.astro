@@ -1,14 +1,13 @@
 ---
 import { Image } from 'astro:assets';
-import FlagMark from './FlagMark.astro';
 import Icon from './Icon.astro';
 import { caseStudyUrl, getCaseStudies } from '../lib/content';
 import mountain from '../assets/home/mountain.png';
 
 // "Selected works": three featured case studies, after the Davies template's
 // showcase. Client names roll in a column on the left, the project photo
-// crossfades on the right, and a mountain range rises over the bottom with
-// the Founding flag waving on its peak. Advances on its own every few
+// crossfades on the right, and a mountain range rises over the bottom,
+// held to the site grid. Advances on its own every few
 // seconds (paused on hover, focus, off screen, and for reduced motion).
 
 interface Props {
@@ -67,8 +66,7 @@ const place = (i: number) => ((i + 1) % count) - 1;
   </div>
 
   <div class="selected-works__range" aria-hidden="true">
-    <Image class="selected-works__mountain" src={mountain} alt="" widths={[720, 1440]} sizes="100vw" />
-    <FlagMark class="selected-works__flag" size={3.5} />
+    <Image class="selected-works__mountain" src={mountain} alt="" widths={[720, 1440]} sizes="(max-width: 1204px) 100vw, 1140px" />
   </div>
 
   <div class="container selected-works__footer">
@@ -349,13 +347,15 @@ const place = (i: number) => ((i + 1) % count) - 1;
     overflow: visible;
   }
 
-  /* The mountain range rises over the bottom of the section, with the flag
-     planted on the right-hand peak (1192, 409 in the 1440 by 720 art) */
+  /* The mountain range rises over the bottom of the section. The art fades
+     out at both ends, so it sits within the site grid rather than bleeding
+     to the viewport edges */
   .selected-works__range {
     position: absolute;
-    right: 0;
     bottom: 0;
-    left: 0;
+    left: 50%;
+    width: min(100% - 2 * var(--container-gutter), var(--container-max));
+    transform: translateX(-50%);
     z-index: 1;
     aspect-ratio: 2 / 1;
     pointer-events: none;
@@ -373,17 +373,6 @@ const place = (i: number) => ((i + 1) % count) - 1;
     position: absolute;
     inset: 70% 0 0;
     background: linear-gradient(transparent, var(--color-night));
-  }
-
-  .selected-works__range :global(.selected-works__flag) {
-    position: absolute;
-    top: 56.8%;
-    left: 82.8%;
-    width: clamp(2rem, 4.2vw, 4rem);
-    color: var(--color-mint);
-    filter: drop-shadow(var(--glow-mint));
-    /* The pole's foot sits about 40% in from the flag's left edge */
-    transform: translate(-40%, -97%);
   }
 
   .selected-works__footer {
@@ -510,14 +499,6 @@ const place = (i: number) => ((i + 1) % count) - 1;
 
     .selected-works__controls {
       justify-content: flex-start;
-    }
-
-    /* A wider range on phones so the peaks read, with the flagged peak
-       still on screen at the right */
-    .selected-works__range {
-      right: auto;
-      left: -42%;
-      width: 150%;
     }
 
     .selected-works__count {
