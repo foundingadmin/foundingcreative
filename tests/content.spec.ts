@@ -23,8 +23,8 @@ test('a post has its hero, body, structured data, and related posts', async ({ p
   await expect(main.getByRole('heading', { name: 'More Field Notes' })).toBeVisible();
 
   const schema = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent()) ?? '[]');
-  const types = [schema].flat().map((s: { '@type': string }) => s['@type']);
-  expect(types).toEqual(expect.arrayContaining(['Organization', 'BlogPosting', 'BreadcrumbList']));
+  const types = schema['@graph'].flatMap((node: { '@type': string | string[] }) => node['@type']);
+  expect(types).toEqual(expect.arrayContaining(['Organization', 'WebSite', 'BlogPosting', 'BreadcrumbList']));
 
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /\.jpg$/);
   await expect(page.locator('meta[property="article:published_time"]')).toHaveAttribute('content', /^2025-10-30/);

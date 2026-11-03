@@ -59,20 +59,16 @@ const jsonLd = [
       })),
     },
   },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
-      { '@type': 'ListItem', position: 2, name: 'Services', item: new URL('/services/', Astro.site).href },
-      { '@type': 'ListItem', position: 3, name: data.name, item: url },
-    ],
-  },
 ];
 ---
 
 <BaseLayout
-  seo={entrySeo(data, { image: data.heroImages[0].src, imageAlt: data.heroImages[0].alt })}
+  seo={entrySeo(data, {
+    image: data.heroImages[0].src,
+    imageAlt: data.heroImages[0].alt,
+    crumb: data.name,
+    parents: [{ name: 'Services', path: '/services/' }],
+  })}
   jsonLd={jsonLd}
   lcpImage={{ src: data.heroImages[0].src, ...wipeSlide }}
 >

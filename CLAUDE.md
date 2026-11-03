@@ -64,6 +64,9 @@ At cutover, nothing needs to change in the code: once foundingcreative.com point
 - Share title and description default to the page title and description. Share images are center-cropped to 1200x630 JPEG; use a source at least 1200px wide and 630px tall or it comes out smaller.
 - The build fails if a page has no description or not exactly one H1 (`src/integrations/seo-check.mjs`, set up in `astro.config.mjs`). Titles over 60 characters and descriptions over 155 are warnings until Sprint 2 rewrites the copy, then `enforceLengths: true` makes them errors too.
 - Keep values matching the WordPress crawl unless told otherwise. A noindex page is marked in `seo.ts` and added to `NOINDEX` in `astro.config.mjs`.
+- Structured data is one JSON-LD `@graph` per page, assembled in `SEO.astro` from `src/lib/schema.ts`: the Organization (in full, as Organization + ProfessionalService, on Home only; a short form elsewhere so references resolve), the WebSite on every page, and a BreadcrumbList on every page below Home (built from the page's `crumb` and `parents` in `seo.ts` or `entrySeo`). Pages pass only their own nodes as `jsonLd` (Service, BlogPosting, CreativeWork, FAQPage...) and refer to the Organization as `{ '@id': organizationId(site) }`. Never add a second WebSite, Organization or BreadcrumbList.
+- FAQPage only where the questions and answers are visible on the page. No street address or phone in the Organization until we have real ones.
+- Validate new page types at validator.schema.org (0 errors, 0 warnings).
 - One H1 per page. Eyebrow labels above headings are styled `<p>` or `<span>`, never heading tags.
 
 ## Images and links

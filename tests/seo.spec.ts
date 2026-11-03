@@ -58,3 +58,39 @@ test('every sitemap page has one full set of search and share tags', async ({ pa
     }
   }
 });
+
+test('structured data: one graph, Organization and WebSite once, breadcrumbs below Home', async ({ page }) => {
+  const graphOf = async (path: string) => {
+    await page.goto(path, { waitUntil: 'domcontentloaded' });
+    const scripts = page.locator('script[type="application/ld+json"]');
+    await expect(scripts, `${path} JSON-LD blocks`).toHaveCount(1);
+    const graph: Record<string, unknown>[] = JSON.parse((await scripts.textContent()) ?? '')['@graph'];
+    const types = (type: string) => graph.filter((node) => [node['@type']].flat().includes(type));
+    expect(types('Organization'), `${path} Organization`).toHaveLength(1);
+    expect(types('WebSite'), `${path} WebSite`).toHaveLength(1);
+    return { graph, types };
+  };
+
+  const home = await graphOf('/');
+  const org = home.types('Organization')[0];
+  expect(org['@type']).toEqual(['Organization', 'ProfessionalService']);
+  expect((org.founder as { name: string }[]).map((f) => f.name)).toEqual(['Tyler Lukey', 'Josh Titus']);
+  expect(org.foundingDate).toBe('2024-01');
+  expect(home.types('BreadcrumbList')).toHaveLength(0);
+
+  const expected: [string, string, string[]][] = [
+    ['/services/website-services/', 'Service', ['Home', 'Services', 'Website Services']],
+    ['/rocket-sitelaunch/', 'Service', ['Home', 'Services', 'Website Services', 'Rocket SiteLaunch']],
+    ['/case-study/turntide-website/', 'CreativeWork', ['Home', 'Case Studies', 'Turntide Website']],
+    ['/5-website-truths-for-marketers/', 'BlogPosting', ['Home', 'Field Notes', '5 Website Truths for Marketers']],
+    ['/buckit/', 'FAQPage', ['Home', 'BucKit']],
+    ['/about-us/', 'AboutPage', ['Home', 'About Us']],
+  ];
+  for (const [path, type, trail] of expected) {
+    const { types } = await graphOf(path);
+    expect(types(type), `${path} ${type}`).toHaveLength(1);
+    expect(types('ProfessionalService'), `${path} ProfessionalService only on Home`).toHaveLength(0);
+    const crumbs = types('BreadcrumbList')[0]?.itemListElement as { name: string }[];
+    expect(crumbs.map((c) => c.name), `${path} breadcrumbs`).toEqual(trail);
+  }
+});

@@ -12,7 +12,6 @@ import HeroBackdrop from '../components/HeroBackdrop.astro';
 import heroPoster from '../assets/home/hero/glowing-grid-poster.png';
 import { heroBackdrop } from '../lib/images';
 import { team } from '../data/team';
-import { pages } from '../data/seo';
 
 // Service sliders
 import web1 from '../assets/home/services/web-1.webp';
@@ -120,35 +119,11 @@ const values = [
   { title: 'Creative systems', text: 'Always building together to drive outcomes' },
   { title: 'Founding energy', text: 'Every project is a chance for something big' },
 ];
-
-const { description } = pages['/'];
-
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Founding Creative',
-    url: Astro.site?.href,
-    publisher: { '@id': `${Astro.site}#organization` },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    name: 'Founding Creative',
-    url: Astro.site?.href,
-    description,
-    parentOrganization: { '@id': `${Astro.site}#organization` },
-    areaServed: { '@type': 'Country', name: 'United States' },
-    address: [
-      { '@type': 'PostalAddress', addressLocality: 'Denver', addressRegion: 'CO', addressCountry: 'US' },
-      { '@type': 'PostalAddress', addressLocality: 'Chattanooga', addressRegion: 'TN', addressCountry: 'US' },
-    ],
-    knowsAbout: ['Brand strategy', 'Website design', 'Design systems', 'Event design', 'Animation'],
-  },
-];
 ---
 
-<BaseLayout jsonLd={jsonLd} lcpImage={{ src: heroPoster, ...heroBackdrop }}>
+<!-- Organization (with ProfessionalService) and WebSite structured data
+     come from SEO.astro, in full on this page -->
+<BaseLayout lcpImage={{ src: heroPoster, ...heroBackdrop }}>
   <!-- Hero: a looping glowing-grid video under a dark veil, with the pearl
        headline glowing on top -->
   <section class="hero under-header">

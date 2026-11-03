@@ -52,20 +52,17 @@ const jsonLd = [
     mainEntityOfPage: url,
     articleSection: data.categories,
   },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
-      { '@type': 'ListItem', position: 2, name: 'Field Notes', item: new URL('/blog/', Astro.site).href },
-      { '@type': 'ListItem', position: 3, name: data.title, item: url },
-    ],
-  },
 ];
 ---
 
 <BaseLayout
-  seo={entrySeo(data, { image: data.cover, imageAlt: data.coverAlt, type: 'article' })}
+  seo={entrySeo(data, {
+    image: data.cover,
+    imageAlt: data.coverAlt,
+    type: 'article',
+    crumb: data.title,
+    parents: [{ name: 'Field Notes', path: '/blog/' }],
+  })}
   article={{ published: data.date, modified: data.updated, section: data.categories[0], tags: data.categories }}
   jsonLd={jsonLd}
   lcpImage={{ src: data.cover, ...postCover }}
