@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from './Img.astro';
 import Icon from './Icon.astro';
 import honeywell from '../assets/home/clients/honeywell-logo.png';
 import gsk from '../assets/home/clients/gsk-logo.png';
@@ -42,7 +42,7 @@ const clients = [
           <ul class="clients__list" aria-label={copy ? undefined : "Brands we've worked with"} aria-hidden={copy ? 'true' : undefined}>
             {clients.map((client) => (
               <li>
-                <Image src={client.src} alt={copy ? '' : `${client.name} logo`} height={48} />
+                <Img src={client.src} alt={copy ? '' : `${client.name} logo`} height={48} />
               </li>
             ))}
           </ul>

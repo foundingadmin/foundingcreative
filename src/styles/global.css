@@ -9,6 +9,18 @@
  * single accent, Gelica for display, Manrope for everything readable.
  */
 
+/* Georgia scaled to Gelica's width, ascent, and descent (measured in
+ * Chromium against the Adobe kit), so headings barely move when Gelica
+ * swaps in after the first paint. */
+@font-face {
+  font-family: 'Gelica Fallback';
+  src: local('Georgia');
+  size-adjust: 103.6%;
+  ascent-override: 89.8%;
+  descent-override: 24.1%;
+  line-gap-override: 0%;
+}
+
 :root {
   /* Color: neutrals */
   --color-black: #000000;
@@ -137,8 +149,9 @@
   /* Typography: families
    * Manrope is self-hosted through Astro's font API (--font-manrope, set in
    * astro.config.mjs). Gelica comes from the Adobe Fonts kit linked in
-   * BaseLayout, as Adobe's license requires. */
-  --font-display: 'gelica', Georgia, 'Times New Roman', serif;
+   * BaseLayout, as Adobe's license requires; until it loads, headings use
+   * Georgia resized to Gelica's metrics (Gelica Fallback, below). */
+  --font-display: 'gelica', 'Gelica Fallback', Georgia, 'Times New Roman', serif;
   --font-body: var(--font-manrope), system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: var(--font-ubuntu-mono), ui-monospace, 'SF Mono', Menlo, monospace; /* case study kickers */
 
@@ -293,12 +306,17 @@ body:has(> .page-end) main {
 }
 
 img,
-picture,
 svg,
 video {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+/* <Picture> wraps each <img> in a <picture>; it takes no box of its own so
+ * the <img> lays out exactly as it would on its own. */
+picture {
+  display: contents;
 }
 
 h1,
@@ -792,12 +810,23 @@ button {
   [data-intro] > :nth-child(n + 5) {
     animation-delay: 480ms;
   }
+
+  [data-intro='left'] > * {
+    animation-name: intro-left;
+  }
 }
 
 @keyframes intro-up {
   from {
     opacity: 0;
     transform: translateY(var(--reveal-distance));
+  }
+}
+
+@keyframes intro-left {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-2 * var(--reveal-distance)));
   }
 }
 

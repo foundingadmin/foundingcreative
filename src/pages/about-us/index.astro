@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../../components/Img.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/CtaSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
@@ -55,7 +55,7 @@ const jsonLd = {
         <p class="about-hero__lead">Sustainable growth begins with a solid foundation.</p>
       </div>
       <div class="about-hero__grid">
-        <div data-reveal="left">
+        <div data-intro="left">
           <p class="about-hero__intro">
             Brought together from a desire to offer up the missing middle ground. A ground where holistic creative strategies
             are developed not just as one-offs, but as one-mores.
@@ -85,7 +85,7 @@ const jsonLd = {
           people.map((person) => (
             <li class="person">
               <div class="person__photo">
-                <Image
+                <Img
                   src={person.photo}
                   alt={`${person.name}, ${person.role}`}
                   widths={[320, 640]}

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../../components/Img.astro';
 import { getEntries } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaseStudyCard from '../../components/CaseStudyCard.astro';
@@ -56,7 +56,7 @@ const description =
         </p>
         <a class="button button--primary" href="#get-in-touch">Get your free copy <Icon name="arrow-up-right" size={16} /></a>
       </div>
-      <Image
+      <Img
         class="hero__image"
         src={magazine}
         alt="Website Buy-In Playbook shown as a printed magazine"
@@ -73,7 +73,7 @@ const description =
       {
         preview.map((page) => (
           <li>
-            <Image src={page.src} alt={page.alt} widths={[400, 800]} sizes="(max-width: 700px) 90vw, 360px" />
+            <Img src={page.src} alt={page.alt} widths={[400, 800]} sizes="(max-width: 700px) 90vw, 360px" />
           </li>
         ))
       }
@@ -105,7 +105,7 @@ const description =
       <p class="split__tagline">Internal wins = external wins = business wins.</p>
       <a class="button button--primary" href="#get-in-touch">Get your copy <Icon name="arrow-up-right" size={16} /></a>
     </div>
-    <Image
+    <Img
       src={teams}
       alt="Playbook spread showing how a new website helps each team"
       widths={[500, 1000]}

@@ -1,5 +1,7 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { getImage } from 'astro:assets';
+import Img from '../../components/Img.astro';
+import { caseCover } from '../../lib/images';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OurWork from '../../components/OurWork.astro';
@@ -112,6 +114,7 @@ const jsonLd = [
   ogType="article"
   article={{ published: data.date, section: 'Case Studies', tags: [...data.services, ...data.sectors] }}
   jsonLd={jsonLd}
+  lcpImage={{ src: data.cover, ...caseCover }}
 >
   <article style={themeStyle}>
     <!-- Hero: the live page's shifting gradient in the study's colors -->
@@ -131,16 +134,15 @@ const jsonLd = [
     <div class="case-cover curve-top">
       <div class="container">
         <figure class="case-cover__card" data-reveal="color">
-          <Image
+          <Img
             class="case-cover__image"
             src={data.cover}
             alt={data.coverAlt}
-            widths={[640, 1280, 1920]}
-            sizes="(max-width: 1240px) 100vw, 1200px"
+            {...caseCover}
             loading="eager"
             fetchpriority="high"
           />
-          {data.logo && <Image class="case-cover__logo" src={data.logo} alt={data.logoAlt ?? ''} height={96} />}
+          {data.logo && <Img class="case-cover__logo" src={data.logo} alt={data.logoAlt ?? ''} height={96} />}
         </figure>
         {
           facts.length > 0 && (
@@ -178,7 +180,7 @@ const jsonLd = [
         <p class="case-next__client">{next.data.clients.join(', ')}</p>
       </div>
       <div class="case-next__media">
-        <Image src={next.data.cover} alt={next.data.coverAlt} widths={[480, 960]} sizes="(max-width: 977px) 100vw, 560px" />
+        <Img src={next.data.cover} alt={next.data.coverAlt} widths={[480, 960]} sizes="(max-width: 977px) 100vw, 560px" />
       </div>
     </div>
   </section>

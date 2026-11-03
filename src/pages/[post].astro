@@ -1,11 +1,12 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../components/Img.astro';
 import { render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Prose from '../components/Prose.astro';
 import PostToc from '../components/PostToc.astro';
 import FieldNotes from '../components/FieldNotes.astro';
 import HeroBackdrop from '../components/HeroBackdrop.astro';
+import { postCover } from '../lib/images';
 import { getPosts, postUrl, formatDate, isoDate, type Post } from '../lib/content';
 
 // Every Field Notes post renders through this one template, at the site root
@@ -72,6 +73,7 @@ const jsonLd = [
   ogType="article"
   article={{ published: data.date, modified: data.updated, section: data.categories[0], tags: data.categories }}
   jsonLd={jsonLd}
+  lcpImage={{ src: data.cover, ...postCover }}
 >
   <article class="post">
     <!-- The aurora band: decoration only, the card below rises into it -->
@@ -83,12 +85,11 @@ const jsonLd = [
       <header>
         <div class="container">
           <div class="post-card" data-intro>
-            <Image
+            <Img
               class="post-card__image"
               src={data.cover}
               alt={data.coverAlt}
-              widths={[640, 1280, 1920]}
-              sizes="(max-width: 1200px) 100vw, 1140px"
+              {...postCover}
               loading="eager"
               fetchpriority="high"
             />

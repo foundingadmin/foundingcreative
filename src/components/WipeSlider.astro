@@ -1,5 +1,6 @@
 ---
-import { Image } from 'astro:assets';
+import Img from './Img.astro';
+import { wipeSlide } from '../lib/images';
 import type { ImageMetadata } from 'astro';
 import Icon from './Icon.astro';
 
@@ -48,11 +49,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
             aria-label={`${i + 1} of ${images.length}`}
             aria-hidden={i === 0 ? undefined : 'true'}
           >
-            <Image
+            <Img
               src={image.src}
               alt={image.alt}
-              widths={[560, 1120]}
-              sizes="(max-width: 977px) 92vw, 560px"
+              {...wipeSlide}
               loading={i === 0 ? 'eager' : 'lazy'}
               fetchpriority={i === 0 ? 'high' : undefined}
             />

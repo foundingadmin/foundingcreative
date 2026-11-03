@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../../components/Img.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/CtaSection.astro';
 import Icon from '../../components/Icon.astro';
@@ -173,7 +173,7 @@ const jsonLd = {
           presence for your business efficiently and effectively under one roof.
         </p>
       </div>
-      <Image class="hero__art" src={idea} alt="" loading="eager" />
+      <Img class="hero__art" src={idea} alt="" loading="eager" />
     </div>
   </section>
 

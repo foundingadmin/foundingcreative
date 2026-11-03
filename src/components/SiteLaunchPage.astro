@@ -1,8 +1,9 @@
 ---
-import { Image } from 'astro:assets';
+import Img from './Img.astro';
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroBackdrop from './HeroBackdrop.astro';
+import { heroBackdrop } from '../lib/images';
 import PillarPills from './PillarPills.astro';
 import CheckList from './CheckList.astro';
 import StatCards from './StatCards.astro';
@@ -88,6 +89,7 @@ const jsonLd = [
   ogImage={data.shareImage}
   ogImageAlt={data.shareImageAlt}
   jsonLd={jsonLd}
+  lcpImage={{ src: data.heroImage, ...heroBackdrop }}
 >
   <div class:list={['sl', `theme-${id}`]}>
     <!-- Hero: the package's photo under the night veil -->
@@ -123,7 +125,7 @@ const jsonLd = [
       <section aria-labelledby="why-heading">
         <div class="container section sl-split">
           <div class="sl-art" aria-hidden="true">
-            <Image src={art} alt="" widths={[480, 960]} sizes="(max-width: 977px) 80vw, 520px" />
+            <Img src={art} alt="" widths={[480, 960]} sizes="(max-width: 977px) 80vw, 520px" />
           </div>
           <div data-reveal="right">
             <p class="tone-kicker">Why <span class="accent">{data.name}</span> SiteLaunch?</p>

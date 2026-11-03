@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from './Img.astro';
 import { formatDate, isoDate, postUrl, type Post } from '../lib/content';
 
 // A Field Notes card for the white index page, as on the live site: the cover
@@ -18,7 +18,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 
 <article class="post-card">
   <div class="post-card__media">
-    <Image
+    <Img
       src={post.data.cover}
       alt={post.data.coverAlt}
       widths={[480, 960, 1200]}

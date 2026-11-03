@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from './Img.astro';
 import Icon from './Icon.astro';
 import { formatDate, isoDate, postUrl, type Post } from '../lib/content';
 
@@ -38,7 +38,7 @@ const id = `field-notes-${heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').repl
                 <a class="field-notes__item" href={postUrl(post)}>
                   <span class="field-notes__item-title">{post.data.title}</span>
                   <span class="field-notes__thumb">
-                    <Image src={post.data.cover} alt={post.data.coverAlt} widths={[160, 320]} sizes="160px" />
+                    <Img src={post.data.cover} alt={post.data.coverAlt} widths={[160, 320]} sizes="160px" />
                   </span>
                 </a>
               </li>
@@ -47,7 +47,7 @@ const id = `field-notes-${heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').repl
         </div>
 
         <article class="field-notes__featured">
-          <Image
+          <Img
             class="field-notes__featured-image"
             src={featured.data.cover}
             alt={featured.data.coverAlt}

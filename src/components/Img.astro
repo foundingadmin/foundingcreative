@@ -1,0 +1,25 @@
+---
+import type { ImageMetadata } from 'astro';
+import type { ComponentProps } from 'astro/types';
+import { Image, Picture } from 'astro:assets';
+import { isAnimated, pictureFormats } from '../lib/images';
+
+// Every image on the site goes through here: raster images become a
+// <picture> with AVIF and WebP sources (the <img> itself falls back to WebP).
+// SVGs and animated images stay a plain <Image>: SVGs are already as small
+// as they get, and animation can't be converted to AVIF. Props are the same
+// as astro:assets <Image>, and `class` and scoped styles land on the <img>.
+type Props = ComponentProps<typeof Image>;
+
+const props = Astro.props;
+const src = props.src as ImageMetadata | string;
+const plain = typeof src !== 'string' && (src.format === 'svg' || isAnimated(src));
+---
+
+{
+  plain ? (
+    <Image {...props} />
+  ) : (
+    <Picture {...(props as ComponentProps<typeof Picture>)} formats={pictureFormats} fallbackFormat="webp" />
+  )
+}
