@@ -627,6 +627,100 @@ button {
   --button-glow: var(--color-mint);
 }
 
+/* Page transitions (cross-document View Transitions). Pages crossfade
+ * briefly and the header holds still; from a case study, the "Next case
+ * study" image grows into the next page's cover (see case-study/[slug]).
+ * Browsers without support just navigate. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group(*) {
+  animation-duration: 350ms;
+  animation-timing-function: var(--ease-out);
+}
+
+.site-header {
+  view-transition-name: site-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+/* Custom cursor, from the live SiteLaunch pages: a dot, a trailing ring that
+ * inverts what's under it, and a holographic ripple on click. Only for a
+ * mouse or trackpad and without reduced motion; src/scripts/cursor.ts adds
+ * .has-cursor and the elements. Text fields keep their I-beam. */
+.has-cursor body {
+  cursor: none;
+}
+
+.has-cursor :is(input, textarea, select, [contenteditable]) {
+  cursor: auto;
+}
+
+.cursor-dot,
+.cursor-ring,
+.cursor-ripple {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cursor-dot {
+  z-index: 9999;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  background-color: var(--color-white);
+  transition: opacity var(--transition-fast);
+}
+
+.cursor-ring {
+  z-index: 9999;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border: 1px solid var(--color-white);
+  background-color: rgb(255 255 255 / 0.7);
+  mix-blend-mode: difference;
+  transition: opacity var(--transition-fast);
+}
+
+.cursor-dot.is-hidden,
+.cursor-ring.is-hidden {
+  opacity: 0;
+}
+
+.cursor-ripple {
+  z-index: 9998;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  background: conic-gradient(
+    var(--color-cyan),
+    var(--color-mint-pale),
+    var(--color-white),
+    var(--color-lavender-light),
+    var(--color-cyan)
+  );
+  mix-blend-mode: difference;
+  opacity: 0.9;
+  animation: cursor-ripple 600ms ease-out forwards;
+}
+
+@keyframes cursor-ripple {
+  to {
+    opacity: 0;
+    transform: scale(5);
+  }
+}
+
 /* A word in the theme's accent: "Brand"Forge, "Prism" SiteLaunch */
 .accent {
   color: var(--accent);
@@ -822,22 +916,12 @@ button {
     animation-delay: 480ms;
   }
 
-  [data-intro='left'] > * {
-    animation-name: intro-left;
-  }
 }
 
 @keyframes intro-up {
   from {
     opacity: 0;
     transform: translateY(var(--reveal-distance));
-  }
-}
-
-@keyframes intro-left {
-  from {
-    opacity: 0;
-    transform: translateX(calc(-2 * var(--reveal-distance)));
   }
 }
 
@@ -855,26 +939,13 @@ button {
     transition-delay: var(--reveal-delay, 0ms);
   }
 
-  .js [data-reveal='left'] {
-    transform: translateX(calc(-2 * var(--reveal-distance)));
-  }
-
-  .js [data-reveal='right'] {
-    transform: translateX(calc(2 * var(--reveal-distance)));
-  }
-
-  .js [data-reveal='up'] {
-    transform: translateY(calc(2 * var(--reveal-distance)));
-  }
+  /* Every reveal is the same subtle slide up (Sprint 3 motion rules); the
+   * old left, right, up and zoom variants all resolve to it. */
 
   /* Color reveal: stays in place, only loses its grayscale (set per use) */
   .js [data-reveal='color'] {
     opacity: 1;
     transform: none;
-  }
-
-  .js [data-reveal='zoom'] {
-    transform: scale(0.96);
   }
 
   .js :is([data-reveal], [data-reveal-stagger] > *, .section__intro, .case-band__inner > *).is-revealed {

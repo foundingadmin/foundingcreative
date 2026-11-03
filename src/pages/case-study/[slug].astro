@@ -237,6 +237,21 @@ const jsonLd = [
   <OurWork exclude={study.id} />
 </BaseLayout>
 
+<script>
+  // Going to the next case study, its image here becomes the shared element
+  // that grows into that page's cover (named case-cover there in CSS). Only
+  // one element per page may hold the name, so it moves off this page's
+  // own cover first.
+  window.addEventListener('pageswap', (event) => {
+    const swap = event as Event & { viewTransition?: unknown; activation?: { entry?: { url?: string } } };
+    const to = swap.activation?.entry?.url;
+    const next = document.querySelector<HTMLAnchorElement>('.case-next__title a');
+    if (!swap.viewTransition || !to || !next || new URL(to).pathname !== next.pathname) return;
+    document.querySelector<HTMLElement>('.case-cover__card')?.style.setProperty('view-transition-name', 'none');
+    document.querySelector<HTMLElement>('.case-next__media')?.style.setProperty('view-transition-name', 'case-cover');
+  });
+</script>
+
 <style>
   /* Hero */
   .case-hero {
@@ -303,6 +318,7 @@ const jsonLd = [
   }
 
   .case-cover__card {
+    view-transition-name: case-cover;
     position: relative;
     display: grid;
     place-items: center;
