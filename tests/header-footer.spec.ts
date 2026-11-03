@@ -129,3 +129,21 @@ test('footer has the live columns, LinkedIn, and legal links', async ({ page }) 
   }
   await expect(footer.getByRole('button', { name: 'Submit' })).toBeVisible();
 });
+
+test('footer does not repeat the homepage H1 as a heading, and its credit reads in full', async ({ page }) => {
+  await page.goto('/');
+  const footer = page.getByRole('contentinfo');
+  await expect(page.getByRole('heading', { name: 'Creative foundations for brands of all sizes' })).toHaveCount(1);
+  await expect(footer.getByText('Creative foundations for brands of all sizes')).toBeVisible();
+  await expect(footer.getByRole('heading', { name: /Creative foundations/ })).toHaveCount(0);
+  await expect(footer.locator('.footer-bottom__credit')).toHaveText('Designed & developed with love by Founding Creative');
+});
+
+test('pages carry no generator tag, and non-production builds are noindex', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('meta[name="generator"]')).toHaveCount(0);
+  // Local and preview builds have no VERCEL_ENV=production, so they stay out of search.
+  if (!process.env.PLAYWRIGHT_BASE_URL?.includes('foundingcreative.com')) {
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+  }
+});

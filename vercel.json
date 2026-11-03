@@ -62,5 +62,12 @@
       "source": "/feed/",
       "destination": "/feed.xml"
     }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "missing": [{ "type": "host", "value": "foundingcreative.com" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
   ]
 }

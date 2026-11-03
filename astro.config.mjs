@@ -52,6 +52,9 @@ export default defineConfig({
       // they live in env vars (Vercel and .env.local) per CLAUDE.md.
       FORMSPREE_FORM_ID: envField.string({ context: 'server', access: 'public', optional: true }),
       FORMSPREE_TEST_FORM_ID: envField.string({ context: 'server', access: 'public', optional: true }),
+      // Set by Vercel at build time. Anything other than 'production' builds
+      // with a noindex robots tag (see BaseLayout).
+      VERCEL_ENV: envField.string({ context: 'server', access: 'public', optional: true }),
     },
   },
 });

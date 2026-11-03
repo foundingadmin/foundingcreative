@@ -43,9 +43,10 @@ const year = new Date().getFullYear();
     <section class="footer-contact" id="get-in-touch" aria-labelledby="footer-contact-heading">
       <div class="footer-contact__intro">
         <img class="footer-contact__logo" src={logo.src} width="175" height="58" alt="" />
-        <h2 class="footer-contact__heading" id="footer-contact-heading">
+        <!-- Repeats the homepage H1, so it is styled text rather than a heading -->
+        <p class="footer-contact__heading" id="footer-contact-heading">
           Creative foundations for <br />brands of all sizes
-        </h2>
+        </p>
         <p class="footer-contact__tagline">Brand and Web Creative Marketing Agency</p>
         <TeamFaces class="footer-contact__team" />
       </div>
@@ -114,7 +115,7 @@ const year = new Date().getFullYear();
         </ul>
       </nav>
       <p class="footer-bottom__credit">
-        Designed &amp; developed with <Icon name="heart" size={14} label="love" /> by Founding Creative
+        Designed &amp; developed with <Icon name="heart" size={14} /><span class="visually-hidden">love</span> by Founding Creative
       </p>
     </div>
   </div>
@@ -146,8 +147,12 @@ const year = new Date().getFullYear();
   }
 
   .footer-contact__heading {
+    margin: 0 0 var(--space-sm);
+    font-family: var(--font-display);
     font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-regular);
     line-height: 1;
+    letter-spacing: var(--tracking-display);
     background: linear-gradient(90deg, var(--color-cyan), var(--color-holo-mint), var(--color-lavender-light));
     -webkit-background-clip: text;
     background-clip: text;

@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import { Font, getImage } from 'astro:assets';
+import { VERCEL_ENV } from 'astro:env/server';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import logo from '../assets/brand/founding-wordmark-white.svg';
@@ -43,6 +44,11 @@ const {
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
+// Preview and local builds stay out of search. The production build is
+// also served on Vercel's own domain; vercel.json sends an
+// X-Robots-Tag header there (see CLAUDE.md, "Search indexing").
+const robots = VERCEL_ENV !== 'production' ? 'noindex, nofollow' : noindex ? 'noindex, follow' : undefined;
+
 // Social platforms want a static JPEG or PNG, so animated or WebP images are
 // flattened to a 1200px JPEG here.
 let ogImageUrl: string | undefined;
@@ -77,7 +83,7 @@ const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    {robots && <meta name="robots" content={robots} />}
     <link rel="alternate" type="application/rss+xml" title="Founding Creative Field Notes" href="/feed/" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -104,8 +110,6 @@ const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
     <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
 
     <script type="application/ld+json" set:html={JSON.stringify(schema.length === 1 ? schema[0] : schema)} />
-
-    <meta name="generator" content={Astro.generator} />
 
     <!-- Manrope, self-hosted by Astro (see astro.config.mjs) -->
     <Font cssVariable="--font-manrope" preload />
