@@ -41,6 +41,8 @@ Round one is a port: same pages, same URLs, same design and copy as the live Wor
 
 ## Search indexing (until cutover)
 
+The step-by-step cutover runbook (DNS, checks, rollback) is `docs/CUTOVER.md`.
+
 Nothing but foundingcreative.com may be indexed. Two guards do this:
 
 1. **Header.** `vercel.json` sends `X-Robots-Tag: noindex, nofollow` on every response whose host is not exactly `foundingcreative.com`. That covers preview URLs, `foundingcreative.vercel.app` and any other alias.
