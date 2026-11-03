@@ -3,6 +3,8 @@ import { Font, getImage } from 'astro:assets';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SEO, { type Article } from '../components/SEO.astro';
+import Analytics from '../components/Analytics.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
 import { pages, type PageSeo } from '../data/seo';
 import { isAnimated, type LcpImage } from '../lib/images';
 import '../styles/global.css';
@@ -38,6 +40,7 @@ const lcpPreload = lcpImage && (await getImage({ ...lcpImage, format: lcpFormat 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <Analytics />
     <!-- Marks that scripts run, so scroll-reveal content only starts hidden when it can be revealed -->
     <script is:inline>document.documentElement.classList.add('js');</script>
     <SEO seo={seo as PageSeo} article={article} jsonLd={jsonLd} />
@@ -89,6 +92,7 @@ const lcpPreload = lcpImage && (await getImage({ ...lcpImage, format: lcpFormat 
         <Footer />
       )
     }
+    <ConsentBanner />
     <script>
       import '../scripts/motion';
     </script>

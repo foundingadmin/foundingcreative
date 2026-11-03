@@ -13,6 +13,12 @@ export default defineConfig({
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL,
+    // Visitors who already declined cookies, so the consent banner doesn't
+    // cover the page. tests/analytics.spec.ts starts without a choice.
+    storageState: {
+      cookies: [],
+      origins: [{ origin: new URL(baseURL).origin, localStorage: [{ name: 'fc-consent', value: 'denied' }] }],
+    },
     trace: 'on-first-retry',
     extraHTTPHeaders: bypassSecret
       ? { 'x-vercel-protection-bypass': bypassSecret, 'x-vercel-set-bypass-cookie': 'true' }

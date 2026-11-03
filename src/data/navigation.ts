@@ -50,7 +50,9 @@ export const legalLinks: NavLink[] = [
 ];
 
 export const letsTalkHref = '/coffee/';
-export const bookMeetingHref = 'https://bit.ly/chatwithfounding';
+// The scheduling page /coffee/ redirects to (keep in sync with vercel.json).
+export const bookMeetingHref =
+  'https://calendar.google.com/calendar/appointments/schedules/AcZssZ1I3oI4KqMnFfcTTL5qkzXIuY06h4DeAE4B10vNbRNinT71if9o6Tj8-BXP-0kzp8vnu2KKz7yb';
 export const linkedInHref = 'https://www.linkedin.com/company/founding-creative/';
 
 // Discovery-call booking page linked from the SiteLaunch package pages.

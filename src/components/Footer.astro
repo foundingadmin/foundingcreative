@@ -112,6 +112,9 @@ const year = new Date().getFullYear();
               </li>
             ))
           }
+          <li>
+            <button type="button" class="footer-bottom__consent" data-consent-open>Cookie settings</button>
+          </li>
         </ul>
       </nav>
       <p class="footer-bottom__credit">
@@ -323,6 +326,21 @@ const year = new Date().getFullYear();
   }
 
   .footer-bottom__legal a:hover {
+    color: var(--color-mint);
+  }
+
+  /* Reopens the cookie banner; styled like the legal links beside it */
+  .footer-bottom__consent {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text-muted);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .footer-bottom__consent:hover {
     color: var(--color-mint);
   }
 
