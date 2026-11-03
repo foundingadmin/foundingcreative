@@ -39,6 +39,15 @@ Round one is a port: same pages, same URLs, same design and copy as the live Wor
 - Internal links and asset paths are always root-relative (`/about-us/`), never absolute `vercel.app` or `foundingcreative.com` URLs.
 - Match the existing WordPress slugs exactly. Never delete a page or change a URL without adding a 301 to the redirect map in `vercel.json`.
 
+## Search indexing (until cutover)
+
+Nothing but foundingcreative.com may be indexed. Two guards do this:
+
+1. **Header.** `vercel.json` sends `X-Robots-Tag: noindex, nofollow` on every response whose host is not exactly `foundingcreative.com`. That covers preview URLs, `foundingcreative.vercel.app` and any other alias.
+2. **Meta tag.** `BaseLayout.astro` renders `<meta name="robots" content="noindex, nofollow">` on every page unless the build has `VERCEL_ENV=production`. Preview and local builds are always noindex.
+
+At cutover, nothing needs to change in the code: once foundingcreative.com points at the Vercel project, the production build serves without the header or the meta tag, and `vercel.app` stays noindexed. Check after cutover with `curl -sI https://foundingcreative.com/ | grep -i x-robots` (no output expected) and view source for no robots meta. If `www.foundingcreative.com` ever serves pages instead of redirecting to the apex domain, it stays noindexed by design.
+
 ## Site map
 
 - Home, About (`/about-us/`), Fractional Creative, Contact, Let's talk (`/coffee/`, redirects to the scheduler)
