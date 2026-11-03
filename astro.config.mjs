@@ -62,6 +62,10 @@ export default defineConfig({
       // Set by Vercel at build time. Anything other than 'production' builds
       // with a noindex robots tag (see BaseLayout).
       VERCEL_ENV: envField.string({ context: 'server', access: 'public', optional: true }),
+      // GA4 measurement ID (G-XXXXXXXXXX). Only production builds use it, and
+      // GA4 only loads on foundingcreative.com after the visitor accepts
+      // analytics cookies (src/components/Analytics.astro).
+      GA_MEASUREMENT_ID: envField.string({ context: 'server', access: 'public', optional: true }),
     },
   },
 });

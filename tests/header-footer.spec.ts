@@ -58,7 +58,7 @@ test.describe('mobile header', () => {
     const menuButton = page.getByRole('button', { name: 'Menu' });
     await expect(page.getByRole('link', { name: 'Book a Meeting' })).toHaveAttribute(
       'href',
-      'https://bit.ly/chatwithfounding',
+      /^https:\/\/calendar\.google\.com\/calendar\/appointments\/schedules\//,
     );
 
     await menuButton.click();

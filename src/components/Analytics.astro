@@ -1,0 +1,24 @@
+---
+// Goes first in <head>: Google Consent Mode v2 defaults to denied before any
+// tag can run. gtag.js itself only loads after the visitor accepts analytics
+// cookies, and only on foundingcreative.com (src/scripts/analytics.ts).
+import { GA_MEASUREMENT_ID, VERCEL_ENV } from 'astro:env/server';
+
+// Preview and local builds ship without a measurement ID, so they can't send
+// anything even if someone accepts the banner there.
+const gaId = VERCEL_ENV === 'production' ? (GA_MEASUREMENT_ID ?? '') : '';
+---
+
+<script is:inline define:vars={{ gaId }}>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () {
+    window.dataLayer.push(arguments);
+  };
+  window.gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+  });
+  if (gaId) document.documentElement.dataset.gaId = gaId;
+</script>

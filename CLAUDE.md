@@ -48,6 +48,17 @@ Nothing but foundingcreative.com may be indexed. Two guards do this:
 
 At cutover, nothing needs to change in the code: once foundingcreative.com points at the Vercel project, the production build serves without the header or the meta tag, and `vercel.app` stays noindexed. Check after cutover with `curl -sI https://foundingcreative.com/ | grep -i x-robots` (no output expected) and view source for no robots meta. If `www.foundingcreative.com` ever serves pages instead of redirecting to the apex domain, it stays noindexed by design.
 
+## Analytics and consent
+
+- GA4 loads only when all of these hold: a production build (`VERCEL_ENV=production`) with `GA_MEASUREMENT_ID` set (Vercel env var, `G-XXXXXXXXXX`), the page is on `foundingcreative.com`, and the visitor accepted the cookie banner. Previews, `vercel.app` and local builds never send anything.
+- `src/components/Analytics.astro` sets Google Consent Mode v2 to denied first thing in `<head>`. `src/components/ConsentBanner.astro` asks once; the choice is saved in `localStorage` (`fc-consent`) and the footer's "Cookie settings" button reopens it. gtag.js isn't downloaded until the visitor accepts. No advertising cookies are used.
+- Events, all in `src/scripts/analytics.ts`:
+  - `generate_lead`: the contact form's Formspree response came back OK (the form dispatches `contact:success`; never on click).
+  - `book_meeting`: a click on any link to the scheduler (`/coffee/` or a Google Calendar appointments URL). Book a Meeting links go straight to the calendar URL in `src/data/navigation.ts`, the same one `/coffee/` redirects to in `vercel.json`; keep them in sync.
+  - `email_click`, `phone_click`: clicks on `mailto:` and `tel:` links.
+  - `cta_click` with `cta_location`: clicks on primary CTAs (`.button--primary` and the header's "Let's talk"). The location is `data-cta-location` if set, else `header`, `footer`, or the enclosing section's id, label or first class.
+- **In GA4 Admin, mark `generate_lead` and `book_meeting` as key events** (Admin > Data display > Events, after they first arrive). The rest are for reporting.
+
 ## Site map
 
 - Home, About (`/about-us/`), Fractional Creative, Contact, Let's talk (`/coffee/`, redirects to the scheduler)

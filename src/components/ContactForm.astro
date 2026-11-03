@@ -180,6 +180,8 @@ const id = (name: string) => `${idPrefix}-${name}`;
           headers: { Accept: 'application/json' },
         });
         if (response.ok) {
+          // Analytics records the lead (src/scripts/analytics.ts).
+          form.dispatchEvent(new CustomEvent('contact:success', { bubbles: true }));
           form.hidden = true;
           success.hidden = false;
           success.focus();

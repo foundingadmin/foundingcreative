@@ -1,0 +1,73 @@
+---
+// Cookie consent, shown until the visitor chooses. Accepting loads GA4
+// (analytics cookies only; no advertising cookies are set). The footer's
+// "Cookie settings" button reopens it. Logic is in src/scripts/analytics.ts.
+---
+
+<section class="consent" aria-labelledby="consent-heading" data-consent-banner hidden>
+  <h2 class="consent__heading" id="consent-heading">Cookies</h2>
+  <p class="consent__text">
+    We'd like to use analytics cookies to see how people use this site. Nothing loads unless you accept. See our <a
+      href="/opt-out-preferences/">cookie policy</a
+    >.
+  </p>
+  <div class="consent__actions">
+    <button type="button" class="button button--primary consent__button" data-consent-accept>Accept analytics</button>
+    <button type="button" class="button consent__button consent__decline" data-consent-decline>Decline</button>
+  </div>
+</section>
+
+<script>
+  import '../scripts/analytics';
+</script>
+
+<style>
+  .consent {
+    position: fixed;
+    right: var(--space-sm);
+    bottom: var(--space-sm);
+    z-index: 60;
+    width: min(26rem, calc(100% - 2 * var(--space-sm)));
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    box-shadow: 0 12px 32px rgb(0 4 7 / 0.5);
+  }
+
+  .consent[hidden] {
+    display: none;
+  }
+
+  .consent__heading {
+    margin-bottom: var(--space-2xs);
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .consent__text {
+    margin-bottom: var(--space-sm);
+    font-size: var(--font-size-sm);
+  }
+
+  .consent__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+  }
+
+  .consent__button {
+    font-size: var(--font-size-sm);
+    padding: var(--space-2xs) var(--space-sm);
+    cursor: pointer;
+  }
+
+  /* The outline button's gradient text doesn't paint on a <button>, so
+   * Decline is plain white on the glass fill */
+  .consent__decline,
+  .consent__decline:hover {
+    background: var(--color-glass);
+    color: var(--color-white);
+  }
+</style>
