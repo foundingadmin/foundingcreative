@@ -17,10 +17,19 @@ Work on a branch, open a pull request, and check the Vercel preview before mergi
 
 ### Add a case study
 
+A case study is one folder with one Markdown file. Everything else (the page, its card on `/case-studies/`, the "Next case study" module, the links to service pages, structured data, the sitemap) is built from it.
+
 1. Create a folder at `src/content/case-studies/<slug>/`. The folder name becomes the URL: `/case-study/<slug>/`.
-2. Add an `index.md` and put its images in the same folder. Copy the frontmatter from an existing case study (for example `turntide-website`) and fill in every field. The schema in `src/content.config.ts` fails the build if anything required is missing, including `coverAlt` and the SEO fields (`seoTitle`, `description`, `ogTitle`, `ogDescription`).
-3. Write the story in Markdown below the frontmatter. Give every image descriptive alt text.
-4. The case study shows up on `/case-studies/` and in the sitemap automatically.
+2. Add an `index.md` and put its images in the same folder. Copy the frontmatter from an existing case study (for example `turntide-website`) and fill in every field. The schema in `src/content.config.ts` fails the build if anything required is missing, including `coverAlt` and the SEO fields (`seoTitle` up to 60 characters, `description` up to 155, `ogTitle`, `ogDescription`).
+3. Set `theme` (`accent`, `dark`, `light`) to the client's brand colors. They color the hero, the story's bands, the Results band, and this study's "Next case study" module on the study before it.
+4. Set `services` using these tags: `Website`, `Interactive`, `Branding`, `Design`, `Events`. Each tag links the page to its service page ("See our website services"); the first tag is the main one.
+5. Write the story below the frontmatter in this order. Each `##` heading starts a new band; a short line right above a `##` heading becomes that band's small label.
+   - **Challenge:** `## The challenge`, a sentence, and a short list.
+   - **Approach:** `### Our approach`, a sentence, and a short list (shown beside the challenge).
+   - **What we built:** the line `What we built` (or `#### What we built`), then a `##` heading and what you made, followed by as many `##` bands as the work needs.
+6. **Results:** when you have measured numbers, add `results` to the frontmatter (up to 4 `value`/`label` pairs) and a Results band appears after the story. Leave it out until the numbers are real.
+7. **Testimonial:** add `testimonial` (`quote`, `name`, `role`) only with the client's approval. It shows after Results.
+8. Give every image descriptive alt text. Run `npm run build` and `npx playwright test`.
 
 ### Add a blog post (Field Notes)
 

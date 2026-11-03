@@ -21,6 +21,15 @@ theme:
   accent: "#0d5b97"
   dark: "#003464"
   light: "#edf8ff"
+# Results: uncomment and add real, measured numbers (up to 4). The Results
+# band only shows on the page once this is set.
+# results:
+#   - value: "+00%"
+#     label: "What the number measures"
+# testimonial:
+#   quote: "Client quote, as approved by the client"
+#   name: "Name"
+#   role: "Title, Company"
 ---
 
 Turntide needed a digital shift that would better support sales and speak directly to their engineering customers.
@@ -41,7 +50,7 @@ Founding Creative reimagined the Turntide digital presence from the ground up fo
 - Implement a scalable design system
 - Develop a content engine for team use
 
-#### The process
+#### What we built
 
 ## Repositioning an electrification brand for online B2B growth
 

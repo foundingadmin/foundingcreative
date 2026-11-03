@@ -153,3 +153,21 @@ test('Fractional Creative FAQ matches its FAQPage structured data', async ({ pag
   const faq = graph.find((node: { '@type': string }) => node['@type'] === 'FAQPage');
   expect(faq.mainEntity.map((q: { name: string }) => q.name)).toEqual(questions.map((q) => q.trim()));
 });
+
+test('case studies follow challenge, approach, what we built, and link onward', async ({ page }) => {
+  for (const [slug, service] of [
+    ['turntide-website', '/services/website-services/'],
+    ['bell-bird-atm', '/services/branding-services/'],
+    ['innovation-forum-event', '/services/event-services/'],
+  ]) {
+    await page.goto(`/case-study/${slug}/`);
+    const story = page.locator('.case-story');
+    await expect(story.getByRole('heading', { name: 'The challenge' })).toBeVisible();
+    await expect(story.getByRole('heading', { name: /approach/i }).first()).toBeAttached();
+    await expect(story.getByText('What we built', { exact: true })).toBeAttached();
+    // No Results band until real numbers are set in the frontmatter.
+    await expect(page.locator('.case-results')).toHaveCount(0);
+    await expect(page.getByRole('complementary', { name: 'Planning something similar?' }).locator(`a[href="${service}"]`)).toBeVisible();
+    await expect(page.locator('.case-next__title a')).toHaveAttribute('href', /^\/case-study\/[a-z-]+\/$/);
+  }
+});

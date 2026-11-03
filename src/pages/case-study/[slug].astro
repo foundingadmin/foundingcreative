@@ -7,7 +7,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import OurWork from '../../components/OurWork.astro';
 import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import Icon from '../../components/Icon.astro';
-import { getCaseStudies, caseStudyUrl, type CaseStudy } from '../../lib/content';
+import { getCaseStudies, caseStudyUrl, servicesFor, type CaseStudy } from '../../lib/content';
 import { entrySeo } from '../../data/seo';
 
 export async function getStaticPaths() {
@@ -27,6 +27,8 @@ interface Props {
 const { study, next } = Astro.props;
 const { Content } = await render(study);
 const { data } = study;
+// The service pages this work came from, for the links after the story.
+const services = await servicesFor(study);
 
 // Each study's colors (from the live page) drive the hero gradient and the
 // story's bands. Studies without a theme fall back to brand navy.
@@ -154,6 +156,61 @@ const jsonLd = [
     <div class="case-story">
       <Content />
     </div>
+
+    {
+      data.results && (
+        <section class="case-results" aria-labelledby="case-results-heading">
+          <div class="container">
+            <h2 id="case-results-heading">Results</h2>
+            <dl class="case-results__list">
+              {data.results.map((result) => (
+                <div>
+                  <dt>{result.label}</dt>
+                  <dd>{result.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      data.testimonial && (
+        <section class="case-quote" aria-label={`What ${data.clients.join(', ')} said`}>
+          <figure class="container">
+            <blockquote>
+              <p>“{data.testimonial.quote}”</p>
+            </blockquote>
+            <figcaption>
+              <strong>{data.testimonial.name}</strong>, {data.testimonial.role}
+            </figcaption>
+          </figure>
+        </section>
+      )
+    }
+
+    {
+      services.length > 0 && (
+        <aside class="case-services" aria-labelledby="case-services-heading">
+          <div class="container case-services__inner">
+            <h2 id="case-services-heading" class="case-services__heading">
+              Planning something similar?
+            </h2>
+            <ul>
+              {services.map((service) => (
+                <li>
+                  <a href={service.data.path}>
+                    See our {service.data.name.toLowerCase()}
+                    <Icon name="arrow-up-right" size={18} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+      )
+    }
   </article>
 
   {data.showSiteLaunch && <SiteLaunchSection />}
@@ -330,6 +387,97 @@ const jsonLd = [
   }
 
   /* Facts strip: hairline-divided cells */
+  /* Results: the numbers big, in the study's AA-safe heading color */
+  .case-results {
+    padding-block: var(--space-2xl);
+    background-color: var(--case-light);
+    color: var(--case-dark);
+  }
+
+  .case-results h2 {
+    color: var(--case-heading);
+  }
+
+  .case-results__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-lg);
+    margin: var(--space-lg) 0 0;
+  }
+
+  .case-results__list div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .case-results__list dd {
+    margin: 0;
+    color: var(--case-heading);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h1);
+    line-height: 1.1;
+  }
+
+  .case-results__list dt {
+    font-size: var(--font-size-lg);
+  }
+
+  /* Client quote */
+  .case-quote {
+    padding-block: var(--space-2xl);
+    background-color: var(--color-white);
+    color: var(--case-dark);
+  }
+
+  .case-quote blockquote {
+    margin: 0 0 var(--space-md);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-snug);
+  }
+
+  /* Links back to the service pages behind the work */
+  .case-services {
+    padding-block: var(--space-xl);
+    background-color: var(--color-white);
+    color: var(--color-night);
+  }
+
+  .case-services__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    align-items: baseline;
+  }
+
+  .case-services__heading {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .case-services ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-services a {
+    display: inline-flex;
+    gap: var(--space-3xs);
+    align-items: center;
+    color: var(--case-heading);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .case-services a:hover {
+    color: var(--color-night);
+  }
+
   .case-facts {
     display: flex;
     flex-wrap: wrap;
