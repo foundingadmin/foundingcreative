@@ -8,8 +8,8 @@ import Icon from '../../components/Icon.astro';
 import ideaSvg from '../../assets/pages/idea-illustration.svg?raw';
 import growthSvg from '../../assets/pages/growth-chart-illustration.svg?raw';
 import buckitLogo from '../../assets/pages/buckit-logo-white.svg';
-import shareImage from '../../assets/home/services/brand-2.webp';
 import { letsTalkHref } from '../../data/navigation';
+import { pages } from '../../data/seo';
 
 // Fractional Creative, laid out as on the live page: the spectrum hero with
 // the frosted benefit cards and the BucKit portal, a light band on the
@@ -77,8 +77,7 @@ const partnership = [
   'A partnership focused on your long-term brand success.',
 ];
 
-const description =
-  'Access expert branding and creative services to build your brand without the cost of full-time hires.';
+const { description } = pages['/fractional-creative/'];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -91,14 +90,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout
-  title="Fractional Creative Team: In-House Talent, Fractional Cost"
-  description={description}
-  ogTitle="A New Brand Design Agencies Model | Fractional Creative"
-  ogImage={shareImage}
-  ogImageAlt="ATL Freight website on a laptop"
-  jsonLd={jsonLd}
->
+<BaseLayout jsonLd={jsonLd}>
   <!-- Hero: the spectrum backdrop behind the pitch, the benefits, and BucKit -->
   <section class="fc-hero under-header" aria-labelledby="fc-title">
     <HeroBackdrop />

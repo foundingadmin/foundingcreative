@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/CtaSection.astro';
 import Icon from '../../components/Icon.astro';
 import idea from '../../assets/pages/idea-illustration.svg';
-import shareImage from '../../assets/home/services/web-5.webp';
+import { pages } from '../../data/seo';
 
 // Copy is ported as-is from WordPress. Note: the CMS section still says
 // Founding Creative builds exclusively on WordPress.
@@ -121,8 +121,7 @@ const plans = [
 ];
 
 const money = (n: number) => `$${n.toLocaleString('en-US')}`;
-const description =
-  "One plan for website hosting, updates, backups, and security. Founding Creative's Site Care Plan keeps your site fast, secure, and up to date.";
+const { description } = pages['/site-care-plan/'];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -146,14 +145,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout
-  title="Site Care Plan: Website Hosting, Updates & Security | Founding Creative"
-  description={description}
-  ogTitle="Site Care Plan"
-  ogImage={shareImage}
-  ogImageAlt="Turntide website shown on an iMac"
-  jsonLd={jsonLd}
->
+<BaseLayout jsonLd={jsonLd}>
   <section class="hero">
     <div class="container hero__grid">
       <div>

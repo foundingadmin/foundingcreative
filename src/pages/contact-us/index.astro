@@ -6,18 +6,15 @@ import LineArt from '../../components/LineArt.astro';
 import TeamFaces from '../../components/TeamFaces.astro';
 import Icon from '../../components/Icon.astro';
 import illustrationSvg from '../../assets/pages/contact-illustration.svg?raw';
-import shareImage from '../../assets/home/services/web-4.webp';
 import { letsTalkHref, linkedInHref } from '../../data/navigation';
+import { pages } from '../../data/seo';
 
 // Contact, laid out as on the live page: a centered title, the form on the
 // left and the conversation illustration on the right, here over the Field
 // Notes aurora with the form in a frosted card. The form itself is the shared
 // ContactForm, unchanged.
 
-// Title and OG title match the WordPress crawl. The live meta description is
-// broken plugin text ("Please enable JavaScript..."), so it is rewritten here.
-const description =
-  "Tell us about your brand, website, or creative project. Send Founding Creative a message and we'll get back to you soon.";
+const { description } = pages['/contact-us/'];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ContactPage',
@@ -28,14 +25,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout
-  title="Contact Us - Founding Creative"
-  description={description}
-  ogTitle="Contact Us"
-  ogImage={shareImage}
-  ogImageAlt="Bank of America app on a tablet, designed by Founding Creative"
-  jsonLd={jsonLd}
->
+<BaseLayout jsonLd={jsonLd}>
   <section class="contact under-header" aria-labelledby="contact-title">
     <HeroBackdrop variant="aurora" />
     <div class="container">

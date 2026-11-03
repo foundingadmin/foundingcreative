@@ -17,6 +17,7 @@ import prismArt from '../assets/home/sitelaunch/flare-1.png';
 import rocketArt from '../assets/home/sitelaunch/rocket-1.png';
 import orbitArt from '../assets/home/sitelaunch/orbit-1.png';
 import { siteLaunchBookingHref } from '../data/navigation';
+import { entrySeo } from '../data/seo';
 
 // One template for the three SiteLaunch package pages, laid out as on the
 // live pages and built from the same pieces as BrandForge: the package's
@@ -82,12 +83,7 @@ const jsonLd = [
 ---
 
 <BaseLayout
-  title={data.seoTitle}
-  description={data.description}
-  ogTitle={data.ogTitle}
-  ogDescription={data.ogDescription}
-  ogImage={data.shareImage}
-  ogImageAlt={data.shareImageAlt}
+  seo={entrySeo(data, { image: data.shareImage, imageAlt: data.shareImageAlt })}
   jsonLd={jsonLd}
   lcpImage={{ src: data.heroImage, ...heroBackdrop }}
 >

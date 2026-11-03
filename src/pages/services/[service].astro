@@ -11,6 +11,7 @@ import { wipeSlide } from '../../lib/images';
 import Icon from '../../components/Icon.astro';
 import FlagMark from '../../components/FlagMark.astro';
 import { letsTalkHref } from '../../data/navigation';
+import { entrySeo } from '../../data/seo';
 
 export async function getStaticPaths() {
   const services = await getCollection('services');
@@ -71,12 +72,7 @@ const jsonLd = [
 ---
 
 <BaseLayout
-  title={data.seoTitle}
-  description={data.description}
-  ogTitle={data.ogTitle}
-  ogDescription={data.ogDescription}
-  ogImage={data.heroImages[0].src}
-  ogImageAlt={data.heroImages[0].alt}
+  seo={entrySeo(data, { image: data.heroImages[0].src, imageAlt: data.heroImages[0].alt })}
   jsonLd={jsonLd}
   lcpImage={{ src: data.heroImages[0].src, ...wipeSlide }}
 >

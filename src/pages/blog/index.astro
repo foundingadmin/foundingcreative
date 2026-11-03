@@ -5,6 +5,7 @@ import PostCard from '../../components/PostCard.astro';
 import Icon from '../../components/Icon.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import { getPosts, postUrl, formatDate, isoDate } from '../../lib/content';
+import { pages } from '../../data/seo';
 
 // The Field Notes index, as on the live site: the newest post featured in the
 // aurora band the posts use, its cover hanging over the white page's curve,
@@ -12,8 +13,7 @@ import { getPosts, postUrl, formatDate, isoDate } from '../../lib/content';
 // the markup (left, right, left...), so reading and tab order match the eye.
 const posts = await getPosts();
 const [featured, ...rest] = posts;
-const description =
-  'Field Notes from Founding Creative: practical insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.';
+const { description } = pages['/blog/'];
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -31,14 +31,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout
-  title="Field Notes: Brand, Web & Design Insights | Founding Creative"
-  description={description}
-  ogTitle="Field Notes"
-  ogImage={featured?.data.cover}
-  ogImageAlt={featured?.data.coverAlt}
-  jsonLd={jsonLd}
->
+<BaseLayout seo={{ image: featured?.data.cover, imageAlt: featured?.data.coverAlt }} jsonLd={jsonLd}>
   <!-- The aurora band, with the newest post -->
   <header class="blog-head under-header">
     <HeroBackdrop variant="aurora" />

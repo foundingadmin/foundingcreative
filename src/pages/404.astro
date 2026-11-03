@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import { pages } from '../data/seo';
 
 const links = [
   { label: 'Case Studies', href: '/case-studies/' },
@@ -11,11 +12,8 @@ const links = [
 ];
 ---
 
-<BaseLayout
-  title="Page not found - Founding Creative"
-  description="The page you're looking for has moved or no longer exists. Find our work, services, and Field Notes from here."
-  noindex
->
+<!-- Served for any missing URL, so its path isn't /404/: look it up by name -->
+<BaseLayout seo={pages['/404/']}>
   <section class="container section not-found">
     <p class="eyebrow">Error <em>404</em></p>
     <h1>Page not found</h1>

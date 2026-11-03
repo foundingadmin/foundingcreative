@@ -3,6 +3,7 @@ import { getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Prose from './Prose.astro';
 import { formatDate, isoDate } from '../lib/content';
+import { entrySeo } from '../data/seo';
 
 interface Props {
   /** Entry in the legal collection, which is also the page slug. */
@@ -15,7 +16,7 @@ const { Content } = await render(entry);
 const { data } = entry;
 ---
 
-<BaseLayout title={data.seoTitle} description={data.description} ogTitle={data.ogTitle} ogDescription={data.ogDescription}>
+<BaseLayout seo={entrySeo(data)}>
   <header class="container legal-hero">
     <p class="eyebrow">Legal</p>
     <h1>{data.title}</h1>

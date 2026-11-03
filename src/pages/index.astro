@@ -12,7 +12,7 @@ import HeroBackdrop from '../components/HeroBackdrop.astro';
 import heroPoster from '../assets/home/hero/glowing-grid-poster.png';
 import { heroBackdrop } from '../lib/images';
 import { team } from '../data/team';
-import shareImage from '../assets/home/services/web-5.webp';
+import { pages } from '../data/seo';
 
 // Service sliders
 import web1 from '../assets/home/services/web-1.webp';
@@ -121,8 +121,7 @@ const values = [
   { title: 'Founding energy', text: 'Every project is a chance for something big' },
 ];
 
-const description =
-  'Founding Creative is a brand and web creative agency for brands of all sizes. Brand strategy, website design, and design systems that drive real growth.';
+const { description } = pages['/'];
 
 const jsonLd = [
   {
@@ -149,15 +148,7 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout
-  title="Founding Creative - Brand & Web Creative Marketing Agency"
-  description={description}
-  ogTitle="Founding Creative"
-  ogImage={shareImage}
-  ogImageAlt="Turntide website designed by Founding Creative, shown on an iMac"
-  jsonLd={jsonLd}
-  lcpImage={{ src: heroPoster, ...heroBackdrop }}
->
+<BaseLayout jsonLd={jsonLd} lcpImage={{ src: heroPoster, ...heroBackdrop }}>
   <!-- Hero: a looping glowing-grid video under a dark veil, with the pearl
        headline glowing on top -->
   <section class="hero under-header">
