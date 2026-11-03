@@ -1,0 +1,167 @@
+---
+// A slim call to action that slides up from the bottom once the visitor is
+// past the first screen, and slides away again near the footer (which has
+// its own contact form), while the cookie banner is open, or once closed.
+// Not shown on the contact page. Fixed position, so it never shifts layout.
+import Icon from './Icon.astro';
+import { letsTalkHref } from '../data/navigation';
+---
+
+<aside class="sticky-cta" aria-label="Start a project" data-sticky-cta data-cta-location="sticky-cta">
+  <p class="sticky-cta__text">Have a project in mind?</p>
+  <div class="sticky-cta__actions">
+    <a class="button button--primary sticky-cta__button" href={letsTalkHref}>
+      Let's talk<span class="visually-hidden">, book a call</span>
+      <Icon name="arrow-up-right" size={16} />
+    </a>
+    <a class="sticky-cta__link" href="/contact-us/">Send a message</a>
+  </div>
+  <button type="button" class="sticky-cta__close" data-sticky-close>
+    <Icon name="x" size={18} />
+    <span class="visually-hidden">Close</span>
+  </button>
+</aside>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const footer = document.querySelector('footer');
+  const KEY = 'fc-sticky-cta-closed';
+  const closed = () => {
+    try {
+      return sessionStorage.getItem(KEY) === '1';
+    } catch {
+      return false;
+    }
+  };
+
+  if (bar && !closed()) {
+    let pastHero = false;
+    let nearFooter = false;
+    const update = () => bar.classList.toggle('is-visible', pastHero && !nearFooter && !closed());
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        pastHero = window.scrollY > window.innerHeight * 0.8;
+        update();
+      },
+      { passive: true },
+    );
+    if (footer) {
+      new IntersectionObserver(([entry]) => {
+        nearFooter = entry.isIntersecting;
+        update();
+      }).observe(footer);
+    }
+
+    bar.querySelector('[data-sticky-close]')?.addEventListener('click', () => {
+      try {
+        sessionStorage.setItem(KEY, '1');
+      } catch {
+        // Private mode: closed for this page only.
+      }
+      bar.classList.remove('is-visible');
+      document.querySelector<HTMLElement>('#main')?.focus();
+    });
+  }
+</script>
+
+<style>
+  .sticky-cta {
+    position: fixed;
+    left: 50%;
+    bottom: var(--space-sm);
+    z-index: 55;
+    display: flex;
+    gap: var(--space-sm) var(--space-md);
+    align-items: center;
+    width: max-content;
+    max-width: calc(100% - 2 * var(--space-sm));
+    padding: var(--space-2xs) var(--space-2xs) var(--space-2xs) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background-color: rgb(28 28 30 / 0.85);
+    box-shadow: 0 12px 32px rgb(0 4 7 / 0.45);
+    backdrop-filter: blur(12px);
+    transform: translate(-50%, calc(100% + var(--space-md)));
+    visibility: hidden;
+    transition:
+      transform 400ms var(--ease-out),
+      visibility 0s linear 400ms;
+  }
+
+  .sticky-cta.is-visible {
+    transform: translate(-50%, 0);
+    visibility: visible;
+    transition:
+      transform 400ms var(--ease-out),
+      visibility 0s;
+  }
+
+  /* Out of the way while the cookie banner asks its question */
+  :global(body:has([data-consent-banner]:not([hidden]))) .sticky-cta {
+    display: none;
+  }
+
+  .sticky-cta__text {
+    margin: 0;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+  }
+
+  .sticky-cta__actions {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+
+  .sticky-cta__button {
+    padding: var(--space-3xs) var(--space-md);
+    font-size: var(--font-size-sm);
+  }
+
+  .sticky-cta__link {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+
+  .sticky-cta__link:hover {
+    color: var(--color-mint);
+  }
+
+  .sticky-cta__close {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+
+  .sticky-cta__close:hover {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 599px) {
+    .sticky-cta__text,
+    .sticky-cta__link {
+      display: none;
+    }
+
+    .sticky-cta {
+      padding-left: var(--space-2xs);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-cta,
+    .sticky-cta.is-visible {
+      transition: none;
+    }
+  }
+</style>

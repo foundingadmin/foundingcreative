@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import SEO, { type Article } from '../components/SEO.astro';
 import Analytics from '../components/Analytics.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
+import StickyCta from '../components/StickyCta.astro';
 import { pages, type PageSeo } from '../data/seo';
 import { isAnimated, type LcpImage } from '../lib/images';
 import '../styles/global.css';
@@ -96,9 +97,11 @@ const lcpPreload = lcpImage && (await getImage({ ...lcpImage, format: lcpFormat 
         <Footer />
       )
     }
+    {Astro.url.pathname !== '/contact-us/' && <StickyCta />}
     <ConsentBanner />
     <script>
       import '../scripts/motion';
+      import '../scripts/cursor';
     </script>
   </body>
 </html>

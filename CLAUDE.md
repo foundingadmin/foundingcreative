@@ -9,7 +9,9 @@ This site replaces the WordPress site at foundingcreative.com and must beat it o
 - Lighthouse mobile 95+ on Performance, Accessibility, Best Practices and SEO
 - LCP under 2.5s, CLS under 0.1
 
-Round one is a port: same pages, same URLs, same design and copy as the live WordPress site. Technical fixes for performance, accessibility and SEO are in scope even when they touch markup or link text. A visual redesign or new copy waits until the port is live.
+The port (Sprint 1) and the copy and SEO work (Sprint 2) are done. Sprint 3, the motion and layout redesign, is being built before cutover, and the domain moves to Vercel at the end of it (docs/CUTOVER.md). URLs still never change without a 301.
+
+Motion rules (Sprint 3): subtle and consistent. CSS and the View Transitions API first; no JS animation library. Everything respects `prefers-reduced-motion`.
 
 ## Stack
 
