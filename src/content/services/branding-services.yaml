@@ -6,42 +6,55 @@ seoTitle: Brand identity design services | Founding Creative
 description: Strategy, naming, logo, and visual identity built as one system, so every page, deck, and product your team ships looks and sounds like you.
 ogTitle: Brand identity design services | Founding Creative
 ogDescription: Strategy, naming, logo, and visual identity built as one system, so every page, deck, and product your team ships looks and sounds like you.
-eyebrow: Visionary Brand Identity Design
+eyebrow: Brand identity design services
 title: Brand identity design, built on strategy
-intro: We guide you through the strategic blueprint that elevates your brand potential.
+intro: "Our brand identity design services start with strategy: positioning, naming, and messaging. Then we design the logo, visual identity, and guidelines as one system your whole team can use."
 heroImages:
   - src: ../../assets/services/brand-strategy-laptop.webp
-    alt: Laptop showing a brand strategy framework and color wheel
+    alt: Laptop showing a brand identity strategy framework and color wheel
   - src: ../../assets/services/brand-workshop-laptop.webp
     alt: Laptop with a brand workshop board of green sticky notes
   - src: ../../assets/services/brand-workshop-blue-notes.webp
     alt: Brand workshop board of blue sticky notes answering where the brand is going
+capabilitiesHeading: What's included in brand identity design
 capabilities:
-  - title: Strategic Consulting
+  - title: Brand strategy
     items:
-      - Comprehensive market analysis
-      - Brand positioning and messaging
-      - Competitive landscape assessment
-  - title: Brand Strategy
+      - Market and competitor research
+      - Positioning and messaging
+      - Audience personas
+  - title: Naming and voice
     items:
-      - Brand Identity Design and storytelling
-      - Customer journey mapping
-      - Brand voice and personality crafting
-  - title: Content Strategy
+      - Naming and tagline development
+      - Brand voice and personality
+      - Key messages
+  - title: Visual identity
     items:
-      - Editorial and content calendar planning
-      - SEO-driven content creation
-      - Multimedia content strategies
-  - title: Digital Marketing Strategy
+      - Logo system
+      - Color and typography
+      - Imagery and iconography style
+  - title: Guidelines and rollout
     items:
-      - Social media strategy and design
-      - Email marketing campaigns
+      - Brand guidelines
+      - Templates for decks, social, and documents
+      - Launch assets
+process:
+  heading: How our brand identity design process works
+  steps:
+    - name: Research
+      text: Stakeholder interviews, competitor audits, and audience research, so the brand is built on market reality.
+    - name: Strategy
+      text: Positioning, messaging, naming, and voice, agreed before any design starts.
+    - name: Creative directions
+      text: Distinct visual directions, each tied back to the strategy, so you choose with reasons, not taste.
+    - name: Identity system
+      text: The chosen direction built out into a logo system, colors, type, guidelines, and the templates your team uses every day.
 work:
-  heading: From vision to victory
-  intro: A look inside the branding projects where strategy, structure, and design all came together to drive meaningful business outcomes.
-  caseStudies: [bell-bird-atm, plant-nursery-ecommerce, genpact-grow-event, safezone-product-and-branding]
+  heading: Brand identity design in the real world
+  intro: Two brands we built from strategy up.
+  caseStudies: [bell-bird-atm, safezone-product-and-branding]
 statement:
-  lead: Brand Identity Design is the compass that guides your brand through today's market landscape, ensuring every step is calculated, impactful, and aligned.
+  lead: A logo can't fix a positioning problem.
   images:
     - src: ../../assets/services/strategy-session-silhouettes.webp
       alt: Three people silhouetted against a whiteboard of strategy sketches
@@ -51,10 +64,10 @@ statement:
       alt: Sticky notes from a strategy session on a glass wall
     - src: ../../assets/services/strategy-room-whiteboard.webp
       alt: Meeting room with brand strategy notes on a whiteboard wall
-  heading: Expertise & conviction
+  heading: Why brand identity design starts with strategy
   body:
-    - In a world saturated with fleeting trends and momentary wins, we stand as your strategic bastion. Committed to elevating your brand with foresight, let us navigate the intricacies of brand development together.
-    - With Founding by your side, your brand identity design is poised to not just compete, but lead. Our comprehensive approach to strategy is designed to harness your unique strengths, target the right audiences, and carve a distinct space for you in the market.
+    - We start with who you serve, what you stand for, and why you're different. Then we design an identity that says it the same way on every page, deck, and product, so your brand looks established and stays consistent as your team grows.
+    - Launching or rebranding on a deadline? [BrandForge](/brandforge/) is our fixed-scope brand identity package for startups, launch-ready in weeks.
 cta:
-  heading: Ready to elevate your Brand Identity Design?
-  text: Discover how strategic expertise can transform your trajectory.
+  heading: Ready for a brand identity that holds up?
+  text: Tell us where your brand is today and where it needs to go.

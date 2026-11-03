@@ -6,9 +6,9 @@ seoTitle: B2B website design agency | Founding Creative
 description: Custom websites for B2B teams, designed and built to load fast, earn trust, and turn visits into pipeline. See the work, then start a project.
 ogTitle: B2B website design agency | Founding Creative
 ogDescription: Custom websites for B2B teams, designed and built to load fast, earn trust, and turn visits into pipeline. See the work, then start a project.
-eyebrow: Be seen anywhere with scalable, custom website design
+eyebrow: B2B website design agency
 title: Website design built for B2B growth
-intro: Websites built strategy first, designed around your users, and engineered to grow with your business.
+intro: "We're a B2B website design agency that builds sites strategy first: fast to load, easy to trust, and wired into the tools your sales and marketing teams already use."
 heroImages:
   - src: ../../assets/services/bank-of-america-interactive-pdf.webp
     alt: Bank of America interactive sales PDF on a tablet beside a laptop
@@ -16,6 +16,7 @@ heroImages:
     alt: Hand holding a phone showing a mobile app asking how much you need
   - src: ../../assets/services/bank-of-america-gateway-kiosk.webp
     alt: Bank of America service gateway app on a touchscreen kiosk
+capabilitiesHeading: What's included in B2B website design
 capabilities:
   - title: Website Design and Development
     items:
@@ -42,10 +43,21 @@ capabilities:
       - Digital strategy and campaign management
       - Analytics setup and conversion tracking
       - Social media and email marketing integration
+process:
+  heading: How a B2B website project works
+  steps:
+    - name: Discover
+      text: Stakeholder interviews, a content and analytics audit, and clear goals for what the site has to do for sales and marketing.
+    - name: Structure
+      text: Sitemap, user journeys, and a content plan built around how your buyers actually decide.
+    - name: Design
+      text: A design system and page designs, reviewed as clickable prototypes before anything is built.
+    - name: Build and launch
+      text: Development, CMS setup, CRM and analytics integrations, QA on every device, then launch and training for your team.
 work:
-  heading: Creative foundations worth showing off
-  intro: A look inside the web projects where strategy, structure, and design all came together to drive meaningful business outcomes.
-  caseStudies: [turntide-website, plant-nursery-ecommerce, atlfreight-website]
+  heading: B2B websites we've designed and built
+  intro: How strategy-first website design played out for two B2B teams.
+  caseStudies: [turntide-website, atlfreight-website]
 teams:
   eyebrow: Built for buy-in
   heading: Designed to serve every team.

@@ -80,12 +80,21 @@ const services = defineCollection({
       title: z.string(),
       intro: z.string(),
       heroImages: z.array(pic).min(1),
+      capabilitiesHeading: z.string().default('Capabilities'),
       capabilities: z.array(z.object({ title: z.string(), items: z.array(z.string()).min(1) })),
+      // How a project runs, shown as numbered steps (ProcessTimeline).
+      process: z
+        .object({
+          heading: z.string(),
+          steps: z.array(z.object({ name: z.string(), text: z.string() })).min(3).max(6),
+        })
+        .optional(),
       work: z.object({ heading: z.string(), intro: z.string(), caseStudies: z.array(z.string()).min(1) }),
       statement: z.object({
         lead: z.string().optional(),
         images: z.array(pic),
         heading: z.string(),
+        // Paragraphs; [text](/path/) becomes a link.
         body: z.array(z.string()).min(1),
       }),
       teams: z

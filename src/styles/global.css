@@ -616,6 +616,17 @@ button {
   --button-glow: var(--color-orbit-glow);
 }
 
+/* Founding Creative's own mint, for the shared components on Home and the
+ * service pages */
+.theme-founding {
+  --tone: var(--color-night);
+  --deep: var(--color-night);
+  --accent: var(--color-mint);
+  --button-start: var(--color-cyan);
+  --button-end: var(--color-mint);
+  --button-glow: var(--color-mint);
+}
+
 /* A word in the theme's accent: "Brand"Forge, "Prism" SiteLaunch */
 .accent {
   color: var(--accent);
