@@ -37,10 +37,9 @@ export default defineConfig({
   },
   integrations: [
     sitemap({ filter: (page) => !NOINDEX.some((path) => page.endsWith(path)), serialize: sitemapPriority }),
-    // Fails the build on a missing description or not exactly one H1. Title
-    // over 60 / description over 155 characters only warn until Sprint 2
-    // rewrites the copy; then set enforceLengths: true.
-    seoCheck({ title: 60, description: 155, enforceLengths: false }),
+    // Fails the build on a missing description, not exactly one H1, a title
+    // over 60 characters, or a description over 155.
+    seoCheck({ title: 60, description: 155, enforceLengths: true }),
   ],
   // Manrope is downloaded at build time and served from this site, so
   // visitors never request Google Fonts. Gelica is Adobe Fonts and has to

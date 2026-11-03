@@ -146,8 +146,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "description": "Founding Creative is a brand and web creative agency for brands of all sizes. Brand strategy, website design, and design systems that drive real growth.",
-        "og:description": "Founding Creative is a brand and web creative agency for brands of all sizes. Brand strategy, website design, and design systems that drive real growth."
+        "title": "Brand strategy and web design agency | Founding Creative",
+        "description": "Founding Creative builds the brand, website, and design system your team grows on. Strategy first, then work that earns trust and drives results.",
+        "og:title": "Brand strategy and web design agency | Founding Creative",
+        "og:description": "Founding Creative builds the brand, website, and design system your team grows on. Strategy first, then work that earns trust and drives results."
       },
       "ported": true
     },
@@ -239,7 +241,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": true
+      "ported": true,
+      "overrides": {
+        "description": "Not every web design company is equal. Learn what matters when choosing a creative partner: strategic insight, user-first thinking, and design consistency.",
+        "og:description": "Not every web design company is equal. Learn what matters when choosing a creative partner: strategic insight, user-first thinking, and design consistency."
+      }
     },
     {
       "path": "/3d-product-renders-to-stand-out-in-beauty-industry-marketing-jobs/",
@@ -346,7 +352,12 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": true
+      "ported": true,
+      "overrides": {
+        "title": "3D product renders for beauty industry marketing",
+        "description": "Looking for beauty industry marketing jobs? Learn how interactive 3D product renders improve storytelling, lift conversions, and make your work stand out.",
+        "og:description": "Looking for beauty industry marketing jobs? Learn how interactive 3D product renders improve storytelling, lift conversions, and make your work stand out."
+      }
     },
     {
       "path": "/3d-test/",
@@ -515,6 +526,7 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
+        "title": "5 Website Truths for Marketers: Slow Sites, Leaking Leads",
         "description": "Discover 5 reasons your outdated website is killing campaigns and ROI. Learn why speed, UX, and credibility are critical for marketing success.",
         "og:description": "Discover 5 reasons your outdated website is killing campaigns and ROI. Learn why speed, UX, and credibility are critical for marketing success."
       },
@@ -611,9 +623,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "About Us: The Team Behind Founding Creative",
-        "description": "Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business.",
-        "og:description": "Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business."
+        "title": "Meet the team | Founding Creative",
+        "description": "Josh Titus, Tyler Lukey, and a senior team of designers and strategists building creative foundations for brands that plan to grow.",
+        "og:title": "Meet the team | Founding Creative",
+        "og:description": "Josh Titus, Tyler Lukey, and a senior team of designers and strategists building creative foundations for brands that plan to grow."
       },
       "ported": true
     },
@@ -965,10 +978,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "og:description": "Field Notes from Founding Creative: practical insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.",
-        "title": "Field Notes: Brand, Web & Design Insights | Founding Creative",
-        "description": "Field Notes from Founding Creative: practical insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.",
+        "title": "Field Notes: Brand, Web & Design | Founding Creative",
+        "description": "Field Notes from Founding Creative: insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.",
         "og:title": "Field Notes",
+        "og:description": "Field Notes from Founding Creative: insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.",
         "h1": "Field Notes"
       },
       "ported": true
@@ -1057,10 +1070,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "BrandForge: Brand Strategy & Identity in Weeks | Founding Creative",
-        "description": "BrandForge delivers research-backed brand strategy, four creative directions, and an AI-ready brand system, launch-ready in weeks, not months.",
-        "og:title": "BrandForge",
-        "og:description": "BrandForge delivers research-backed brand strategy, four creative directions, and an AI-ready brand system, launch-ready in weeks, not months."
+        "title": "BrandForge | Branding agency for startups",
+        "description": "Research-backed brand strategy and identity, built for people and AI search, and launch-ready in weeks instead of months.",
+        "og:title": "BrandForge | Branding agency for startups",
+        "og:description": "Research-backed brand strategy and identity, built for people and AI search, and launch-ready in weeks instead of months."
       },
       "ported": true
     },
@@ -1149,7 +1162,7 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "BucKit: Notion Brand Portal for Creative Assets | Founding Creative",
+        "title": "BucKit: Notion brand portal | Founding Creative",
         "description": "BucKit is Founding Creative's Notion-based brand portal: one organized, searchable home for your brand assets, guidelines, projects, and files.",
         "og:description": "BucKit is Founding Creative's Notion-based brand portal: one organized, searchable home for your brand assets, guidelines, projects, and files.",
         "h1": "BucKit: a brand new home for your brand"
@@ -1365,10 +1378,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Case Studies: Brand, Web & Event Design | Founding Creative",
-        "description": "A look inside projects where strategy, structure, and design came together to drive real business outcomes for Mastercard, Bank of America, and more.",
-        "og:title": "Case Studies",
-        "og:description": "A look inside projects where strategy, structure, and design came together to drive real business outcomes for Mastercard, Bank of America, and more."
+        "title": "Branding and web design case studies | Founding Creative",
+        "description": "Real results from brand, website, product, and event work, with the strategy behind each project and the outcomes it drove.",
+        "og:title": "Branding and web design case studies | Founding Creative",
+        "og:description": "Real results from brand, website, product, and event work, with the strategy behind each project and the outcomes it drove."
       },
       "ported": true
     },
@@ -1488,7 +1501,7 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Aprilaire Product Selector App Case Study | Founding Creative",
+        "title": "Aprilaire Product Selector App | Founding Creative",
         "description": "How Founding Creative designed an interactive product selector app that matches Aprilaire customers to the right indoor air quality products.",
         "og:title": "Aprilaire Product Selector App",
         "og:description": "How Founding Creative designed an interactive product selector app that matches Aprilaire customers to the right indoor air quality products."
@@ -1730,7 +1743,7 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Bank of America Interactive Apps Case Study | Founding Creative",
+        "title": "Bank of America Interactive Apps | Founding Creative",
         "description": "Interactive PDFs, a cached web app, and event touchscreens that made Bank of America content easy to explore, share, and track across sectors.",
         "og:title": "Bank of America Interactive Apps",
         "og:description": "Interactive PDFs, a cached web app, and event touchscreens that made Bank of America content easy to explore, share, and track across sectors."
@@ -2109,10 +2122,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Mastercard Innovation Forum Event Case Study | Founding Creative",
-        "description": "Event branding for Mastercard's LAC Innovation Forum: a visual system that carried across digital, physical, and motion formats for an immersive experience.",
+        "title": "Mastercard Innovation Forum Event | Founding Creative",
+        "description": "Event branding for Mastercard's LAC Innovation Forum: one visual system across digital, physical, and motion formats for an immersive experience.",
         "og:title": "Mastercard LAC Innovation Forum",
-        "og:description": "Event branding for Mastercard's LAC Innovation Forum: a visual system that carried across digital, physical, and motion formats for an immersive experience."
+        "og:description": "Event branding for Mastercard's LAC Innovation Forum: one visual system across digital, physical, and motion formats for an immersive experience."
       },
       "ported": true
     },
@@ -2231,7 +2244,7 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Tata Interactive Learning Mural Case Study | Founding Creative",
+        "title": "Tata Interactive Learning Mural | Founding Creative",
         "description": "We turned a 44-page Tata company document into a large interactive mural that merged physical space with digital storytelling at a busy conference.",
         "og:title": "Tata Interactive Learning Mural",
         "og:description": "We turned a 44-page Tata company document into a large interactive mural that merged physical space with digital storytelling at a busy conference."
@@ -2480,7 +2493,6 @@
       "overrides": {
         "title": "SafeZone Gun Safety Branding Case Study | Founding Creative",
         "description": "Brand identity, product design, and app UI for SafeZone, a fingerprint-authorized gun safety device built for fast, secure access when it matters.",
-        "og:title": "SafeZone Product and Branding",
         "og:description": "Brand identity, product design, and app UI for SafeZone, a fingerprint-authorized gun safety device built for fast, secure access when it matters."
       },
       "ported": true
@@ -3680,7 +3692,11 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Fractional Creative Team: In-House Talent, Fractional Cost"
+        "title": "Fractional creative director and team | Founding Creative",
+        "description": "Senior creative direction and a full design team on a monthly plan, without the cost of full-time hires. Priority access and roll-over benefits.",
+        "og:title": "Fractional creative director and team | Founding Creative",
+        "og:description": "Senior creative direction and a full design team on a monthly plan, without the cost of full-time hires. Priority access and roll-over benefits.",
+        "h1": "In-house creative at fractional cost"
       },
       "ported": true
     },
@@ -3768,7 +3784,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": true
+      "ported": true,
+      "overrides": {
+        "description": "Figma web templates are fast, but are they worth the risk? Learn how credibility-first brands weigh the limits of pre-made templates before they build.",
+        "og:description": "Figma web templates are fast, but are they worth the risk? Learn how credibility-first brands weigh the limits of pre-made templates before they build."
+      }
     },
     {
       "path": "/how-marketing-in-sales-gets-stronger-with-brand-aligned-ui/",
@@ -3857,7 +3877,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": true
+      "ported": true,
+      "overrides": {
+        "description": "High-growth brands put marketing in sales. If your website doesn't match your identity, sales suffer. See how teams turn brand into UI that performs.",
+        "og:description": "High-growth brands put marketing in sales. If your website doesn't match your identity, sales suffer. See how teams turn brand into UI that performs."
+      }
     },
     {
       "path": "/imprint/",
@@ -4112,7 +4136,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": true
+      "ported": true,
+      "overrides": {
+        "description": "Content alone won't make you stand out, especially for teams chasing credibility and scale. Learn how a design system builds trust with every click.",
+        "og:description": "Content alone won't make you stand out, especially for teams chasing credibility and scale. Learn how a design system builds trust with every click."
+      }
     },
     {
       "path": "/opt-out-preferences/",
@@ -4286,9 +4314,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Orbit SiteLaunch: Scalable Team Websites | Founding Creative",
-        "description": "Unify your brand, teams, and content under one modular, scalable website built for growth and alignment.",
-        "og:description": "Unify your brand, teams, and content under one modular, scalable website built for growth and alignment."
+        "title": "Enterprise website design | Orbit SiteLaunch",
+        "description": "One modular, scalable website that brings every team, product, and page under a single brand system, so growth stays clear instead of chaotic.",
+        "og:title": "Enterprise website design | Orbit SiteLaunch",
+        "og:description": "One modular, scalable website that brings every team, product, and page under a single brand system, so growth stays clear instead of chaotic."
       },
       "ported": true
     },
@@ -4379,7 +4408,10 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": true
+      "ported": true,
+      "overrides": {
+        "title": "A front-end developer salary doesn't cover branding"
+      }
     },
     {
       "path": "/prism-sitelaunch",
@@ -4476,9 +4508,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Prism SiteLaunch: High-Impact Website Design | Founding Creative",
-        "description": "Elevate your brand with a high-impact website built for visual wow, immersive motion, and polished identity.",
-        "og:description": "Elevate your brand with a high-impact website built for visual wow, immersive motion, and polished identity."
+        "title": "Immersive website design | Prism SiteLaunch",
+        "description": "A high-impact website with motion, rich visuals, and a polished identity, built for brands whose first impression has to land.",
+        "og:title": "Immersive website design | Prism SiteLaunch",
+        "og:description": "A high-impact website with motion, rich visuals, and a polished identity, built for brands whose first impression has to land."
       },
       "ported": true
     },
@@ -4825,9 +4858,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Rocket SiteLaunch: Conversion-Focused Websites | Founding Creative",
-        "description": "Turn traffic into leads with a website engineered for speed, conversion, and integrated marketing workflows.",
-        "og:description": "Turn traffic into leads with a website engineered for speed, conversion, and integrated marketing workflows.",
+        "title": "Lead generation website design | Rocket SiteLaunch",
+        "description": "A conversion-focused website engineered for speed, clear funnels, and marketing workflows that turn traffic into qualified leads.",
+        "og:title": "Lead generation website design | Rocket SiteLaunch",
+        "og:description": "A conversion-focused website engineered for speed, clear funnels, and marketing workflows that turn traffic into qualified leads.",
         "h1": "Designed to sell. Built to convert."
       },
       "ported": true
@@ -4992,10 +5026,11 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Creative Services: Brand, Web, Design & Events | Founding Creative",
-        "description": "Explore Founding Creative's services: brand strategy, website design and development, graphic design, event design, animation, and custom creative work.",
-        "og:description": "Explore Founding Creative's services: brand strategy, website design and development, graphic design, event design, animation, and custom creative work.",
-        "h1": "Creative services built on strategy"
+        "title": "Creative design services | Founding Creative",
+        "description": "Brand strategy, websites, design, events, and animation from one senior team, so every piece of your brand works together. Find the right fit.",
+        "og:title": "Creative design services | Founding Creative",
+        "og:description": "Brand strategy, websites, design, events, and animation from one senior team, so every piece of your brand works together. Find the right fit.",
+        "h1": "Creative design services for growing brands"
       },
       "ported": true
     },
@@ -5093,8 +5128,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "description": "Bring stories to life with our motion graphics agency services. Long and short-form animation. We create to captivate.",
-        "og:description": "Bring stories to life with our motion graphics agency services. Long and short-form animation. We create to captivate."
+        "title": "Motion graphics services for brands | Founding Creative",
+        "description": "Explainer videos, brand animation, product demos, and event visuals that make complex ideas simple to follow and hard to forget.",
+        "og:title": "Motion graphics services for brands | Founding Creative",
+        "og:description": "Explainer videos, brand animation, product demos, and event visuals that make complex ideas simple to follow and hard to forget."
       },
       "ported": true
     },
@@ -5205,8 +5242,11 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "description": "Increase revenue with expert brand identity design, visual identity, and marketing strategy for scaling companies from Founding Creative.",
-        "og:description": "Increase revenue with expert brand identity design, visual identity, and marketing strategy for scaling companies from Founding Creative."
+        "title": "Brand identity design services | Founding Creative",
+        "description": "Strategy, naming, logo, and visual identity built as one system, so every page, deck, and product your team ships looks and sounds like you.",
+        "og:title": "Brand identity design services | Founding Creative",
+        "og:description": "Strategy, naming, logo, and visual identity built as one system, so every page, deck, and product your team ships looks and sounds like you.",
+        "h1": "Brand identity design, built on strategy"
       },
       "ported": true
     },
@@ -5326,10 +5366,11 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Custom Creative Services | Founding Creative",
-        "description": "Custom creative services for unique challenges, from illustration and photography to podcasts, copywriting, and sustainable design.",
-        "og:title": "Custom Creative Services",
-        "og:description": "Custom creative services for unique challenges, from illustration and photography to podcasts, copywriting, and sustainable design."
+        "title": "Custom creative services | Founding Creative",
+        "description": "Illustration, photography, video, podcast production, and copywriting for projects that need more than a standard package.",
+        "og:title": "Custom creative services | Founding Creative",
+        "og:description": "Illustration, photography, video, podcast production, and copywriting for projects that need more than a standard package.",
+        "h1": "Custom creative for unique challenges"
       },
       "ported": true
     },
@@ -5439,8 +5480,11 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "description": "Elevate your brand with our expert logo and graphics designer services. Build visual impact that drives sales and marketing.",
-        "og:description": "Elevate your brand with our expert logo and graphics designer services. Build visual impact that drives sales and marketing."
+        "title": "Marketing and brand design services | Founding Creative",
+        "description": "Sales decks, campaigns, packaging, publications, and signage designed on your brand system, so every piece looks like it came from one team.",
+        "og:title": "Marketing and brand design services | Founding Creative",
+        "og:description": "Sales decks, campaigns, packaging, publications, and signage designed on your brand system, so every piece looks like it came from one team.",
+        "h1": "Design services that carry your brand"
       },
       "ported": true
     },
@@ -5546,8 +5590,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "description": "Transform events with our expert design. From exhibit booths to conferences, we deliver spaces that captivate attendees.",
-        "og:description": "Transform events with our expert design. From exhibit booths to conferences, we deliver spaces that captivate attendees."
+        "title": "Event branding services for conferences and exhibits",
+        "description": "Booths, stages, signage, and wayfinding designed as one experience, so attendees remember your brand after the doors close.",
+        "og:title": "Event branding services for conferences and exhibits",
+        "og:description": "Booths, stages, signage, and wayfinding designed as one experience, so attendees remember your brand after the doors close."
       },
       "ported": true
     },
@@ -5667,7 +5713,13 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "overrides": {},
+      "overrides": {
+        "title": "B2B website design agency | Founding Creative",
+        "description": "Custom websites for B2B teams, designed and built to load fast, earn trust, and turn visits into pipeline. See the work, then start a project.",
+        "og:title": "B2B website design agency | Founding Creative",
+        "og:description": "Custom websites for B2B teams, designed and built to load fast, earn trust, and turn visits into pipeline. See the work, then start a project.",
+        "h1": "Website design built for B2B growth"
+      },
       "ported": true
     },
     {
@@ -5752,9 +5804,10 @@
       "foundOn": null,
       "port": "port",
       "overrides": {
-        "title": "Site Care Plan: Website Hosting, Updates & Security | Founding Creative",
-        "description": "One plan for website hosting, updates, backups, and security. Founding Creative's Site Care Plan keeps your site fast, secure, and up to date.",
-        "og:description": "One plan for website hosting, updates, backups, and security. Founding Creative's Site Care Plan keeps your site fast, secure, and up to date."
+        "title": "Website maintenance plans | Founding Creative",
+        "description": "Software updates, daily backups, and performance tuning handled by the team that built your site, so it stays fast and current.",
+        "og:title": "Website maintenance plans | Founding Creative",
+        "og:description": "Software updates, daily backups, and performance tuning handled by the team that built your site, so it stays fast and current."
       },
       "ported": true
     },
@@ -6478,7 +6531,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": true
+      "ported": true,
+      "overrides": {
+        "description": "Design can power your marketing and management. See how consistent design systems help B2B teams streamline operations, cut costs, and build brand trust.",
+        "og:description": "Design can power your marketing and management. See how consistent design systems help B2B teams streamline operations, cut costs, and build brand trust."
+      }
     },
     {
       "path": "/why-marketing-direct-relies-on-website-trust/",
@@ -6567,7 +6624,11 @@
       "inSitemap": true,
       "foundOn": null,
       "port": "port",
-      "ported": true
+      "ported": true,
+      "overrides": {
+        "description": "Marketing direct to customers works best when your website looks the part. See how strong teams back their outbound efforts with branded experiences.",
+        "og:description": "Marketing direct to customers works best when your website looks the part. See how strong teams back their outbound efforts with branded experiences."
+      }
     }
   ]
 }

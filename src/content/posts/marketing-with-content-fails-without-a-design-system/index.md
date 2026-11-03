@@ -1,9 +1,9 @@
 ---
 title: "Marketing with content fails without a design system"
 seoTitle: "Marketing with content fails without a design system"
-description: "Marketing with content isn’t enough to stand out, especially for teams chasing credibility and scale. Learn how a design system builds trust with every click."
+description: "Content alone won't make you stand out, especially for teams chasing credibility and scale. Learn how a design system builds trust with every click."
 ogTitle: "Marketing with content fails without a design system"
-ogDescription: "Marketing with content isn’t enough to stand out, especially for teams chasing credibility and scale. Learn how a design system builds trust with every click."
+ogDescription: "Content alone won't make you stand out, especially for teams chasing credibility and scale. Learn how a design system builds trust with every click."
 excerpt: "Marketing with content isn’t enough to stand out, especially for teams chasing credibility and scale. Learn how a design system builds trust with every click."
 date: 2025-05-29
 updated: 2025-05-31

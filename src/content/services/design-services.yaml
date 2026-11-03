@@ -2,12 +2,12 @@ path: /services/design-services/
 order: 3
 name: Design Services
 summary: Logo and identity systems, sales enablement, packaging, publications, and environmental design.
-seoTitle: Custom Logo Graphics Designer & Logo Redevelopment Services
-description: Elevate your brand with our expert logo and graphics designer services. Build visual impact that drives sales and marketing.
-ogTitle: Custom Logo Graphics Designer & Logo Redevelopment Services
-ogDescription: Elevate your brand with our expert logo and graphics designer services. Build visual impact that drives sales and marketing.
+seoTitle: Marketing and brand design services | Founding Creative
+description: Sales decks, campaigns, packaging, publications, and signage designed on your brand system, so every piece looks like it came from one team.
+ogTitle: Marketing and brand design services | Founding Creative
+ogDescription: Sales decks, campaigns, packaging, publications, and signage designed on your brand system, so every piece looks like it came from one team.
 eyebrow: Creative design pioneers
-title: Hoisting brands through design
+title: Design services that carry your brand
 intro: Transforming concepts into visual narratives through quality design.
 heroImages:
   - src: ../../assets/services/modl-mailer-bag.webp

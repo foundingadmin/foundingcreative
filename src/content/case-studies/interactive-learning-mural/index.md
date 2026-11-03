@@ -1,6 +1,6 @@
 ---
 title: "Interactive Learning Mural"
-seoTitle: "Tata Interactive Learning Mural Case Study | Founding Creative"
+seoTitle: "Tata Interactive Learning Mural | Founding Creative"
 description: "We turned a 44-page Tata company document into a large interactive mural that merged physical space with digital storytelling at a busy conference."
 ogTitle: "Tata Interactive Learning Mural"
 ogDescription: "We turned a 44-page Tata company document into a large interactive mural that merged physical space with digital storytelling at a busy conference."

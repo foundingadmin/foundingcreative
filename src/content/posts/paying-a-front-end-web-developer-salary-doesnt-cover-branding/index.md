@@ -1,6 +1,6 @@
 ---
 title: "Paying a front-end web developer salary doesn’t cover branding"
-seoTitle: "Paying a front-end web developer salary doesn’t cover branding"
+seoTitle: "A front-end developer salary doesn't cover branding"
 description: "Learn why brand strategy and UI planning should come before hiring front-end devs, and how design-led thinking ensures your site performs from the start."
 ogTitle: "Paying a front-end web developer salary doesn’t cover branding"
 ogDescription: "Learn why brand strategy and UI planning should come before hiring front-end devs, and how design-led thinking ensures your site performs from the start."

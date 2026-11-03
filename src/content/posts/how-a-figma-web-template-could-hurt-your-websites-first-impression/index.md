@@ -1,9 +1,9 @@
 ---
 title: "How a Figma web template hurts your first impression"
 seoTitle: "How a Figma web template hurts your first impression"
-description: "Figma web templates are fast, but are they the best option? Learn how credibility-first brands evaluate the risks and limitations of pre-made templates when…"
+description: "Figma web templates are fast, but are they worth the risk? Learn how credibility-first brands weigh the limits of pre-made templates before they build."
 ogTitle: "How a Figma web template hurts your first impression"
-ogDescription: "Figma web templates are fast, but are they the best option? Learn how credibility-first brands evaluate the risks and limitations of pre-made templates when building sites meant to inspire trust…"
+ogDescription: "Figma web templates are fast, but are they worth the risk? Learn how credibility-first brands weigh the limits of pre-made templates before they build."
 excerpt: "Figma web templates are fast, but are they the best option? Learn how credibility-first brands evaluate the risks and limitations of pre-made templates when building sites meant to inspire trust, show polish, and scale with your company."
 date: 2025-05-29
 updated: 2025-07-17

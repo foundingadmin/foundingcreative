@@ -1,9 +1,9 @@
 ---
 title: "10 key factors when choosing the best web design company"
 seoTitle: "10 key factors when choosing the best web design company"
-description: "Not every web design company is created equal. Learn what really matters when choosing the right creative partner for strategic insight and user-first thinking."
+description: "Not every web design company is equal. Learn what matters when choosing a creative partner: strategic insight, user-first thinking, and design consistency."
 ogTitle: "10 key factors when choosing the best web design company"
-ogDescription: "Not every web design company is created equal. Learn what really matters when choosing the right creative partner for strategic insight and user-first thinking."
+ogDescription: "Not every web design company is equal. Learn what matters when choosing a creative partner: strategic insight, user-first thinking, and design consistency."
 excerpt: "Not all web design companies are created equal. Learn what really matters when choosing a creative partner, beyond just visual polish, and why design consistency, strategic insight, and user-first thinking beat templates every time."
 date: 2025-06-05
 updated: 2025-07-30
