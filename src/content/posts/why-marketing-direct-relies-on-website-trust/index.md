@@ -1,9 +1,9 @@
 ---
 title: "Why marketing direct relies on website trust"
 seoTitle: "Why marketing direct relies on website trust"
-description: "Marketing direct to customers works best when your website looks the part. Learn how high-performing teams support their outbound efforts through branded…"
+description: "Marketing direct to customers works best when your website looks the part. See how strong teams back their outbound efforts with branded experiences."
 ogTitle: "Why marketing direct relies on website trust"
-ogDescription: "Marketing direct to customers works best when your website looks the part. Learn how high-performing teams support their outbound efforts through branded experiences."
+ogDescription: "Marketing direct to customers works best when your website looks the part. See how strong teams back their outbound efforts with branded experiences."
 excerpt: "Marketing direct to customers works best when your website looks the part. Learn how high-performing teams support their outbound efforts through branded experiences."
 date: 2025-05-28
 updated: 2025-05-31

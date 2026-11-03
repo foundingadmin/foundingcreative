@@ -1,9 +1,9 @@
 ---
 title: "How marketing in sales gets stronger with brand-aligned UI"
 seoTitle: "How marketing in sales gets stronger with brand-aligned UI"
-description: "High-growth brands know how to inject marketing in sales. But if your website isn’t aligned with your identity, sales will suffer. Discover how teams translate…"
+description: "High-growth brands put marketing in sales. If your website doesn't match your identity, sales suffer. See how teams turn brand into UI that performs."
 ogTitle: "How marketing in sales gets stronger with brand-aligned UI"
-ogDescription: "High-growth brands know how to inject marketing in sales. But if your website isn’t aligned with your identity, sales will suffer. Discover how teams translate brand into UI that performs."
+ogDescription: "High-growth brands put marketing in sales. If your website doesn't match your identity, sales suffer. See how teams turn brand into UI that performs."
 excerpt: "High-growth brands know how to inject marketing in sales. But if your website isn’t aligned with your identity, sales will suffer. Discover how teams translate brand into UI that performs."
 date: 2025-05-31
 updated: 2026-06-03

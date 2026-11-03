@@ -2,12 +2,12 @@ path: /services/branding-services/
 order: 2
 name: Branding Services
 summary: Brand strategy, positioning, identity design, and content strategy for scaling companies.
-seoTitle: Brand Identity Design & Redesign for Scaling Companies
-description: Increase revenue with expert brand identity design, visual identity, and marketing strategy for scaling companies from Founding Creative.
-ogTitle: Brand Identity Design & Redesign for Scaling Companies
-ogDescription: Increase revenue with expert brand identity design, visual identity, and marketing strategy for scaling companies from Founding Creative.
+seoTitle: Brand identity design services | Founding Creative
+description: Strategy, naming, logo, and visual identity built as one system, so every page, deck, and product your team ships looks and sounds like you.
+ogTitle: Brand identity design services | Founding Creative
+ogDescription: Strategy, naming, logo, and visual identity built as one system, so every page, deck, and product your team ships looks and sounds like you.
 eyebrow: Visionary Brand Identity Design
-title: Charting you towards brand excellence
+title: Brand identity design, built on strategy
 intro: We guide you through the strategic blueprint that elevates your brand potential.
 heroImages:
   - src: ../../assets/services/brand-strategy-laptop.webp

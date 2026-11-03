@@ -2,12 +2,12 @@ path: /services/custom/
 order: 6
 name: Custom Services
 summary: Illustration, photo and video, audio and podcasts, copywriting, and sustainable design.
-seoTitle: Custom Creative Services | Founding Creative
-description: Custom creative services for unique challenges, from illustration and photography to podcasts, copywriting, and sustainable design.
-ogTitle: Custom Creative Services
-ogDescription: Custom creative services for unique challenges, from illustration and photography to podcasts, copywriting, and sustainable design.
+seoTitle: Custom creative services | Founding Creative
+description: Illustration, photography, video, podcast production, and copywriting for projects that need more than a standard package.
+ogTitle: Custom creative services | Founding Creative
+ogDescription: Illustration, photography, video, podcast production, and copywriting for projects that need more than a standard package.
 eyebrow: Solution Architects
-title: Problem solvers against unique challenges
+title: Custom creative for unique challenges
 intro: Tailoring bespoke answers to fit your unique needs.
 heroImages:
   - src: ../../assets/services/damage-scan-game-sketch.webp

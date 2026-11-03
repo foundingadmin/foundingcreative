@@ -1,9 +1,9 @@
 ---
 title: "3D product renders to stand out in beauty industry marketing jobs"
-seoTitle: "3D product renders to stand out in beauty industry marketing jobs"
-description: "Looking for beauty industry marketing jobs? Learn how interactive 3D content can elevate product storytelling, increase conversions, and make your work stand…"
+seoTitle: "3D product renders for beauty industry marketing"
+description: "Looking for beauty industry marketing jobs? Learn how interactive 3D product renders improve storytelling, lift conversions, and make your work stand out."
 ogTitle: "3D product renders to stand out in beauty industry marketing jobs"
-ogDescription: "Looking for beauty industry marketing jobs? Learn how interactive 3D content can elevate product storytelling, increase conversions, and make your work stand out."
+ogDescription: "Looking for beauty industry marketing jobs? Learn how interactive 3D product renders improve storytelling, lift conversions, and make your work stand out."
 excerpt: "Looking for beauty industry marketing jobs? Learn how interactive 3D content can elevate product storytelling, increase conversions, and make your work stand out."
 date: 2025-06-05
 updated: 2025-06-05

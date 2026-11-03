@@ -54,37 +54,36 @@ export interface PageSeo {
 
 export const pages: Record<string, PageSeo> = {
   '/': {
-    title: 'Founding Creative - Brand & Web Creative Marketing Agency',
+    title: 'Brand strategy and web design agency | Founding Creative',
     description:
-      'Founding Creative is a brand and web creative agency for brands of all sizes. Brand strategy, website design, and design systems that drive real growth.',
-    shareTitle: 'Founding Creative',
+      'Founding Creative builds the brand, website, and design system your team grows on. Strategy first, then work that earns trust and drives results.',
   },
   '/about-us/': {
-    title: 'About Us: The Team Behind Founding Creative',
+    title: 'Meet the team | Founding Creative',
     description:
-      'Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business.',
-    shareTitle: 'About Us',
+      'Josh Titus, Tyler Lukey, and a senior team of designers and strategists building creative foundations for brands that plan to grow.',
+    crumb: 'About Us',
     image: titus,
     imageAlt: 'Josh Titus, Brand & Marketing Design at Founding Creative',
   },
   '/blog/': {
-    title: 'Field Notes: Brand, Web & Design Insights | Founding Creative',
+    title: 'Field Notes: Brand, Web & Design | Founding Creative',
     description:
-      'Field Notes from Founding Creative: practical insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.',
+      'Field Notes from Founding Creative: insights on brand strategy, website design, design systems, and creative leadership for marketers and founders.',
     shareTitle: 'Field Notes',
     // Share image: the featured (newest) post's cover, set by the page.
   },
   '/brandforge/': {
-    title: 'BrandForge: Brand Strategy & Identity in Weeks | Founding Creative',
+    title: 'BrandForge | Branding agency for startups',
     description:
-      'BrandForge delivers research-backed brand strategy, four creative directions, and an AI-ready brand system, launch-ready in weeks, not months.',
-    shareTitle: 'BrandForge',
+      'Research-backed brand strategy and identity, built for people and AI search, and launch-ready in weeks instead of months.',
+    crumb: 'BrandForge',
     parents: [{ name: 'Services', path: '/services/' }],
     image: strategyLaptop,
     imageAlt: 'Laptop showing a brand strategy framework and color wheel',
   },
   '/buckit/': {
-    title: 'BucKit: Notion Brand Portal for Creative Assets | Founding Creative',
+    title: 'BucKit: Notion brand portal | Founding Creative',
     description:
       "BucKit is Founding Creative's Notion-based brand portal: one organized, searchable home for your brand assets, guidelines, projects, and files.",
     shareTitle: 'BucKit',
@@ -101,10 +100,10 @@ export const pages: Record<string, PageSeo> = {
     imageAlt: 'Website Buy-In Playbook shown as a printed magazine',
   },
   '/case-studies/': {
-    title: 'Case Studies: Brand, Web & Event Design | Founding Creative',
+    title: 'Branding and web design case studies | Founding Creative',
     description:
-      'A look inside projects where strategy, structure, and design came together to drive real business outcomes for Mastercard, Bank of America, and more.',
-    shareTitle: 'Case Studies',
+      'Real results from brand, website, product, and event work, with the strategy behind each project and the outcomes it drove.',
+    crumb: 'Case Studies',
     // Share image: the newest case study's cover, set by the page.
   },
   // Title and share title match the WordPress crawl. The live meta description
@@ -118,26 +117,26 @@ export const pages: Record<string, PageSeo> = {
     imageAlt: 'Bank of America app on a tablet, designed by Founding Creative',
   },
   '/fractional-creative/': {
-    title: 'Fractional Creative Team: In-House Talent, Fractional Cost',
-    description: 'Access expert branding and creative services to build your brand without the cost of full-time hires.',
-    shareTitle: 'A New Brand Design Agencies Model | Fractional Creative',
+    title: 'Fractional creative director and team | Founding Creative',
+    description:
+      'Senior creative direction and a full design team on a monthly plan, without the cost of full-time hires. Priority access and roll-over benefits.',
     crumb: 'Fractional Creative',
     image: brand2,
     imageAlt: 'ATL Freight website on a laptop',
   },
   '/services/': {
-    title: 'Creative Services: Brand, Web, Design & Events | Founding Creative',
+    title: 'Creative design services | Founding Creative',
     description:
-      "Explore Founding Creative's services: brand strategy, website design and development, graphic design, event design, animation, and custom creative work.",
-    shareTitle: 'Services',
+      'Brand strategy, websites, design, events, and animation from one senior team, so every piece of your brand works together. Find the right fit.',
+    crumb: 'Services',
     image: genpactLaptop,
     imageAlt: 'Laptop showing the Genpact GROW18 event website',
   },
   '/site-care-plan/': {
-    title: 'Site Care Plan: Website Hosting, Updates & Security | Founding Creative',
+    title: 'Website maintenance plans | Founding Creative',
     description:
-      "One plan for website hosting, updates, backups, and security. Founding Creative's Site Care Plan keeps your site fast, secure, and up to date.",
-    shareTitle: 'Site Care Plan',
+      'Software updates, daily backups, and performance tuning handled by the team that built your site, so it stays fast and current.',
+    crumb: 'Site Care Plan',
     imageAlt: 'Turntide website shown on an iMac',
   },
   '/tools/': {

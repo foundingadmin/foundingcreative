@@ -1,9 +1,9 @@
 ---
 title: "Innovation Forum Event"
-seoTitle: "Mastercard Innovation Forum Event Case Study | Founding Creative"
-description: "Event branding for Mastercard's LAC Innovation Forum: a visual system that carried across digital, physical, and motion formats for an immersive experience."
+seoTitle: "Mastercard Innovation Forum Event | Founding Creative"
+description: "Event branding for Mastercard's LAC Innovation Forum: one visual system across digital, physical, and motion formats for an immersive experience."
 ogTitle: "Mastercard LAC Innovation Forum"
-ogDescription: "Event branding for Mastercard's LAC Innovation Forum: a visual system that carried across digital, physical, and motion formats for an immersive experience."
+ogDescription: "Event branding for Mastercard's LAC Innovation Forum: one visual system across digital, physical, and motion formats for an immersive experience."
 eyebrow: "Case Study: Innovation Forum Event"
 headline: "Innovating the future of finance at Mastercard"
 subheadline: "Transforming ideas into immersive experiences at the annual LAC forum"

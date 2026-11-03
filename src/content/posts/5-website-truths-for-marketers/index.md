@@ -1,6 +1,6 @@
 ---
 title: "5 Website Truths for Marketers"
-seoTitle: "5 Website Truths for Marketers: Lagging Load Times, Leaking Leads"
+seoTitle: "5 Website Truths for Marketers: Slow Sites, Leaking Leads"
 description: "Discover 5 reasons your outdated website is killing campaigns and ROI. Learn why speed, UX, and credibility are critical for marketing success."
 ogTitle: "5 Website Truths for Marketers: Lagging Load Times, Leaking Leads"
 ogDescription: "Discover 5 reasons your outdated website is killing campaigns and ROI. Learn why speed, UX, and credibility are critical for marketing success."

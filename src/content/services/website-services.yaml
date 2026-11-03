@@ -2,12 +2,12 @@ path: /services/website-services/
 order: 1
 name: Website Services
 summary: Custom websites, eCommerce, CMS, and interactive touchscreen experiences built to perform.
-seoTitle: Web Design & Development Experts for Top Brands
-description: Boost business with our expert website design services. Elevate online presence, increase engagement, and gain ROI.
-ogTitle: Web Design & Development Experts for Top Brands
-ogDescription: Boost business with our expert website design services. Elevate online presence, increase engagement, and gain ROI.
+seoTitle: B2B website design agency | Founding Creative
+description: Custom websites for B2B teams, designed and built to load fast, earn trust, and turn visits into pipeline. See the work, then start a project.
+ogTitle: B2B website design agency | Founding Creative
+ogDescription: Custom websites for B2B teams, designed and built to load fast, earn trust, and turn visits into pipeline. See the work, then start a project.
 eyebrow: Be seen anywhere with scalable, custom website design
-title: Focused on the user
+title: Website design built for B2B growth
 intro: Websites built strategy first, designed around your users, and engineered to grow with your business.
 heroImages:
   - src: ../../assets/services/bank-of-america-interactive-pdf.webp

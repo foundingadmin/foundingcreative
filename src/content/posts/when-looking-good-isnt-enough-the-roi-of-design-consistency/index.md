@@ -1,9 +1,9 @@
 ---
 title: "The overlap between marketing and management and design"
 seoTitle: "The overlap between marketing and management and design"
-description: "Design can power your marketing and management strategy. Explore how consistent design systems help B2B teams streamline operations, reduce costs…"
+description: "Design can power your marketing and management. See how consistent design systems help B2B teams streamline operations, cut costs, and build brand trust."
 ogTitle: "The overlap between marketing and management and design"
-ogDescription: "Design can power your marketing and management strategy. Explore how consistent design systems help B2B teams streamline operations, reduce costs, and build brand trust."
+ogDescription: "Design can power your marketing and management. See how consistent design systems help B2B teams streamline operations, cut costs, and build brand trust."
 excerpt: "Design can power your marketing and management strategy. Explore how consistent design systems help B2B teams streamline operations, reduce costs, and build brand trust."
 date: 2025-05-31
 updated: 2025-05-31

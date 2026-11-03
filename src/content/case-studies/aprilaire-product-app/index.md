@@ -1,6 +1,6 @@
 ---
 title: "Aprilaire Product App"
-seoTitle: "Aprilaire Product Selector App Case Study | Founding Creative"
+seoTitle: "Aprilaire Product Selector App | Founding Creative"
 description: "How Founding Creative designed an interactive product selector app that matches Aprilaire customers to the right indoor air quality products."
 ogTitle: "Aprilaire Product Selector App"
 ogDescription: "How Founding Creative designed an interactive product selector app that matches Aprilaire customers to the right indoor air quality products."

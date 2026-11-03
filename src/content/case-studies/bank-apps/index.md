@@ -1,6 +1,6 @@
 ---
 title: "Banking App"
-seoTitle: "Bank of America Interactive Apps Case Study | Founding Creative"
+seoTitle: "Bank of America Interactive Apps | Founding Creative"
 description: "Interactive PDFs, a cached web app, and event touchscreens that made Bank of America content easy to explore, share, and track across sectors."
 ogTitle: "Bank of America Interactive Apps"
 ogDescription: "Interactive PDFs, a cached web app, and event touchscreens that made Bank of America content easy to explore, share, and track across sectors."
