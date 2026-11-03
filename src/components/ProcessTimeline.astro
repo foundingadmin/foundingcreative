@@ -5,7 +5,8 @@
 // lights that step's ring; the last ring glows, as on live.
 
 interface Props {
-  steps: { phase: string; title: string; text: string }[];
+  /** `title` is an optional one-line promise under the phase name. */
+  steps: { phase: string; title?: string; text: string }[];
 }
 
 const { steps } = Astro.props;
@@ -19,7 +20,7 @@ const { steps } = Astro.props;
           {i + 1}
         </span>
         <h3>{step.phase}</h3>
-        <p class="timeline__title">{step.title}</p>
+        {step.title && <p class="timeline__title">{step.title}</p>}
         <p class="timeline__text">{step.text}</p>
       </li>
     ))

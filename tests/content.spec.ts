@@ -115,3 +115,41 @@ test('sitemap and robots.txt', async ({ request }) => {
     expect(sitemap).toContain(`https://foundingcreative.com${url}`);
   }
 });
+
+test('home shows what we do, for whom, and proof on the first screen', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const hero = page.locator('.hero');
+  await expect(hero.getByText('We\'re a brand strategy agency for growing B2B teams.', { exact: false })).toBeVisible();
+  const clients = page.getByRole('list', { name: /Trusted by 28 clients in 2025/ });
+  await expect(clients.getByRole('img')).toHaveCount(6);
+  // The proof sits above the fold.
+  const box = await clients.boundingBox();
+  expect(box!.y + box!.height).toBeLessThan(900);
+  await expect(page.locator('.year-stats .stat__value')).toHaveCount(4);
+});
+
+test('service pages explain their process and link two relevant case studies', async ({ page }) => {
+  for (const [path, studies] of [
+    ['/services/website-services/', ['/case-study/turntide-website/', '/case-study/atlfreight-website/']],
+    ['/services/branding-services/', ['/case-study/bell-bird-atm/', '/case-study/safezone-product-and-branding/']],
+    ['/brandforge/', ['/case-study/bell-bird-atm/', '/case-study/safezone-product-and-branding/']],
+  ] as const) {
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 2, name: /How .* works/ })).toBeVisible();
+    const work = page.locator('#work-slider > li');
+    await expect(work).toHaveCount(2);
+    for (const href of studies) await expect(work.locator(`a[href="${href}"]`).first()).toBeAttached();
+  }
+  await page.goto('/services/branding-services/');
+  await expect(page.getByRole('link', { name: 'BrandForge', exact: true })).toHaveAttribute('href', '/brandforge/');
+});
+
+test('Fractional Creative FAQ matches its FAQPage structured data', async ({ page }) => {
+  await page.goto('/fractional-creative/');
+  const questions = await page.locator('.fc-faq summary').allTextContents();
+  expect(questions).toHaveLength(3);
+  const graph = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent()) ?? '')['@graph'];
+  const faq = graph.find((node: { '@type': string }) => node['@type'] === 'FAQPage');
+  expect(faq.mainEntity.map((q: { name: string }) => q.name)).toEqual(questions.map((q) => q.trim()));
+});

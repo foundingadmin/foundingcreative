@@ -10,6 +10,7 @@ import WipeSlider from '../../components/WipeSlider.astro';
 import { wipeSlide } from '../../lib/images';
 import Icon from '../../components/Icon.astro';
 import FlagMark from '../../components/FlagMark.astro';
+import ProcessTimeline from '../../components/ProcessTimeline.astro';
 import { letsTalkHref } from '../../data/navigation';
 import { entrySeo } from '../../data/seo';
 
@@ -38,6 +39,11 @@ const columns = [
   data.statement.images.filter((_, i) => i % 2 === 1),
 ];
 const pad = (n: number) => String(n).padStart(2, '0');
+
+// Statement paragraphs are plain text; [text](/path/) becomes an internal link.
+const escapeHtml = (text: string) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const withLinks = (text: string) =>
+  escapeHtml(text).replace(/\[([^\]]+)\]\((\/[^)\s]*)\)/g, '<a href="$2">$1</a>');
 
 const url = new URL(data.path, Astro.site).href;
 const jsonLd = [
@@ -97,7 +103,7 @@ const jsonLd = [
     </section>
 
     <section class="container section capabilities-section" aria-labelledby="capabilities-heading">
-      <h2 id="capabilities-heading" class="capabilities__heading" data-reveal>Capabilities</h2>
+      <h2 id="capabilities-heading" class="capabilities__heading" data-reveal>{data.capabilitiesHeading}</h2>
       <div class="capabilities" data-reveal-stagger>
         {
           data.capabilities.map((group, i) => (
@@ -116,6 +122,19 @@ const jsonLd = [
         }
       </div>
     </section>
+
+    {
+      data.process && (
+        <section class="container section theme-founding" aria-labelledby="process-heading">
+          <h2 id="process-heading" class="capabilities__heading" data-reveal>
+            {data.process.heading}
+          </h2>
+          <ProcessTimeline
+            steps={data.process.steps.map((step) => ({ phase: step.name, text: step.text }))}
+          />
+        </section>
+      )
+    }
 
     <OurWork only={data.work.caseStudies} heading={data.work.heading} intro={data.work.intro} />
 
@@ -173,7 +192,7 @@ const jsonLd = [
         </div>
         <div class="statement__text" data-reveal="right">
           <h2 id="statement-heading">{data.statement.heading}</h2>
-          {data.statement.body.map((paragraph) => <p>{paragraph}</p>)}
+          {data.statement.body.map((paragraph) => <p set:html={withLinks(paragraph)} />)}
         </div>
       </div>
     </div>
@@ -471,6 +490,16 @@ const jsonLd = [
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-regular);
     line-height: 1.5;
+  }
+
+  /* Links in statement copy, on the white band (AA contrast) */
+  .statement__text a {
+    color: var(--color-mint-darker);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .statement__text a:hover {
+    color: var(--color-night);
   }
 
   /* The second image column drifts against the scroll, like the live site's

@@ -77,17 +77,44 @@ const partnership = [
   'A partnership focused on your long-term brand success.',
 ];
 
+// Visible on the page and repeated as FAQPage structured data.
+const faqs = [
+  {
+    q: 'How much does a fractional creative director cost?',
+    a: "You pay a monthly plan sized to the work you need, not a salary. For most teams it costs less than one senior full-time hire, and you get a creative director and a design team, with no benefits, equity, or recruiting fees. Tell us what you need and we'll recommend a plan.",
+  },
+  {
+    q: "What's included in a fractional creative plan?",
+    a: 'Senior creative direction, a design team across brand, web, marketing, and presentation work, priority access, strategy workshops, and BucKit, your brand portal for every asset and guideline. Unused time rolls over, so a quiet month isn\'t wasted.',
+  },
+  {
+    q: 'How does fractional creative compare to hiring in-house?',
+    a: "Hiring takes months and gets you one person's skill set. A fractional team starts in weeks, covers more specialties, and scales up or down as your needs change. The trade-off is that we're not in your office full-time, so we work through your tools, your channels, and a regular rhythm of check-ins.",
+  },
+];
+
 const { description } = pages['/fractional-creative/'];
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Service',
-  name: 'Fractional Creative',
-  serviceType: 'Fractional creative team',
-  description,
-  url: new URL('/fractional-creative/', Astro.site).href,
-  provider: { '@id': `${Astro.site}#organization` },
-  areaServed: { '@type': 'Country', name: 'United States' },
-};
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Fractional Creative',
+    serviceType: 'Fractional creative team',
+    description,
+    url: new URL('/fractional-creative/', Astro.site).href,
+    provider: { '@id': `${Astro.site}#organization` },
+    areaServed: { '@type': 'Country', name: 'United States' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  },
+];
 ---
 
 <BaseLayout jsonLd={jsonLd}>
@@ -96,15 +123,17 @@ const jsonLd = {
     <HeroBackdrop />
     <div class="container">
       <div class="fc-hero__head" data-intro>
-        <p class="fc-hero__eyebrow">Changing Brand Design Agencies</p>
+        <p class="fc-hero__eyebrow">Fractional creative director and team</p>
         <h1 id="fc-title">In-house creative at fractional cost</h1>
       </div>
 
       <div class="fc-intro">
         <div data-intro="left">
-          <h2 class="fc-intro__heading">A new era of brand design agencies</h2>
+          <h2 class="fc-intro__heading">What is a fractional creative team?</h2>
           <p class="fc-intro__lead">
-            Fractional creative service means having a dedicated creative team, but only when you need it.
+            Fractional creative means a senior fractional creative director and a full design team working as part of
+            yours, on a monthly plan, without the cost of full-time hires. You get the strategy and output of an in-house
+            team and pay only for the capacity you need.
           </p>
           <p>This model offers:</p>
           <ul class="fc-list">{offers.map((item) => <li>{item}</li>)}</ul>
@@ -143,17 +172,16 @@ const jsonLd = {
     <div class="container section">
       <div class="fc-columns" data-reveal-stagger>
         <div>
-          <h2 id="experts-heading">Creative system experts</h2>
+          <h2 id="experts-heading">A fractional creative director who builds systems</h2>
           <p>
-            At Founding Creative, we're not just designers and strategists; we're creative system experts. We bring a wealth
-            of industry experience, infused with foresight to build creative solutions that scale with your business.
-            There's science in the art of developing creative systems that grow and evolve as you do. This is different from
-            most Brand Design Agencies.
+            We're not a pair of extra hands. As your fractional creative director and team, we set the creative direction,
+            build the systems behind it, and keep every deliverable consistent as you grow. That's the difference between a
+            fractional creative studio and a freelancer.
           </p>
         </div>
         <div>
-          <h2>Solving the dilemma</h2>
-          <p>Many business leaders face:</p>
+          <h2>Signs you need a fractional creative team</h2>
+          <p>Most teams we meet are dealing with at least one of these:</p>
           <ul class="fc-list fc-list--cross">{dilemmas.map((item) => <li>{item}</li>)}</ul>
           <p>
             These challenges restrict growth, dilute brand, and drain resources. Our fractional service is the key to turning
@@ -165,7 +193,7 @@ const jsonLd = {
       <div class="fc-payoff">
         <LineArt svg={growthSvg} class="fc-payoff__art" />
         <div data-reveal="right">
-          <h2>Your path to sustained creative excellence</h2>
+          <h2>What you get with Founding Creative</h2>
           <p>Choosing Founding Creative's fractional services means you gain:</p>
           <ul class="fc-list fc-list--check">{gains.map((item) => <li>{item}</li>)}</ul>
         </div>
@@ -178,13 +206,11 @@ const jsonLd = {
     <div class="container section">
       <div class="fc-models__intro" data-reveal>
         <p class="fc-kicker">Finding your best fit</p>
-        <h2 id="models-heading">Brand design agency models</h2>
+        <h2 id="models-heading">Fractional creative vs. hiring vs. an agency</h2>
         <p>
-          Choosing the right creative path for your business is key. Founding is setting out to bring the missing middle
-          ground to the playing field. A new time calls for a new solution that marries affordability, quality, and
-          flexibility. Perfect for businesses of all sizes, from "we don't even have a logo yet" to "we need to pivot our
-          entire brand strategy." We are your creative guru in the corner helping you stand out and attract your tribe.
-          Ready to raise your flag?
+          Hiring in-house gets you one person's skills after months of recruiting. A traditional agency gets you a project
+          team that moves on when the project ends. A fractional creative team sits in the middle: senior direction and a
+          range of specialists, working as part of your team month after month.
         </p>
       </div>
       <div class="table-wrap" tabindex="0" role="region" aria-labelledby="models-heading" data-reveal>
@@ -218,13 +244,28 @@ const jsonLd = {
     </div>
   </section>
 
+  <!-- FAQ, on the same white band; also FAQPage structured data (faqs above) -->
+  <section class="fc-faq" aria-labelledby="faq-heading">
+    <div class="container section fc-faq__inner" data-reveal>
+      <h2 id="faq-heading">Fractional creative FAQs</h2>
+      {
+        faqs.map((faq) => (
+          <details>
+            <summary>{faq.q}</summary>
+            <p>{faq.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
   <!-- Call to action on the pearl gradient -->
   <section class="fc-cta" aria-labelledby="cta-heading">
     <div class="container">
       <div class="fc-cta__card" data-reveal>
         <div>
           <p class="fc-kicker">Empower your creative starting today</p>
-          <h2 id="cta-heading">Ready to transform creative strategy?</h2>
+          <h2 id="cta-heading">Ready for a fractional creative team?</h2>
         </div>
         <div>
           <p>
@@ -486,6 +527,34 @@ const jsonLd = {
   .fc-models {
     background-color: var(--color-white);
     color: var(--color-night);
+  }
+
+  .fc-faq {
+    background-color: var(--color-white);
+    color: var(--color-night);
+  }
+
+  .fc-faq__inner {
+    max-width: calc(48rem + 2 * var(--container-gutter));
+    padding-top: 0;
+  }
+
+  .fc-faq details {
+    border-bottom: 1px solid rgb(0 4 7 / 0.15);
+  }
+
+  .fc-faq summary {
+    padding-block: var(--space-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+  }
+
+  .fc-faq summary::marker {
+    color: var(--color-mint-darker);
+  }
+
+  .fc-faq details p {
+    color: rgb(0 4 7 / 0.75);
   }
 
   .fc-models__intro {

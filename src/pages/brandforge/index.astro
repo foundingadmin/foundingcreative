@@ -6,6 +6,7 @@ import PillarPills from '../../components/PillarPills.astro';
 import CheckList from '../../components/CheckList.astro';
 import StatCards from '../../components/StatCards.astro';
 import FeatureGrid from '../../components/FeatureGrid.astro';
+import ProcessTimeline from '../../components/ProcessTimeline.astro';
 import Icon from '../../components/Icon.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import strategyLaptop from '../../assets/services/brand-strategy-laptop.webp';
@@ -76,6 +77,14 @@ const workshopImages = [
   { src: workshopNotes, alt: 'Brand workshop board of blue sticky notes answering where the brand is going' },
 ];
 
+// How a BrandForge engagement runs (ProcessTimeline).
+const process = [
+  { phase: 'Research', text: 'Stakeholder interviews, competitor audits, and audience personas pressure-test your assumptions first.' },
+  { phase: 'Four directions', text: 'Four strategic creative directions, so you make a real decision backed by real reasoning.' },
+  { phase: 'Identity system', text: 'The chosen direction built into a logo system, color, typography, and an AI-ready brand system.' },
+  { phase: 'Launch kit', text: 'Your brand guide plus the activation assets you need most: investor deck, social toolkit, web UI framework.' },
+];
+
 const { description } = pages['/brandforge/'];
 const url = new URL('/brandforge/', Astro.site).href;
 const jsonLd = [
@@ -110,8 +119,8 @@ const jsonLd = [
         <PillarPills pillars={pillars} />
         <h1 id="brandforge-title" class="holo-text">From zero to market-ready, without the wait</h1>
         <p class="tone-lead forge-hero__lead">
-          High-fidelity <span class="accent">branding</span> built on market reality, not founder intuition. Your identity,
-          your systems, your flag in the ground.
+          BrandForge is <span class="accent">branding for startups</span>: research-backed strategy, a complete visual
+          identity, and an AI-ready brand system, launch-ready in weeks instead of months.
         </p>
         <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
       </div>
@@ -124,7 +133,7 @@ const jsonLd = [
         <div class="container section audience">
           <div data-reveal="left">
             <p class="tone-kicker">Who is <span class="accent">Brand</span>Forge for</p>
-            <h2 id="audience-heading">Built for brands that mean business</h2>
+            <h2 id="audience-heading">Startup branding for founders who need to look ready</h2>
             <p class="tone-lead">Your window to make a first impression is shorter than you think.</p>
             <CheckList items={audience} />
           </div>
@@ -142,8 +151,8 @@ const jsonLd = [
             <p class="tone-lead">Most startups die in the gap between ambition and execution.</p>
             <p class="tone-copy">
               Traditional agencies are too slow and too expensive. In-house teams are too narrow. BrandForge is the third option:
-              high-fidelity branding and a launch-ready creative system delivered in weeks, not months. Built on research. Built
-              to last.
+              a branding agency for startups that delivers high-fidelity branding and a launch-ready creative system in weeks,
+              not months. Built on research. Built to last.
             </p>
           </div>
         </div>
@@ -162,9 +171,17 @@ const jsonLd = [
         <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
       </FeatureGrid>
 
+      <!-- Process: the four steps from research to launch kit -->
+      <section aria-labelledby="process-heading">
+        <div class="container section">
+          <h2 id="process-heading" data-reveal>How BrandForge works</h2>
+          <ProcessTimeline steps={process} />
+        </div>
+      </section>
+
       <OurWork
-        only={['bell-bird-atm', 'plant-nursery-ecommerce', 'genpact-grow-event', 'safezone-product-and-branding']}
-        heading="From vision to victory"
+        only={['bell-bird-atm', 'safezone-product-and-branding']}
+        heading="Startup brands we've built"
         intro="A look inside the branding projects where strategy, structure, and design all came together to drive meaningful business outcomes."
       />
     </div>
