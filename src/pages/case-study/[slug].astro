@@ -82,7 +82,7 @@ const url = new URL(caseStudyUrl(study), Astro.site).href;
 const jsonLd = [
   {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'CreativeWork',
     headline: data.headline,
     name: data.title,
     description: data.description,
@@ -93,20 +93,17 @@ const jsonLd = [
     about: data.clients.map((name) => ({ '@type': 'Organization', name })),
     keywords: [...data.services, ...data.sectors].join(', '),
   },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site?.href },
-      { '@type': 'ListItem', position: 2, name: 'Case Studies', item: new URL('/case-studies/', Astro.site).href },
-      { '@type': 'ListItem', position: 3, name: data.title, item: url },
-    ],
-  },
 ];
 ---
 
 <BaseLayout
-  seo={entrySeo(data, { image: data.cover, imageAlt: data.coverAlt, type: 'article' })}
+  seo={entrySeo(data, {
+    image: data.cover,
+    imageAlt: data.coverAlt,
+    type: 'article',
+    crumb: data.title,
+    parents: [{ name: 'Case Studies', path: '/case-studies/' }],
+  })}
   article={{ published: data.date, section: 'Case Studies', tags: [...data.services, ...data.sectors] }}
   jsonLd={jsonLd}
   lcpImage={{ src: data.cover, ...caseCover }}

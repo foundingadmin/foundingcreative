@@ -16,7 +16,7 @@ const { Content } = await render(entry);
 const { data } = entry;
 ---
 
-<BaseLayout seo={entrySeo(data)}>
+<BaseLayout seo={entrySeo(data, { crumb: data.title })}>
   <header class="container legal-hero">
     <p class="eyebrow">Legal</p>
     <h1>{data.title}</h1>

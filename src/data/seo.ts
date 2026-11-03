@@ -12,6 +12,7 @@
 // titles to 60 characters and descriptions to 155.
 
 import type { ImageMetadata } from 'astro';
+import type { Crumb } from '../lib/schema';
 import web5 from '../assets/home/services/web-5.webp';
 import web4 from '../assets/home/services/web-4.webp';
 import brand2 from '../assets/home/services/brand-2.webp';
@@ -41,6 +42,11 @@ export interface PageSeo {
   image?: ImageMetadata;
   imageAlt?: string;
   type?: 'website' | 'article';
+  /** This page's name in its breadcrumb trail. Defaults to `shareTitle`,
+   * then `title`. */
+  crumb?: string;
+  /** Pages between Home and this one in the breadcrumb trail. */
+  parents?: Crumb[];
   /** Keep the page out of search results. Also add it to NOINDEX in
    * astro.config.mjs so the sitemap leaves it out. */
   noindex?: boolean;
@@ -73,6 +79,7 @@ export const pages: Record<string, PageSeo> = {
     description:
       'BrandForge delivers research-backed brand strategy, four creative directions, and an AI-ready brand system, launch-ready in weeks, not months.',
     shareTitle: 'BrandForge',
+    parents: [{ name: 'Services', path: '/services/' }],
     image: strategyLaptop,
     imageAlt: 'Laptop showing a brand strategy framework and color wheel',
   },
@@ -89,6 +96,7 @@ export const pages: Record<string, PageSeo> = {
     description:
       'Get the free Website Buy-In Playbook: a ready-to-present deck that shows every team why a better website means better business.',
     shareTitle: 'Buy-in Deck',
+    crumb: 'Website Buy-In Playbook',
     image: buyinMagazine,
     imageAlt: 'Website Buy-In Playbook shown as a printed magazine',
   },
@@ -113,6 +121,7 @@ export const pages: Record<string, PageSeo> = {
     title: 'Fractional Creative Team: In-House Talent, Fractional Cost',
     description: 'Access expert branding and creative services to build your brand without the cost of full-time hires.',
     shareTitle: 'A New Brand Design Agencies Model | Fractional Creative',
+    crumb: 'Fractional Creative',
     image: brand2,
     imageAlt: 'ATL Freight website on a laptop',
   },
@@ -158,7 +167,7 @@ interface EntrySeoFields {
 /** SEO for a collection page, from its frontmatter. */
 export function entrySeo(
   data: EntrySeoFields,
-  extra: Pick<PageSeo, 'image' | 'imageAlt' | 'type'> = {},
+  extra: Pick<PageSeo, 'image' | 'imageAlt' | 'type' | 'crumb' | 'parents'> = {},
 ): PageSeo {
   return {
     title: data.seoTitle,

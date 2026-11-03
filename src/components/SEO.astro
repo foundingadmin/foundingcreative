@@ -4,8 +4,8 @@
 import { getImage } from 'astro:assets';
 import { VERCEL_ENV } from 'astro:env/server';
 import logo from '../assets/brand/founding-wordmark-white.svg';
-import { linkedInHref } from '../data/navigation';
-import { site, type PageSeo } from '../data/seo';
+import { pages, site, type PageSeo } from '../data/seo';
+import { breadcrumbs, organization, website, type Node } from '../lib/schema';
 
 export interface Article {
   published: Date;
@@ -18,8 +18,10 @@ interface Props {
   seo: PageSeo;
   /** For articles: adds article:* Open Graph tags. */
   article?: Article;
-  /** Page-specific schema.org data, added after the site-wide Organization. */
-  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** The page's own schema.org nodes (a Service, BlogPosting, FAQPage...).
+   * Organization, WebSite, and BreadcrumbList are added here; refer to the
+   * first two by @id (src/lib/schema.ts). */
+  jsonLd?: Node | Node[];
 }
 
 const { seo, article, jsonLd } = Astro.props;
@@ -56,16 +58,27 @@ const share = await getImage({
 });
 const shareUrl = new URL(share.src, Astro.site).href;
 
-const organization = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  '@id': `${Astro.site}#organization`,
-  name: site.name,
-  url: Astro.site?.href,
-  logo: new URL(logo.src, Astro.site).href,
-  sameAs: [linkedInHref],
-};
-const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
+// One @graph per page: the Organization (in full on Home), the WebSite, the
+// breadcrumb trail below Home, then the page's own nodes. Articles and
+// creative works get the share image if they don't name one.
+const siteUrl = Astro.site!;
+const isHome = Astro.url.pathname === '/';
+const graph: Node[] = [
+  organization(siteUrl, new URL(logo.src, siteUrl).href, pages['/'].description, isHome),
+  website(siteUrl),
+];
+if (!isHome && !noindex) {
+  const crumb = seo.crumb ?? shareTitle;
+  graph.push(breadcrumbs(siteUrl, [...(seo.parents ?? []), { name: crumb, path: Astro.url.pathname }]));
+}
+for (const node of [jsonLd ?? []].flat()) {
+  const { '@context': _context, ...rest } = node;
+  if (['BlogPosting', 'Article', 'CreativeWork'].includes(rest['@type'] as string) && !rest.image) {
+    rest.image = shareUrl;
+  }
+  graph.push(rest);
+}
+const schema = { '@context': 'https://schema.org', '@graph': graph };
 ---
 
 <title>{title}</title>
@@ -100,4 +113,4 @@ const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
 <meta name="twitter:image" content={shareUrl} />
 {imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
 
-<script type="application/ld+json" set:html={JSON.stringify(schema.length === 1 ? schema[0] : schema)} />
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
