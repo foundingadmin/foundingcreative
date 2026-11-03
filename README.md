@@ -32,7 +32,7 @@ Work on a branch, open a pull request, and check the Vercel preview before mergi
 ### Add a page
 
 1. Create `src/pages/<slug>/index.astro`. Keep the trailing-slash folder pattern so the URL is `/<slug>/`.
-2. Wrap the page in `BaseLayout` and pass its title, description and share image. Do not write head tags in the page itself.
+2. Add the page to `pages` in `src/data/seo.ts` under its path (`'/<slug>/'`): title (60 characters max), description (155 max), and a share image at least 1200x630 with alt text. Wrap the page in `BaseLayout`; it picks the entry up by URL. Do not write head tags in the page itself.
 3. Use one H1, the components in `src/components/`, and the tokens in `src/styles/global.css`. Use `<Image>` or `<Picture>` from `astro:assets` for raster images.
 4. If it belongs in the menu, add it to `src/data/navigation.ts`.
 5. If the page replaces or moves an old URL, add a 301 to `redirects` in `vercel.json`. Never delete a page or change a URL without one.

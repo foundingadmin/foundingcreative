@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
-import shareImage from '../../assets/home/services/brand-4.webp';
 
 const tools = [
   {
@@ -16,8 +15,6 @@ const tools = [
   },
 ];
 
-const description =
-  "Free tools from Founding Creative: FontSeek helps you find your brand's typography and VoiceSeek helps you find your brand's voice.";
 const jsonLd = tools.map((tool) => ({
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
@@ -31,14 +28,7 @@ const jsonLd = tools.map((tool) => ({
 }));
 ---
 
-<BaseLayout
-  title="Free Brand Tools: FontSeek & VoiceSeek | Founding Creative"
-  description={description}
-  ogTitle="Tools"
-  ogImage={shareImage}
-  ogImageAlt="Hand-drawn logo sketches on graph paper"
-  jsonLd={jsonLd}
->
+<BaseLayout jsonLd={jsonLd}>
   <section class="container section">
     <div class="section__intro">
       <p class="eyebrow">Free <em>brand tools</em></p>

@@ -8,6 +8,7 @@ import OurWork from '../../components/OurWork.astro';
 import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import Icon from '../../components/Icon.astro';
 import { getCaseStudies, caseStudyUrl, type CaseStudy } from '../../lib/content';
+import { entrySeo } from '../../data/seo';
 
 export async function getStaticPaths() {
   const studies = await getCaseStudies();
@@ -105,13 +106,7 @@ const jsonLd = [
 ---
 
 <BaseLayout
-  title={data.seoTitle}
-  description={data.description}
-  ogTitle={data.ogTitle}
-  ogDescription={data.ogDescription}
-  ogImage={data.cover}
-  ogImageAlt={data.coverAlt}
-  ogType="article"
+  seo={entrySeo(data, { image: data.cover, imageAlt: data.coverAlt, type: 'article' })}
   article={{ published: data.date, section: 'Case Studies', tags: [...data.services, ...data.sectors] }}
   jsonLd={jsonLd}
   lcpImage={{ src: data.cover, ...caseCover }}

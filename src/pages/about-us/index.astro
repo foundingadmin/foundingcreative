@@ -5,6 +5,7 @@ import CtaSection from '../../components/CtaSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
 import Icon from '../../components/Icon.astro';
 import { team } from '../../data/team';
+import { pages } from '../../data/seo';
 import LineArt from '../../components/LineArt.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import builderSvg from '../../assets/pages/about-builder-illustration.svg?raw';
@@ -18,8 +19,7 @@ const values = [
   { title: 'Founding energy', text: 'Every project is a chance for something big' },
 ];
 
-const description =
-  'Meet the Founding Creative team: brand, web, and design strategists building creative foundations that scale with your business.';
+const { description } = pages['/about-us/'];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AboutPage',
@@ -38,14 +38,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout
-  title="About Us: The Team Behind Founding Creative"
-  description={description}
-  ogTitle="About Us"
-  ogImage={people[0].photo}
-  ogImageAlt="Josh Titus, Brand & Marketing Design at Founding Creative"
-  jsonLd={jsonLd}
->
+<BaseLayout jsonLd={jsonLd}>
   <!-- Hero: the homepage's four-color gradient under the wave and a dark veil -->
   <section class="about-hero under-header" aria-labelledby="about-title">
     <HeroBackdrop />

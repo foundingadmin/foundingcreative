@@ -2,10 +2,10 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaseStudyCard from '../../components/CaseStudyCard.astro';
 import { getCaseStudies, caseStudyUrl } from '../../lib/content';
+import { pages } from '../../data/seo';
 
 const studies = await getCaseStudies();
-const description =
-  'A look inside projects where strategy, structure, and design came together to drive real business outcomes for Mastercard, Bank of America, and more.';
+const { description } = pages['/case-studies/'];
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -25,14 +25,7 @@ const jsonLd = {
 };
 ---
 
-<BaseLayout
-  title="Case Studies: Brand, Web & Event Design | Founding Creative"
-  description={description}
-  ogTitle="Case Studies"
-  ogImage={studies[0]?.data.cover}
-  ogImageAlt={studies[0]?.data.coverAlt}
-  jsonLd={jsonLd}
->
+<BaseLayout seo={{ image: studies[0]?.data.cover, imageAlt: studies[0]?.data.coverAlt }} jsonLd={jsonLd}>
   <section class="container work-intro">
     <p class="work-intro__eyebrow">Our work</p>
     <h1>Creative foundations worth showing off</h1>

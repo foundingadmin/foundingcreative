@@ -11,6 +11,7 @@ import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import strategyLaptop from '../../assets/services/brand-strategy-laptop.webp';
 import workshopLaptop from '../../assets/services/brand-workshop-laptop.webp';
 import workshopNotes from '../../assets/services/brand-workshop-blue-notes.webp';
+import { pages } from '../../data/seo';
 
 // BrandForge is the "Branding and Strategy" offering in the main menu. The
 // layout follows the live page: the homepage's gradient hero, then deep teal
@@ -75,8 +76,7 @@ const workshopImages = [
   { src: workshopNotes, alt: 'Brand workshop board of blue sticky notes answering where the brand is going' },
 ];
 
-const description =
-  'BrandForge delivers research-backed brand strategy, four creative directions, and an AI-ready brand system, launch-ready in weeks, not months.';
+const { description } = pages['/brandforge/'];
 const url = new URL('/brandforge/', Astro.site).href;
 const jsonLd = [
   {
@@ -100,14 +100,7 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout
-  title="BrandForge: Brand Strategy & Identity in Weeks | Founding Creative"
-  description={description}
-  ogTitle="BrandForge"
-  ogImage={strategyLaptop}
-  ogImageAlt="Laptop showing a brand strategy framework and color wheel"
-  jsonLd={jsonLd}
->
+<BaseLayout jsonLd={jsonLd}>
   <div class="theme-forge">
     <!-- Hero: the homepage's four-color gradient under the wave and a dark veil -->
     <section class="forge-hero under-header" aria-labelledby="brandforge-title">

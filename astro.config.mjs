@@ -3,8 +3,9 @@ import { defineConfig, envField, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import caseStudyBands from './src/lib/case-study-bands.mjs';
+import seoCheck from './src/integrations/seo-check.mjs';
 
-// Pages that set `noindex` in BaseLayout; keep this list in sync.
+// Pages marked `noindex` in src/data/seo.ts; keep this list in sync.
 const NOINDEX = ['/404/'];
 
 // WordPress slugs all end in a trailing slash, so build every page as
@@ -16,12 +17,18 @@ export default defineConfig({
     format: 'directory',
   },
   // sitemap-index.xml for search engines (listed in public/robots.txt).
-  // Pages marked noindex in BaseLayout are left out here too.
+  // Pages marked noindex in src/data/seo.ts are left out here too.
   // Case studies get the live site's banded section layout at build time.
   markdown: {
     processor: satteri({ hastPlugins: [caseStudyBands] }),
   },
-  integrations: [sitemap({ filter: (page) => !NOINDEX.some((path) => page.endsWith(path)) })],
+  integrations: [
+    sitemap({ filter: (page) => !NOINDEX.some((path) => page.endsWith(path)) }),
+    // Fails the build on a missing description or not exactly one H1. Title
+    // over 60 / description over 155 characters only warn until Sprint 2
+    // rewrites the copy; then set enforceLengths: true.
+    seoCheck({ title: 60, description: 155, enforceLengths: false }),
+  ],
   // Manrope is downloaded at build time and served from this site, so
   // visitors never request Google Fonts. Gelica is Adobe Fonts and has to
   // load from Adobe's kit (see BaseLayout).

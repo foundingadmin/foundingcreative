@@ -8,6 +8,7 @@ import FieldNotes from '../components/FieldNotes.astro';
 import HeroBackdrop from '../components/HeroBackdrop.astro';
 import { postCover } from '../lib/images';
 import { getPosts, postUrl, formatDate, isoDate, type Post } from '../lib/content';
+import { entrySeo } from '../data/seo';
 
 // Every Field Notes post renders through this one template, at the site root
 // like the WordPress permalinks. The layout follows the live posts: a dark
@@ -64,13 +65,7 @@ const jsonLd = [
 ---
 
 <BaseLayout
-  title={data.seoTitle}
-  description={data.description}
-  ogTitle={data.ogTitle}
-  ogDescription={data.ogDescription}
-  ogImage={data.cover}
-  ogImageAlt={data.coverAlt}
-  ogType="article"
+  seo={entrySeo(data, { image: data.cover, imageAlt: data.coverAlt, type: 'article' })}
   article={{ published: data.date, modified: data.updated, section: data.categories[0], tags: data.categories }}
   jsonLd={jsonLd}
   lcpImage={{ src: data.cover, ...postCover }}

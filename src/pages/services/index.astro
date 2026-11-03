@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import Icon from '../../components/Icon.astro';
 import { letsTalkHref } from '../../data/navigation';
-import shareImage from '../../assets/services/genpact-grow-website-laptop.webp';
+import { pages } from '../../data/seo';
 
 // Replaces the unfinished WordPress /services/ page with a real overview.
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
@@ -17,8 +17,7 @@ const offerings = [
   ...services.map((s) => ({ name: s.data.name, summary: s.data.summary, href: s.data.path })),
 ];
 
-const description =
-  "Explore Founding Creative's services: brand strategy, website design and development, graphic design, event design, animation, and custom creative work.";
+const { description } = pages['/services/'];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
@@ -38,11 +37,6 @@ const jsonLd = {
 ---
 
 <BaseLayout
-  title="Creative Services: Brand, Web, Design & Events | Founding Creative"
-  description={description}
-  ogTitle="Services"
-  ogImage={shareImage}
-  ogImageAlt="Laptop showing the Genpact GROW18 event website"
   jsonLd={jsonLd}
 >
   <section class="container section">

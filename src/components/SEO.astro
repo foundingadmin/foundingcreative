@@ -1,0 +1,103 @@
+---
+// The one place head tags for search and sharing are written. BaseLayout
+// renders it with the page's entry from src/data/seo.ts.
+import { getImage } from 'astro:assets';
+import { VERCEL_ENV } from 'astro:env/server';
+import logo from '../assets/brand/founding-wordmark-white.svg';
+import { linkedInHref } from '../data/navigation';
+import { site, type PageSeo } from '../data/seo';
+
+export interface Article {
+  published: Date;
+  modified?: Date;
+  section?: string;
+  tags?: string[];
+}
+
+interface Props {
+  seo: PageSeo;
+  /** For articles: adds article:* Open Graph tags. */
+  article?: Article;
+  /** Page-specific schema.org data, added after the site-wide Organization. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { seo, article, jsonLd } = Astro.props;
+const {
+  title,
+  description,
+  shareTitle = title,
+  shareDescription = description,
+  image = site.image,
+  type = 'website',
+  noindex = false,
+} = seo;
+const imageAlt = seo.imageAlt ?? (image === site.image ? site.imageAlt : undefined);
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Preview and local builds stay out of search. The production build is
+// also served on Vercel's own domain; vercel.json sends an
+// X-Robots-Tag header there (see CLAUDE.md, "Search indexing").
+const robots = VERCEL_ENV !== 'production' ? 'noindex, nofollow' : noindex ? 'noindex, follow' : undefined;
+
+// Social platforms want a static 1200x630 JPEG, so every share image is
+// center-cropped to that shape. Astro never scales an image up, so a source
+// narrower than 1200px (or shorter than 630px) gives the largest 1.91:1 crop
+// it has, and the width/height tags report that real size.
+const width = Math.min(1200, image.width, Math.floor((image.height * 1200) / 630));
+const share = await getImage({
+  src: image,
+  width,
+  height: Math.round((width * 630) / 1200),
+  fit: 'cover',
+  format: 'jpg',
+  quality: 82,
+});
+const shareUrl = new URL(share.src, Astro.site).href;
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${Astro.site}#organization`,
+  name: site.name,
+  url: Astro.site?.href,
+  logo: new URL(logo.src, Astro.site).href,
+  sameAs: [linkedInHref],
+};
+const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{robots && <meta name="robots" content={robots} />}
+
+<meta property="og:locale" content={site.locale} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:type" content={type} />
+<meta property="og:title" content={shareTitle} />
+<meta property="og:description" content={shareDescription} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={shareUrl} />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content={String(share.attributes.width)} />
+<meta property="og:image:height" content={String(share.attributes.height)} />
+{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+{
+  article && (
+    <>
+      <meta property="article:published_time" content={article.published.toISOString()} />
+      {article.modified && <meta property="article:modified_time" content={article.modified.toISOString()} />}
+      {article.section && <meta property="article:section" content={article.section} />}
+      {article.tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+    </>
+  )
+}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={shareTitle} />
+<meta name="twitter:description" content={shareDescription} />
+<meta name="twitter:image" content={shareUrl} />
+{imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
+
+<script type="application/ld+json" set:html={JSON.stringify(schema.length === 1 ? schema[0] : schema)} />

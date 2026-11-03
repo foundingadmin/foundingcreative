@@ -59,8 +59,11 @@ At cutover, nothing needs to change in the code: once foundingcreative.com point
 
 ## SEO and head tags
 
-- Every page sets its title, meta description, canonical, robots, Open Graph and Twitter tags through one shared SEO component that reads from a single data file (`src/components/SEO.astro` and `src/data/seo.ts`). No page hardcodes its own head tags. Until that component lands (Sprint 1.3), `BaseLayout.astro` owns the head and pages pass values to it as props.
-- Collection entries carry their SEO fields in frontmatter (`seoTitle`, `description`, `ogTitle`, `ogDescription`). Keep values matching the WordPress crawl unless told otherwise.
+- Every page's title, meta description, canonical, robots, Open Graph and Twitter tags and JSON-LD are written by `src/components/SEO.astro`, which `BaseLayout` renders. No page writes its own head tags.
+- Values live in `src/data/seo.ts`. Static pages have an entry in `pages`, keyed by path (`'/about-us/'`); `BaseLayout` finds it by URL. Collection pages (posts, case studies, services, SiteLaunch, legal) keep `seoTitle`, `description`, `ogTitle`, `ogDescription` in frontmatter and pass `seo={entrySeo(data, { image, imageAlt })}`. A page passes `seo` for anything only known at build time (the blog index's featured cover).
+- Share title and description default to the page title and description. Share images are center-cropped to 1200x630 JPEG; use a source at least 1200px wide and 630px tall or it comes out smaller.
+- The build fails if a page has no description or not exactly one H1 (`src/integrations/seo-check.mjs`, set up in `astro.config.mjs`). Titles over 60 characters and descriptions over 155 are warnings until Sprint 2 rewrites the copy, then `enforceLengths: true` makes them errors too.
+- Keep values matching the WordPress crawl unless told otherwise. A noindex page is marked in `seo.ts` and added to `NOINDEX` in `astro.config.mjs`.
 - One H1 per page. Eyebrow labels above headings are styled `<p>` or `<span>`, never heading tags.
 
 ## Images and links
