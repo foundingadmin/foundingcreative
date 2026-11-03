@@ -1,0 +1,170 @@
+---
+// A process laid out like gpc.consulting/process: each step is a tall row,
+// text on the left (title and number, a one-line promise, the detail, three
+// points) and a large image on the right that holds in place while the
+// row's text scrolls past. CSS only (position: sticky). Colors come from the
+// surrounding theme. Stacks into one column on small screens.
+import type { ImageMetadata } from 'astro';
+import Img from './Img.astro';
+
+interface Props {
+  steps: {
+    title: string;
+    tagline: string;
+    text: string;
+    points: string[];
+    image: { src: ImageMetadata; alt: string };
+  }[];
+}
+
+const { steps } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<ol class="process-split">
+  {
+    steps.map((step, i) => (
+      <li class="process-split__step">
+        <div class="process-split__text" data-reveal>
+          <div class="process-split__head">
+            <h3>{step.title}</h3>
+            <span class="process-split__number" aria-hidden="true">
+              {pad(i + 1)}
+            </span>
+          </div>
+          <p class="process-split__tagline">{step.tagline}</p>
+          <p class="process-split__detail">{step.text}</p>
+          <ul class="process-split__points">
+            {step.points.map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="process-split__media">
+          <Img
+            src={step.image.src}
+            alt={step.image.alt}
+            widths={[480, 800, 1200]}
+            sizes="(max-width: 977px) 100vw, 50vw"
+          />
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .process-split {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .process-split__step {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-2xl);
+    min-height: 90vh;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .process-split__step:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .process-split__text {
+    align-self: start;
+    padding-block: var(--space-2xl);
+  }
+
+  .process-split__head {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .process-split__head h3 {
+    margin: 0;
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .process-split__number {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+  }
+
+  .process-split__tagline {
+    margin-block: var(--space-sm) var(--space-md);
+    color: var(--accent, var(--color-mint));
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .process-split__detail {
+    max-width: 34rem;
+    color: var(--color-text-muted);
+  }
+
+  .process-split__points {
+    display: grid;
+    gap: var(--space-xs);
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .process-split__points li {
+    display: flex;
+    gap: var(--space-xs);
+    align-items: baseline;
+  }
+
+  /* Ring markers, as on the reference */
+  .process-split__points li::before {
+    content: '';
+    flex: none;
+    width: 0.6rem;
+    height: 0.6rem;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+  }
+
+  /* The image holds while this step's text scrolls by */
+  .process-split__media {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-md));
+    align-self: start;
+    height: min(70vh, 40rem);
+    margin-block: var(--space-xl);
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+
+  .process-split__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 977px) {
+    .process-split__step {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      min-height: 0;
+    }
+
+    .process-split__media {
+      position: static;
+      order: -1;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      margin-block: var(--space-lg) 0;
+    }
+
+    .process-split__text {
+      padding-block: var(--space-lg) var(--space-xl);
+    }
+  }
+</style>

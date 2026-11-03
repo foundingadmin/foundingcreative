@@ -58,3 +58,37 @@ test('scroll reveals only ever slide up', async ({ page }) => {
     expect([a, d, x]).toEqual([1, 1, 0]);
   }
 });
+
+test('home services pin "We design / develop / build" and swap the verb on scroll', async ({ page }) => {
+  await page.goto('/');
+  const active = page.locator('[data-cycler] .cycler__word.is-active');
+  const steps = page.locator('[data-cycler-step]');
+  for (const [i, word] of ['design', 'develop', 'build'].entries()) {
+    await steps.nth(i).evaluate((el) => el.scrollIntoView({ block: 'center' }));
+    await expect(active).toHaveText(word);
+    await expect(steps.nth(i).getByRole('heading', { level: 3 })).toContainText(`We ${word}`);
+  }
+});
+
+test('BrandForge steps: four on Home linking to the page, and in full on BrandForge', async ({ page }) => {
+  const titles = ['Discovery & Alignment', 'Strategy & Direction', 'Visual Identity', 'Activation'];
+  await page.goto('/');
+  const band = page.getByRole('region', { name: 'From zero to market-ready in four steps' });
+  await expect(band.getByRole('heading', { level: 3 })).toHaveText(titles);
+  await expect(band.getByRole('link', { name: /Explore BrandForge/ })).toHaveAttribute('href', '/brandforge/');
+
+  await page.goto('/brandforge/');
+  const steps = page.locator('.process-split__step');
+  await expect(steps.getByRole('heading', { level: 3 })).toHaveText(titles);
+  for (const step of await steps.all()) await expect(step.locator('img')).toHaveAttribute('alt', /\S/);
+});
+
+test('service work slider steps through projects with its buttons', async ({ page }) => {
+  await page.goto('/services/website-services/');
+  const slider = page.locator('[data-work-slider]');
+  await expect(slider.locator('[data-work-current]')).toHaveText('01');
+  await expect(slider.getByRole('button', { name: 'Previous project' })).toBeDisabled();
+  await slider.getByRole('button', { name: 'Next project' }).click();
+  await expect(slider.locator('[data-work-current]')).toHaveText('02');
+  await expect(slider.getByRole('button', { name: 'Next project' })).toBeDisabled();
+});

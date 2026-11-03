@@ -1,0 +1,273 @@
+---
+// A large work slider for the service pages, after dd.nyc's featured work:
+// one big project image at a time with the next peeking in, the client,
+// headline and service tags under it, a 01 / 02 counter, and previous/next
+// buttons. Native horizontal scroll with snap points, so swipe, trackpad and
+// keyboard scrolling all work; the buttons and counter are a small script.
+import Img from './Img.astro';
+import Icon from './Icon.astro';
+import { getCaseStudies, caseStudyUrl } from '../lib/content';
+
+interface Props {
+  /** Case study ids, in order. */
+  only: string[];
+  heading: string;
+  intro: string;
+}
+
+const { only, heading, intro } = Astro.props;
+const all = await getCaseStudies();
+const studies = only.map((id) => all.find((study) => study.id === id)).filter((study) => study !== undefined);
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<section class="work-slider section" aria-labelledby="work-heading" data-work-slider>
+  <div class="container work-slider__head">
+    <div>
+      <p class="eyebrow">Our <em>work</em></p>
+      <h2 id="work-heading">{heading}</h2>
+      <p class="section__lead">{intro}</p>
+    </div>
+    <div class="work-slider__controls">
+      <p class="work-slider__count" aria-hidden="true">
+        <span data-work-current>01</span> / {pad(studies.length)}
+      </p>
+      <button type="button" class="work-slider__button" aria-controls="work-slider" data-work-prev>
+        <Icon name="chevron-left" size={20} />
+        <span class="visually-hidden">Previous project</span>
+      </button>
+      <button type="button" class="work-slider__button" aria-controls="work-slider" data-work-next>
+        <Icon name="chevron-right" size={20} />
+        <span class="visually-hidden">Next project</span>
+      </button>
+      <a class="button" href="/case-studies/">All case studies <Icon name="arrow-up-right" size={16} /></a>
+    </div>
+  </div>
+
+  <ul class="work-slider__track" id="work-slider" tabindex="0" aria-label={`${heading}: projects`}>
+    {
+      studies.map((study, i) => (
+        <li class="work-slide" data-work-slide={i}>
+          <a class="work-slide__link" href={caseStudyUrl(study)}>
+            <span class="work-slide__media">
+              <Img
+                src={study.data.cover}
+                alt={study.data.coverAlt}
+                widths={[640, 960, 1280, 1600]}
+                sizes="(max-width: 977px) 88vw, 75vw"
+              />
+            </span>
+            <span class="work-slide__caption">
+              <span class="work-slide__client">{study.data.clients.join(', ')}</span>
+              <span class="work-slide__title">
+                {study.data.headline}
+                <Icon name="arrow-up-right" size={22} />
+              </span>
+            </span>
+          </a>
+          <ul class="work-slide__tags" aria-label={`${study.data.clients.join(', ')}: services`}>
+            {study.data.services.map((tag) => (
+              <li class="pill">{tag}</li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-work-slider]')) {
+    const track = root.querySelector<HTMLElement>('.work-slider__track')!;
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-work-slide]')];
+    const current = root.querySelector('[data-work-current]')!;
+    const prev = root.querySelector<HTMLButtonElement>('[data-work-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-work-next]')!;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let index = 0;
+
+    const update = (i: number) => {
+      index = i;
+      current.textContent = String(i + 1).padStart(2, '0');
+      prev.disabled = i === 0;
+      next.disabled = i === slides.length - 1;
+    };
+    update(0);
+
+    // The slide most in view is the current one.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) update(Number((entry.target as HTMLElement).dataset.workSlide));
+        }
+      },
+      { root: track, threshold: 0.6 },
+    );
+    slides.forEach((slide) => observer.observe(slide));
+
+    const go = (i: number) => {
+      const slide = slides[Math.max(0, Math.min(slides.length - 1, i))];
+      track.scrollTo({ left: slide.offsetLeft - track.offsetLeft, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    };
+    prev.addEventListener('click', () => go(index - 1));
+    next.addEventListener('click', () => go(index + 1));
+  }
+</script>
+
+<style>
+  .work-slider__head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-xl);
+  }
+
+  .work-slider__head > div:first-child {
+    max-width: 44rem;
+  }
+
+  .work-slider__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    align-items: center;
+  }
+
+  .work-slider__count {
+    margin: 0 var(--space-xs) 0 0;
+    font-family: var(--font-mono);
+    letter-spacing: 0.1em;
+  }
+
+  .work-slider__button {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--color-stroke);
+    border-radius: 50%;
+    background: var(--color-glass);
+    color: var(--color-text);
+    cursor: pointer;
+    transition:
+      border-color var(--transition-fast),
+      opacity var(--transition-fast);
+  }
+
+  .work-slider__button:hover:not(:disabled) {
+    border-color: var(--color-white);
+  }
+
+  .work-slider__button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  /* One big slide at a time, the next peeking in from the right */
+  .work-slider__track {
+    display: grid;
+    grid-auto-columns: min(75vw, 1100px);
+    grid-auto-flow: column;
+    gap: var(--space-lg);
+    margin: 0;
+    padding: 0 var(--container-gutter) var(--space-sm);
+    overflow-x: auto;
+    list-style: none;
+    scroll-padding-inline: var(--container-gutter);
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  .work-slider__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .work-slider__track:focus-visible {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 4px;
+  }
+
+  .work-slide {
+    scroll-snap-align: start;
+  }
+
+  .work-slide__link {
+    display: grid;
+    gap: var(--space-md);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .work-slide__media {
+    display: block;
+    aspect-ratio: 1.9 / 1;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+
+  .work-slide__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 700ms var(--ease-out);
+  }
+
+  .work-slide__link:hover .work-slide__media :global(img) {
+    transform: scale(1.03);
+  }
+
+  .work-slide__caption {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .work-slide__client {
+    color: var(--color-mint);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .work-slide__title {
+    display: inline-flex;
+    gap: var(--space-xs);
+    align-items: center;
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-snug);
+  }
+
+  .work-slide__link:hover .work-slide__title {
+    color: var(--color-mint);
+  }
+
+  .work-slide__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 977px) {
+    .work-slider__track {
+      grid-auto-columns: 88vw;
+      gap: var(--space-md);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-slider__track {
+      scroll-behavior: auto;
+    }
+
+    .work-slide__media :global(img) {
+      transition: none;
+    }
+  }
+</style>
