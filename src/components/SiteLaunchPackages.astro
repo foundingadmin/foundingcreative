@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from './Img.astro';
 import Icon from './Icon.astro';
 import prismArt from '../assets/home/sitelaunch/flare-1.png';
 import rocketArt from '../assets/home/sitelaunch/rocket-1.png';
@@ -28,7 +28,7 @@ const packages = [
   {
     packages.map((pkg) => (
       <li class:list={['package', `package--${pkg.tone}`, { 'is-current': pkg.tone === current }]} data-reveal={pkg.from}>
-        <Image class="package__art" src={pkg.art} alt="" widths={[400, 800]} sizes="(max-width: 977px) 90vw, 380px" />
+        <Img class="package__art" src={pkg.art} alt="" widths={[400, 800]} sizes="(max-width: 977px) 90vw, 380px" />
         {pkg.tone === current ? (
           <span class="package__here">You're here</span>
         ) : (

@@ -47,6 +47,19 @@ function setupHeader() {
   window.addEventListener('scroll', update, { passive: true });
 }
 
+// A hero clip with data-src sits over its poster image and only starts
+// downloading once the page has loaded, so it never competes with the first
+// paint. Reduced-motion visitors keep the poster and never download it.
+function loadDeferredVideos() {
+  if (reduceMotion.matches) return;
+  for (const video of document.querySelectorAll<HTMLVideoElement>('video[data-src]')) {
+    video.addEventListener('playing', () => video.classList.add('is-playing'), { once: true });
+    video.preload = 'auto';
+    video.src = video.dataset.src!;
+    video.removeAttribute('data-src');
+  }
+}
+
 function setupVideos() {
   const videos = [...document.querySelectorAll<HTMLVideoElement>('video[data-ambient]')];
   if (!videos.length) return;
@@ -68,6 +81,13 @@ function setupVideos() {
   });
   videos.forEach((video) => observer.observe(video));
   reduceMotion.addEventListener('change', apply);
+
+  const start = () => {
+    loadDeferredVideos();
+    apply();
+  };
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
 }
 
 setupReveal();

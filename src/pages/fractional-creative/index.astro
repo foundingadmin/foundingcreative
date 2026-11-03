@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../../components/Img.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import LineArt from '../../components/LineArt.astro';
@@ -109,7 +109,7 @@ const jsonLd = {
       </div>
 
       <div class="fc-intro">
-        <div data-reveal="left">
+        <div data-intro="left">
           <h2 class="fc-intro__heading">A new era of brand design agencies</h2>
           <p class="fc-intro__lead">
             Fractional creative service means having a dedicated creative team, but only when you need it.
@@ -134,7 +134,7 @@ const jsonLd = {
         </ul>
 
         <div class="fc-card fc-portal" data-reveal="right">
-          <Image class="fc-portal__logo" src={buckitLogo} alt="BucKit by Founding" height={80} />
+          <Img class="fc-portal__logo" src={buckitLogo} alt="BucKit by Founding" height={80} />
           <h3>Creative system</h3>
           <p>We build your team an all-in-one project and toolkit portal to easily access your branding and creative.</p>
           <ul class="fc-list">{portal.map((item) => <li>{item}</li>)}</ul>

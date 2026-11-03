@@ -66,12 +66,16 @@ At cutover, nothing needs to change in the code: once foundingcreative.com point
 ## Images and links
 
 - Every `<img>` has meaningful alt text, or `alt=""` only when purely decorative.
-- Use `astro:assets` `<Image>` / `<Picture>` for every raster image. Raster images live in `src/assets/` or next to their content entry, never in `public/` (video posters next to their video in `public/media/` are the exception).
+- Render every image with `src/components/Img.astro`. It wraps `astro:assets`: raster images become `<Picture>` with AVIF and WebP, SVGs stay `<Image>`. Give it `widths` and `sizes` (or a fixed `width`/`height`) so the browser picks the right file. Raster images live in `src/assets/` or next to their content entry, never in `public/`.
+- Images below the fold lazy-load (the default). The one LCP image per page gets `loading="eager"` and `fetchpriority="high"`, and is passed to `BaseLayout` as `lcpImage` for a preload. Keep its widths and sizes in `src/lib/images.ts` so the preload and the `<Picture>` request the same file.
+- Content above the fold animates with `data-intro` (pure CSS), never `data-reveal` (waits for a script, delays LCP).
+- Background video sits over a poster image and only downloads after the page loads (`HeroBackdrop` `variant="video"`).
 - Links describe their destination ("See the Turntide case study", not "Learn more"). If the visible text has to stay short, add visually hidden text that names the destination.
 
 ## Brand
 
 - Fonts: Gelica (display, from the Adobe Fonts kit, which has to be served by Adobe), Manrope (body, self-hosted by Astro). Gelasio is part of the brand but not loaded on the site; ask before adding it.
+- The Adobe kit stylesheet loads without blocking render. Headings show in "Gelica Fallback" (Georgia resized to Gelica's metrics, in `global.css`) until Gelica arrives. If Gelica's weights change, re-measure the fallback. The kit itself is set to Font display: swap in Adobe Fonts (Web Projects); keep it there, or Gelica headings blink out while the font downloads.
 - Accent: mint `#7ef893` (`--color-mint`).
 - The product name is always spelled BrandForge.
 - Copy style: never use em dashes. Use commas, periods, or parentheses instead.

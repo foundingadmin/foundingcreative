@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../../components/Img.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import Icon from '../../components/Icon.astro';
@@ -64,7 +64,7 @@ const jsonLd = {
     {
       featured && (
         <div class="featured__media">
-          <Image
+          <Img
             src={featured.data.cover}
             alt={featured.data.coverAlt}
             widths={[640, 1280]}

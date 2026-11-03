@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../components/Img.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteLaunchSection from '../components/SiteLaunchSection.astro';
 import ClientLogos from '../components/ClientLogos.astro';
@@ -9,6 +9,8 @@ import SelectedWorks from '../components/SelectedWorks.astro';
 import Carousel from '../components/Carousel.astro';
 import Icon from '../components/Icon.astro';
 import HeroBackdrop from '../components/HeroBackdrop.astro';
+import heroPoster from '../assets/home/hero/glowing-grid-poster.png';
+import { heroBackdrop } from '../lib/images';
 import { team } from '../data/team';
 import shareImage from '../assets/home/services/web-5.webp';
 
@@ -154,11 +156,12 @@ const jsonLd = [
   ogImage={shareImage}
   ogImageAlt="Turntide website designed by Founding Creative, shown on an iMac"
   jsonLd={jsonLd}
+  lcpImage={{ src: heroPoster, ...heroBackdrop }}
 >
   <!-- Hero: a looping glowing-grid video under a dark veil, with the pearl
        headline glowing on top -->
   <section class="hero under-header">
-    <HeroBackdrop variant="video" video="/media/home/glowing-grid.mp4" />
+    <HeroBackdrop variant="video" video="/media/home/glowing-grid.mp4" image={heroPoster} />
     <div class="container hero__content" data-intro>
       <p class="hero__eyebrow">Brand &amp; Web Creative Marketing Agency</p>
       <h1 class="hero__title holo-text">Creative foundations for brands of all sizes</h1>
@@ -210,7 +213,7 @@ const jsonLd = [
               <Carousel id={`service-${i}-work`} label={`${service.title}: example work`} class="service__gallery">
                 {service.images.map((image) => (
                   <li>
-                    <Image src={image.src} alt={image.alt} widths={[300, 600]} sizes="244px" />
+                    <Img src={image.src} alt={image.alt} widths={[300, 600]} sizes="244px" />
                   </li>
                 ))}
               </Carousel>
@@ -297,7 +300,7 @@ const jsonLd = [
         {
           crew.map((person) => (
             <li>
-              <Image src={person.photo} alt={person.name} widths={[240, 480]} sizes="(max-width: 700px) 30vw, 180px" />
+              <Img src={person.photo} alt={person.name} widths={[240, 480]} sizes="(max-width: 700px) 30vw, 180px" />
             </li>
           ))
         }

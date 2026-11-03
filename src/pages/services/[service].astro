@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../../components/Img.astro';
 import { getCollection, getEntries, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FieldNotes from '../../components/FieldNotes.astro';
@@ -7,6 +7,7 @@ import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
 import OurWork from '../../components/OurWork.astro';
 import WipeSlider from '../../components/WipeSlider.astro';
+import { wipeSlide } from '../../lib/images';
 import Icon from '../../components/Icon.astro';
 import FlagMark from '../../components/FlagMark.astro';
 import { letsTalkHref } from '../../data/navigation';
@@ -77,6 +78,7 @@ const jsonLd = [
   ogImage={data.heroImages[0].src}
   ogImageAlt={data.heroImages[0].alt}
   jsonLd={jsonLd}
+  lcpImage={{ src: data.heroImages[0].src, ...wipeSlide }}
 >
   <!-- One drifting gradient runs behind the hero, capabilities, and work, as on the live site -->
   <div class="service-top under-header">
@@ -170,7 +172,7 @@ const jsonLd = [
               <ul class:list={['statement__column', `statement__column--${c + 1}`]} data-reveal={c ? 'up' : 'left'}>
                 {column.map((image, i) => (
                   <li class:list={{ 'is-tall': (i + c) % 2 === 0 }}>
-                    <Image src={image.src} alt={image.alt} widths={[320, 640]} sizes="(max-width: 700px) 46vw, 290px" />
+                    <Img src={image.src} alt={image.alt} widths={[320, 640]} sizes="(max-width: 700px) 46vw, 290px" />
                   </li>
                 ))}
               </ul>

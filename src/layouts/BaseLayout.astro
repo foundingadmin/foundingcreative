@@ -7,6 +7,7 @@ import Footer from '../components/Footer.astro';
 import logo from '../assets/brand/founding-wordmark-white.svg';
 import defaultShareImage from '../assets/home/services/web-5.webp';
 import { linkedInHref } from '../data/navigation';
+import { isAnimated, type LcpImage } from '../lib/images';
 import '../styles/global.css';
 
 interface Props {
@@ -26,6 +27,10 @@ interface Props {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   /** Keep the page out of search results (also excluded from the sitemap in astro.config.mjs). */
   noindex?: boolean;
+  /** The page's LCP image, preloaded as AVIF (WebP if animated). Pass the same widths and sizes
+   * as the <Picture> that shows it (see src/lib/images.ts), or the browser
+   * downloads it twice. */
+  lcpImage?: LcpImage;
 }
 
 const {
@@ -40,7 +45,11 @@ const {
   article,
   jsonLd,
   noindex = false,
+  lcpImage,
 } = Astro.props;
+
+const lcpFormat = lcpImage && isAnimated(lcpImage.src) ? 'webp' : 'avif';
+const lcpPreload = lcpImage && (await getImage({ ...lcpImage, format: lcpFormat }));
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
@@ -111,14 +120,34 @@ const schema = [organization, ...(jsonLd ? [jsonLd].flat() : [])];
 
     <script type="application/ld+json" set:html={JSON.stringify(schema.length === 1 ? schema[0] : schema)} />
 
-    <!-- Manrope, self-hosted by Astro (see astro.config.mjs) -->
-    <Font cssVariable="--font-manrope" preload />
+    {
+      lcpPreload && (
+        <link
+          rel="preload"
+          as="image"
+          type={`image/${lcpFormat}`}
+          imagesrcset={lcpPreload.srcSet.attribute}
+          imagesizes={lcpImage?.sizes}
+          fetchpriority="high"
+        />
+      )
+    }
+
+    <!-- Manrope, self-hosted by Astro (see astro.config.mjs). Only the latin
+         subset is preloaded; latin-ext loads if a page needs it. -->
+    <Font cssVariable="--font-manrope" preload={[{ subset: 'latin' }]} />
     <Font cssVariable="--font-ubuntu-mono" />
     <!-- Gelica from the Founding Creative Adobe Fonts kit. Adobe's license
-         requires serving it from Adobe; the kit only serves domains listed in
-         its Adobe Fonts settings. -->
+         requires serving it from Adobe (the kit and its p.typekit.net
+         tracking import stay as Adobe ships them); the kit only serves
+         domains listed in its Adobe Fonts settings. It loads without blocking
+         the first paint, and headings show in the metric-matched fallback
+         (global.css) until it arrives. -->
     <link rel="preconnect" href="https://use.typekit.net" crossorigin />
-    <link rel="stylesheet" href="https://use.typekit.net/ooi7rue.css" />
+    <link rel="preconnect" href="https://p.typekit.net" crossorigin />
+    <link rel="preload" as="style" href="https://use.typekit.net/ooi7rue.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/ooi7rue.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://use.typekit.net/ooi7rue.css" /></noscript>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

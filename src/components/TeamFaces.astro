@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from './Img.astro';
 import { team, type PersonKey } from '../data/team';
 
 // A row of overlapping round team photos, as in the footer and the SiteLaunch
@@ -20,7 +20,7 @@ const { order = ['tyler', 'titus', 'stacey', 'jamie', 'sasha', 'blake'], size = 
   {
     team(order).map((person) => (
       <li>
-        <Image src={person.photo} alt={person.name} width={160} height={160} />
+        <Img src={person.photo} alt={person.name} width={160} height={160} />
       </li>
     ))
   }

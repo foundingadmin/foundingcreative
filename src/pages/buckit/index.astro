@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from '../../components/Img.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/CtaSection.astro';
 import Icon from '../../components/Icon.astro';
@@ -135,7 +135,7 @@ const jsonLd = [
 >
   <section class="hero">
     <div class="container">
-      <Image class="hero__logo" src={logo} alt="BucKit by Founding" height={80} loading="eager" />
+      <Img class="hero__logo" src={logo} alt="BucKit by Founding" height={80} loading="eager" />
       <h1>BucKit: a brand new home for your brand</h1>
       <p class="section__lead hero__lead">
         Founding's brand portal is not just a toolkit, it's your creative destination. Designed with your business needs in
@@ -155,7 +155,7 @@ const jsonLd = [
       </p>
       <p class="split__tagline">Your total toolkit, all in one bucket. Your BucKit™.</p>
     </div>
-    <Image class="split__art" src={interfaceArt} alt="" />
+    <Img class="split__art" src={interfaceArt} alt="" />
   </section>
 
   <section class="container section" aria-labelledby="collab-heading">

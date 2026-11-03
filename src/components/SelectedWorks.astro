@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import Img from './Img.astro';
 import Icon from './Icon.astro';
 import { caseStudyUrl, getCaseStudies } from '../lib/content';
 import mountain from '../assets/home/mountain.png';
@@ -50,7 +50,7 @@ const place = (i: number) => ((i + 1) % count) - 1;
             inert={i !== 0}
             aria-hidden={i !== 0 ? 'true' : undefined}
           >
-            <Image
+            <Img
               src={study.data.cover}
               alt={study.data.coverAlt}
               widths={[480, 800, 1200]}
@@ -66,7 +66,7 @@ const place = (i: number) => ((i + 1) % count) - 1;
   </div>
 
   <div class="selected-works__range" aria-hidden="true">
-    <Image class="selected-works__mountain" src={mountain} alt="" widths={[720, 1440]} sizes="(max-width: 1204px) 100vw, 1140px" />
+    <Img class="selected-works__mountain" src={mountain} alt="" widths={[720, 1440]} sizes="(max-width: 1204px) 100vw, 1140px" />
   </div>
 
   <div class="container selected-works__footer">
