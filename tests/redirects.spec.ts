@@ -41,6 +41,9 @@ test('old WordPress archive and filter URLs redirect', () => {
     ['/blog/page/2/', '/blog/'],
     ['/tag/branding/', '/blog/'],
     ['/comments/feed/', '/feed/'],
+    // WordPress's sitemap URLs (Search Console may still have them).
+    ['/sitemap_index.xml', '/sitemap-index.xml'],
+    ['/sitemap.xml', '/sitemap-index.xml'],
   ];
   for (const [path, destination] of cases) {
     expect(redirectFor(path)?.destination, path).toBe(destination);
