@@ -93,7 +93,16 @@ const jsonLd = [
             <p class="post-card__meta">
               <span class="post-card__category">{data.categories.join(', ')}</span>
               <time datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
-              <span class="post-card__author">By {data.author}</span>
+              <span class="post-card__author">
+                By {data.author}
+                {
+                  isoDate(data.updated) !== isoDate(data.date) && (
+                    <>
+                      , updated <time datetime={isoDate(data.updated)}>{formatDate(data.updated)}</time>
+                    </>
+                  )
+                }
+              </span>
             </p>
           </div>
         </div>
@@ -219,7 +228,7 @@ const jsonLd = [
     font-weight: var(--font-weight-semibold);
   }
 
-  .post-card__meta time {
+  .post-card__meta > time {
     font-family: var(--font-display);
     font-size: var(--font-size-md);
   }
