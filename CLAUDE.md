@@ -75,7 +75,7 @@ At cutover, nothing needs to change in the code: once foundingcreative.com point
 ## Brand
 
 - Fonts: Gelica (display, from the Adobe Fonts kit, which has to be served by Adobe), Manrope (body, self-hosted by Astro). Gelasio is part of the brand but not loaded on the site; ask before adding it.
-- The Adobe kit stylesheet loads without blocking render. Headings show in "Gelica Fallback" (Georgia resized to Gelica's metrics, in `global.css`) until Gelica arrives. If Gelica's weights change, re-measure the fallback.
+- The Adobe kit stylesheet loads without blocking render. Headings show in "Gelica Fallback" (Georgia resized to Gelica's metrics, in `global.css`) until Gelica arrives. If Gelica's weights change, re-measure the fallback. The kit itself is set to Font display: swap in Adobe Fonts (Web Projects); keep it there, or Gelica headings blink out while the font downloads.
 - Accent: mint `#7ef893` (`--color-mint`).
 - The product name is always spelled BrandForge.
 - Copy style: never use em dashes. Use commas, periods, or parentheses instead.
