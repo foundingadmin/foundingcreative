@@ -13,7 +13,8 @@
     "astro": "astro",
     "test": "playwright test",
     "crawl": "node scripts/crawl-live-site.mjs",
-    "media": "node scripts/media-manifest.mjs"
+    "media": "node scripts/media-manifest.mjs",
+    "check-urls": "node scripts/check-urls.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.5",

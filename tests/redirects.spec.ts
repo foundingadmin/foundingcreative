@@ -1,35 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
+import { redirectFor, vercel } from '../scripts/lib/vercel-redirects.mjs';
 import inventory from '../src/data/wp-inventory.json' with { type: 'json' };
 
 // Every WordPress URL the new site doesn't rebuild must redirect somewhere
 // sensible (or 404 on purpose). Redirects live in vercel.json, so these
 // checks read that file; the 404 checks run against the built site.
 
-const vercel = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8')) as {
-  trailingSlash?: boolean;
-  redirects: { source: string; destination: string; permanent?: boolean }[];
-};
-
-// Minimal matcher for Vercel source patterns, following path-to-regexp:
-// :name matches one segment, :name* matches segments but not a trailing
-// slash, and (regex) groups are used as written.
-function toRegExp(source: string) {
-  const escape = (s: string) => s.replace(/[.+?^${}|[\]\\*]/g, '\\$&');
-  let pattern = '';
-  let last = 0;
-  for (const m of source.matchAll(/:(\w+)(?:\(([^)]+)\))?(\*)?|\(([^)]+)\)/g)) {
-    pattern += escape(source.slice(last, m.index));
-    if (m[4]) pattern += `(${m[4]})`;
-    else if (m[2]) pattern += `(${m[2]})`;
-    else if (m[3]) pattern += '((?:[^/]+(?:/[^/]+)*)?)';
-    else pattern += '([^/]+)';
-    last = m.index! + m[0].length;
-  }
-  return new RegExp(`^${pattern}${escape(source.slice(last))}$`);
-}
-
-const redirectFor = (path: string) => vercel.redirects.find((r) => toRegExp(r.source).test(path));
+// The matcher is shared with scripts/check-urls.mjs.
 
 type Entry = { path: string; port: string; redirectTo?: string; redirectsTo?: string };
 const pages = inventory.pages as Entry[];
@@ -67,6 +45,37 @@ test('old WordPress archive and filter URLs redirect', () => {
   for (const [path, destination] of cases) {
     expect(redirectFor(path)?.destination, path).toBe(destination);
   }
+});
+
+test('old case study copies Google still knows redirect to the live case study', () => {
+  const legacy = readFileSync(new URL('../scripts/legacy-urls.txt', import.meta.url), 'utf8')
+    .split('\n')
+    .filter((line) => line.startsWith('/'));
+  expect(legacy.length).toBeGreaterThan(30);
+  for (const path of legacy) {
+    const rule = redirectFor(path);
+    expect(rule, `no redirect for ${path}`).toBeDefined();
+    expect(rule!.permanent, path).toBe(true);
+    expect(rule!.destination, path).toMatch(/^\/case-stud(y\/[a-z-]+|ies)\/$/);
+  }
+
+  const cases: [string, string][] = [
+    ['/case-studies/atl-freight-website/', '/case-study/atlfreight-website/'],
+    ['/case-studies-old/atl-freight-website/', '/case-study/atlfreight-website/'],
+    ['/case-study/bell-bird-atm-2/', '/case-study/bell-bird-atm/'],
+    ['/case-studies-old/bell-bird-atm-old/', '/case-study/bell-bird-atm/'],
+    ['/case-studies/mastercard-innovation-forum-2-2-2/', '/case-study/innovation-forum-event/'],
+    ['/case-studies/hucklerberry-holler-website/', '/case-study/plant-nursery-ecommerce/'],
+    ['/case-studies-old/a-copy-we-never-saw/', '/case-studies/'],
+    ['/case-studies-old/', '/case-studies/'],
+    ['/testimonial/jon-ciotti/', '/about-us/'],
+  ];
+  for (const [path, destination] of cases) {
+    expect(redirectFor(path)?.destination, path).toBe(destination);
+  }
+  // The live case study pages themselves never redirect.
+  expect(redirectFor('/case-study/bell-bird-atm/')).toBeUndefined();
+  expect(redirectFor('/case-studies/')).toBeUndefined();
 });
 
 test('leftover WordPress pages are gone (404)', async ({ request }) => {
