@@ -110,6 +110,15 @@ At cutover, nothing needs to change in the code: once foundingcreative.com point
 
 Required: semantic HTML, alt text on every image, visible focus states, keyboard-usable nav and dropdowns, AA contrast.
 
+- Nav items with a menu are a real link (crawlable) plus a separate chevron button that opens the menu (keyboard, click, and hover for mouse users).
+- Images: client logos use the client name as alt; the marquee's duplicate copy is `aria-hidden` with `alt=""`. Backdrop photos inside `aria-hidden` containers stay `alt=""`.
+- A short visible label ("Let's talk", "Find the right fit") gets visually hidden text naming where it goes, after the visible words so the accessible name still starts with them.
+- `tests/site-quality.spec.ts` runs axe on every sitemap page; Lighthouse Accessibility, Best Practices and SEO should stay at 100.
+
+## Security headers
+
+`vercel.json` sends a Content-Security-Policy, Referrer-Policy, X-Content-Type-Options, X-Frame-Options and Permissions-Policy on every response. The CSP allows only the hosts the site uses (Adobe Fonts, Google Tag Manager/Analytics, Formspree). Adding a script, font, embed or form endpoint from a new host means adding it to the CSP; `tests/security-headers.spec.ts` serves every page under the policy and fails on any violation. Scripts and styles still need `'unsafe-inline'` (inline `style` attributes, Typekit's `onload` swap, the consent defaults); moving to hashes is a follow-up.
+
 ## Rules for Claude
 
 - Work on a branch, never commit straight to main. Open a pull request for review.

@@ -31,6 +31,7 @@ const id = `cta-${heading.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|
     <div class="cta__actions">
       <a class="button button--primary" href={primary.href}>
         {primary.label}
+        {primary.href === letsTalkHref && <span class="visually-hidden">, book a call</span>}
         <Icon name="arrow-up-right" size={16} />
       </a>
       <a class="button" href={secondary.href}>{secondary.label}</a>

@@ -85,7 +85,7 @@ const jsonLd = [
           <p class="service-hero__eyebrow">{data.eyebrow}</p>
           <h1 id="service-title" class="service-hero__title">{data.title}</h1>
           <p class="section__lead service-hero__intro">{data.intro}</p>
-          <a class="button button--primary" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
+          <a class="button button--primary" href={letsTalkHref}>Let's talk<span class="visually-hidden">, book a call</span> <Icon name="arrow-up-right" size={16} /></a>
         </div>
         <WipeSlider
           id="service-images"
@@ -192,7 +192,7 @@ const jsonLd = [
       <h2 id="cta-heading">{data.cta.heading}</h2>
       <p class="closing__text">{data.cta.text}</p>
       <div class="closing__actions">
-        <a class="button button--dark" href={letsTalkHref}>Let's talk <Icon name="arrow-up-right" size={16} /></a>
+        <a class="button button--dark" href={letsTalkHref}>Let's talk<span class="visually-hidden">, book a call</span> <Icon name="arrow-up-right" size={16} /></a>
         <a class="button closing__secondary" href="/contact-us/">Send us a message</a>
       </div>
     </div>
