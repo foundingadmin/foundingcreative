@@ -1,0 +1,38 @@
+# Old URLs Google still knows about that the WordPress sitemap doesn't list:
+# copies of case studies under /case-studies/ and /case-studies-old/, and
+# two stray /case-study/ slugs. Collected from the Wayback Machine's URL
+# index (Search Console reports about 35; add any missing ones here).
+# scripts/check-urls.mjs requires every one to redirect to a live page.
+/case-studies/aprilaire/
+/case-studies/atl-freight-website/
+/case-studies/banking-app/
+/case-studies/bell-bird-atm/
+/case-studies/genpact-grow-event/
+/case-studies/genpact-grow-event-2/
+/case-studies/hucklerberry-holler-website/
+/case-studies/interactive-mural/
+/case-studies/mastercard-innovation-forum/
+/case-studies/mastercard-innovation-forum-2/
+/case-studies/mastercard-innovation-forum-2-2/
+/case-studies/mastercard-innovation-forum-2-2-2/
+/case-studies/mastercard-innovation-forum-2-2-2-2/
+/case-studies/mastercard-innovation-forum-2-3/
+/case-studies/safezone/
+/case-studies-old/aprilaire/
+/case-studies-old/atl-freight-website/
+/case-studies-old/banking-app/
+/case-studies-old/bell-bird-atm-old/
+/case-studies-old/genpact-grow-event/
+/case-studies-old/genpact-grow-event-2/
+/case-studies-old/hucklerberry-holler-website/
+/case-studies-old/interactive-mural/
+/case-studies-old/mastercard-innovation-forum/
+/case-studies-old/mastercard-innovation-forum-2/
+/case-studies-old/mastercard-innovation-forum-2-2/
+/case-studies-old/mastercard-innovation-forum-2-2-2/
+/case-studies-old/mastercard-innovation-forum-2-2-2-2/
+/case-studies-old/mastercard-innovation-forum-2-3/
+/case-studies-old/safezone/
+/case-studies-2/
+/case-study/bell-bird-atm-2/
+/case-study/website/

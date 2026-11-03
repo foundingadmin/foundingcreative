@@ -8,6 +8,19 @@ import seoCheck from './src/integrations/seo-check.mjs';
 // Pages marked `noindex` in src/data/seo.ts; keep this list in sync.
 const NOINDEX = ['/404/'];
 
+// Sitemap priority: Home first, then the main pages, then posts and case
+// studies; legal pages last (they stay listed, just never prioritized).
+const LEGAL = /\/(imprint|disclaimer|opt-out-preferences|cookie-policy-(eu|uk)|privacy-statement-(eu|uk|us))\/$/;
+const MAIN = /\/(about-us|services|brandforge|fractional-creative|contact-us|case-studies|blog|[a-z]+-sitelaunch)\/$|\/services\/[^/]+\/$/;
+/** @param {import('@astrojs/sitemap').SitemapItem} item */
+function sitemapPriority(item) {
+  const path = new URL(item.url).pathname;
+  if (path === '/') return { ...item, priority: 1.0 };
+  if (LEGAL.test(path)) return { ...item, priority: 0.1 };
+  if (MAIN.test(path)) return { ...item, priority: 0.8 };
+  return { ...item, priority: 0.6 };
+}
+
 // WordPress slugs all end in a trailing slash, so build every page as
 // /slug/index.html and require the slash to keep URLs identical.
 export default defineConfig({
@@ -23,7 +36,7 @@ export default defineConfig({
     processor: satteri({ hastPlugins: [caseStudyBands] }),
   },
   integrations: [
-    sitemap({ filter: (page) => !NOINDEX.some((path) => page.endsWith(path)) }),
+    sitemap({ filter: (page) => !NOINDEX.some((path) => page.endsWith(path)), serialize: sitemapPriority }),
     // Fails the build on a missing description or not exactly one H1. Title
     // over 60 / description over 155 characters only warn until Sprint 2
     // rewrites the copy; then set enforceLengths: true.

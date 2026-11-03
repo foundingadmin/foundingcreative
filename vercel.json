@@ -18,8 +18,78 @@
       "permanent": true
     },
     {
+      "source": "/case-studies(-old)?/aprilaire/",
+      "destination": "/case-study/aprilaire-product-app/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies(-old)?/atl-freight-website/",
+      "destination": "/case-study/atlfreight-website/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies(-old)?/banking-app/",
+      "destination": "/case-study/bank-apps/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies(-old)?/bell-bird-atm(-old)?/",
+      "destination": "/case-study/bell-bird-atm/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies(-old)?/genpact-grow-event(-2)?/",
+      "destination": "/case-study/genpact-grow-event/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies(-old)?/hucklerberry-holler-website/",
+      "destination": "/case-study/plant-nursery-ecommerce/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies(-old)?/interactive-mural/",
+      "destination": "/case-study/interactive-learning-mural/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies(-old)?/mastercard-innovation-forum(.*)",
+      "destination": "/case-study/innovation-forum-event/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies(-old)?/safezone/",
+      "destination": "/case-study/safezone-product-and-branding/",
+      "permanent": true
+    },
+    {
+      "source": "/case-study/bell-bird-atm-2/",
+      "destination": "/case-study/bell-bird-atm/",
+      "permanent": true
+    },
+    {
+      "source": "/case-study/website/",
+      "destination": "/case-study/turntide-website/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies-2/",
+      "destination": "/case-studies/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies-old/",
+      "destination": "/case-studies/",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies-old/(.*)",
+      "destination": "/case-studies/",
+      "permanent": true
+    },
+    {
       "source": "/testimonial/(.*)",
-      "destination": "/",
+      "destination": "/about-us/",
       "permanent": true
     },
     {
@@ -66,8 +136,18 @@
   "headers": [
     {
       "source": "/(.*)",
-      "missing": [{ "type": "host", "value": "foundingcreative.com" }],
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "missing": [
+        {
+          "type": "host",
+          "value": "foundingcreative.com"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ]
 }

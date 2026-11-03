@@ -59,6 +59,14 @@ At cutover, nothing needs to change in the code: once foundingcreative.com point
   - `cta_click` with `cta_location`: clicks on primary CTAs (`.button--primary` and the header's "Let's talk"). The location is `data-cta-location` if set, else `header`, `footer`, or the enclosing section's id, label or first class.
 - **In GA4 Admin, mark `generate_lead` and `book_meeting` as key events** (Admin > Data display > Events, after they first arrive). The rest are for reporting.
 
+## Redirects and the cutover URL check
+
+- Every URL the WordPress site had must load or redirect on the new site. Redirects live in `vercel.json` (first matching rule wins; Vercel sends `permanent: true` as a 308, which search engines treat like a 301).
+- Old case study copies (`/case-studies/<slug>/`, `/case-studies-old/<slug>/`, stray `/case-study/` slugs) go to their current `/case-study/<slug>/`. Anything else under `/case-studies-old/` goes to `/case-studies/`. Testimonial posts go to `/about-us/`. Known legacy URLs are listed in `scripts/legacy-urls.txt`; add new ones from Search Console there.
+- WordPress test pages `/3d-test/`, `/sample-page/` and `/coming-soon/` are not ported and return 404 on purpose.
+- `npm run check-urls -- <deploy URL>` requests every WordPress sitemap URL, every legacy URL and every literal redirect source, follows redirects, and fails on anything that doesn't end on a live page. Run it against the Vercel preview before cutover (set `VERCEL_AUTOMATION_BYPASS_SECRET` if previews are protected). Locally, add `--emulate-redirects` (`astro preview` doesn't read `vercel.json`).
+- Sitemap (`@astrojs/sitemap`): noindex pages are left out (`NOINDEX` in `astro.config.mjs`), legal pages get priority 0.1, Home 1.0, main pages 0.8, posts and case studies 0.6. `public/robots.txt` allows everything and points to the sitemap; the noindex header keeps previews out (see "Search indexing").
+
 ## Site map
 
 - Home, About (`/about-us/`), Fractional Creative, Contact, Let's talk (`/coffee/`, redirects to the scheduler)
