@@ -13,9 +13,7 @@ import SiteLaunchPackages from './SiteLaunchPackages.astro';
 import TeamFaces from './TeamFaces.astro';
 import Icon from './Icon.astro';
 import ContactForm from './ContactForm.astro';
-import prismArt from '../assets/home/sitelaunch/flare-1.png';
-import rocketArt from '../assets/home/sitelaunch/rocket-1.png';
-import orbitArt from '../assets/home/sitelaunch/orbit-1.png';
+import { sitelaunchArt } from '../data/sitelaunch-art';
 import { siteLaunchBookingHref } from '../data/navigation';
 import { entrySeo } from '../data/seo';
 
@@ -36,7 +34,7 @@ if (!entry) throw new Error(`Unknown SiteLaunch package: ${id}`);
 const { data } = entry;
 const packageName = `${data.name} SiteLaunch`;
 const path = `/${id}-sitelaunch/`;
-const art = { prism: prismArt, rocket: rocketArt, orbit: orbitArt }[id];
+const art = sitelaunchArt[id];
 
 const nextSteps = [
   'Submissions reviewed within 2 to 3 business days',
@@ -114,8 +112,8 @@ const jsonLd = [
       <!-- Why: the package's art floating beside the argument -->
       <section aria-labelledby="why-heading">
         <div class="container section sl-split">
-          <div class="sl-art" aria-hidden="true">
-            <Img src={art} alt="" widths={[480, 960]} sizes="(max-width: 977px) 80vw, 520px" />
+          <div class="sl-art">
+            <Img src={art.src} alt={art.alt} widths={[480, 960]} sizes="(max-width: 977px) 80vw, 520px" />
           </div>
           <div data-reveal="right">
             <p class="tone-kicker">Why <span class="accent">{data.name}</span> SiteLaunch?</p>

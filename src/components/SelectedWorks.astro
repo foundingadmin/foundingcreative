@@ -295,13 +295,14 @@ const place = (i: number) => ((i + 1) % count) - 1;
     line-height: 1.25;
     text-align: left;
     white-space: nowrap;
-    opacity: 0.25;
+    /* 0.4 keeps the dimmed names at 3:1 contrast (WCAG AA, large text) */
+    opacity: 0.4;
     cursor: pointer;
     transition: opacity 700ms var(--ease-out);
   }
 
   .selected-works__names button:hover {
-    opacity: 0.5;
+    opacity: 0.65;
   }
 
   .selected-works__names button[aria-current='true'] {

@@ -42,7 +42,7 @@ const clients = [
           <ul class="clients__list" aria-label={copy ? undefined : "Brands we've worked with"} aria-hidden={copy ? 'true' : undefined}>
             {clients.map((client) => (
               <li>
-                <Img src={client.src} alt={copy ? '' : `${client.name} logo`} height={48} />
+                <Img src={client.src} alt={copy ? '' : client.name} height={48} />
               </li>
             ))}
           </ul>

@@ -1,9 +1,7 @@
 ---
 import Img from './Img.astro';
 import Icon from './Icon.astro';
-import prismArt from '../assets/home/sitelaunch/flare-1.png';
-import rocketArt from '../assets/home/sitelaunch/rocket-1.png';
-import orbitArt from '../assets/home/sitelaunch/orbit-1.png';
+import { sitelaunchArt } from '../data/sitelaunch-art';
 
 // The three SiteLaunch package cards, as on the live site: thin colored
 // outlines, the package art at the top, and the middle card set lower. They
@@ -18,9 +16,9 @@ interface Props {
 const { current } = Astro.props;
 
 const packages = [
-  { name: 'Prism', href: '/prism-sitelaunch/', tagline: 'For brands ready to make an unforgettable entrance.', art: prismArt, tone: 'prism', from: 'left' },
-  { name: 'Rocket', href: '/rocket-sitelaunch/', tagline: 'For growth-focused brands ready to fuel conversions.', art: rocketArt, tone: 'rocket', from: 'up' },
-  { name: 'Orbit', href: '/orbit-sitelaunch/', tagline: 'For scaling companies needing clarity, structure, and alignment.', art: orbitArt, tone: 'orbit', from: 'right' },
+  { name: 'Prism', href: '/prism-sitelaunch/', tagline: 'For brands ready to make an unforgettable entrance.', art: sitelaunchArt.prism, tone: 'prism', from: 'left' },
+  { name: 'Rocket', href: '/rocket-sitelaunch/', tagline: 'For growth-focused brands ready to fuel conversions.', art: sitelaunchArt.rocket, tone: 'rocket', from: 'up' },
+  { name: 'Orbit', href: '/orbit-sitelaunch/', tagline: 'For scaling companies needing clarity, structure, and alignment.', art: sitelaunchArt.orbit, tone: 'orbit', from: 'right' },
 ];
 ---
 
@@ -28,7 +26,7 @@ const packages = [
   {
     packages.map((pkg) => (
       <li class:list={['package', `package--${pkg.tone}`, { 'is-current': pkg.tone === current }]} data-reveal={pkg.from}>
-        <Img class="package__art" src={pkg.art} alt="" widths={[400, 800]} sizes="(max-width: 977px) 90vw, 380px" />
+        <Img class="package__art" src={pkg.art.src} alt={pkg.art.alt} widths={[400, 800]} sizes="(max-width: 977px) 90vw, 380px" />
         {pkg.tone === current ? (
           <span class="package__here">You're here</span>
         ) : (

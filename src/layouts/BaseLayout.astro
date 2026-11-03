@@ -46,6 +46,10 @@ const lcpPreload = lcpImage && (await getImage({ ...lcpImage, format: lcpFormat 
     <SEO seo={seo as PageSeo} article={article} jsonLd={jsonLd} />
     <link rel="alternate" type="application/rss+xml" title="Founding Creative Field Notes" href="/feed/" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- The Founding flag, as on the live site (generated from FlagMark.astro) -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     {
       lcpPreload && (

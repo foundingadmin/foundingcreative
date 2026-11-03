@@ -6,8 +6,10 @@ test.describe('desktop header', () => {
   test('Services dropdown works with the keyboard', async ({ page }) => {
     await page.goto('/');
     const nav = page.getByRole('navigation', { name: 'Main' });
-    const services = nav.getByRole('button', { name: 'Services' });
+    const services = nav.getByRole('button', { name: 'Services menu' });
 
+    // "Services" is a real link, so crawlers reach the services index from the nav.
+    await expect(nav.getByRole('link', { name: 'Services', exact: true })).toHaveAttribute('href', '/services/');
     await expect(services).toHaveAttribute('aria-expanded', 'false');
     await expect(nav.getByRole('link', { name: 'Design Services' })).toBeHidden();
 
@@ -26,7 +28,7 @@ test.describe('desktop header', () => {
 
   test('Services dropdown closes on an outside click', async ({ page }) => {
     await page.goto('/');
-    const services = page.getByRole('navigation', { name: 'Main' }).getByRole('button', { name: 'Services' });
+    const services = page.getByRole('navigation', { name: 'Main' }).getByRole('button', { name: 'Services menu' });
     await services.click();
     await expect(services).toHaveAttribute('aria-expanded', 'true');
     await page.locator('main').click({ position: { x: 5, y: 5 } });
@@ -46,7 +48,7 @@ test.describe('desktop header', () => {
       await expect(nav.getByRole('link', { name, exact: true })).toHaveAttribute('href', href);
     }
     await expect(page.getByRole('banner').getByRole('link', { name: "Let's talk" })).toHaveAttribute('href', '/coffee/');
-    await expect(page.getByRole('button', { name: 'Menu' })).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Menu', exact: true })).toBeHidden();
   });
 });
 
@@ -55,14 +57,14 @@ test.describe('mobile header', () => {
 
   test('menu opens as a dialog, expands Services, and closes with Escape', async ({ page }) => {
     await page.goto('/');
-    const menuButton = page.getByRole('button', { name: 'Menu' });
+    const menuButton = page.getByRole('button', { name: 'Menu', exact: true });
     await expect(page.getByRole('link', { name: 'Book a Meeting' })).toHaveAttribute(
       'href',
       /^https:\/\/calendar\.google\.com\/calendar\/appointments\/schedules\//,
     );
 
     await menuButton.click();
-    const dialog = page.getByRole('dialog', { name: 'Menu' });
+    const dialog = page.getByRole('dialog', { name: 'Menu', exact: true });
     await expect(dialog).toBeVisible();
 
     const services = dialog.getByRole('button', { name: 'Services' });
@@ -77,8 +79,8 @@ test.describe('mobile header', () => {
 
   test('tapping empty space in the menu panel keeps it open', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: 'Menu' }).click();
-    const dialog = page.getByRole('dialog', { name: 'Menu' });
+    await page.getByRole('button', { name: 'Menu', exact: true }).click();
+    const dialog = page.getByRole('dialog', { name: 'Menu', exact: true });
     const box = (await dialog.boundingBox())!;
     await page.mouse.click(box.x + box.width / 2, box.y + box.height - 10);
     await expect(dialog).toBeVisible();
@@ -86,8 +88,8 @@ test.describe('mobile header', () => {
 
   test('close button closes the menu', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: 'Menu' }).click();
-    const dialog = page.getByRole('dialog', { name: 'Menu' });
+    await page.getByRole('button', { name: 'Menu', exact: true }).click();
+    const dialog = page.getByRole('dialog', { name: 'Menu', exact: true });
     await dialog.getByRole('button', { name: 'Close menu' }).click();
     await expect(dialog).toBeHidden();
   });

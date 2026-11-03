@@ -125,7 +125,7 @@ const tiles: (Quote | Logo)[] = [
               <p>“{tile.quote}”</p>
             </blockquote>
             <figcaption class="tile__person">
-              <Img class="tile__avatar" src={tile.avatar} alt="" width={48} height={48} densities={[1, 2]} />
+              <Img class="tile__avatar" src={tile.avatar} alt={tile.name} width={48} height={48} densities={[1, 2]} />
               <span>
                 <strong>{tile.name}</strong>
                 {tile.role}

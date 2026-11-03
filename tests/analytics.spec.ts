@@ -85,8 +85,8 @@ test.describe('GA4 events on the production host', () => {
     await page.locator('.site-header__book').dispatchEvent('click');
     await page.locator('.hero a.button--primary').first().click();
     expect(await events(page)).toEqual([
-      ['event', 'book_meeting', expect.objectContaining({ link_text: "Let's talk" })],
-      ['event', 'cta_click', expect.objectContaining({ cta_location: 'header', link_text: "Let's talk" })],
+      ['event', 'book_meeting', expect.objectContaining({ link_text: "Let's talk, book a call" })],
+      ['event', 'cta_click', expect.objectContaining({ cta_location: 'header', link_text: "Let's talk, book a call" })],
       ['event', 'book_meeting', expect.objectContaining({ link_text: 'Book a Meeting' })],
       ['event', 'cta_click', expect.objectContaining({ cta_location: 'hero' })],
     ]);

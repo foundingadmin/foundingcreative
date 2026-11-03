@@ -18,9 +18,12 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
         {
           mainNav.map((item) =>
             item.children ? (
-              <li class="site-nav__item" data-disclosure="dropdown">
-                <button type="button" class="site-nav__toggle" aria-expanded="false" aria-controls="services-menu">
+              <li class="site-nav__item site-nav__item--parent" data-disclosure="dropdown">
+                <a class="site-nav__link" href={item.href} aria-current={isCurrent(item.href)}>
                   {item.label}
+                </a>
+                <button type="button" class="site-nav__toggle" aria-expanded="false" aria-controls="services-menu">
+                  <span class="visually-hidden">{item.label} menu</span>
                   <Icon name="chevron-down" size={16} />
                 </button>
                 <ul class="site-nav__menu" id="services-menu" hidden>
@@ -45,7 +48,7 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
       </ul>
     </nav>
 
-    <a class="site-header__cta" href={letsTalkHref}>Let's talk</a>
+    <a class="site-header__cta" href={letsTalkHref}>Let's talk<span class="visually-hidden">, book a call</span></a>
 
     <a class="site-header__book" href={bookMeetingHref}>Book a Meeting</a>
     <button type="button" class="site-header__menu-button" aria-haspopup="dialog" aria-controls="mobile-menu">
@@ -94,7 +97,7 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
           )
         }
         <li>
-          <a class="mobile-menu__item mobile-menu__cta" href={letsTalkHref}>Let's talk</a>
+          <a class="mobile-menu__item mobile-menu__cta" href={letsTalkHref}>Let's talk<span class="visually-hidden">, book a call</span></a>
         </li>
       </ul>
     </nav>
@@ -103,21 +106,39 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
 
 <script>
   // Services dropdown (and the mobile Services accordion): a disclosure
-  // button that opens on click, Enter, or Space.
+  // button that opens on click, Enter, or Space. On desktop "Services" itself
+  // is a link to /services/ (so crawlers reach every service page from the
+  // nav), the chevron beside it is the button, and hovering either opens the
+  // menu for mouse users.
   for (const item of document.querySelectorAll<HTMLElement>('[data-disclosure]')) {
     const button = item.querySelector<HTMLButtonElement>('button[aria-controls]')!;
     const panel = document.getElementById(button.getAttribute('aria-controls')!)!;
 
+    // Opened by hovering: a click pins it open instead of toggling it shut,
+    // and only a hover-opened menu closes when the pointer leaves.
+    let openedByHover = false;
     const setOpen = (open: boolean) => {
       button.setAttribute('aria-expanded', String(open));
       panel.hidden = !open;
+      if (!open) openedByHover = false;
     };
 
-    button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+    button.addEventListener('click', () => {
+      if (openedByHover) openedByHover = false;
+      else setOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
     // The desktop dropdown floats over the page, so Escape, a click outside,
     // or focus leaving it closes it. The mobile accordion stays open until
     // toggled, and Escape there closes the whole menu.
     if (item.dataset.disclosure === 'dropdown') {
+      item.addEventListener('pointerenter', (event) => {
+        if (event.pointerType !== 'mouse' || button.getAttribute('aria-expanded') === 'true') return;
+        openedByHover = true;
+        setOpen(true);
+      });
+      item.addEventListener('pointerleave', (event) => {
+        if (event.pointerType === 'mouse' && openedByHover) setOpen(false);
+      });
       item.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
           setOpen(false);
@@ -202,6 +223,13 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
 
   .site-nav__item {
     position: relative;
+  }
+
+  /* "Services" link and its chevron button sit side by side */
+  .site-nav__item--parent {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
   }
 
   .site-nav__link,
