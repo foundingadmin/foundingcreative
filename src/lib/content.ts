@@ -1,4 +1,4 @@
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'posts'>;
 export type CaseStudy = CollectionEntry<'caseStudies'>;
@@ -18,6 +18,23 @@ export async function getCaseStudies(): Promise<CaseStudy[]> {
 // matching the WordPress URLs.
 export const postUrl = (post: Post) => `/${post.id}/`;
 export const caseStudyUrl = (study: CaseStudy) => `/case-study/${study.id}/`;
+
+// The service page behind each case study service tag. Case study pages link
+// back to these; the first tag is the study's main service.
+const SERVICE_FOR_TAG: Record<string, string> = {
+  Website: 'website-services',
+  Interactive: 'website-services',
+  Branding: 'branding-services',
+  Design: 'design-services',
+  Events: 'event-services',
+};
+
+/** The service pages behind a case study's service tags, main service first, without repeats. */
+export async function servicesFor(study: CaseStudy) {
+  const ids = [...new Set(study.data.services.map((tag) => SERVICE_FOR_TAG[tag]).filter(Boolean))];
+  const entries = await Promise.all(ids.map((id) => getEntry('services', id)));
+  return entries.filter((entry) => entry !== undefined);
+}
 
 export const formatDate = (date: Date) =>
   date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });

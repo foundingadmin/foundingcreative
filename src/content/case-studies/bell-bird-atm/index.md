@@ -20,6 +20,15 @@ theme:
   accent: "#0e471d"
   dark: "#022b0c"
   light: "#99f39b"
+# Results: uncomment and add real, measured numbers (up to 4). The Results
+# band only shows on the page once this is set.
+# results:
+#   - value: "+00%"
+#     label: "What the number measures"
+# testimonial:
+#   quote: "Client quote, as approved by the client"
+#   name: "Name"
+#   role: "Title, Company"
 ---
 
 How can we shift the ATM experience to slash expenses, boost security, and ditch the outdated card system? Can we skip the screen and opt instead for an entirely new approach to a dated machine?
@@ -54,7 +63,7 @@ Leveraging data-over-sound technology will result in a seamless, secure, and cos
 
 ![Man looking at Bellbird ATM](./image-3.jpg)
 
-user journey mapping
+What we built
 
 ## Following the beat of a different drum.
 

@@ -20,6 +20,15 @@ theme:
   accent: "#eb6824"
   dark: "#1f0303"
   light: "#e4e4e4"
+# Results: uncomment and add real, measured numbers (up to 4). The Results
+# band only shows on the page once this is set.
+# results:
+#   - value: "+00%"
+#     label: "What the number measures"
+# testimonial:
+#   quote: "Client quote, as approved by the client"
+#   name: "Name"
+#   role: "Title, Company"
 ---
 
 Seeking to immerse their brightest minds in a world of innovation and creativity, Mastercard needed help translating their vision into a tangible experience for attendees from start to finish.
@@ -42,7 +51,7 @@ We developed a bold, flexible design system that elevated the Mastercard brand a
 
 ![Mastercard event presentation slide of Steve Wozniak](./image-3.webp)
 
-step-by-step from idea to impact
+What we built
 
 ## The blueprint to innovation
 

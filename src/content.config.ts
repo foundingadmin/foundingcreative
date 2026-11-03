@@ -61,6 +61,15 @@ const caseStudies = defineCollection({
         .optional(),
       // Show the SiteLaunch packages after the story (web projects).
       showSiteLaunch: z.boolean().default(false),
+      // Measured outcomes, shown as a Results band after the story. Leave out
+      // until there are real numbers; the band only appears when set.
+      results: z
+        .array(z.object({ value: z.string(), label: z.string() }))
+        .min(1)
+        .max(4)
+        .optional(),
+      // A client quote, shown after Results when one exists.
+      testimonial: z.object({ quote: z.string(), name: z.string(), role: z.string() }).optional(),
     }),
 });
 
