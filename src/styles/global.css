@@ -27,6 +27,8 @@
   --color-night: #000407; /* the live site's page black, a hair of navy */
   --color-white: #ffffff;
   --color-ink: #1c1c1e; /* card backgrounds, elevated surfaces */
+  --color-cursor-ring: #3a3a3c; /* the custom cursor: dark grey ring */
+  --color-cursor-dot: #ececec; /* and its near-white center */
   --color-neutral-darker: #252424;
   --color-neutral-dark: #4c4c4c;
   --color-neutral: #7f7f7f;
@@ -684,12 +686,13 @@ button {
   pointer-events: none;
 }
 
+/* The light dot sits on top of the dark ring */
 .cursor-dot {
-  z-index: 9999;
+  z-index: 10000;
   width: 10px;
   height: 10px;
   margin: -5px 0 0 -5px;
-  background-color: var(--color-white);
+  background-color: var(--color-cursor-dot);
   transition: opacity var(--transition-fast);
 }
 
@@ -698,9 +701,8 @@ button {
   width: 30px;
   height: 30px;
   margin: -15px 0 0 -15px;
-  border: 1px solid var(--color-white);
-  background-color: rgb(255 255 255 / 0.7);
-  mix-blend-mode: difference;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  background-color: var(--color-cursor-ring);
   transition: opacity var(--transition-fast);
 }
 
