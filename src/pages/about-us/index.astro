@@ -5,6 +5,7 @@ import CtaSection from '../../components/CtaSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
 import Icon from '../../components/Icon.astro';
 import { team } from '../../data/team';
+import { testimonials } from '../../data/testimonials';
 import { pages } from '../../data/seo';
 import LineArt from '../../components/LineArt.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
@@ -64,6 +65,41 @@ const jsonLd = {
 
   <!-- White band: the team, what we stand for, and who we've worked with -->
   <div class="about-light curve-top curve-bottom">
+    <!-- Our story, with "The Founding difference" from the Creative GTM deck -->
+    <section class="container section story" aria-labelledby="story-heading">
+      <div class="story__text" data-reveal>
+        <p class="eyebrow">Our <em>story</em></p>
+        <h2 id="story-heading">The missing middle ground</h2>
+        <p class="section__lead">
+          Josh Titus and Tyler Lukey started Founding Creative in 2024 for the teams stuck between bloated agencies and
+          scattered freelancers. We work from Denver and Chattanooga with clients across the US.
+        </p>
+        <p>
+          You work with the founders directly. No layers of account executives, producers, and art directors between your
+          idea and the people making it, so more of every hour goes into the work.
+        </p>
+      </div>
+      <figure class="story__split" data-reveal>
+        <figcaption class="story__caption">More creative. Less management.</figcaption>
+        <dl class="split-bars">
+          <div class="split-bar split-bar--ours">
+            <dt>Founding Creative</dt>
+            <dd>
+              <span class="split-bar__creative" style="--share: 90%">90% creative</span>
+              <span class="split-bar__management" style="--share: 10%">10% management</span>
+            </dd>
+          </div>
+          <div class="split-bar">
+            <dt>Traditional agency</dt>
+            <dd>
+              <span class="split-bar__creative" style="--share: 33%">33% creative</span>
+              <span class="split-bar__management" style="--share: 67%">66% management</span>
+            </dd>
+          </div>
+        </dl>
+      </figure>
+    </section>
+
     <section class="container section" aria-labelledby="team-heading">
       <div class="section__intro about-light__intro">
         <p class="eyebrow">Our <em>team</em></p>
@@ -91,6 +127,7 @@ const jsonLd = {
               </div>
               <h3>{person.name}</h3>
               <p>{person.role}</p>
+              {person.bio && <p class="person__bio">{person.bio}</p>}
             </li>
           ))
         }
@@ -112,6 +149,33 @@ const jsonLd = {
           ))
         }
       </dl>
+    </section>
+
+    <!-- Client words, from the old WordPress testimonial pages -->
+    <section class="container section" aria-labelledby="testimonials-heading">
+      <div class="section__intro about-light__intro" data-reveal>
+        <p class="eyebrow">Client <em>words</em></p>
+        <h2 id="testimonials-heading">What working with us is like</h2>
+      </div>
+      <ul class="quotes" data-reveal-stagger>
+        {
+          testimonials.map((t) => (
+            <li class="quote">
+              <figure>
+                <blockquote>
+                  <p>“{t.quote}”</p>
+                </blockquote>
+                <figcaption>
+                  <strong>{t.name}</strong>
+                  <span>
+                    {t.role}, {t.company}
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
     </section>
 
     <section class="about-light__logos" aria-label="Brands we've worked with">
@@ -287,6 +351,122 @@ const jsonLd = {
   }
 
   /* What we stand for: four numbered columns on hairlines */
+  /* Our story: text beside the creative / management split */
+  .story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+
+  .story__split {
+    margin: 0;
+    padding: var(--space-lg);
+    border: 1px solid rgb(0 4 7 / 0.12);
+    border-radius: var(--radius-lg);
+  }
+
+  .story__caption {
+    margin-bottom: var(--space-md);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+  }
+
+  .split-bars {
+    display: grid;
+    gap: var(--space-md);
+    margin: 0;
+  }
+
+  .split-bar dt {
+    margin-bottom: var(--space-3xs);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .split-bar dd {
+    display: flex;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+  }
+
+  .split-bar dd span {
+    flex: 0 0 var(--share);
+    min-width: 0;
+    padding: var(--space-2xs) var(--space-sm);
+    overflow: hidden;
+    text-overflow: clip;
+  }
+
+  .split-bar__creative {
+    background-color: var(--color-mint-darker);
+    color: var(--color-white);
+  }
+
+  .split-bar__management {
+    background-color: rgb(0 4 7 / 0.08);
+    color: var(--color-night);
+  }
+
+  .split-bar--ours .split-bar__creative {
+    background-color: var(--color-mint);
+    color: var(--color-night);
+  }
+
+  /* 10% is too narrow for its label; the caption carries it */
+  .split-bar--ours .split-bar__management {
+    font-size: 0;
+  }
+
+  .person__bio {
+    margin-top: var(--space-2xs);
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+  }
+
+  /* Client quotes: a masonry-ish set of cards */
+  .quotes {
+    columns: 3 18rem;
+    column-gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .quote {
+    break-inside: avoid;
+    margin-bottom: var(--space-md);
+  }
+
+  .quote figure {
+    margin: 0;
+    padding: var(--space-lg);
+    border: 1px solid rgb(0 4 7 / 0.12);
+    border-radius: var(--radius-lg);
+    background-color: rgb(0 4 7 / 0.03);
+  }
+
+  .quote blockquote {
+    margin: 0 0 var(--space-md);
+  }
+
+  .quote figcaption {
+    display: grid;
+    font-size: var(--font-size-sm);
+  }
+
+  .quote figcaption span {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 977px) {
+    .story {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   .values-section {
     padding-top: 0;
   }

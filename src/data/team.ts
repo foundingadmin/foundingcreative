@@ -18,6 +18,8 @@ export interface Person {
   role: string;
   photo: ImageMetadata;
   linkedin: string;
+  /** A short bio for the About page (one or two sentences). Shown when set. */
+  bio?: string;
 }
 
 export const people = {

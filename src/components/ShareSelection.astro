@@ -1,0 +1,162 @@
+---
+// Select a passage in a post and a small toolbar appears above it to share
+// it: LinkedIn, copy the quote with the link, or the device's own share sheet
+// where there is one. Styled and revealed like Vercel's tooltip (skiper43):
+// a dark pill that opens with a clip-path. Only watches selections inside
+// [data-share-scope] (the post body), never in its navigation.
+import Icon from './Icon.astro';
+
+interface Props {
+  /** The canonical URL of the post being shared. */
+  url: string;
+}
+
+const { url } = Astro.props;
+---
+
+<div class="share-tip" role="toolbar" aria-label="Share the selected text" data-share-tip data-url={url} hidden>
+  <a class="share-tip__button" data-share-linkedin href="#" target="_blank" rel="noopener">
+    <Icon name="linkedin" size={16} />
+    <span class="visually-hidden">Share on LinkedIn</span>
+  </a>
+  <button type="button" class="share-tip__button" data-share-copy>
+    <Icon name="copy" size={16} />
+    <span class="visually-hidden">Copy quote with link</span>
+  </button>
+  <button type="button" class="share-tip__button" data-share-native hidden>
+    <Icon name="share" size={16} />
+    <span class="visually-hidden">Share</span>
+  </button>
+  <span class="share-tip__status" aria-live="polite" data-share-status></span>
+</div>
+
+<script>
+  const tip = document.querySelector<HTMLElement>('[data-share-tip]');
+  const scope = document.querySelector<HTMLElement>('[data-share-scope]');
+
+  if (tip && scope) {
+    const url = tip.dataset.url!;
+    const linkedin = tip.querySelector<HTMLAnchorElement>('[data-share-linkedin]')!;
+    const copy = tip.querySelector<HTMLButtonElement>('[data-share-copy]')!;
+    const native = tip.querySelector<HTMLButtonElement>('[data-share-native]')!;
+    const status = tip.querySelector<HTMLElement>('[data-share-status]')!;
+    let quote = '';
+    let range: Range | null = null;
+
+    linkedin.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    if ('share' in navigator) native.hidden = false;
+
+    const hide = () => {
+      tip.classList.remove('is-open');
+      tip.hidden = true;
+      status.textContent = '';
+      range = null;
+    };
+
+    // Fixed to the viewport, centered above the selection; kept there on scroll.
+    const place = () => {
+      if (!range) return;
+      const rect = range.getBoundingClientRect();
+      const half = tip.offsetWidth / 2 + 8;
+      const left = Math.max(half, Math.min(rect.left + rect.width / 2, document.documentElement.clientWidth - half));
+      tip.style.left = `${left}px`;
+      tip.style.top = `${Math.max(rect.top - tip.offsetHeight - 10, 8)}px`;
+    };
+    window.addEventListener('scroll', place, { passive: true });
+
+    const show = () => {
+      const selection = window.getSelection();
+      const text = selection?.toString().trim() ?? '';
+      if (!selection || selection.isCollapsed || text.length < 3 || text.length > 500) return hide();
+      const selected = selection.getRangeAt(0);
+      const node = selected.commonAncestorContainer;
+      const element = node instanceof Element ? node : node.parentElement;
+      if (!element || !scope.contains(element) || element.closest('nav')) return hide();
+
+      quote = text;
+      range = selected;
+      tip.hidden = false;
+      place();
+      requestAnimationFrame(() => tip.classList.add('is-open'));
+    };
+
+    // Wait until a mouse or keyboard selection settles before showing.
+    let timer = 0;
+    document.addEventListener('selectionchange', () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(show, 250);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') hide();
+    });
+
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(`“${quote}” ${url}`);
+        status.textContent = 'Copied';
+      } catch {
+        status.textContent = 'Copy failed';
+      }
+    });
+    native.addEventListener('click', () => {
+      navigator.share({ text: `“${quote}”`, url }).catch(() => {});
+    });
+  }
+</script>
+
+<style>
+  .share-tip {
+    position: fixed;
+    z-index: 40;
+    display: flex;
+    gap: var(--space-3xs);
+    align-items: center;
+    padding: var(--space-3xs);
+    border: 1px solid rgb(255 255 255 / 0.15);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-ink);
+    box-shadow: 0 8px 24px rgb(0 4 7 / 0.35);
+    color: var(--color-white);
+    transform: translateX(-50%);
+    clip-path: inset(50% 50% round var(--radius-pill));
+    transition: clip-path 220ms var(--ease-out);
+  }
+
+  .share-tip.is-open {
+    clip-path: inset(0 round var(--radius-pill));
+  }
+
+  .share-tip[hidden] {
+    display: none;
+  }
+
+  .share-tip__button {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .share-tip__button:hover,
+  .share-tip__button:focus-visible {
+    background-color: rgb(255 255 255 / 0.12);
+  }
+
+  .share-tip__status:not(:empty) {
+    padding-inline: var(--space-2xs) var(--space-xs);
+    color: var(--color-mint);
+    font-size: var(--font-size-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .share-tip {
+      transition: none;
+    }
+  }
+</style>
