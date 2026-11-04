@@ -10,6 +10,7 @@ import growthSvg from '../../assets/pages/growth-chart-illustration.svg?raw';
 import buckitLogo from '../../assets/pages/buckit-logo-white.svg';
 import { letsTalkHref } from '../../data/navigation';
 import { pages } from '../../data/seo';
+import Faq from '../../components/Faq.astro';
 
 // Fractional Creative, laid out as on the live page: the spectrum hero with
 // the frosted benefit cards and the BucKit portal, a light band on the
@@ -248,14 +249,7 @@ const jsonLd = [
   <section class="fc-faq" aria-labelledby="faq-heading">
     <div class="container section fc-faq__inner" data-reveal>
       <h2 id="faq-heading">Fractional creative FAQs</h2>
-      {
-        faqs.map((faq) => (
-          <details>
-            <summary>{faq.q}</summary>
-            <p>{faq.a}</p>
-          </details>
-        ))
-      }
+      <Faq items={faqs} tone="light" />
     </div>
   </section>
 
@@ -539,22 +533,8 @@ const jsonLd = [
     padding-top: 0;
   }
 
-  .fc-faq details {
-    border-bottom: 1px solid rgb(0 4 7 / 0.15);
-  }
-
-  .fc-faq summary {
-    padding-block: var(--space-sm);
-    font-weight: var(--font-weight-semibold);
-    cursor: pointer;
-  }
-
-  .fc-faq summary::marker {
-    color: var(--color-mint-darker);
-  }
-
-  .fc-faq details p {
-    color: rgb(0 4 7 / 0.75);
+  .fc-faq h2 {
+    margin-bottom: var(--space-lg);
   }
 
   .fc-models__intro {
