@@ -92,3 +92,46 @@ test('service work slider steps through projects with its buttons', async ({ pag
   await expect(slider.locator('[data-work-current]')).toHaveText('02');
   await expect(slider.getByRole('button', { name: 'Next project' })).toBeDisabled();
 });
+
+test('About tells the story, shows client words, logos and a CTA', async ({ page }) => {
+  await page.goto('/about-us/');
+  await expect(page.getByRole('heading', { level: 2, name: 'The missing middle ground' })).toBeVisible();
+  await expect(page.locator('.split-bar dt')).toHaveText(['Founding Creative', 'Traditional agency']);
+  const quotes = page.locator('.quote figcaption strong');
+  await expect(quotes).toHaveText(['Jon Ciotti', 'John Keen', 'DeAnna Miller', 'Paige Isovitsch', 'Brooke McPoyle']);
+  await expect(page.getByRole('region', { name: "Brands we've worked with" })).toBeAttached();
+  await expect(page.getByRole('heading', { level: 2, name: "Let's build your foundation" })).toBeVisible();
+});
+
+test('selecting text in a post offers to share it', async ({ page }) => {
+  const slug = 'what-is-a-founding-designer-and-do-you-actually-need-one';
+  await page.goto(`/${slug}/`);
+  const tip = page.getByRole('toolbar', { name: 'Share the selected text' });
+  await expect(tip).toBeHidden();
+
+  await page.locator('.post-body p').first().evaluate((p) => {
+    const range = document.createRange();
+    range.selectNodeContents(p);
+    const selection = window.getSelection()!;
+    selection.removeAllRanges();
+    selection.addRange(range);
+  });
+  await expect(tip).toBeVisible();
+  await expect(tip.getByRole('link', { name: 'Share on LinkedIn' })).toHaveAttribute(
+    'href',
+    `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://foundingcreative.com/${slug}/`)}`,
+  );
+  await expect(tip.getByRole('button', { name: 'Copy quote with link' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(tip).toBeHidden();
+
+  // Nothing for selections in the contents list.
+  await page.locator('.post-body nav a').first().evaluate((a) => {
+    const range = document.createRange();
+    range.selectNodeContents(a);
+    window.getSelection()!.removeAllRanges();
+    window.getSelection()!.addRange(range);
+  });
+  await page.waitForTimeout(400);
+  await expect(tip).toBeHidden();
+});

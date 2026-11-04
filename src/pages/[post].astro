@@ -9,6 +9,7 @@ import HeroBackdrop from '../components/HeroBackdrop.astro';
 import { postCover } from '../lib/images';
 import { getPosts, postUrl, formatDate, isoDate, type Post } from '../lib/content';
 import { entrySeo } from '../data/seo';
+import ShareSelection from '../components/ShareSelection.astro';
 
 // Every Field Notes post renders through this one template, at the site root
 // like the WordPress permalinks. The layout follows the live posts: a dark
@@ -108,12 +109,13 @@ const jsonLd = [
         </div>
       </header>
 
-      <div class="post-body">
+      <div class="post-body" data-share-scope>
         <div class="container post-body__grid">
           <PostToc headings={headings} />
           <Prose variant="article"><Content /></Prose>
         </div>
       </div>
+      <ShareSelection url={url} />
     </div>
   </article>
 
