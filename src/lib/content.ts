@@ -19,6 +19,11 @@ export async function getCaseStudies(): Promise<CaseStudy[]> {
 export const postUrl = (post: Post) => `/${post.id}/`;
 export const caseStudyUrl = (study: CaseStudy) => `/case-study/${study.id}/`;
 
+// The Case Studies page filters by service tag from ?type=<slug>, so a tag
+// anywhere on the site can link to the page with its filter already set.
+export const serviceSlug = (tag: string) => tag.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+export const caseStudiesByTypeUrl = (tag: string) => `/case-studies/?type=${serviceSlug(tag)}`;
+
 // The service page behind each case study service tag. Case study pages link
 // back to these; the first tag is the study's main service.
 const SERVICE_FOR_TAG: Record<string, string> = {

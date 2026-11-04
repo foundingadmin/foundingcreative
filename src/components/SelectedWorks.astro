@@ -1,7 +1,7 @@
 ---
 import Img from './Img.astro';
 import Icon from './Icon.astro';
-import { caseStudyUrl, getCaseStudies } from '../lib/content';
+import { caseStudiesByTypeUrl, caseStudyUrl, getCaseStudies } from '../lib/content';
 import mountain from '../assets/home/mountain.png';
 
 // "Selected works": three featured case studies, after the Davies template's
@@ -76,7 +76,12 @@ const place = (i: number) => ((i + 1) % count) - 1;
           <div class="selected-works__detail" hidden={i !== 0}>
             <ul class="selected-works__tags" aria-label={`${study.data.clients.join(', ')}: services`}>
               {study.data.services.map((tag) => (
-                <li>{tag}</li>
+                <li>
+                  <a href={caseStudiesByTypeUrl(tag)}>
+                    {tag}
+                    <span class="visually-hidden"> case studies</span>
+                  </a>
+                </li>
               ))}
             </ul>
             <a class="selected-works__more" href={caseStudyUrl(study)}>
@@ -403,16 +408,29 @@ const place = (i: number) => ((i + 1) % count) - 1;
     list-style: none;
   }
 
-  .selected-works__tags li {
+  /* Each tag links to Case Studies filtered to that type */
+  .selected-works__tags a {
+    display: block;
     padding: 4px var(--space-sm);
     border: 1px solid var(--color-stroke);
     border-radius: var(--radius-pill);
     background-color: var(--color-chip);
     backdrop-filter: blur(6px);
+    color: var(--color-text);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.08em;
+    text-decoration: none;
     text-transform: uppercase;
+    transition:
+      border-color var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+  .selected-works__tags a:hover,
+  .selected-works__tags a:focus-visible {
+    border-color: var(--color-mint);
+    color: var(--color-mint);
   }
 
   .selected-works__more {

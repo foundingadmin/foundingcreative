@@ -1,11 +1,20 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaseStudyCard from '../../components/CaseStudyCard.astro';
-import { getCaseStudies, caseStudyUrl } from '../../lib/content';
+import { getCaseStudies, caseStudyUrl, serviceSlug } from '../../lib/content';
 import { pages } from '../../data/seo';
 
 const studies = await getCaseStudies();
 const { description } = pages['/case-studies/'];
+
+// Project types to filter by: every service tag in use, A to Z, with counts.
+const types = [...new Set(studies.flatMap((study) => study.data.services))]
+  .sort()
+  .map((tag) => ({
+    tag,
+    slug: serviceSlug(tag),
+    count: studies.filter((study) => study.data.services.includes(tag)).length,
+  }));
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -35,10 +44,72 @@ const jsonLd = {
     </p>
   </section>
 
-  <section class="container work-grid" aria-label="All case studies">
-    {studies.map((study) => <CaseStudyCard study={study} />)}
+  <section class="container work-list" aria-label="All case studies">
+    <!-- Filter by project type. ?type=<slug> sets it on load, so tags elsewhere
+         on the site link straight to a filtered list. Without the script it
+         stays hidden and every case study shows. -->
+    <div class="work-filter" role="group" aria-label="Filter by project type" data-work-filter hidden>
+      <button type="button" class="work-filter__button" data-type="" aria-pressed="true">
+        All <span class="work-filter__count">{studies.length}</span>
+      </button>
+      {
+        types.map(({ tag, slug, count }) => (
+          <button type="button" class="work-filter__button" data-type={slug} aria-pressed="false">
+            {tag} <span class="work-filter__count">{count}</span>
+          </button>
+        ))
+      }
+    </div>
+    <p class="visually-hidden" aria-live="polite" data-work-status></p>
+
+    <ul class="work-grid">
+      {
+        studies.map((study) => (
+          <li data-types={study.data.services.map(serviceSlug).join(' ')}>
+            <CaseStudyCard study={study} />
+          </li>
+        ))
+      }
+    </ul>
   </section>
 </BaseLayout>
+
+<script>
+  const filter = document.querySelector<HTMLElement>('[data-work-filter]');
+  const status = document.querySelector<HTMLElement>('[data-work-status]');
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.work-filter__button')];
+  const items = [...document.querySelectorAll<HTMLElement>('.work-grid > li')];
+
+  if (filter && status) {
+    const show = (type: string, announce: boolean) => {
+      let shown = 0;
+      for (const item of items) {
+        const match = !type || item.dataset.types!.split(' ').includes(type);
+        item.hidden = !match;
+        if (match) shown++;
+      }
+      for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.type === type));
+
+      const url = new URL(location.href);
+      if (type) url.searchParams.set('type', type);
+      else url.searchParams.delete('type');
+      history.replaceState(history.state, '', url);
+
+      if (announce) {
+        const label = buttons.find((button) => button.dataset.type === type)?.firstChild?.textContent?.trim();
+        status.textContent = type
+          ? `Showing ${shown} ${label} case ${shown === 1 ? 'study' : 'studies'}`
+          : `Showing all ${shown} case studies`;
+      }
+    };
+
+    for (const button of buttons) button.addEventListener('click', () => show(button.dataset.type!, true));
+
+    const requested = new URLSearchParams(location.search).get('type') ?? '';
+    show(buttons.some((button) => button.dataset.type === requested) ? requested : '', false);
+    filter.hidden = false;
+  }
+</script>
 
 <style>
   .work-intro {
@@ -63,10 +134,63 @@ const jsonLd = {
     font-size: var(--font-size-lg);
   }
 
+  .work-list {
+    padding-bottom: var(--space-2xl);
+  }
+
+  .work-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    margin-bottom: var(--space-lg);
+  }
+
+  .work-filter[hidden] {
+    display: none;
+  }
+
+  .work-filter__button {
+    display: inline-flex;
+    gap: var(--space-2xs);
+    align-items: center;
+    padding: var(--space-2xs) var(--space-sm);
+    border: 1px solid var(--color-stroke);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-chip);
+    color: var(--color-text);
+    font: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      border-color var(--transition-fast),
+      background-color var(--transition-fast),
+      color var(--transition-fast);
+  }
+
+  .work-filter__button:hover {
+    border-color: var(--color-mint);
+  }
+
+  .work-filter__button[aria-pressed='true'] {
+    border-color: var(--color-mint);
+    background-color: var(--color-mint);
+    color: var(--color-night);
+  }
+
+  .work-filter__count {
+    opacity: 0.6;
+    font-weight: var(--font-weight-regular);
+  }
+
   .work-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
     gap: var(--space-md);
-    padding-bottom: var(--space-2xl);
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 </style>
