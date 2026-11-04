@@ -103,7 +103,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 <style>
   .process-cards {
-    --open-grow: 3.2;
+    --open-grow: 2.4;
     --countdown: 6s;
     display: flex;
     gap: var(--space-sm);
@@ -163,7 +163,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   }
 
   .process-card.is-active .process-card__panel {
-    width: min(26rem, 100%);
+    width: min(32rem, 100%);
     border-top-right-radius: var(--radius-lg);
     background-color: rgb(0 4 7 / 0.88);
     backdrop-filter: blur(12px);
@@ -196,10 +196,21 @@ const pad = (n: number) => String(n).padStart(2, '0');
     align-items: flex-start;
   }
 
+  /* A closed card is clickable all over: the button's hit area stretches to
+   * the card (the panel stays unpositioned so the card is its container). */
+  .process-card:not(.is-active) {
+    cursor: pointer;
+  }
+
+  .process-card:not(.is-active) .process-card__panel {
+    position: static;
+  }
+
   .process-card:not(.is-active) .process-card__toggle::after {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 1;
   }
 
   .process-card__toggle:focus-visible {

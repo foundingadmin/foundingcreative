@@ -340,6 +340,8 @@ h6 {
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-heading);
   letter-spacing: var(--tracking-display);
+  /* Wrapped lines come out about the same length, with no lone last word */
+  text-wrap: balance;
 }
 
 h1 {

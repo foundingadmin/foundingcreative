@@ -200,12 +200,10 @@ const values = [
   <section class="services curve-bottom" id="services" aria-labelledby="services-heading">
     <div class="container section">
       <div class="section__intro">
-        <p class="eyebrow">Our <em>services</em></p>
-        <h2 id="services-heading">Brand strategy, websites, and design in one team</h2>
-        <p class="section__lead">
-          Strategy comes first. Then we design the brand, the website, and every piece that carries it, so it all works
-          together.
-        </p>
+        <!-- The services below speak for themselves; the heading is for screen
+             readers and the outline only. -->
+        <p class="eyebrow" aria-hidden="true">Our <em>services</em></p>
+        <h2 id="services-heading" class="visually-hidden">Our services</h2>
       </div>
 
       <!-- Pinned line: the verb swaps as each service passes the middle of the
@@ -266,14 +264,16 @@ const values = [
        as cards that open one at a time -->
   <section class="home-forge theme-forge" aria-labelledby="home-forge-heading">
     <div class="container section">
-      <div class="section__intro">
+      <div class="section__intro section__intro--center">
         <p class="eyebrow"><span class="accent">Brand</span>Forge™ <em>for startups</em></p>
         <h2 id="home-forge-heading">From zero to market-ready in four steps</h2>
         <p class="section__lead">
           Research-backed brand strategy and identity, launch-ready in weeks instead of months.
         </p>
       </div>
-      <ProcessCards steps={brandForgeSteps} id="home-forge-step" />
+      <div class="home-forge__cards">
+        <ProcessCards steps={brandForgeSteps} id="home-forge-step" />
+      </div>
       <a class="button button--primary home-forge__cta" href="/brandforge/">
         Explore BrandForge<span class="visually-hidden">, branding for startups</span>
         <Icon name="arrow-up-right" size={16} />
@@ -517,6 +517,14 @@ const values = [
   /* BrandForge band */
   .home-forge {
     background: linear-gradient(160deg, var(--color-forge-teal), var(--color-night));
+  }
+
+  /* The cards break out of the container to the window's width, less the
+   * gutters, so the closed cards have room for their titles. */
+  .home-forge__cards {
+    width: min(100vw - 2 * var(--container-gutter), 110rem);
+    margin-left: 50%;
+    translate: -50%;
   }
 
   .home-forge__cta {
@@ -869,8 +877,10 @@ const values = [
   }
 
   /* Closing CTA: a holographic card */
+  /* Room above the card: the page slides off the footer reveal from the top,
+   * so a tight gap leaves the card hidden under it for most of the scroll. */
   .cta-wrap {
-    padding-block: var(--space-xl) var(--space-2xl);
+    padding-block: var(--space-3xl) var(--space-2xl);
   }
 
   .cta {
