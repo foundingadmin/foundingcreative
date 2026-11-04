@@ -4,7 +4,6 @@ import ContactForm from './ContactForm.astro';
 import Icon from './Icon.astro';
 import TeamFaces from './TeamFaces.astro';
 import logo from '../assets/brand/founding-wordmark-white.svg';
-import wave from '../assets/brand/wave-black.svg';
 import { companyLinks, services, sitelaunch, legalLinks, linkedInHref } from '../data/navigation';
 import { getCaseStudies, getPosts, caseStudyUrl, postUrl } from '../lib/content';
 
@@ -38,7 +37,7 @@ const columns = [
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer" id="footer" style={`--footer-wave: url(${wave.src})`}>
+<footer class="site-footer" id="footer">
   <div class="container">
     <section class="footer-contact" id="get-in-touch" aria-labelledby="footer-contact-heading">
       <div class="footer-contact__intro">
@@ -125,14 +124,10 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  /* The live footer sits on the same faint wave as the hero, under a
-   * night veil */
+  /* Its background (the wave) is on BaseLayout's .page-end, so it also runs
+   * under anything a page puts above the footer there */
   .site-footer {
     padding-block: var(--space-2xl) var(--space-lg);
-    background:
-      linear-gradient(rgb(0 4 7 / 0.55), var(--color-night) 85%),
-      var(--footer-wave) center top / cover no-repeat,
-      linear-gradient(160deg, var(--color-navy), var(--color-night) 60%);
   }
 
   /* Contact block */
