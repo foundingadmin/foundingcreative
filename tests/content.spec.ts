@@ -121,7 +121,7 @@ test('home shows what we do, for whom, and proof on the first screen', async ({ 
   await page.goto('/');
   const hero = page.locator('.hero');
   await expect(hero.getByText('We\'re a brand strategy agency for growing B2B teams.', { exact: false })).toBeVisible();
-  const clients = page.getByRole('list', { name: /Trusted by 28 clients in 2025/ });
+  const clients = hero.getByRole('list', { name: 'Clients' });
   await expect(clients.getByRole('img')).toHaveCount(6);
   // The proof sits above the fold.
   const box = await clients.boundingBox();

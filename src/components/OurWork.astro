@@ -60,4 +60,37 @@ const studies = only
   :global(.our-work__slider .carousel__track) {
     padding-block: var(--space-sm) var(--space-lg);
   }
+
+  /* The row fades to the page black at the window's right edge, so the next
+   * arrow sits on dark ground over any cover. Gone once the row reaches its
+   * end, so the last card shows in full. */
+  :global(.our-work__slider)::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    right: calc(50% - 50vw);
+    width: calc(50vw - 50% + var(--fade-width, 10rem));
+    background: linear-gradient(to right, transparent, var(--color-bg) var(--fade-width, 10rem));
+    pointer-events: none;
+    transition: opacity var(--transition-fast);
+  }
+
+  :global(.our-work__slider:has(.carousel__button--next:disabled))::after {
+    opacity: 0;
+  }
+
+  :global(.our-work__slider .carousel__controls) {
+    z-index: 1;
+  }
+
+  @media (max-width: 977px) {
+    :global(.our-work__slider) {
+      --fade-width: 4rem;
+    }
+
+    /* The buttons sit under the slides here, clear of the fade */
+    :global(.our-work__slider)::after {
+      bottom: calc(2.5rem + var(--space-sm));
+    }
+  }
 </style>

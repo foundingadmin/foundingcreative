@@ -87,16 +87,10 @@ const lcpPreload = lcpImage && (await getImage({ ...lcpImage, format: lcpFormat 
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    {
-      Astro.slots.has('page-end') ? (
-        <div class="page-end">
-          <slot name="page-end" />
-          <Footer />
-        </div>
-      ) : (
-        <Footer />
-      )
-    }
+    <div class="page-end">
+      <slot name="page-end" />
+      <Footer />
+    </div>
     {Astro.url.pathname !== '/contact-us/' && <StickyCta />}
     <ConsentBanner />
     <script>

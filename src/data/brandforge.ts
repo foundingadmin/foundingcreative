@@ -6,14 +6,12 @@ import activationImage from '../assets/home/services/brand-3.webp';
 
 // The BrandForge Gauntlet: the four steps from the Creative GTM for Startups
 // deck. The BrandForge page shows them in full (ProcessSplit); the homepage
-// shows the name and summary of each.
+// shows the title, tagline, and text of each (ProcessCards).
 
 export interface BrandForgeStep {
   title: string;
   /** The step's one-line promise, from the deck. */
   tagline: string;
-  /** One line for the homepage card. */
-  summary: string;
   /** The fuller explanation on the BrandForge page. */
   text: string;
   points: string[];
@@ -24,7 +22,6 @@ export const brandForgeSteps: BrandForgeStep[] = [
   {
     title: 'Discovery & Alignment',
     tagline: 'Stop guessing. Start knowing.',
-    summary: 'Stakeholder interviews, market and competitor audits, and audience personas.',
     text: 'We pressure-test your assumptions first, so your brand is built on market reality, not founder intuition.',
     points: ['Stakeholder interviews', 'Market and competitor audit', 'Target audience personas'],
     image: { src: discoveryImage, alt: 'Three people silhouetted against a whiteboard of strategy sketches' },
@@ -32,7 +29,6 @@ export const brandForgeSteps: BrandForgeStep[] = [
   {
     title: 'Strategy & Direction',
     tagline: 'Define the path. Design the win.',
-    summary: "Four distinct directions. We don't guess; we test.",
     text: 'Four distinct creative strategies, not just options: different ways to win your market, with the voice and positioning for your first year defined.',
     points: ['Four distinct creative strategies', 'Voice and positioning', 'A decision gate before design'],
     image: { src: strategyImage, alt: 'Sticky notes from a strategy session on a glass wall' },
@@ -40,7 +36,6 @@ export const brandForgeSteps: BrandForgeStep[] = [
   {
     title: 'Visual Identity',
     tagline: 'Building a face for the mission.',
-    summary: 'Logo systems, typography, and color strategy, developed fast.',
     text: 'A scalable visual language, stress-tested on your highest-priority asset, like a homepage hero or a product label.',
     points: ['Identity exploration', 'Accessible color and typography', 'Tested on a real asset'],
     image: { src: identityImage, alt: 'Laptop showing a brand strategy framework and color wheel' },
@@ -48,7 +43,6 @@ export const brandForgeSteps: BrandForgeStep[] = [
   {
     title: 'Activation',
     tagline: 'Launch the brand. Own the market.',
-    summary: 'Brand guide, AI design system, web UI, social toolkits, and more.',
     text: 'The brand guide your team and your AI tools work from, plus the launch assets you need first, chosen with you.',
     points: ['The brand guide', 'Curated launch assets', 'A design appendix to grow into'],
     image: { src: activationImage, alt: 'Brand color palette swatches named Sky, Sea, Fern, Ash, Smoke, and Fog' },

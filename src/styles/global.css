@@ -222,6 +222,7 @@
   --reveal-distance: 1rem;
   --glow-mint: 0 0 1.5rem rgb(110 255 182 / 0.45);
   --glow-white: 0 0 12px rgb(255 255 255 / 0.6); /* live primary button */
+  --glow-white-soft: 0 0 1.5rem rgb(255 255 255 / 0.16); /* testimonial tiles */
   --text-glow: 0 0 12px rgb(255 255 255 / 0.3); /* live hero headline */
   --radius-card: 32px; /* big image and feature cards */
 
@@ -274,14 +275,13 @@ main:focus {
   outline: none;
 }
 
-/* Footer reveal: a page that fills BaseLayout's page-end slot (the homepage's
- * closing CTA) gets that and the footer tucked underneath it. The page lifts
- * away like a sheet while the page-end rises from behind it at half speed,
- * so the CTA is what shows first, then it scrolls on as usual once fully
- * uncovered. (The page-end is taller than the screen, so holding it fully
- * still would uncover the footer's form before the CTA.) Without
+/* Footer reveal, after gpc.consulting: the page lifts away like a sheet
+ * while the footer (and whatever a page puts in BaseLayout's page-end slot,
+ * like the homepage's closing CTA) holds still underneath, top first, and
+ * brightens out of the shadow. Once fully uncovered it scrolls on as usual,
+ * so a footer taller than the screen still shows its top first. Without
  * scroll-driven animations, or for reduced motion, it simply scrolls. */
-body:has(> .page-end) main {
+main {
   position: relative;
   z-index: 1;
   background-color: var(--color-bg);
@@ -301,7 +301,8 @@ body:has(> .page-end) main {
 
 @keyframes page-end-reveal {
   from {
-    transform: translateY(-50vh);
+    opacity: 0.35;
+    transform: translateY(-100vh);
   }
 }
 
