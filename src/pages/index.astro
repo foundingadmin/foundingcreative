@@ -877,10 +877,17 @@ const values = [
   }
 
   /* Closing CTA: a holographic card */
-  /* Room above the card: the page slides off the footer reveal from the top,
-   * so a tight gap leaves the card hidden under it for most of the scroll. */
   .cta-wrap {
-    padding-block: var(--space-3xl) var(--space-2xl);
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
+  /* After gpc.consulting: the card sticks under the header and the footer
+   * slides up over it. Only on screens tall enough to show the whole card. */
+  @media (min-height: 640px) {
+    .cta-wrap {
+      position: sticky;
+      top: var(--header-height);
+    }
   }
 
   .cta {

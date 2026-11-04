@@ -277,44 +277,22 @@ main:focus {
   outline: none;
 }
 
-/* Footer reveal, after gpc.consulting: the page lifts away like a sheet
- * while the footer (and whatever a page puts in BaseLayout's page-end slot,
- * like the homepage's closing CTA) holds still underneath, top first, and
- * brightens out of the shadow. Once fully uncovered it scrolls on as usual,
- * so a footer taller than the screen still shows its top first. Without
- * scroll-driven animations, or for reduced motion, it simply scrolls. */
-main {
-  position: relative;
-  z-index: 1;
-  background-color: var(--color-bg);
-  box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.6);
-}
-
 /* The footer's faint wave under a night veil, as on the live site. It sits on
- * the whole page-end, so it runs up under the homepage's closing CTA too. */
-.page-end {
+ * the whole page-end, so it runs up under the homepage's closing CTA too.
+ * The footer carries it as well: after gpc.consulting, a page can pin what
+ * it puts in BaseLayout's page-end slot (the homepage's closing CTA sticks)
+ * and the footer slides up over it as a sheet of its own. */
+.page-end,
+.site-footer {
   background:
     linear-gradient(rgb(0 4 7 / 0.55), var(--color-night) 85%),
     var(--footer-wave) center top / cover no-repeat,
     linear-gradient(160deg, var(--color-navy), var(--color-night) 60%);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view(0px)) {
-    .page-end {
-      animation: page-end-reveal linear both;
-      /* Zero inset: the header's scroll padding must not shorten the run */
-      animation-timeline: view(0px);
-      animation-range: entry 0% entry 100%;
-    }
-  }
-}
-
-@keyframes page-end-reveal {
-  from {
-    opacity: 0.35;
-    transform: translateY(-100vh);
-  }
+.site-footer {
+  position: relative;
+  box-shadow: 0 -1.5rem 3rem rgb(0 0 0 / 0.5);
 }
 
 img,
