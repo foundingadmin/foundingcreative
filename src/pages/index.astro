@@ -5,6 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteLaunchSection from '../components/SiteLaunchSection.astro';
 import ClientLogos from '../components/ClientLogos.astro';
 import StatCards from '../components/StatCards.astro';
+import { brandForgeSteps } from '../data/brandforge';
 import Testimonials from '../components/Testimonials.astro';
 import OurWork from '../components/OurWork.astro';
 import SelectedWorks from '../components/SelectedWorks.astro';
@@ -38,10 +39,30 @@ import design3 from '../assets/home/services/design-3.webp';
 import design4 from '../assets/home/services/design-4.webp';
 import design5 from '../assets/home/services/design-5.webp';
 
+// The three services, in the order the pinned "We design / develop / build"
+// line cycles through them.
 const services = [
   {
+    icon: 'pen-tool',
+    word: 'design',
+    title: 'We design everything',
+    lead: 'Design systems that ensure your brand consistently shines across all platforms.',
+    text: 'From pitch decks to packaging, we deliver quality design consistently across every single one of your channels.',
+    href: '/services/design-services/',
+    cta: 'Design services',
+    tags: ['Digital marketing', 'Print collateral', 'Packaging', 'Presentations', 'Sales enablement'],
+    images: [
+      { src: design1, alt: 'Construction worker using his phone at a glowing green Bell Bird ATM' },
+      { src: design2, alt: 'Man presenting on a large TCS Business 4.0 interactive wall' },
+      { src: design3, alt: '3D render of Turntide motors and controllers on white pedestals' },
+      { src: design4, alt: 'Event graphic for speaker Steve Wozniak, co-founder of Apple' },
+      { src: design5, alt: 'MODL branded hoodie with an orange line pattern' },
+    ],
+  },
+  {
     icon: 'globe',
-    title: 'We launch websites',
+    word: 'develop',
+    title: 'We develop websites',
     lead: 'No two sites should be the same because no two businesses are.',
     text: 'Our SiteLaunch system has three unique entry points, each tailored to unique business goals and growth stages.',
     href: '/services/website-services/',
@@ -57,7 +78,8 @@ const services = [
   },
   {
     icon: 'flag',
-    title: 'We shape brands',
+    word: 'build',
+    title: 'We build brands',
     lead: 'Brand identities built to last through clear, scalable creative foundations.',
     text: 'From brand strategy and copy to logo systems and style guides, we create the foundations that help brands grow with confidence.',
     href: '/services/branding-services/',
@@ -69,22 +91,6 @@ const services = [
       { src: brand3, alt: 'Brand color palette swatches named Sky, Sea, Fern, Ash, Smoke, and Fog' },
       { src: brand4, alt: 'Hand-drawn logo sketches of an infinity loop on graph paper' },
       { src: brand5, alt: 'Genpact GROW18 event mural in a convention center' },
-    ],
-  },
-  {
-    icon: 'pen-tool',
-    title: 'We design everything',
-    lead: 'Design systems that ensure your brand consistently shines across all platforms.',
-    text: 'From pitch decks to packaging, we deliver quality design consistently across every single one of your channels.',
-    href: '/services/design-services/',
-    cta: 'Design services',
-    tags: ['Digital marketing', 'Print collateral', 'Packaging', 'Presentations', 'Sales enablement'],
-    images: [
-      { src: design1, alt: 'Construction worker using his phone at a glowing green Bell Bird ATM' },
-      { src: design2, alt: 'Man presenting on a large TCS Business 4.0 interactive wall' },
-      { src: design3, alt: '3D render of Turntide motors and controllers on white pedestals' },
-      { src: design4, alt: 'Event graphic for speaker Steve Wozniak, co-founder of Apple' },
-      { src: design5, alt: 'MODL branded hoodie with an orange line pattern' },
     ],
   },
 ] as const;
@@ -199,9 +205,22 @@ const values = [
         </p>
       </div>
 
+      <!-- Pinned line: the verb swaps as each service passes the middle of the
+           screen (script below). Decorative; each service's H3 says the same. -->
+      <p class="cycler" aria-hidden="true" data-cycler>
+        <span class="cycler__we">We</span>
+        <span class="cycler__words">
+          {
+            services.map((service, i) => (
+              <span class:list={['cycler__word', { 'is-active': i === 0 }]}>{service.word}</span>
+            ))
+          }
+        </span>
+      </p>
+
       {
         services.map((service, i) => (
-          <article class="service" aria-labelledby={`service-${i}`} data-reveal>
+          <article class="service" aria-labelledby={`service-${i}`} data-reveal data-cycler-step={i}>
             <div class="service__text">
               <div>
                 <span class="service__icon">
@@ -232,6 +251,37 @@ const values = [
           </article>
         ))
       }
+    </div>
+  </section>
+
+  <!-- BrandForge: the four steps from the Creative GTM deck, in its teal -->
+  <section class="home-forge theme-forge" aria-labelledby="home-forge-heading">
+    <div class="container section">
+      <div class="section__intro">
+        <p class="eyebrow"><span class="accent">Brand</span>Forge™ <em>for startups</em></p>
+        <h2 id="home-forge-heading">From zero to market-ready in four steps</h2>
+        <p class="section__lead">
+          Research-backed brand strategy and identity, launch-ready in weeks instead of months.
+        </p>
+      </div>
+      <ol class="forge-steps" data-reveal-stagger>
+        {
+          brandForgeSteps.map((step, i) => (
+            <li class="forge-step">
+              <span class="forge-step__number" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3>{step.title}</h3>
+              <p class="forge-step__tagline">{step.tagline}</p>
+              <p class="forge-step__summary">{step.summary}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <a class="button button--primary home-forge__cta" href="/brandforge/">
+        Explore BrandForge<span class="visually-hidden">, branding for startups</span>
+        <Icon name="arrow-up-right" size={16} />
+      </a>
     </div>
   </section>
 
@@ -478,6 +528,121 @@ const values = [
     --curve-color: var(--color-night);
     z-index: 2;
     background-color: var(--color-night);
+  }
+
+  /* BrandForge band: the deck's four steps as numbered cards */
+  .home-forge {
+    background: linear-gradient(160deg, var(--color-forge-teal), var(--color-night));
+  }
+
+  .forge-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-md);
+    margin: 0 0 var(--space-xl);
+    padding: 0;
+    list-style: none;
+  }
+
+  .forge-step {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-lg);
+    border: 1px solid rgb(255 255 255 / 0.15);
+    border-radius: var(--radius-lg);
+    background-color: rgb(0 4 7 / 0.35);
+  }
+
+  .forge-step__number {
+    margin-bottom: var(--space-lg);
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+  }
+
+  .forge-step h3 {
+    margin-bottom: var(--space-2xs);
+    font-family: var(--font-body);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
+  }
+
+  .forge-step__tagline {
+    margin-bottom: var(--space-sm);
+    color: var(--accent);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .forge-step__summary {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  @media (max-width: 977px) {
+    .forge-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 599px) {
+    .forge-steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* "We design / We develop / We build": pinned under the header while the
+   * services scroll beneath it; the verb blurs and scales between states. */
+  .cycler {
+    position: sticky;
+    top: var(--header-height);
+    z-index: 1;
+    display: flex;
+    gap: 0.25em;
+    margin: 0;
+    padding-block: var(--space-md) var(--space-lg);
+    background: linear-gradient(var(--color-night) 75%, transparent);
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 1.5rem + 4vw, 6rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-display);
+    line-height: 1;
+  }
+
+  .cycler__words {
+    display: grid;
+  }
+
+  .cycler__word {
+    grid-area: 1 / 1;
+    color: var(--color-mint);
+    opacity: 0;
+    filter: blur(12px);
+    transform: scale(0.92);
+    transform-origin: left center;
+    transition:
+      opacity 500ms var(--ease-out),
+      filter 500ms var(--ease-out),
+      transform 500ms var(--ease-out);
+  }
+
+  .cycler__word.is-active {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cycler__word {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 977px) {
+    .cycler {
+      display: none;
+    }
   }
 
   .service {
@@ -842,3 +1007,22 @@ const values = [
     }
   }
 </style>
+
+<script>
+  // Swap the pinned verb to whichever service is crossing the middle of the screen.
+  const cycler = document.querySelector('[data-cycler]');
+  if (cycler) {
+    const words = [...cycler.querySelectorAll('.cycler__word')];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const active = Number((entry.target as HTMLElement).dataset.cyclerStep);
+          words.forEach((word, i) => word.classList.toggle('is-active', i === active));
+        }
+      },
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    document.querySelectorAll('[data-cycler-step]').forEach((step) => observer.observe(step));
+  }
+</script>

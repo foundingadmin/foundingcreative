@@ -6,7 +6,8 @@ import PillarPills from '../../components/PillarPills.astro';
 import CheckList from '../../components/CheckList.astro';
 import StatCards from '../../components/StatCards.astro';
 import FeatureGrid from '../../components/FeatureGrid.astro';
-import ProcessTimeline from '../../components/ProcessTimeline.astro';
+import ProcessSplit from '../../components/ProcessSplit.astro';
+import { brandForgeSteps } from '../../data/brandforge';
 import Icon from '../../components/Icon.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
 import strategyLaptop from '../../assets/services/brand-strategy-laptop.webp';
@@ -75,14 +76,6 @@ const workshopImages = [
   { src: strategyLaptop, alt: 'Laptop showing a brand strategy framework and color wheel' },
   { src: workshopLaptop, alt: 'Laptop with a brand workshop board of green sticky notes' },
   { src: workshopNotes, alt: 'Brand workshop board of blue sticky notes answering where the brand is going' },
-];
-
-// How a BrandForge engagement runs (ProcessTimeline).
-const process = [
-  { phase: 'Research', text: 'Stakeholder interviews, competitor audits, and audience personas pressure-test your assumptions first.' },
-  { phase: 'Four directions', text: 'Four strategic creative directions, so you make a real decision backed by real reasoning.' },
-  { phase: 'Identity system', text: 'The chosen direction built into a logo system, color, typography, and an AI-ready brand system.' },
-  { phase: 'Launch kit', text: 'Your brand guide plus the activation assets you need most: investor deck, social toolkit, web UI framework.' },
 ];
 
 const { description } = pages['/brandforge/'];
@@ -171,11 +164,14 @@ const jsonLd = [
         <a class="button button--primary" href="#get-in-touch">Get started <Icon name="arrow-up-right" size={16} /></a>
       </FeatureGrid>
 
-      <!-- Process: the four steps from research to launch kit -->
+      <!-- Process: the BrandForge Gauntlet, four steps from the Creative GTM deck -->
       <section aria-labelledby="process-heading">
         <div class="container section">
-          <h2 id="process-heading" data-reveal>How BrandForge works</h2>
-          <ProcessTimeline steps={process} />
+          <div data-reveal>
+            <p class="tone-kicker">The <span class="accent">Brand</span>Forge Gauntlet</p>
+            <h2 id="process-heading">How BrandForge works</h2>
+          </div>
+          <ProcessSplit steps={brandForgeSteps} />
         </div>
       </section>
 

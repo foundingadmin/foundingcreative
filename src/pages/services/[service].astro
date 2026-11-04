@@ -5,7 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import FieldNotes from '../../components/FieldNotes.astro';
 import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
-import OurWork from '../../components/OurWork.astro';
+import WorkSlider from '../../components/WorkSlider.astro';
 import WipeSlider from '../../components/WipeSlider.astro';
 import { wipeSlide } from '../../lib/images';
 import Icon from '../../components/Icon.astro';
@@ -136,7 +136,7 @@ const jsonLd = [
       )
     }
 
-    <OurWork only={data.work.caseStudies} heading={data.work.heading} intro={data.work.intro} />
+    <WorkSlider only={data.work.caseStudies} heading={data.work.heading} intro={data.work.intro} />
 
     {
       data.teams && (
