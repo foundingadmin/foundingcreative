@@ -1,0 +1,343 @@
+---
+// A process as a row of cards, after gpc.consulting's homepage "Train / Adopt
+// / Deploy / Maintain": one card is open at a time, wide, with its photo and
+// a panel of copy; the rest are narrow and show only their title and number.
+// The open card counts down on a ring and hands over to the next one; hover
+// or focus pauses it, and choosing a card stops it for good. The ring is a
+// CSS animation, so the script only listens for it to finish. Without the
+// script, card one stays open. Reduced motion: no countdown, no transitions.
+// Stacks into a column on small screens, where it waits to be tapped. Colors come from the theme.
+import type { ImageMetadata } from 'astro';
+import Img from './Img.astro';
+
+interface Props {
+  steps: {
+    title: string;
+    tagline: string;
+    text: string;
+    image: { src: ImageMetadata; alt: string };
+  }[];
+  /** Unique on the page; prefixes the panel ids. */
+  id: string;
+}
+
+const { steps, id } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<ol class="process-cards" data-process-cards>
+  {
+    steps.map((step, i) => (
+      <li class:list={['process-card', { 'is-active': i === 0 }]} data-process-card>
+        <div class="process-card__media">
+          <Img
+            src={step.image.src}
+            alt={step.image.alt}
+            widths={[480, 800, 1200]}
+            sizes="(max-width: 977px) 100vw, 55vw"
+          />
+        </div>
+        <div class="process-card__panel">
+          <h3 class="process-card__head">
+            <button
+              type="button"
+              class="process-card__toggle"
+              aria-expanded={i === 0 ? 'true' : 'false'}
+              aria-controls={`${id}-${i}`}
+            >
+              <span class="process-card__title">{step.title}</span>
+              <span class="process-card__timer" aria-hidden="true">
+                <svg viewBox="0 0 48 48" class="process-card__ring">
+                  <circle cx="24" cy="24" r="22" pathLength="100" class="process-card__track" />
+                  <circle cx="24" cy="24" r="22" pathLength="100" class="process-card__bar" data-process-ring />
+                </svg>
+                <span class="process-card__number">{pad(i + 1)}</span>
+              </span>
+            </button>
+          </h3>
+          <div class="process-card__copy" id={`${id}-${i}`} hidden={i !== 0}>
+            <p class="process-card__tagline">{step.tagline}</p>
+            <p>{step.text}</p>
+          </div>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-process-cards]')) {
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-process-card]')];
+    const toggles = cards.map((card) => card.querySelector<HTMLButtonElement>('.process-card__toggle')!);
+    const copies = cards.map((card) => card.querySelector<HTMLElement>('.process-card__copy')!);
+
+    const open = (index: number) => {
+      cards.forEach((card, i) => {
+        const active = i === index;
+        card.classList.toggle('is-active', active);
+        toggles[i].setAttribute('aria-expanded', String(active));
+        copies[i].hidden = !active;
+      });
+    };
+
+    toggles.forEach((toggle, i) =>
+      toggle.addEventListener('click', () => {
+        root.classList.add('is-stopped');
+        open(i);
+      }),
+    );
+
+    // The ring's countdown ending moves on to the next card.
+    root.addEventListener('animationend', (event) => {
+      if (!(event.target as Element).matches('[data-process-ring]')) return;
+      const current = cards.findIndex((card) => card.classList.contains('is-active'));
+      open((current + 1) % cards.length);
+    });
+
+    // Count down only while the row is on screen.
+    new IntersectionObserver(([entry]) => root.classList.toggle('is-running', entry.isIntersecting), {
+      threshold: 0.5,
+    }).observe(root);
+  }
+</script>
+
+<style>
+  .process-cards {
+    --open-grow: 3.2;
+    --countdown: 6s;
+    display: flex;
+    gap: var(--space-sm);
+    height: min(38rem, 80vh);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .process-card {
+    position: relative;
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 0.15);
+    border-radius: var(--radius-lg);
+    background-color: rgb(0 4 7 / 0.35);
+    transition:
+      flex-grow 800ms var(--ease-out),
+      background-color var(--transition-fast);
+  }
+
+  .process-card.is-active {
+    flex-grow: var(--open-grow);
+  }
+
+  @media (hover: hover) {
+    .process-card:not(.is-active):hover {
+      background-color: rgb(0 4 7 / 0.6);
+    }
+  }
+
+  /* The photo wipes open from the top left corner */
+  .process-card__media {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 100% 100% 0);
+    transition: clip-path 800ms var(--ease-out);
+  }
+
+  .process-card.is-active .process-card__media {
+    clip-path: inset(0);
+  }
+
+  .process-card__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .process-card__panel {
+    position: relative;
+    padding: var(--space-md);
+  }
+
+  .process-card.is-active .process-card__panel {
+    width: min(26rem, 100%);
+    border-top-right-radius: var(--radius-lg);
+    background-color: rgb(0 4 7 / 0.88);
+    backdrop-filter: blur(12px);
+  }
+
+  .process-card__head {
+    margin: 0;
+    font-size: inherit;
+  }
+
+  /* The whole card is the button's hit area */
+  .process-card__toggle {
+    display: flex;
+    gap: var(--space-sm);
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  /* Too narrow for a row: the number sits above the title */
+  .process-card:not(.is-active) .process-card__toggle {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  .process-card:not(.is-active) .process-card__toggle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .process-card__toggle:focus-visible {
+    outline: none;
+  }
+
+  .process-card:has(.process-card__toggle:focus-visible) {
+    outline: var(--focus-ring-width) solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .process-card__title {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h5);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-snug);
+    transition: font-size 500ms var(--ease-out);
+  }
+
+  .process-card.is-active .process-card__title {
+    font-size: var(--font-size-h3);
+  }
+
+  .process-card__timer {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .process-card:not(.is-active) .process-card__timer {
+    justify-items: start;
+    height: auto;
+  }
+
+  .process-card__number {
+    font-family: var(--font-display);
+    font-size: var(--font-size-md);
+  }
+
+  .process-card__ring {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+    opacity: 0;
+    transform: rotate(-90deg);
+  }
+
+  .process-card.is-active .process-card__ring {
+    opacity: 1;
+  }
+
+  .process-card__ring circle {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+
+  .process-card__track {
+    opacity: 0.25;
+  }
+
+  .process-card__bar {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+  }
+
+  .process-card__copy {
+    margin-top: var(--space-sm);
+    color: var(--color-text-muted);
+  }
+
+  .process-card__copy p {
+    margin: 0;
+  }
+
+  .process-card__copy .process-card__tagline {
+    margin-bottom: var(--space-2xs);
+    color: var(--accent);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* The countdown: paused off screen and while a visitor hovers or is using
+   * the keyboard in the row, gone once they pick a card. Wide screens only:
+   * stacked, the cards changing height would move the page under the reader. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 978px) {
+    .process-cards:not(.is-stopped) .process-card.is-active .process-card__bar {
+      animation: process-countdown var(--countdown) linear forwards paused;
+    }
+
+    .process-cards.is-running:not(:hover, :focus-within) .process-card.is-active .process-card__bar {
+      animation-play-state: running;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .process-card__copy:not([hidden]) {
+      animation: process-copy-in 600ms 300ms var(--ease-out) both;
+    }
+  }
+
+  @keyframes process-countdown {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes process-copy-in {
+    from {
+      opacity: 0;
+      transform: translateY(var(--space-xs));
+    }
+  }
+
+  @media (max-width: 977px) {
+    .process-cards {
+      flex-direction: column;
+      height: auto;
+    }
+
+    .process-card {
+      flex: none;
+      min-height: 4.5rem;
+      transition: min-height 800ms var(--ease-out);
+    }
+
+    .process-card.is-active {
+      min-height: min(34rem, 85vh);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process-card,
+    .process-card__media,
+    .process-card__title {
+      transition: none;
+    }
+  }
+</style>
