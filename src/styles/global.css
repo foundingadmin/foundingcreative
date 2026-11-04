@@ -288,6 +288,15 @@ main {
   box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.6);
 }
 
+/* The footer's faint wave under a night veil, as on the live site. It sits on
+ * the whole page-end, so it runs up under the homepage's closing CTA too. */
+.page-end {
+  background:
+    linear-gradient(rgb(0 4 7 / 0.55), var(--color-night) 85%),
+    var(--footer-wave) center top / cover no-repeat,
+    linear-gradient(160deg, var(--color-navy), var(--color-night) 60%);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view(0px)) {
     .page-end {

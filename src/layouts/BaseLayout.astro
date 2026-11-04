@@ -6,6 +6,7 @@ import SEO, { type Article } from '../components/SEO.astro';
 import Analytics from '../components/Analytics.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
 import StickyCta from '../components/StickyCta.astro';
+import footerWave from '../assets/brand/wave-black.svg';
 import { pages, type PageSeo } from '../data/seo';
 import { isAnimated, type LcpImage } from '../lib/images';
 import '../styles/global.css';
@@ -87,7 +88,7 @@ const lcpPreload = lcpImage && (await getImage({ ...lcpImage, format: lcpFormat 
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <div class="page-end">
+    <div class="page-end" style={`--footer-wave: url(${footerWave.src})`}>
       <slot name="page-end" />
       <Footer />
     </div>
