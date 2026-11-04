@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import logo from '../assets/brand/founding-wordmark-white.svg';
-import { mainNav, letsTalkHref, bookMeetingHref } from '../data/navigation';
+import { mainNav, sitelaunch, letsTalkHref, bookMeetingHref } from '../data/navigation';
 
 const current = Astro.url.pathname;
 const isCurrent = (href: string) => (current === href ? 'page' : undefined);
@@ -26,15 +26,41 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
                   <span class="visually-hidden">{item.label} menu</span>
                   <Icon name="chevron-down" size={16} />
                 </button>
-                <ul class="site-nav__menu" id="services-menu" hidden>
-                  {item.children.map((child) => (
-                    <li>
-                      <a href={child.href} aria-current={isCurrent(child.href)}>
-                        {child.label}
+                <div class="site-nav__menu" id="services-menu">
+                  <div class="site-nav__menu-clip">
+                    <div class="container site-nav__menu-inner">
+                      <div class="mega-col">
+                        <p class="mega-col__label">Services</p>
+                        <ul>
+                          {item.children.map((child, i) => (
+                            <li style={`--i: ${i}`}>
+                              <a href={child.href} aria-current={isCurrent(child.href)}>
+                                {child.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div class="mega-col">
+                        <p class="mega-col__label">SiteLaunch websites</p>
+                        <ul>
+                          {sitelaunch.map((link, i) => (
+                            <li style={`--i: ${i + 2}`}>
+                              <a href={link.href} aria-current={isCurrent(link.href)}>
+                                {link.label}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <a class="mega-feature" href="/brandforge/" style="--i: 4">
+                        <span class="mega-feature__label">New for startups</span>
+                        <span class="mega-feature__title">BrandForge</span>
+                        <span class="mega-feature__text">Brand strategy and identity, launch-ready in weeks.</span>
                       </a>
-                    </li>
-                  ))}
-                </ul>
+                    </div>
+                  </div>
+                </div>
               </li>
             ) : (
               <li class="site-nav__item">
@@ -117,11 +143,17 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
     // Opened by hovering: a click pins it open instead of toggling it shut,
     // and only a hover-opened menu closes when the pointer leaves.
     let openedByHover = false;
+    // The desktop dropdown animates open in CSS (keyed off aria-expanded) and
+    // is kept out of reach with `inert` while closed; the mobile accordion
+    // just shows and hides.
+    const isDropdown = item.dataset.disclosure === 'dropdown';
     const setOpen = (open: boolean) => {
       button.setAttribute('aria-expanded', String(open));
-      panel.hidden = !open;
+      if (isDropdown) panel.inert = !open;
+      else panel.hidden = !open;
       if (!open) openedByHover = false;
     };
+    if (isDropdown) panel.inert = true;
 
     button.addEventListener('click', () => {
       if (openedByHover) openedByHover = false;
@@ -261,35 +293,131 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
     transform: rotate(180deg);
   }
 
+  /* Services: a full-width panel that grows open under the header, after
+   * Apple's product nav (skiper75). The header is its containing block. */
+  .site-nav__item--parent {
+    position: static;
+  }
+
   .site-nav__menu {
     position: absolute;
     top: 100%;
-    left: calc(-1 * var(--space-md));
-    min-width: 14rem;
-    margin: var(--space-2xs) 0 0;
-    padding: var(--space-2xs) 0;
-    list-style: none;
-    border-radius: var(--radius-sm);
-    background-color: var(--color-white);
-    box-shadow: 0 12px 32px rgb(0 0 0 / 0.35);
+    right: 0;
+    left: 0;
+    display: grid;
+    grid-template-rows: 0fr;
+    border-bottom: 1px solid transparent;
+    background-color: rgb(0 4 7 / 0.97);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      grid-template-rows 450ms var(--ease-out),
+      opacity 300ms var(--ease-out),
+      visibility 0s linear 450ms;
   }
 
-  .site-nav__menu a {
-    display: block;
-    padding: var(--space-2xs) var(--space-md);
-    color: var(--color-black);
-    font-size: var(--font-size-sm);
+  .site-nav__toggle[aria-expanded='true'] + .site-nav__menu {
+    grid-template-rows: 1fr;
+    border-bottom-color: var(--color-border);
+    opacity: 1;
+    visibility: visible;
+    transition:
+      grid-template-rows 450ms var(--ease-out),
+      opacity 300ms var(--ease-out),
+      visibility 0s;
+  }
+
+  .site-nav__menu-clip {
+    overflow: hidden;
+  }
+
+  .site-nav__menu-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr minmax(16rem, 1.2fr);
+    gap: var(--space-xl);
+    padding-block: var(--space-lg) var(--space-xl);
+  }
+
+  .mega-col__label,
+  .mega-feature__label {
+    margin: 0 0 var(--space-sm);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .mega-col ul {
+    display: grid;
+    gap: var(--space-3xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mega-col a {
+    display: inline-block;
+    padding-block: var(--space-3xs);
+    color: var(--color-text);
+    font-size: var(--font-size-lg);
     text-decoration: none;
   }
 
-  .site-nav__menu a:hover,
-  .site-nav__menu a[aria-current='page'] {
-    background-color: var(--color-mint-lighter);
-    color: var(--color-black);
+  .mega-col a:hover,
+  .mega-col a[aria-current='page'] {
+    color: var(--color-mint);
   }
 
-  .site-nav__menu a:focus-visible {
-    outline-offset: -2px;
+  .mega-feature {
+    display: grid;
+    align-content: end;
+    padding: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, var(--color-forge-teal), var(--color-night));
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .mega-feature__title {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+  }
+
+  .mega-feature__text {
+    color: var(--color-text-muted);
+  }
+
+  .mega-feature:hover {
+    border-color: var(--color-forge-cyan);
+  }
+
+  /* Links settle in one after another as the panel opens */
+  .mega-col li,
+  .mega-feature {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 300ms var(--ease-out);
+  }
+
+  .site-nav__toggle[aria-expanded='true'] + .site-nav__menu :is(.mega-col li, .mega-feature) {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(120ms + var(--i, 0) * 35ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-nav__menu,
+    .site-nav__toggle[aria-expanded='true'] + .site-nav__menu,
+    .mega-col li,
+    .mega-feature {
+      transition: none;
+    }
   }
 
   .site-header__cta {

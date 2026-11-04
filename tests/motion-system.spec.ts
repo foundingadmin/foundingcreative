@@ -135,3 +135,33 @@ test('selecting text in a post offers to share it', async ({ page }) => {
   await page.waitForTimeout(400);
   await expect(tip).toBeHidden();
 });
+
+test('case study hero carries the project facts', async ({ page }) => {
+  await page.goto('/case-study/turntide-website/');
+  const facts = page.locator('.case-hero .case-facts');
+  await expect(facts.locator('dt')).toHaveText(['Client', 'Services', 'Sector']);
+  await expect(facts.locator('dd').first()).toHaveText('Turntide');
+});
+
+test('Services panel opens full width with services, SiteLaunch and BrandForge', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const toggle = page.getByRole('navigation', { name: 'Main' }).getByRole('button', { name: 'Services menu' });
+  const panel = page.locator('#services-menu');
+  await expect(panel.getByRole('link', { name: 'Rocket SiteLaunch' })).toBeHidden();
+  await toggle.click();
+  await expect(panel.getByRole('link', { name: 'Rocket SiteLaunch' })).toBeVisible();
+  await expect(panel.getByRole('link', { name: /BrandForge/ })).toHaveAttribute('href', '/brandforge/');
+  const box = await panel.boundingBox();
+  expect(box!.width).toBeGreaterThan(1400);
+});
+
+test('FAQ accordions open and close with the keyboard', async ({ page }) => {
+  await page.goto('/buckit/');
+  const first = page.locator('.faq-item').first();
+  await first.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(first).toHaveAttribute('open', '');
+  await page.keyboard.press('Enter');
+  await expect(first).not.toHaveAttribute('open', '');
+});

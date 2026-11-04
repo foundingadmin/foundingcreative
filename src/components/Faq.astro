@@ -1,0 +1,139 @@
+---
+// FAQ accordion, after skiper-ui's "Bouncy accordion" (skiper103): separate
+// rounded items with gaps between them, a glassy plus icon that turns into a
+// cross, and answers that ease open with a slight spring. Native
+// <details>/<summary>, so it works with keyboard and without JavaScript; the
+// open/close animation uses ::details-content where the browser supports it.
+// The page renders the heading and its own FAQPage structured data.
+
+interface Props {
+  items: { q: string; a: string }[];
+  /** The band it sits on. */
+  tone?: 'light' | 'dark';
+}
+
+const { items, tone = 'dark' } = Astro.props;
+---
+
+<div class:list={['faq-list', `faq-list--${tone}`]}>
+  {
+    items.map((item) => (
+      <details class="faq-item">
+        <summary>
+          <span class="faq-item__question">{item.q}</span>
+          <span class="faq-item__icon" aria-hidden="true" />
+        </summary>
+        <p class="faq-item__answer">{item.a}</p>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq-list {
+    --faq-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+    display: grid;
+    gap: var(--space-xs);
+    interpolate-size: allow-keywords;
+  }
+
+  .faq-item {
+    border: 1px solid var(--faq-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--faq-fill);
+    transition: border-color var(--transition-fast);
+  }
+
+  .faq-list--dark {
+    --faq-border: var(--color-border);
+    --faq-fill: rgb(255 255 255 / 0.04);
+    --faq-muted: var(--color-text-muted);
+    --faq-icon: var(--color-glass);
+  }
+
+  .faq-list--light {
+    --faq-border: rgb(0 4 7 / 0.12);
+    --faq-fill: rgb(0 4 7 / 0.03);
+    --faq-muted: rgb(0 4 7 / 0.75);
+    --faq-icon: rgb(0 4 7 / 0.06);
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-mint-dark);
+  }
+
+  .faq-item summary {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-lg);
+    font-weight: var(--font-weight-semibold);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Glassy round icon: a plus that turns into a cross */
+  .faq-item__icon {
+    position: relative;
+    flex: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--faq-border);
+    border-radius: 50%;
+    background-color: var(--faq-icon);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    transition: transform 450ms var(--faq-spring);
+  }
+
+  .faq-item__icon::before,
+  .faq-item__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.8rem;
+    height: 1.5px;
+    margin: -0.75px 0 0 -0.4rem;
+    background-color: currentColor;
+  }
+
+  .faq-item__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .faq-item[open] .faq-item__icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-item__answer {
+    margin: 0;
+    padding: 0 var(--space-lg) var(--space-md);
+    color: var(--faq-muted);
+  }
+
+  /* Ease open where ::details-content is supported; otherwise it just opens */
+  .faq-item::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 450ms var(--faq-spring),
+      content-visibility 450ms allow-discrete;
+  }
+
+  .faq-item[open]::details-content {
+    block-size: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-item__icon,
+    .faq-item::details-content {
+      transition: none;
+    }
+  }
+</style>
