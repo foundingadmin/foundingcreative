@@ -329,6 +329,18 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
       visibility 0s;
   }
 
+  /* The menu hangs from the header's bottom edge, a gap below "Services".
+   * This invisible strip fills the gap, so the pointer stays inside the item
+   * on its way down and a hover-opened menu doesn't close under it. */
+  .site-nav__menu::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    left: 0;
+    height: 1.25rem;
+  }
+
   .site-nav__menu-clip {
     overflow: hidden;
   }
