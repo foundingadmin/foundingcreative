@@ -171,3 +171,22 @@ test('case studies follow challenge, approach, what we built, and link onward', 
     await expect(page.locator('.case-next__title a')).toHaveAttribute('href', /^\/case-study\/[a-z-]+\/$/);
   }
 });
+
+test('case studies filter by type, from the URL or a homepage tag', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('.selected-works__tags').first().getByRole('link', { name: /^Website/ }).click();
+  await expect(page).toHaveURL(/\/case-studies\/\?type=website$/);
+
+  const filter = page.getByRole('group', { name: 'Filter by project type' });
+  const cards = page.getByRole('main').getByRole('article');
+  await expect(filter.getByRole('button', { name: /^Website/ })).toHaveAttribute('aria-pressed', 'true');
+  await expect(cards).toHaveCount(3);
+
+  await filter.getByRole('button', { name: /^Interactive/ }).click();
+  await expect(page).toHaveURL(/\?type=interactive$/);
+  await expect(cards.filter({ hasText: 'Aprilaire' })).toBeVisible();
+
+  await filter.getByRole('button', { name: /^All/ }).click();
+  await expect(page).toHaveURL(/\/case-studies\/$/);
+  await expect(cards).toHaveCount(10);
+});

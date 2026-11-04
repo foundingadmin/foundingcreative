@@ -9,7 +9,7 @@ headline: "Aprilaire Interactive Product Selector"
 subheadline: "Customers input their location and get a product recommendation"
 clients: ["AprilAire"]
 sectors: ["Wellness"]
-services: []
+services: ["Interactive"]
 date: 2025-07-22
 cover: "./cover.jpg"
 coverAlt: "Woman standing with Aprilaire app on tablet"
