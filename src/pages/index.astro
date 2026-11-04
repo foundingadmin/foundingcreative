@@ -39,11 +39,13 @@ import design3 from '../assets/home/services/design-3.webp';
 import design4 from '../assets/home/services/design-4.webp';
 import design5 from '../assets/home/services/design-5.webp';
 
-// The three services.
+// The three services, in the order the pinned "We design / develop / build"
+// line cycles through them.
 const services = [
   {
     icon: 'pen-tool',
     title: 'We design everything',
+    word: 'design',
     lead: 'Design systems that ensure your brand consistently shines across all platforms.',
     text: 'From pitch decks to packaging, we deliver quality design consistently across every single one of your channels.',
     href: '/services/design-services/',
@@ -60,6 +62,7 @@ const services = [
   {
     icon: 'globe',
     title: 'We develop websites',
+    word: 'develop',
     lead: 'No two sites should be the same because no two businesses are.',
     text: 'Our SiteLaunch system has three unique entry points, each tailored to unique business goals and growth stages.',
     href: '/services/website-services/',
@@ -76,6 +79,7 @@ const services = [
   {
     icon: 'flag',
     title: 'We build brands',
+    word: 'build',
     lead: 'Brand identities built to last through clear, scalable creative foundations.',
     text: 'From brand strategy and copy to logo systems and style guides, we create the foundations that help brands grow with confidence.',
     href: '/services/branding-services/',
@@ -93,6 +97,10 @@ const services = [
 
 // First-screen proof: one 2025 number and a few recognizable clients. Each
 // logo gets the same visual area, so wide wordmarks don't dwarf compact marks.
+// Gallery tiles are 244x320 and crop landscape photos to fill the height,
+// so the file needs to be as wide as the photo shows at that height.
+const coverSizes = (img: ImageMetadata) => `${Math.ceil(Math.max(244, 320 * (img.width / img.height)))}px`;
+
 const LOGO_AREA = 3200; // px²
 const logoHeight = (logo: ImageMetadata) => Math.round(Math.sqrt(LOGO_AREA / (logo.width / logo.height)));
 const heroClients = [
@@ -200,9 +208,22 @@ const values = [
         </p>
       </div>
 
+      <!-- Pinned line: the verb swaps as each service passes the middle of the
+           screen (script below). Decorative; each service's H3 says the same. -->
+      <p class="cycler" aria-hidden="true" data-cycler>
+        <span class="cycler__we">We</span>
+        <span class="cycler__words">
+          {
+            services.map((service, i) => (
+              <span class:list={['cycler__word', { 'is-active': i === 0 }]}>{service.word}</span>
+            ))
+          }
+        </span>
+      </p>
+
       {
         services.map((service, i) => (
-          <article class="service" aria-labelledby={`service-${i}`} data-reveal>
+          <article class="service" aria-labelledby={`service-${i}`} data-reveal data-cycler-step={i}>
             <div class="service__text">
               <div>
                 <span class="service__icon">
@@ -225,7 +246,12 @@ const values = [
               <Carousel id={`service-${i}-work`} label={`${service.title}: example work`} class="service__gallery">
                 {service.images.map((image) => (
                   <li>
-                    <Img src={image.src} alt={image.alt} widths={[300, 600]} sizes="244px" />
+                    <Img
+                      src={image.src}
+                      alt={image.alt}
+                      widths={[400, 600, 800, 1200].filter((w) => w <= image.src.width)}
+                      sizes={coverSizes(image.src)}
+                    />
                   </li>
                 ))}
               </Carousel>
@@ -495,6 +521,59 @@ const values = [
 
   .home-forge__cta {
     margin-top: var(--space-xl);
+  }
+
+  /* "We design / We develop / We build": pinned under the header while the
+   * services scroll beneath it; the verb blurs and scales between states. */
+  .cycler {
+    position: sticky;
+    top: var(--header-height);
+    z-index: 1;
+    display: flex;
+    gap: 0.25em;
+    margin: 0;
+    padding-block: var(--space-md) var(--space-lg);
+    background: linear-gradient(var(--color-night) 75%, transparent);
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 1.5rem + 4vw, 6rem);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--tracking-display);
+    line-height: 1;
+  }
+
+  .cycler__words {
+    display: grid;
+  }
+
+  .cycler__word {
+    grid-area: 1 / 1;
+    color: var(--color-mint);
+    opacity: 0;
+    filter: blur(12px);
+    transform: scale(0.92);
+    transform-origin: left center;
+    transition:
+      opacity 500ms var(--ease-out),
+      filter 500ms var(--ease-out),
+      transform 500ms var(--ease-out);
+  }
+
+  .cycler__word.is-active {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cycler__word {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 977px) {
+    .cycler {
+      display: none;
+    }
   }
 
   .service {
@@ -859,3 +938,22 @@ const values = [
     }
   }
 </style>
+
+<script>
+  // Swap the pinned verb to whichever service is crossing the middle of the screen.
+  const cycler = document.querySelector('[data-cycler]');
+  if (cycler) {
+    const words = [...cycler.querySelectorAll('.cycler__word')];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const active = Number((entry.target as HTMLElement).dataset.cyclerStep);
+          words.forEach((word, i) => word.classList.toggle('is-active', i === active));
+        }
+      },
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    document.querySelectorAll('[data-cycler-step]').forEach((step) => observer.observe(step));
+  }
+</script>

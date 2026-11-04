@@ -59,12 +59,19 @@ test('scroll reveals only ever slide up', async ({ page }) => {
   }
 });
 
-test('home services scroll freely: nothing pinned, and no SiteLaunch band', async ({ page }) => {
+test('home services pin "We design / develop / build" and swap the verb on scroll', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('[data-cycler]')).toHaveCount(0);
-  for (const word of ['design', 'develop', 'build']) {
-    await expect(page.locator('#services').getByRole('heading', { level: 3, name: new RegExp(`^We ${word}`) })).toBeVisible();
+  const active = page.locator('[data-cycler] .cycler__word.is-active');
+  const steps = page.locator('[data-cycler-step]');
+  for (const [i, word] of ['design', 'develop', 'build'].entries()) {
+    await steps.nth(i).evaluate((el) => el.scrollIntoView({ block: 'center' }));
+    await expect(active).toHaveText(word);
+    await expect(steps.nth(i).getByRole('heading', { level: 3 })).toContainText(`We ${word}`);
   }
+});
+
+test('the We build websites band stays off Home', async ({ page }) => {
+  await page.goto('/');
   await expect(page.getByRole('heading', { name: 'We build websites' })).toHaveCount(0);
 });
 
