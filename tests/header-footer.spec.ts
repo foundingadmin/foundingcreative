@@ -31,7 +31,8 @@ test.describe('desktop header', () => {
     const services = page.getByRole('navigation', { name: 'Main' }).getByRole('button', { name: 'Services menu' });
     await services.click();
     await expect(services).toHaveAttribute('aria-expanded', 'true');
-    await page.locator('main').click({ position: { x: 5, y: 5 } });
+    // Below the full-width panel, which covers the top of the page while open.
+    await page.locator('main').click({ position: { x: 5, y: 700 } });
     await expect(services).toHaveAttribute('aria-expanded', 'false');
   });
 

@@ -74,10 +74,11 @@ const themeStyle = [
   .filter(Boolean)
   .join('; ');
 const nextStyle = `--next-accent: ${nextTheme.accent}; --next-dark: ${nextTheme.dark};`;
+// The project at a glance, along the bottom of the hero (after thebranx.com).
 const facts = [
   { label: 'Client', value: data.clients.join(', ') },
-  { label: 'Sector', value: data.sectors.join(', ') },
   { label: 'Services', value: data.services.join(', ') },
+  { label: 'Sector', value: data.sectors.join(', ') },
 ].filter((fact) => fact.value);
 
 const url = new URL(caseStudyUrl(study), Astro.site).href;
@@ -112,6 +113,8 @@ const jsonLd = [
 >
   <article style={themeStyle}>
     <!-- Hero: the live page's shifting gradient in the study's colors -->
+    <!-- Hero, after clay.global: a band in the client's colors with the
+         headline set large and left, and the project facts along the bottom -->
     <header class="case-hero under-header">
       <div class="container case-hero__text" data-intro>
         <nav aria-label="Breadcrumb" class="case-hero__breadcrumb">
@@ -120,6 +123,18 @@ const jsonLd = [
         <p class="case-hero__eyebrow">{data.eyebrow}</p>
         <h1 class="case-hero__title">{data.headline}</h1>
         <p class="case-hero__subtitle">{data.subheadline}</p>
+        {
+          facts.length > 0 && (
+            <dl class="case-facts">
+              {facts.map((fact) => (
+                <div>
+                  <dt>{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )
+        }
       </div>
     </header>
 
@@ -138,18 +153,6 @@ const jsonLd = [
           />
           {data.logo && <Img class="case-cover__logo" src={data.logo} alt={data.logoAlt ?? ''} height={96} />}
         </figure>
-        {
-          facts.length > 0 && (
-            <dl class="case-facts">
-              {facts.map((fact) => (
-                <div>
-                  <dt>{fact.label}</dt>
-                  <dd>{fact.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )
-        }
       </div>
     </div>
 
@@ -256,22 +259,21 @@ const jsonLd = [
   /* Hero */
   .case-hero {
     position: relative;
-    padding-block: calc(var(--header-height) + 5rem) calc(var(--cover-lift) + 4rem);
-    background: linear-gradient(-45deg, var(--color-black), var(--case-accent), var(--case-dark)) 0% 50% / 400% 400%;
-    animation: case-gradient 7s ease infinite;
-  }
-
-  @keyframes case-gradient {
-    50% {
-      background-position: 100% 50%;
-    }
+    padding-block: calc(var(--header-height) + 5rem) calc(var(--cover-lift) + 3rem);
+    /* The accent is mixed toward the study's dark so white type keeps AA
+     * contrast even on bright accents (Innovation Forum's orange). */
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--case-accent) 60%, var(--case-dark)),
+      var(--case-dark) 70%,
+      var(--color-black)
+    );
   }
 
   .case-hero__text {
     display: grid;
-    justify-items: center;
+    justify-items: start;
     gap: var(--space-sm);
-    text-align: center;
   }
 
   .case-hero__breadcrumb a {
@@ -293,10 +295,11 @@ const jsonLd = [
   }
 
   .case-hero__title {
-    max-width: 14em;
+    max-width: 16ch;
     margin: 0;
+    font-size: clamp(2.75rem, 1.5rem + 4vw, 5.5rem);
     font-weight: var(--font-weight-regular);
-    text-shadow: var(--text-glow);
+    line-height: 1.05;
   }
 
   .case-hero__subtitle {
@@ -494,24 +497,29 @@ const jsonLd = [
     color: var(--color-night);
   }
 
+  /* Facts along the bottom of the hero: hairline-divided cells */
   .case-facts {
     display: flex;
     flex-wrap: wrap;
-    margin: var(--space-lg) 0 0;
-    border-block: 1px solid color-mix(in srgb, var(--case-dark) 20%, transparent);
-    color: var(--case-dark);
+    justify-self: stretch;
+    margin: var(--space-xl) 0 0;
+    border-top: 1px solid rgb(255 255 255 / 0.25);
+    color: var(--color-white);
   }
 
   .case-facts div {
-    display: flex;
-    flex: 1 1 12rem;
-    gap: var(--space-xs);
-    align-items: baseline;
-    padding: var(--space-sm) var(--space-md);
+    display: grid;
+    flex: 1 1 10rem;
+    gap: var(--space-3xs);
+    padding: var(--space-sm) var(--space-md) 0;
+  }
+
+  .case-facts div:first-child {
+    padding-left: 0;
   }
 
   .case-facts div + div {
-    border-left: 1px solid color-mix(in srgb, var(--case-dark) 20%, transparent);
+    border-left: 1px solid rgb(255 255 255 / 0.25);
   }
 
   .case-facts dt {
@@ -519,12 +527,21 @@ const jsonLd = [
     font-size: 0.85rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    opacity: 0.75;
+    opacity: 0.8;
   }
 
   .case-facts dd {
     margin: 0;
     font-weight: var(--font-weight-semibold);
+  }
+
+  @media (max-width: 599px) {
+    .case-facts div,
+    .case-facts div + div {
+      flex-basis: 45%;
+      padding-left: 0;
+      border-left: 0;
+    }
   }
 
   /* ===== The story: bands built by src/lib/case-study-bands.mjs ===== */

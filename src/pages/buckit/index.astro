@@ -6,6 +6,7 @@ import Icon from '../../components/Icon.astro';
 import logo from '../../assets/pages/buckit-logo-white.svg';
 import interfaceArt from '../../assets/pages/buckit-interface-illustration.svg';
 import { pages } from '../../data/seo';
+import Faq from '../../components/Faq.astro';
 
 const collaboration = [
   {
@@ -220,14 +221,7 @@ const jsonLd = [
 
   <section class="container section faq" aria-labelledby="faq-heading">
     <h2 id="faq-heading">FAQs</h2>
-    {
-      faqs.map((faq) => (
-        <details>
-          <summary>{faq.q}</summary>
-          <p>{faq.a}</p>
-        </details>
-      ))
-    }
+    <Faq items={faqs} />
   </section>
 
   <CtaSection
@@ -327,21 +321,4 @@ const jsonLd = [
     max-width: calc(48rem + 2 * var(--container-gutter));
   }
 
-  .faq details {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .faq summary {
-    padding-block: var(--space-sm);
-    font-weight: var(--font-weight-semibold);
-    cursor: pointer;
-  }
-
-  .faq summary::marker {
-    color: var(--color-mint);
-  }
-
-  .faq details p {
-    color: var(--color-text-muted);
-  }
 </style>
