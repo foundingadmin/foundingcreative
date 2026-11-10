@@ -18,10 +18,10 @@
     "inventory:accept": "node scripts/accept-inventory.mjs"
   },
   "dependencies": {
-    "@astrojs/markdown-satteri": "^0.4.5",
+    "@astrojs/markdown-satteri": "^0.4.7",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
-    "astro": "^7.4.2"
+    "astro": "^7.4.7"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
