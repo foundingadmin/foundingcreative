@@ -74,7 +74,7 @@ What we built
 5. User approves pairing
 6. Users device emits a unique ultrasonic sound wave signature
 7. Audio signature is recognized by the ATM and illuminates
-8. Encrytped user data transfersto ATM via sound waves
+8. Encrypted user data transfers to ATM via sound waves
 9. Users device and ATM both “chirp” to confirm ready to use.
 10. User completes desired transaction on their device
 11. ATM responds to user request, e.g. dispenses cash

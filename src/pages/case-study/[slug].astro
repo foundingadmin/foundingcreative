@@ -12,11 +12,13 @@ import { entrySeo } from '../../data/seo';
 
 export async function getStaticPaths() {
   const studies = await getCaseStudies();
-  // Each study links on to the next one, wrapping around at the end.
-  return studies.map((study, i) => ({
-    params: { slug: study.id },
-    props: { study, next: studies[(i + 1) % studies.length] },
-  }));
+  // Each study links on to the next one, wrapping around at the end, unless
+  // it names its own (two studies of one client point at each other).
+  return studies.map((study, i) => {
+    const named = study.data.next && studies.find((other) => other.id === study.data.next);
+    if (study.data.next && !named) throw new Error(`${study.id}: no case study "${study.data.next}" for next`);
+    return { params: { slug: study.id }, props: { study, next: named || studies[(i + 1) % studies.length] } };
+  });
 }
 
 interface Props {
@@ -93,7 +95,12 @@ const jsonLd = [
     author: { '@id': `${Astro.site}#organization` },
     publisher: { '@id': `${Astro.site}#organization` },
     mainEntityOfPage: url,
-    about: data.clients.map((name) => ({ '@type': 'Organization', name })),
+    ...(data.created && { dateCreated: data.created }),
+    about: data.clients.map((name) => ({
+      '@type': 'Organization',
+      name,
+      ...(data.clientUrl && data.clients.length === 1 && { url: data.clientUrl }),
+    })),
     keywords: [...data.services, ...data.sectors].join(', '),
   },
 ];
@@ -979,6 +986,46 @@ const jsonLd = [
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  /* A full-length page capture in a short window. It pans from top to
+   * bottom as the window crosses the screen; without scroll timelines (or
+   * with reduced motion) it shows the top of the page. */
+  .case-story :global(.case-scroll) {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--case-dark) 15%, transparent);
+    border-radius: var(--radius-card);
+    box-shadow: 0 30px 60px rgb(0 0 0 / 0.15);
+  }
+
+  .case-story :global(.case-scroll p) {
+    height: 100%;
+    margin: 0;
+  }
+
+  .case-story :global(.case-scroll img) {
+    display: block;
+    height: 100%;
+    border-radius: 0;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .case-story :global(.case-scroll img) {
+        animation: case-scroll-pan linear both;
+        animation-timeline: view();
+        animation-range: entry 80% exit 20%;
+      }
+    }
+  }
+
+  @keyframes case-scroll-pan {
+    to {
+      object-position: bottom;
+    }
   }
 
   /* Light line art made for dark backgrounds */

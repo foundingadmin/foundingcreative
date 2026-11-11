@@ -77,7 +77,7 @@ test('cover cards rise over the curve so its dip tucks under them', async ({ pag
 
 test('case studies index and a case study page', async ({ page }) => {
   await page.goto('/case-studies/');
-  await expect(page.getByRole('main').getByRole('article')).toHaveCount(10);
+  await expect(page.getByRole('main').getByRole('article')).toHaveCount(12);
 
   await page.goto('/case-study/bank-apps/');
   const main = page.getByRole('main');
@@ -179,7 +179,7 @@ test('case studies filter by type, from the URL', async ({ page }) => {
   const filter = page.getByRole('group', { name: 'Filter by project type' });
   const cards = page.getByRole('main').getByRole('article');
   await expect(filter.getByRole('button', { name: /^Website/ })).toHaveAttribute('aria-pressed', 'true');
-  await expect(cards).toHaveCount(3);
+  await expect(cards).toHaveCount(4);
 
   await filter.getByRole('button', { name: /^Interactive/ }).click();
   await expect(page).toHaveURL(/\?type=interactive$/);
@@ -187,5 +187,16 @@ test('case studies filter by type, from the URL', async ({ page }) => {
 
   await filter.getByRole('button', { name: /^All/ }).click();
   await expect(page).toHaveURL(/\/case-studies\/$/);
-  await expect(cards).toHaveCount(10);
+  await expect(cards).toHaveCount(12);
+});
+
+test('two case studies for one client link to each other, and process steps keep their words together', async ({ page }) => {
+  await page.goto('/case-study/82-south-brand/');
+  await expect(page.locator('.case-next__title a')).toHaveAttribute('href', '/case-study/82-south-website/');
+  // Bold and plain text share one grid cell beside the step number.
+  await expect(page.locator('.case-story ol > li').first().locator('> *')).toHaveCount(1);
+
+  await page.goto('/case-study/82-south-website/');
+  await expect(page.locator('.case-next__title a')).toHaveAttribute('href', '/case-study/82-south-brand/');
+  await expect(page.locator('.case-quote')).toContainText('Trust the process!');
 });

@@ -171,5 +171,5 @@ test('case studies are laid out in colored bands', async ({ page }) => {
     await expect(box.locator('img')).toHaveCount(1);
   }
   // The other case studies follow, not this one.
-  await expect(page.locator('#work-slider > li')).toHaveCount(9);
+  await expect(page.locator('#work-slider > li')).toHaveCount(11);
 });
