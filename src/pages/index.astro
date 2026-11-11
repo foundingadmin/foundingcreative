@@ -2,7 +2,6 @@
 import Img from '../components/Img.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClientLogos from '../components/ClientLogos.astro';
-import StatCards from '../components/StatCards.astro';
 import Testimonials from '../components/Testimonials.astro';
 import CaseStudyCard from '../components/CaseStudyCard.astro';
 import Carousel from '../components/Carousel.astro';
@@ -47,14 +46,6 @@ const services = [
     tags: ['Event branding', 'Trade show exhibits', 'Signage and wayfinding', 'Presentations', 'Post-event content'],
     studies: pick(['innovation-forum-event', 'bank-apps', 'interactive-learning-mural', 'genpact-grow-event']),
   },
-];
-
-// 2025 in numbers, above the testimonials.
-const yearStats = [
-  { value: '28', label: 'clients' },
-  { value: '800+', label: 'tasks delivered' },
-  { value: '3,000+', label: 'hours of creative' },
-  { value: '73%', label: 'of proposals won' },
 ];
 
 const trustpilot = 'https://www.trustpilot.com/review/foundingcreative.com';
@@ -134,7 +125,7 @@ const values = [
               <Carousel id={`service-${i}-work`} label={`${service.title}: case studies`} class="service__gallery">
                 {service.studies.map((study) => (
                   <li>
-                    <CaseStudyCard study={study} headingLevel={4} />
+                    <CaseStudyCard study={study} headingLevel={4} tags={false} />
                   </li>
                 ))}
               </Carousel>
@@ -152,10 +143,6 @@ const values = [
         <p class="eyebrow">Partner <em>testimonials</em></p>
         <h2 id="testimonials-heading">Proof is better than a pitch</h2>
         <p class="section__lead">See what it's like to work with a creative team that builds for the long run.</p>
-      </div>
-      <div class="year-stats theme-founding" data-reveal>
-        <p class="year-stats__label">2025 in numbers</p>
-        <StatCards stats={yearStats} />
       </div>
       <ClientLogos />
       <Testimonials />
@@ -398,28 +385,6 @@ const values = [
   /* Testimonials band */
   .testimonials-band {
     background-color: var(--color-coal);
-  }
-
-  .year-stats {
-    margin-bottom: var(--space-xl);
-  }
-
-  .year-stats__label {
-    margin: 0 0 var(--space-sm);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    text-align: center;
-  }
-
-  .year-stats :global(.stats) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media (max-width: 977px) {
-    .year-stats :global(.stats) {
-      grid-template-columns: 1fr 1fr;
-    }
   }
 
   .section__intro--wide {

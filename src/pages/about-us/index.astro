@@ -2,6 +2,7 @@
 import Img from '../../components/Img.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CtaSection from '../../components/CtaSection.astro';
+import StatCards from '../../components/StatCards.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
 import Icon from '../../components/Icon.astro';
 import { team } from '../../data/team';
@@ -46,6 +47,14 @@ const engagements = [
     href: '/contact-us/',
     cta: "Let's talk",
   },
+];
+
+// 2025 in numbers, above the client words.
+const yearStats = [
+  { value: '28', label: 'clients' },
+  { value: '800+', label: 'tasks delivered' },
+  { value: '3,000+', label: 'hours of creative' },
+  { value: '73%', label: 'of proposals won' },
 ];
 
 const { description } = pages['/about-us/'];
@@ -226,6 +235,12 @@ const jsonLd = {
           }
         </ul>
       </div>
+    </section>
+
+    <!-- 2025 in numbers (moved here from the homepage), as light cards -->
+    <section class="container section year-stats" aria-labelledby="year-stats-heading" data-reveal>
+      <h2 id="year-stats-heading" class="year-stats__label">2025 in numbers</h2>
+      <StatCards stats={yearStats} />
     </section>
 
     <!-- Client words, from the old WordPress testimonial pages -->
@@ -624,6 +639,46 @@ const jsonLd = {
 
   .engagement__link:hover .icon {
     transform: translate(2px, -2px);
+  }
+
+  /* ===== 2025 in numbers: the stat cards, relit for white ===== */
+  .year-stats {
+    --accent: var(--color-mint-darker);
+    padding-block: 0;
+  }
+
+  .year-stats__label {
+    margin: 0 0 var(--space-sm);
+    color: var(--color-neutral-dark);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
+    text-align: center;
+  }
+
+  .year-stats :global(.stats) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .year-stats :global(.stat) {
+    border-color: rgb(0 4 7 / 0.12);
+    background-color: rgb(0 4 7 / 0.03);
+    backdrop-filter: none;
+  }
+
+  .year-stats :global(.stat:hover) {
+    border-color: rgb(0 4 7 / 0.3);
+  }
+
+  .year-stats :global(.stat__value) {
+    text-shadow: none;
+  }
+
+  @media (max-width: 977px) {
+    .year-stats :global(.stats) {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   /* Client quotes: a masonry-ish set of cards */

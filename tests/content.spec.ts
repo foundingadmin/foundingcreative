@@ -124,6 +124,9 @@ test('home says what we do up top, without client logos in the hero', async ({ p
   // The coded gradient backdrop, not a video, and no logo row.
   await expect(hero.locator('.backdrop--spectrum')).toHaveCount(1);
   await expect(hero.locator('video, img')).toHaveCount(0);
+  // 2025 in numbers lives on About now.
+  await expect(page.locator('.year-stats')).toHaveCount(0);
+  await page.goto('/about-us/');
   await expect(page.locator('.year-stats .stat__value')).toHaveCount(4);
 });
 

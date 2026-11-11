@@ -10,9 +10,11 @@ import { caseStudyUrl, type CaseStudy } from '../lib/content';
 interface Props {
   study: CaseStudy;
   headingLevel?: 2 | 3 | 4;
+  /** Sector and service tags over the photo. Off where the card already sits under its service. */
+  tags?: boolean;
 }
 
-const { study, headingLevel = 2 } = Astro.props;
+const { study, headingLevel = 2, tags = true } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
 const { data } = study;
 ---
@@ -27,7 +29,7 @@ const { data } = study;
       sizes="(max-width: 700px) 85vw, 360px"
     />
     {
-      data.sectors.length > 0 && (
+      tags && data.sectors.length > 0 && (
         <ul class="case-card__tags" aria-label="Sectors">
           {data.sectors.map((tag) => (
             <li>{tag}</li>
@@ -36,7 +38,7 @@ const { data } = study;
       )
     }
     {
-      data.services.length > 0 && (
+      tags && data.services.length > 0 && (
         <ul class="case-card__tags case-card__tags--services" aria-label="Services">
           {data.services.map((tag) => (
             <li>{tag}</li>
