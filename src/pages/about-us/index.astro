@@ -20,6 +20,34 @@ const values = [
   { title: 'Founding energy', text: 'Every project is a chance for something big' },
 ];
 
+const engagements = [
+  {
+    title: 'Fixed projects',
+    icon: 'target',
+    points: ['Clear scope', 'Defined timelines', 'Focused engagement'],
+    text: 'Straightforward path from idea to launch through clearly defined scopes.',
+    href: '/contact-us/',
+    cta: "Let's talk",
+  },
+  {
+    title: 'Fractional creative',
+    icon: 'layers',
+    featured: true,
+    points: ['Priority access', 'Multiple work streams', 'Sliding scale cost'],
+    text: 'Designed to reduce expenses for teams in need of regular creative support.',
+    href: '/fractional-creative/',
+    cta: 'Learn more',
+  },
+  {
+    title: 'Custom fit',
+    icon: 'puzzle',
+    points: ['Creative ops guidance', 'Adapted to your systems', 'Built around your org'],
+    text: 'Co-create the right structure for your unique goals, constraints, and vision.',
+    href: '/contact-us/',
+    cta: "Let's talk",
+  },
+];
+
 const { description } = pages['/about-us/'];
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -149,6 +177,55 @@ const jsonLd = {
           ))
         }
       </dl>
+    </section>
+
+    <!-- How we work: the three engagement models (moved here from the homepage) -->
+    <section class="engagement-band" aria-labelledby="engagement-heading">
+      <div class="container section">
+        <div class="section__intro section__intro--split">
+          <div>
+            <p class="eyebrow">How we <em>work</em></p>
+            <h2 id="engagement-heading">Built to fit your process</h2>
+            <p class="section__lead">
+              Every team works differently. Which is why we designed our engagement models to match. Whether you need a
+              scoped project, ongoing support, or something totally unique, we'll meet you where you are.
+            </p>
+          </div>
+          <a class="button button--dark" href="/contact-us/">
+            Find the right fit<span class="visually-hidden">: contact us about an engagement</span>
+            <Icon name="arrow-up-right" size={16} />
+          </a>
+        </div>
+        <ul class="engagements" data-reveal-stagger>
+          {
+            engagements.map((model) => (
+              <li class:list={['engagement', { 'engagement--featured': model.featured }]}>
+                <div class="engagement__top">
+                  <span class="engagement__icon">
+                    <Icon name={model.icon as 'target'} size={32} />
+                  </span>
+                  {model.featured && <p class="engagement__badge">Most popular</p>}
+                </div>
+                <h3>{model.title}</h3>
+                <ul class="engagement__points">
+                  {model.points.map((point) => (
+                    <li>
+                      <Icon name="check" size={16} />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+                <p class="engagement__text">{model.text}</p>
+                <a class="engagement__link" href={model.href}>
+                  {model.cta}
+                  <span class="visually-hidden"> about {model.title.toLowerCase()}</span>
+                  <Icon name="arrow-up-right" size={16} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </section>
 
     <!-- Client words, from the old WordPress testimonial pages -->
@@ -424,6 +501,129 @@ const jsonLd = {
     margin-top: var(--space-2xs);
     font-size: var(--font-size-sm);
     opacity: 0.8;
+  }
+
+  /* ===== How we work: three engagement models, as light cards ===== */
+  .engagement-band .section__intro--split .section__lead {
+    margin-inline: 0;
+  }
+
+  .engagements {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--space-xl);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .engagement {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    border: 1px solid rgb(0 4 7 / 0.12);
+    border-radius: var(--radius-lg);
+    background-color: rgb(0 4 7 / 0.03);
+    transition:
+      transform var(--transition-fast),
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
+  }
+
+  .engagement:hover {
+    border-color: rgb(0 4 7 / 0.3);
+    box-shadow: 0 1.5rem 3rem rgb(0 4 7 / 0.12);
+    transform: translateY(-4px);
+  }
+
+  /* The featured model is outlined in ink over a soft mint wash */
+  .engagement--featured {
+    border-color: var(--color-night);
+    background: linear-gradient(160deg, var(--color-mint-pale), var(--color-white) 70%);
+  }
+
+  .engagement__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+  }
+
+  .engagement__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: var(--radius-md);
+    background-color: rgb(0 4 7 / 0.06);
+  }
+
+  .engagement--featured .engagement__icon {
+    background-color: var(--color-white);
+  }
+
+  .engagement__badge {
+    margin: 0;
+    padding: 2px var(--space-xs);
+    border-radius: var(--radius-pill);
+    background: var(--color-night);
+    color: var(--color-white);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .engagement h3 {
+    margin: 0;
+    color: var(--color-night);
+    font-family: var(--font-body);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: normal;
+  }
+
+  .engagement__points {
+    display: grid;
+    gap: var(--space-2xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9rem;
+  }
+
+  .engagement__points li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+  }
+
+  .engagement__text {
+    flex: 1;
+    margin: 0;
+    color: var(--color-neutral-dark);
+    font-size: 0.9rem;
+  }
+
+  .engagement__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin-top: var(--space-md);
+    color: var(--color-night);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+  }
+
+  .engagement__link:hover {
+    color: var(--color-mint-darker);
+  }
+
+  .engagement__link .icon {
+    transition: transform var(--transition-fast);
+  }
+
+  .engagement__link:hover .icon {
+    transform: translate(2px, -2px);
   }
 
   /* Client quotes: a masonry-ish set of cards */
