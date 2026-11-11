@@ -67,13 +67,13 @@ One system, built in the order a brand gets used.
 
 ## A North Star that points South
 
-#### Mission, vision, positioning
+### Mission, vision, positioning
 
 ![82 South Brand Blueprint strategic framework page with the mission, vision, positioning and personality](./strategic-framework.webp)
 
 We wrote three lines the team could repeat anywhere. The vision, "To be the South Star in leading a better kind of partnership," gave the badge its meaning.
 
-#### Six pillars, one funnel
+### Six pillars, one funnel
 
 ![82 South marketing pillar hierarchy, a funnel from sensory enhancing at the top to growth, client care and expertise at the bottom](./pillar-hierarchy.webp)
 
@@ -81,7 +81,7 @@ Sensory enhancing leads at the top. Innovative partnership and bespoke experienc
 
 ## An identity with a sense of direction
 
-#### The badge
+### The badge
 
 ![82 South logo system: horizontal wordmark, vertical wordmark and the badge](./logo-system.webp)
 
@@ -89,13 +89,13 @@ Sensory enhancing leads at the top. Innovative partnership and bespoke experienc
 
 The 82 sits inside a squircle, and a lime arrow below it points south. Rotating the badge is off limits: the arrow has to point the right way.
 
-#### Color built for contrast
+### Color built for contrast
 
 ![82 South color palette swatches: purple, light purple, lime green, white, black and grey](./color-palette.webp)
 
 The palette is purple, light purple, lime green, grey, black and white. Every approved pairing passes AAA contrast, so the brand stays readable on stage screens and in print.
 
-#### Mulish everywhere
+### Mulish everywhere
 
 ![82 South typography page showing Mulish in Regular, Medium, Bold and Black weights](./mulish-weights.webp)
 
@@ -103,7 +103,7 @@ One open-source typeface works across the web, Office and Google, so nobody hunt
 
 ## Ready on day one
 
-#### Toolkits, not just guidelines
+### Toolkits, not just guidelines
 
 Every page of the blueprint links to its source files: logos in PNG and SVG, color guides, patterns, Word letterhead, PowerPoint and InDesign one sheets.
 
@@ -113,11 +113,11 @@ Every page of the blueprint links to its source files: logos in PNG and SVG, col
 
 ![82 South PowerPoint template on a monitor, a laptop and a tablet](./powerpoint.webp)
 
-#### Signatures for the whole team
+### Signatures for the whole team
 
 We converted the email signature design into HTML for all five staff members, then recorded a two-minute install video.
 
-#### Brand activations
+### Brand activations
 
 Twenty-plus art direction mockups show the brand on caps, hoodies, luggage, tumblers, packing tape and a road case that rides with the crew to every show.
 

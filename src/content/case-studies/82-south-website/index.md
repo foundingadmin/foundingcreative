@@ -73,19 +73,19 @@ Built alongside the brand, launched the same month.
 
 </div>
 
-#### Squircles everywhere
+### Squircles everywhere
 
 ![82 South squircle-framed photos of a guest, confetti, stage truss and a camera lens](./squircles.webp)
 
 The badge's rounded shape frames the photography across the site, so even a stock photo feels like 82 South.
 
-#### Headlines that sell the feeling
+### Headlines that sell the feeling
 
 ![82 South homepage hero reading Sensory experiences that go deeper than the event itself](./home.webp)
 
 "Sensory experiences that go deeper than the event itself" moved straight from strategy to the hero.
 
-#### Lime means go
+### Lime means go
 
 ![82 South services page with a lime green Get Started button](./services.webp)
 
@@ -93,13 +93,13 @@ The lime green from the palette is saved for calls to action, so Get Started alw
 
 ## A portfolio that keeps growing
 
-#### Post an event in minutes
+### Post an event in minutes
 
 ![82 South portfolio project page for Duck Creek Formation with client, industry and attendance](./project.webp)
 
 The 82 South team publishes their own projects, from Duck Creek Formation in Orlando to Avalara CRUSH in Austin.
 
-#### Filter by what you need
+### Filter by what you need
 
 ![82 South portfolio page with filters for event, exhibit, media, talent and activation](./portfolio.webp)
 
@@ -111,11 +111,11 @@ Buyers can jump straight to exhibits, activations or media, the way they actuall
 
 ![82 South portfolio page on a phone](./mobile-portfolio.webp)
 
-#### Fast and focused
+### Fast and focused
 
 We skipped plugin bloat. One lightweight SEO tool and GA4 give the team clean data without slowing the site.
 
-#### Owned by the client
+### Owned by the client
 
 Analytics admin access, training videos and a care plan mean the team never waits on us to make a change.
 
