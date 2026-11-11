@@ -49,6 +49,37 @@ process:
       text: Distinct visual directions, each tied back to the strategy, so you choose with reasons, not taste.
     - name: Identity system
       text: The chosen direction built out into a logo system, colors, type, guidelines, and the templates your team uses every day.
+areas:
+  heading: What goes into a brand
+  items:
+    - id: brand-strategy
+      label: Brand strategy
+      what: "Brand strategy is the thinking that comes before any design: who you serve, what you stand for, and why someone should pick you over the alternative."
+      how: "We run stakeholder interviews, a competitor audit, and audience research, then work through positioning and messaging with your team. You leave with a strategy everyone has agreed to before design starts."
+      image:
+        src: ../../assets/services/strategy-room-whiteboard.webp
+        alt: Meeting room with brand strategy notes on a whiteboard wall
+    - id: visual-identity
+      label: Visual identity
+      what: "Your visual identity is everything people see: the logo system, color, typography, imagery, and iconography that make you recognizable at a glance."
+      how: "We develop distinct creative directions, each tied back to the strategy, so you choose with reasons instead of taste. The chosen direction is built out into a full system that holds up on every screen and surface."
+      image:
+        src: ../../assets/services/modl-logo-sketches.webp
+        alt: Hand-drawn MODL infinity logo sketches on graph paper
+    - id: guidelines
+      label: Guidelines
+      what: "Brand guidelines are the single source of truth for how your brand looks and sounds, so nobody on your team has to guess what on-brand means."
+      how: "We document the logo, color, type, and voice rules with real examples, then hand over the templates your team uses every day: decks, social posts, and documents."
+      image:
+        src: ../../assets/services/brand-strategy-book.webp
+        alt: Open brand strategy book with highlighted pages
+    - id: creative-copywriting
+      label: Creative copywriting
+      what: "Creative copywriting gives the brand its voice: the name, the tagline, the key messages, and the words on your site, decks, and campaigns."
+      how: "We define the voice and personality as part of the strategy, then write to it, so everything you publish sounds like the same company."
+      image:
+        src: ../../assets/services/brand-workshop-blue-notes.webp
+        alt: Brand workshop board of blue sticky notes answering where the brand is going
 work:
   heading: Brand identity design in the real world
   intro: Two brands we built from strategy up.

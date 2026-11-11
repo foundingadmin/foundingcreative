@@ -47,6 +47,44 @@ capabilities:
       - Event highlight reels and motion graphics
       - Digital content for follow-up marketing
       - Interactive online platforms for continued engagement
+areas:
+  heading: What goes into an event
+  items:
+    - id: event-branding
+      label: Event branding
+      what: "Event branding gives a conference or meeting its own look: a theme, a name, and a visual system that carries from the invitation to the main stage."
+      how: "We build the event identity out of your brand, then apply it to every touchpoint (stage, screens, badges, print, and digital) so the whole event feels like one experience."
+      image:
+        src: ../../assets/services/genpact-grow-hallway.webp
+        alt: Genpact GROW event hallway with branded walls and signage
+    - id: trade-show-exhibits
+      label: Trade show exhibits
+      what: "Your booth has a few seconds to stop someone walking the floor. Exhibit design makes those seconds count."
+      how: "We design the booth, the graphics, and interactive pieces such as kiosks and games around one clear message, then prepare the files for production."
+      image:
+        src: ../../assets/services/genpact-kiosk-render.webp
+        alt: Genpact branded kiosk render
+    - id: signage-and-wayfinding
+      label: Signage and wayfinding
+      what: "Signage and wayfinding get attendees where they need to be without having to ask, and keep the brand present in every hallway."
+      how: "We plan signs around how people move through the venue, then design them as one family: directional signs, room markers, agendas, and large-format graphics."
+      image:
+        src: ../../assets/services/mastercard-event-signage.webp
+        alt: Mastercard event wayfinding signs for general session, lunch, and breakouts
+    - id: presentations
+      label: Presentations
+      what: "Presentation design turns a speaker's message into slides an audience can follow from the back of the room."
+      how: "We work from your outline to build decks that match the event's look, with clear visuals, consistent templates, and motion where it helps the story."
+      image:
+        src: ../../assets/services/event-presenter-on-stage.webp
+        alt: Audience silhouette facing a presenter on a lit conference stage
+    - id: post-event-content
+      label: Post-event content
+      what: "Post-event content keeps the event working after the doors close: recaps, highlights, and material your team can share with people who weren't there."
+      how: "We plan what to capture before the event, then turn it into content sized for your website, email, and social channels."
+      image:
+        src: ../../assets/services/genpact-event-attendees.webp
+        alt: Attendees with lanyards talking at a Genpact event
 work:
   heading: Crafted Connections
   intro: A look inside the events where strategy, structure, and design all came together to drive meaningful business outcomes.

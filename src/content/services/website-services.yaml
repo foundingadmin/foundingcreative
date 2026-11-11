@@ -54,6 +54,44 @@ process:
       text: A design system and page designs, reviewed as clickable prototypes before anything is built.
     - name: Build and launch
       text: Development, CMS setup, CRM and analytics integrations, QA on every device, then launch and training for your team.
+areas:
+  heading: What goes into a website
+  items:
+    - id: user-journeys
+      label: User journeys
+      what: "A user journey is the path a visitor takes from first click to getting in touch. Mapping it shows what each page has to do, and what can go."
+      how: "We start with who is visiting and what they need to decide, then plan the sitemap and page flow around those questions before any design begins."
+      image:
+        src: ../../assets/services/huckleberry-holler-farmers.webp
+        alt: Two farmers reviewing the Huckleberry Holler website on a laptop
+    - id: design-systems
+      label: Design systems
+      what: "A design system is the set of reusable components, colors, and type styles your site is built from, so every page looks like it belongs."
+      how: "We design the components once, build them in code, and document how to use them. New pages come together quickly and stay consistent as the site grows."
+      image:
+        src: ../../assets/services/phone-mockup-mobile-app.webp
+        alt: Hand holding a phone showing a mobile app asking how much you need
+    - id: content-strategy
+      label: Content strategy
+      what: "Content strategy decides what each page says, in what order, and for whom, so the site answers the questions buyers actually ask."
+      how: "We audit what you have, plan pages around search intent and your sales conversations, and structure the copy so people and search engines can both follow it."
+      image:
+        src: ../../assets/services/sticky-notes-glass-wall.webp
+        alt: Sticky notes from a strategy session on a glass wall
+    - id: custom-dev
+      label: Custom dev
+      what: "Custom development means the site is built for your business instead of bent to fit a template: fast to load, accessible, and easy for your team to update."
+      how: "We build to the approved designs, test on real devices, and set up content management so your team can publish without calling a developer."
+      image:
+        src: ../../assets/services/atl-freight-website-on-laptop.webp
+        alt: ATL Freight worker holding a laptop showing the new website at a truck yard
+    - id: integrations
+      label: Integrations
+      what: "Integrations connect the site to the tools your sales and marketing teams already use, such as your CRM, analytics, forms, and scheduling."
+      how: "We map where each lead and data point needs to go, wire up the connections, and test them end to end before launch."
+      image:
+        src: ../../assets/services/bank-of-america-gateway-kiosk.webp
+        alt: Bank of America service gateway app on a touchscreen kiosk
 work:
   heading: B2B websites we've designed and built
   intro: How strategy-first website design played out for two B2B teams.

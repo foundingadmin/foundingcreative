@@ -7,6 +7,7 @@ import CaseStudyCard from '../components/CaseStudyCard.astro';
 import Carousel from '../components/Carousel.astro';
 import Icon from '../components/Icon.astro';
 import HeroBackdrop from '../components/HeroBackdrop.astro';
+import { getCollection } from 'astro:content';
 import { getCaseStudies } from '../lib/content';
 import { team } from '../data/team';
 
@@ -18,8 +19,14 @@ const pick = (ids: string[]) =>
 // The three services, in the order the pinned "We shape brands / launch
 // websites / support events" line cycles through them. Each shows its case
 // studies two at a time (aim for six per service as more are written).
-// A pill's anchor on its service page: "Brand strategy" is #brand-strategy.
-const slug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+// Each service's pills are the sections ("areas") of its service page, set
+// in src/content/services/*.yaml: the pill links to that section's anchor.
+const servicePages = await getCollection('services');
+const pills = (path: string) =>
+  (servicePages.find((page) => page.data.path === path)?.data.areas?.items ?? []).map((area) => ({
+    label: area.label,
+    href: `${path}#${area.id}`,
+  }));
 
 const services = [
   {
@@ -28,7 +35,7 @@ const services = [
     lead: 'Brand identities built to last through clear, scalable creative foundations.',
     href: '/services/branding-services/',
     cta: 'Branding services',
-    tags: ['Brand strategy', 'Visual identity', 'Guidelines', 'Creative copywriting'],
+    tags: pills('/services/branding-services/'),
     studies: pick(['bell-bird-atm', 'safezone-product-and-branding', 'genpact-grow-event', 'plant-nursery-ecommerce']),
   },
   {
@@ -37,7 +44,7 @@ const services = [
     lead: 'No two sites should be the same because no two businesses are.',
     href: '/services/website-services/',
     cta: 'Website services',
-    tags: ['User journeys', 'Design systems', 'Content strategy', 'Custom dev', 'Integrations'],
+    tags: pills('/services/website-services/'),
     studies: pick(['turntide-website', 'atlfreight-website', 'plant-nursery-ecommerce', 'aprilaire-product-app']),
   },
   {
@@ -46,7 +53,7 @@ const services = [
     lead: 'Crafting environments for unforgettable experiences.',
     href: '/services/event-services/',
     cta: 'Event services',
-    tags: ['Event branding', 'Trade show exhibits', 'Signage and wayfinding', 'Presentations', 'Post-event content'],
+    tags: pills('/services/event-services/'),
     studies: pick(['innovation-forum-event', 'bank-apps', 'interactive-learning-mural', 'genpact-grow-event']),
   },
 ];
@@ -122,8 +129,8 @@ const values = [
               <ul class="service__tags" aria-label={`${service.title}: what's included`}>
                 {service.tags.map((tag) => (
                   <li>
-                    <a class="pill service__tag" href={`${service.href}#${slug(tag)}`}>
-                      {tag}
+                    <a class="pill service__tag" href={tag.href}>
+                      {tag.label}
                     </a>
                   </li>
                 ))}

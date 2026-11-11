@@ -136,6 +136,38 @@ const jsonLd = [
       )
     }
 
+    {
+      data.areas && (
+        <section class="container section areas" aria-labelledby="areas-heading">
+          <h2 id="areas-heading" class="capabilities__heading" data-reveal>
+            {data.areas.heading}
+          </h2>
+          {/* One row per part of the service. The homepage pills link to these ids. */}
+          {data.areas.items.map((area, i) => (
+            <article class="area" id={area.id} aria-labelledby={`${area.id}-heading`} data-reveal>
+              <div class="area__media">
+                <Img
+                  src={area.image.src}
+                  alt={area.image.alt}
+                  widths={[400, 640, 960]}
+                  sizes="(max-width: 977px) 92vw, 560px"
+                />
+              </div>
+              <div class="area__text">
+                <span class="area__index" aria-hidden="true">
+                  {pad(i + 1)}
+                </span>
+                <h3 id={`${area.id}-heading`}>{area.label}</h3>
+                <p class="area__what">{area.what}</p>
+                <p class="area__label">How we do it</p>
+                <p class="area__how">{area.how}</p>
+              </div>
+            </article>
+          ))}
+        </section>
+      )
+    }
+
     <WorkSlider only={data.work.caseStudies} heading={data.work.heading} intro={data.work.intro} />
 
     {
@@ -372,6 +404,62 @@ const jsonLd = [
     box-shadow: 0 0 6px rgb(255 255 255 / 0.5);
   }
 
+  /* ===== Areas: a photo beside a short write-up, sides alternating ===== */
+  .area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--space-2xl);
+    padding-block: var(--space-xl);
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .area:nth-of-type(even) .area__media {
+    order: 2;
+  }
+
+  .area__media :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+  }
+
+  .area__index {
+    display: block;
+    margin-bottom: var(--space-xs);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.1em;
+  }
+
+  .area h3 {
+    margin: 0 0 var(--space-sm);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-regular);
+  }
+
+  .area__what {
+    margin: 0 0 var(--space-md);
+    font-size: var(--font-size-lg);
+  }
+
+  .area__label {
+    margin: 0 0 var(--space-2xs);
+    color: var(--color-mint);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .area__how {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
   /* ===== Teams (Website Services) ===== */
   .teams {
     display: grid;
@@ -599,6 +687,15 @@ const jsonLd = [
     .statement__grid {
       grid-template-columns: 1fr;
       gap: var(--space-xl);
+    }
+
+    .area {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .area:nth-of-type(even) .area__media {
+      order: 0;
     }
 
     .capabilities {

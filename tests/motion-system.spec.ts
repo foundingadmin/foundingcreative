@@ -83,6 +83,19 @@ test('home services pin "We shape brands / launch websites / support events" and
   );
 });
 
+test('every home service pill lands on a section of its service page', async ({ page }) => {
+  await page.goto('/');
+  const hrefs = await page.locator('.service__tag').evaluateAll((links) => links.map((a) => a.getAttribute('href')!));
+  expect(hrefs).toHaveLength(14);
+  for (const href of hrefs) {
+    await page.goto(href);
+    const section = page.locator(`article#${href.split('#')[1]}`);
+    await expect(section.getByRole('heading', { level: 3 })).toBeVisible();
+    await expect(section.locator('img')).toHaveAttribute('alt', /\S/);
+    await expect(section).toBeInViewport();
+  }
+});
+
 test('the We build websites band stays off Home', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'We build websites' })).toHaveCount(0);
