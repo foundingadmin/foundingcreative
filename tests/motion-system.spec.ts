@@ -68,8 +68,39 @@ test('home services pin "We shape brands / launch websites / support events" and
     await steps.nth(i).evaluate((el) => el.scrollIntoView({ block: 'center' }));
     await expect(active).toHaveText(words);
     await expect(steps.nth(i).getByRole('heading', { level: 3 })).toHaveText(`We ${words}`);
-    // No icon, one sentence, then the button.
-    await expect(steps.nth(i).locator('.service__text > *')).toHaveCount(3);
+    // The pinned line and the H3 both link to the service page.
+    const href = ['/services/branding-services/', '/services/website-services/', '/services/event-services/'][i];
+    await expect(page.locator('[data-cycler-link]')).toHaveAttribute('href', href);
+    await expect(steps.nth(i).getByRole('heading', { level: 3 }).getByRole('link')).toHaveAttribute('href', href);
+    // No icon, one sentence, the pills, then the button.
+    await expect(steps.nth(i).locator('.service__text > *')).toHaveCount(4);
+    await expect(steps.nth(i).locator('.service__text > *').last()).toHaveText(
+      ['View all brand services', 'View all website services', 'View all event services'][i],
+    );
+    await expect(steps.nth(i).locator('.service__text > *').last()).toHaveAttribute('href', href);
+    await expect(steps.nth(i).locator('.service__media .pill')).toHaveCount(0);
+  }
+  // Each pill links to its section on the service page.
+  await expect(steps.first().getByRole('link', { name: 'Brand strategy' })).toHaveAttribute(
+    'href',
+    '/services/branding-services/#brand-strategy',
+  );
+  await expect(steps.nth(2).getByRole('link', { name: 'Signage and wayfinding' })).toHaveAttribute(
+    'href',
+    '/services/event-services/#signage-and-wayfinding',
+  );
+});
+
+test('every home service pill lands on a section of its service page', async ({ page }) => {
+  await page.goto('/');
+  const hrefs = await page.locator('.service__tag').evaluateAll((links) => links.map((a) => a.getAttribute('href')!));
+  expect(hrefs).toHaveLength(14);
+  for (const href of hrefs) {
+    await page.goto(href);
+    const section = page.locator(`article#${href.split('#')[1]}`);
+    await expect(section.getByRole('heading', { level: 3 })).toBeVisible();
+    await expect(section.locator('img')).toHaveAttribute('alt', /\S/);
+    await expect(section).toBeInViewport();
   }
 });
 

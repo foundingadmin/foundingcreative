@@ -106,6 +106,26 @@ const services = defineCollection({
           steps: z.array(z.object({ name: z.string(), text: z.string() })).min(3).max(6),
         })
         .optional(),
+      // The parts of the service, each a section with its own anchor (#id).
+      // The homepage's service pills come from here: `label` is the pill and
+      // it links to `id` on this page. Changing an id breaks links to it.
+      areas: z
+        .object({
+          heading: z.string(),
+          items: z
+            .array(
+              z.object({
+                id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+                label: z.string(),
+                // What it is, then how we do it.
+                what: z.string(),
+                how: z.string(),
+                image: pic,
+              }),
+            )
+            .min(1),
+        })
+        .optional(),
       work: z.object({ heading: z.string(), intro: z.string(), caseStudies: z.array(z.string()).min(1) }),
       statement: z.object({
         lead: z.string().optional(),
