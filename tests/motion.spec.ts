@@ -7,7 +7,7 @@ test.use({ viewport: { width: 1440, height: 900 } });
 
 test('content fades in as it scrolls into view', async ({ page }) => {
   await page.goto('/');
-  const intro = page.locator('.section__intro', { has: page.locator('#engagement-heading') });
+  const intro = page.locator('.section__intro', { has: page.locator('#testimonials-heading') });
   await expect(intro).not.toHaveClass(/is-revealed/);
   await intro.scrollIntoViewIfNeeded();
   await expect(intro).toHaveClass(/is-revealed/);
@@ -117,9 +117,35 @@ test('the process line fills as you scroll through the steps', async ({ page }) 
   await expect(steps.last()).toHaveAttribute('data-reached', '');
 });
 
-test('our work slider lists every case study', async ({ page }) => {
+test('home services show their case studies two at a time', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
-  await expect(page.locator('#work-slider > li')).toHaveCount(10);
+  // Selected Works and the Our Work slider are gone; the services carry the work.
+  await expect(page.locator('[data-selected-works], #work-slider')).toHaveCount(0);
+  const track = page.locator('#service-1-work');
+  await expect(track.locator('> li').first().getByRole('link')).toHaveAttribute('href', '/case-study/turntide-website/');
+  await track.scrollIntoViewIfNeeded();
+  const inView = () =>
+    track.evaluate((el) => {
+      const box = el.getBoundingClientRect();
+      return [...el.children].filter((li) => {
+        const r = li.getBoundingClientRect();
+        return r.left >= box.left - 1 && r.right <= box.right + 1;
+      }).length;
+    });
+  expect(await inView()).toBe(2);
+  // Compact cards: no sector or service tags, and a link arrow on the photo
+  // in place of the "View case study" line.
+  await expect(track.locator('.case-card__tags, .case-card__more')).toHaveCount(0);
+  await expect(track.locator('.case-card__arrow')).toHaveCount(4);
+  // Next brings on the following pair.
+  await track.locator('xpath=..').getByRole('button', { name: 'Next slides' }).click();
+  await expect.poll(() => track.evaluate((el) => el.scrollLeft)).toBeGreaterThan(300);
+  await expect.poll(inView).toBe(2);
+  // The third card now leads the row.
+  await expect
+    .poll(() => track.evaluate((el) => Math.abs(Math.round(el.children[2].getBoundingClientRect().left - el.getBoundingClientRect().left))))
+    .toBe(0);
 });
 
 test('logo marquee can be paused', async ({ page }) => {
@@ -146,37 +172,4 @@ test('case studies are laid out in colored bands', async ({ page }) => {
   }
   // The other case studies follow, not this one.
   await expect(page.locator('#work-slider > li')).toHaveCount(9);
-});
-
-test('selected works rolls through the three featured projects', async ({ page }) => {
-  await page.goto('/');
-  const section = page.locator('[data-selected-works]');
-  const names = section.getByRole('list', { name: 'Featured projects' }).getByRole('button');
-  await expect(names).toHaveText(['Turntide', 'Bank of America', 'Tata']);
-  await section.scrollIntoViewIfNeeded();
-
-  // Hovering pauses the autoplay, so the buttons alone decide what shows.
-  await section.hover();
-  await expect(names.nth(0)).toHaveAttribute('aria-current', 'true');
-  const active = section.locator('.selected-works__slide.is-active');
-  await expect(active).toHaveAttribute('href', '/case-study/turntide-website/');
-
-  await section.getByRole('button', { name: 'Next' }).click();
-  await expect(names.nth(1)).toHaveAttribute('aria-current', 'true');
-  await expect(active).toHaveAttribute('href', '/case-study/bank-apps/');
-  await expect(section.locator('[data-current]')).toHaveText('02');
-
-  await names.nth(2).click();
-  await expect(active).toHaveAttribute('href', '/case-study/interactive-learning-mural/');
-  // Only the showing project's links can take focus.
-  await expect(section.locator('.selected-works__slide:not(.is-active)').first()).toHaveJSProperty('inert', true);
-  await expect(section.getByRole('link', { name: /View case study for Tata/ })).toBeVisible();
-});
-
-test('selected works can be paused', async ({ page }) => {
-  await page.goto('/');
-  const pause = page.locator('[data-selected-works] [data-pause]');
-  await pause.click();
-  await expect(pause).toHaveAttribute('aria-pressed', 'true');
-  await expect(pause).toHaveAccessibleName('Play slideshow');
 });

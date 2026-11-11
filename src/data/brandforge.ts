@@ -5,8 +5,8 @@ import identityImage from '../assets/services/brand-strategy-laptop.webp';
 import activationImage from '../assets/home/services/brand-3.webp';
 
 // The BrandForge Gauntlet: the four steps from the Creative GTM for Startups
-// deck. The BrandForge page shows them in full (ProcessSplit); the homepage
-// shows the title, tagline, and text of each (ProcessCards).
+// deck. The BrandForge page shows them under its hero as cards that open one
+// at a time (ProcessCards).
 
 export interface BrandForgeStep {
   title: string;
