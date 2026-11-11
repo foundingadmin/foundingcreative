@@ -46,6 +46,14 @@ const caseStudies = defineCollection({
       sectors: z.array(z.string()),
       services: z.array(z.string()),
       date: z.coerce.date(),
+      // When the work was made (YYYY or YYYY-MM), if that differs from the
+      // publish date. Goes into the structured data only.
+      created: z.string().regex(/^\d{4}(-\d{2})?$/).optional(),
+      // The client's website, for the structured data.
+      clientUrl: z.string().url().optional(),
+      // The case study the "Next case study" band links to (its folder
+      // name). Without it, the next one by date.
+      next: z.string().optional(),
       cover: image(),
       coverAlt: z.string().min(1),
       // White client logo, shown over the hero photo.

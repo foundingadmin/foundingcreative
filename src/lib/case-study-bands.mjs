@@ -85,6 +85,11 @@ function splitIntoBands(nodes) {
       current.nodes.push(node);
       return;
     }
+    // A study without a closing H2 still gets its conclusion as its own band:
+    // "Conclusion" starts one unless it directly follows a band's header.
+    if (isElement(node, 'h3') && /^conclusion$/i.test(textOf(node).trim()) && current.nodes.some((n) => !isElement(n, 'h2', 'p'))) {
+      close();
+    }
     if (isElement(node, 'h2')) {
       const onlyKicker = current.nodes.length === 1 && hasClass(current.nodes[0], 'case-kicker');
       if (!onlyKicker) close();
@@ -340,6 +345,13 @@ function joinRawWrappers(nodes) {
 /** Build the banded tree from the document's top-level nodes. */
 function toBands(children) {
   const nodes = joinRawWrappers(children.filter((node) => !isBlank(node)));
+  // Process steps are a two-column grid (number, words). Wrap each step's
+  // words so bold and plain text stay one grid cell instead of one each.
+  for (const list of nodes.filter((node) => isElement(node, 'ol'))) {
+    for (const li of list.children.filter((child) => isElement(child, 'li'))) {
+      li.children = [el('span', 'case-step__text', li.children)];
+    }
+  }
   const bands = splitIntoBands(nodes);
 
   let previous = 'white';
