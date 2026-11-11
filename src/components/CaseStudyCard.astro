@@ -10,11 +10,13 @@ import { caseStudyUrl, type CaseStudy } from '../lib/content';
 interface Props {
   study: CaseStudy;
   headingLevel?: 2 | 3 | 4;
-  /** Sector and service tags over the photo. Off where the card already sits under its service. */
-  tags?: boolean;
+  /** A shorter card for the homepage service sliders: no sector or service
+   * tags (the card already sits under its service) and, in place of the
+   * "View case study" line, a link arrow on the photo's top right corner. */
+  compact?: boolean;
 }
 
-const { study, headingLevel = 2, tags = true } = Astro.props;
+const { study, headingLevel = 2, compact = false } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
 const { data } = study;
 ---
@@ -29,7 +31,7 @@ const { data } = study;
       sizes="(max-width: 700px) 85vw, 360px"
     />
     {
-      tags && data.sectors.length > 0 && (
+      !compact && data.sectors.length > 0 && (
         <ul class="case-card__tags" aria-label="Sectors">
           {data.sectors.map((tag) => (
             <li>{tag}</li>
@@ -38,12 +40,19 @@ const { data } = study;
       )
     }
     {
-      tags && data.services.length > 0 && (
+      !compact && data.services.length > 0 && (
         <ul class="case-card__tags case-card__tags--services" aria-label="Services">
           {data.services.map((tag) => (
             <li>{tag}</li>
           ))}
         </ul>
+      )
+    }
+    {
+      compact && (
+        <span class="case-card__arrow" aria-hidden="true">
+          <Icon name="arrow-up-right" size={18} />
+        </span>
       )
     }
   </div>
@@ -53,7 +62,13 @@ const { data } = study;
       <a href={caseStudyUrl(study)}>{data.headline}</a>
     </Heading>
     <p class="case-card__summary">{data.subheadline}</p>
-    <p class="case-card__more" aria-hidden="true">View case study <Icon name="arrow-up-right" size={16} /></p>
+    {
+      !compact && (
+        <p class="case-card__more" aria-hidden="true">
+          View case study <Icon name="arrow-up-right" size={16} />
+        </p>
+      )
+    }
   </div>
 </article>
 
@@ -129,6 +144,42 @@ const { data } = study;
     font-weight: var(--font-weight-semibold);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  /* Compact cards: a round link arrow on the photo's corner, lit on hover */
+  .case-card__arrow {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid rgb(255 255 255 / 0.2);
+    border-radius: var(--radius-pill);
+    background-color: rgb(0 0 0 / 0.65);
+    backdrop-filter: blur(6px);
+    color: var(--color-white);
+    transition:
+      background-color 250ms var(--ease-out),
+      border-color 250ms var(--ease-out),
+      color 250ms var(--ease-out);
+  }
+
+  .case-card__arrow .icon {
+    transition: transform 250ms var(--ease-out);
+  }
+
+  .case-card:hover .case-card__arrow,
+  .case-card:focus-within .case-card__arrow {
+    border-color: var(--color-mint);
+    background-color: var(--color-mint);
+    color: var(--color-black);
+  }
+
+  .case-card:hover .case-card__arrow .icon,
+  .case-card:focus-within .case-card__arrow .icon {
+    transform: translate(2px, -2px);
   }
 
   .case-card__body {

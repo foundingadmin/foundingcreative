@@ -125,7 +125,7 @@ const values = [
               <Carousel id={`service-${i}-work`} label={`${service.title}: case studies`} class="service__gallery">
                 {service.studies.map((study) => (
                   <li>
-                    <CaseStudyCard study={study} headingLevel={4} tags={false} />
+                    <CaseStudyCard study={study} headingLevel={4} compact />
                   </li>
                 ))}
               </Carousel>

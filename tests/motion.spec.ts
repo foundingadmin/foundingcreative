@@ -134,8 +134,10 @@ test('home services show their case studies two at a time', async ({ page }) => 
       }).length;
     });
   expect(await inView()).toBe(2);
-  // The cards sit under their service, so they carry no sector or service tags.
-  await expect(track.locator('.case-card__tags')).toHaveCount(0);
+  // Compact cards: no sector or service tags, and a link arrow on the photo
+  // in place of the "View case study" line.
+  await expect(track.locator('.case-card__tags, .case-card__more')).toHaveCount(0);
+  await expect(track.locator('.case-card__arrow')).toHaveCount(4);
   // Next brings on the following pair.
   await track.locator('xpath=..').getByRole('button', { name: 'Next slides' }).click();
   await expect.poll(() => track.evaluate((el) => el.scrollLeft)).toBeGreaterThan(300);
