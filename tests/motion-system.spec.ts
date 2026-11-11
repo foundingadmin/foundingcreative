@@ -68,9 +68,19 @@ test('home services pin "We shape brands / launch websites / support events" and
     await steps.nth(i).evaluate((el) => el.scrollIntoView({ block: 'center' }));
     await expect(active).toHaveText(words);
     await expect(steps.nth(i).getByRole('heading', { level: 3 })).toHaveText(`We ${words}`);
-    // No icon, one sentence, then the button.
-    await expect(steps.nth(i).locator('.service__text > *')).toHaveCount(3);
+    // No icon, one sentence, the button, then the pills.
+    await expect(steps.nth(i).locator('.service__text > *')).toHaveCount(4);
+    await expect(steps.nth(i).locator('.service__media .pill')).toHaveCount(0);
   }
+  // Each pill links to its section on the service page.
+  await expect(steps.first().getByRole('link', { name: 'Brand strategy' })).toHaveAttribute(
+    'href',
+    '/services/branding-services/#brand-strategy',
+  );
+  await expect(steps.nth(2).getByRole('link', { name: 'Signage and wayfinding' })).toHaveAttribute(
+    'href',
+    '/services/event-services/#signage-and-wayfinding',
+  );
 });
 
 test('the We build websites band stays off Home', async ({ page }) => {

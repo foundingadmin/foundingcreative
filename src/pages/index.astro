@@ -18,6 +18,9 @@ const pick = (ids: string[]) =>
 // The three services, in the order the pinned "We shape brands / launch
 // websites / support events" line cycles through them. Each shows its case
 // studies two at a time (aim for six per service as more are written).
+// A pill's anchor on its service page: "Brand strategy" is #brand-strategy.
+const slug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
 const services = [
   {
     title: 'We shape brands',
@@ -115,13 +118,18 @@ const values = [
               <a class="button" href={service.href}>
                 {service.cta} <Icon name="arrow-up-right" size={16} />
               </a>
-            </div>
-            <div class="service__media">
+              <!-- What's included: each pill jumps to its section on the service page -->
               <ul class="service__tags" aria-label={`${service.title}: what's included`}>
                 {service.tags.map((tag) => (
-                  <li class="pill">{tag}</li>
+                  <li>
+                    <a class="pill service__tag" href={`${service.href}#${slug(tag)}`}>
+                      {tag}
+                    </a>
+                  </li>
                 ))}
               </ul>
+            </div>
+            <div class="service__media">
               <Carousel id={`service-${i}-work`} label={`${service.title}: case studies`} class="service__gallery">
                 {service.studies.map((study) => (
                   <li>
@@ -357,10 +365,26 @@ const values = [
   .service__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.7rem;
-    margin: 0 0 var(--space-sm);
+    gap: 0.6rem;
+    margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .service__tag {
+    color: var(--color-text);
+    text-decoration: none;
+    transition:
+      border-color 150ms var(--ease-out),
+      background-color 150ms var(--ease-out),
+      color 150ms var(--ease-out);
+  }
+
+  .service__tag:hover,
+  .service__tag:focus-visible {
+    border-color: var(--color-mint);
+    background-color: var(--color-mint);
+    color: var(--color-black);
   }
 
   /* Case studies two at a time; the arrows bring on the next two. The
