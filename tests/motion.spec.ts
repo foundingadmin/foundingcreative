@@ -117,9 +117,28 @@ test('the process line fills as you scroll through the steps', async ({ page }) 
   await expect(steps.last()).toHaveAttribute('data-reached', '');
 });
 
-test('our work slider lists every case study', async ({ page }) => {
+test('home services show their case studies two at a time', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
-  await expect(page.locator('#work-slider > li')).toHaveCount(10);
+  // Selected Works and the Our Work slider are gone; the services carry the work.
+  await expect(page.locator('[data-selected-works], #work-slider')).toHaveCount(0);
+  const track = page.locator('#service-1-work');
+  await expect(track.locator('> li').first().getByRole('link')).toHaveAttribute('href', '/case-study/turntide-website/');
+  await track.scrollIntoViewIfNeeded();
+  const inView = () =>
+    track.evaluate((el) => {
+      const box = el.getBoundingClientRect();
+      return [...el.children].filter((li) => {
+        const r = li.getBoundingClientRect();
+        return r.left >= box.left - 1 && r.right <= box.right + 1;
+      }).length;
+    });
+  expect(await inView()).toBe(2);
+  // Next brings on the following pair.
+  await track.locator('xpath=..').getByRole('button', { name: 'Next slides' }).click();
+  await expect.poll(() => track.evaluate((el) => el.scrollLeft)).toBeGreaterThan(300);
+  await expect.poll(inView).toBe(2);
+  await expect(track.locator('> li').nth(2)).toBeInViewport({ ratio: 0.9 });
 });
 
 test('logo marquee can be paused', async ({ page }) => {
@@ -146,37 +165,4 @@ test('case studies are laid out in colored bands', async ({ page }) => {
   }
   // The other case studies follow, not this one.
   await expect(page.locator('#work-slider > li')).toHaveCount(9);
-});
-
-test('selected works rolls through the three featured projects', async ({ page }) => {
-  await page.goto('/');
-  const section = page.locator('[data-selected-works]');
-  const names = section.getByRole('list', { name: 'Featured projects' }).getByRole('button');
-  await expect(names).toHaveText(['Turntide', 'Bank of America', 'Tata']);
-  await section.scrollIntoViewIfNeeded();
-
-  // Hovering pauses the autoplay, so the buttons alone decide what shows.
-  await section.hover();
-  await expect(names.nth(0)).toHaveAttribute('aria-current', 'true');
-  const active = section.locator('.selected-works__slide.is-active');
-  await expect(active).toHaveAttribute('href', '/case-study/turntide-website/');
-
-  await section.getByRole('button', { name: 'Next' }).click();
-  await expect(names.nth(1)).toHaveAttribute('aria-current', 'true');
-  await expect(active).toHaveAttribute('href', '/case-study/bank-apps/');
-  await expect(section.locator('[data-current]')).toHaveText('02');
-
-  await names.nth(2).click();
-  await expect(active).toHaveAttribute('href', '/case-study/interactive-learning-mural/');
-  // Only the showing project's links can take focus.
-  await expect(section.locator('.selected-works__slide:not(.is-active)').first()).toHaveJSProperty('inert', true);
-  await expect(section.getByRole('link', { name: /View case study for Tata/ })).toBeVisible();
-});
-
-test('selected works can be paused', async ({ page }) => {
-  await page.goto('/');
-  const pause = page.locator('[data-selected-works] [data-pause]');
-  await pause.click();
-  await expect(pause).toHaveAttribute('aria-pressed', 'true');
-  await expect(pause).toHaveAccessibleName('Play slideshow');
 });

@@ -116,16 +116,14 @@ test('sitemap and robots.txt', async ({ request }) => {
   }
 });
 
-test('home shows what we do, for whom, and proof on the first screen', async ({ page }) => {
+test('home says what we do up top, without client logos in the hero', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
   const hero = page.locator('.hero');
   await expect(hero.getByText('We\'re a brand strategy agency for growing B2B teams.', { exact: false })).toBeVisible();
-  const clients = hero.getByRole('list', { name: 'Clients' });
-  await expect(clients.getByRole('img')).toHaveCount(6);
-  // The proof sits above the fold.
-  const box = await clients.boundingBox();
-  expect(box!.y + box!.height).toBeLessThan(900);
+  // The coded gradient backdrop, not a video, and no logo row.
+  await expect(hero.locator('.backdrop--spectrum')).toHaveCount(1);
+  await expect(hero.locator('video, img')).toHaveCount(0);
   await expect(page.locator('.year-stats .stat__value')).toHaveCount(4);
 });
 
@@ -172,10 +170,8 @@ test('case studies follow challenge, approach, what we built, and link onward', 
   }
 });
 
-test('case studies filter by type, from the URL or a homepage tag', async ({ page }) => {
-  await page.goto('/');
-  await page.locator('.selected-works__tags').first().getByRole('link', { name: /^Website/ }).click();
-  await expect(page).toHaveURL(/\/case-studies\/\?type=website$/);
+test('case studies filter by type, from the URL', async ({ page }) => {
+  await page.goto('/case-studies/?type=website');
 
   const filter = page.getByRole('group', { name: 'Filter by project type' });
   const cards = page.getByRole('main').getByRole('article');

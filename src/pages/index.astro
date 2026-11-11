@@ -1,115 +1,52 @@
 ---
-import type { ImageMetadata } from 'astro';
 import Img from '../components/Img.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClientLogos from '../components/ClientLogos.astro';
 import StatCards from '../components/StatCards.astro';
-import { brandForgeSteps } from '../data/brandforge';
-import ProcessCards from '../components/ProcessCards.astro';
 import Testimonials from '../components/Testimonials.astro';
-import OurWork from '../components/OurWork.astro';
-import SelectedWorks from '../components/SelectedWorks.astro';
+import CaseStudyCard from '../components/CaseStudyCard.astro';
 import Carousel from '../components/Carousel.astro';
 import Icon from '../components/Icon.astro';
 import HeroBackdrop from '../components/HeroBackdrop.astro';
-import heroPoster from '../assets/home/hero/glowing-grid-poster.png';
-import { heroBackdrop } from '../lib/images';
-import mastercardLogo from '../assets/home/clients/mastercard-logo.png';
-import bankOfAmericaLogo from '../assets/home/clients/bank-of-america-logo.png';
-import honeywellLogo from '../assets/home/clients/honeywell-logo.png';
-import tataLogo from '../assets/home/clients/tat-horizontal.png';
-import volvoLogo from '../assets/home/clients/volvo-logo-solid.png';
-import nissanLogo from '../assets/home/clients/nissan-logo-solid.png';
+import { getCaseStudies } from '../lib/content';
 import { team } from '../data/team';
 
-// Service sliders
-import web1 from '../assets/home/services/web-1.webp';
-import web2 from '../assets/home/services/web-2.webp';
-import web3 from '../assets/home/services/web-3.webp';
-import web4 from '../assets/home/services/web-4.webp';
-import web5 from '../assets/home/services/web-5.webp';
-import brand1 from '../assets/home/services/brand-1.webp';
-import brand2 from '../assets/home/services/brand-2.webp';
-import brand3 from '../assets/home/services/brand-3.webp';
-import brand4 from '../assets/home/services/brand-4.webp';
-import brand5 from '../assets/home/services/brand-5.webp';
-import design1 from '../assets/home/services/design-1.webp';
-import design2 from '../assets/home/services/design-2.webp';
-import design3 from '../assets/home/services/design-3.webp';
-import design4 from '../assets/home/services/design-4.webp';
-import design5 from '../assets/home/services/design-5.webp';
+// Case studies for the service sliders, by folder name, in the order given.
+const allStudies = await getCaseStudies();
+const pick = (ids: string[]) =>
+  ids.map((id) => allStudies.find((study) => study.id === id)).filter((study) => study !== undefined);
 
-// The three services, in the order the pinned "We design / develop / build"
-// line cycles through them.
+// The three services, in the order the pinned "We shape brands / launch
+// websites / support events" line cycles through them. Each shows its case
+// studies two at a time (aim for six per service as more are written).
 const services = [
   {
-    icon: 'pen-tool',
-    title: 'We design everything',
-    word: 'design',
-    lead: 'Design systems that ensure your brand consistently shines across all platforms.',
-    text: 'From pitch decks to packaging, we deliver quality design consistently across every single one of your channels.',
-    href: '/services/design-services/',
-    cta: 'Design services',
-    tags: ['Digital marketing', 'Print collateral', 'Packaging', 'Presentations', 'Sales enablement'],
-    images: [
-      { src: design1, alt: 'Construction worker using his phone at a glowing green Bell Bird ATM' },
-      { src: design2, alt: 'Man presenting on a large TCS Business 4.0 interactive wall' },
-      { src: design3, alt: '3D render of Turntide motors and controllers on white pedestals' },
-      { src: design4, alt: 'Event graphic for speaker Steve Wozniak, co-founder of Apple' },
-      { src: design5, alt: 'MODL branded hoodie with an orange line pattern' },
-    ],
-  },
-  {
-    icon: 'globe',
-    title: 'We develop websites',
-    word: 'develop',
-    lead: 'No two sites should be the same because no two businesses are.',
-    text: 'Our SiteLaunch system has three unique entry points, each tailored to unique business goals and growth stages.',
-    href: '/services/website-services/',
-    cta: 'Website services',
-    tags: ['User journeys', 'Design systems', 'Content strategy', 'Custom dev', 'Integrations'],
-    images: [
-      { src: web1, alt: 'Laptop showing the Genpact GROW18 event website' },
-      { src: web2, alt: 'Turntide website article pages on two phones' },
-      { src: web3, alt: 'Huckleberry Holler plant page for the Mexican sunflower' },
-      { src: web4, alt: 'Bank of America Public Sector app on a tablet beside a laptop' },
-      { src: web5, alt: 'Turntide website homepage featuring a motor product render' },
-    ],
-  },
-  {
-    icon: 'flag',
-    title: 'We build brands',
-    word: 'build',
+    title: 'We shape brands',
+    words: 'shape brands',
     lead: 'Brand identities built to last through clear, scalable creative foundations.',
-    text: 'From brand strategy and copy to logo systems and style guides, we create the foundations that help brands grow with confidence.',
     href: '/services/branding-services/',
     cta: 'Branding services',
     tags: ['Brand strategy', 'Visual identity', 'Guidelines', 'Creative copywriting'],
-    images: [
-      { src: brand1, alt: 'Laptop showing a bold "Disrupt or be disrupted" brand graphic' },
-      { src: brand2, alt: 'ATL Freight website on a laptop with the headline "Built on service, backed by integrity"' },
-      { src: brand3, alt: 'Brand color palette swatches named Sky, Sea, Fern, Ash, Smoke, and Fog' },
-      { src: brand4, alt: 'Hand-drawn logo sketches of an infinity loop on graph paper' },
-      { src: brand5, alt: 'Genpact GROW18 event mural in a convention center' },
-    ],
+    studies: pick(['bell-bird-atm', 'safezone-product-and-branding', 'genpact-grow-event', 'plant-nursery-ecommerce']),
   },
-] as const;
-
-// First-screen proof: one 2025 number and a few recognizable clients. Each
-// logo gets the same visual area, so wide wordmarks don't dwarf compact marks.
-// Gallery tiles are 244x320 and crop landscape photos to fill the height,
-// so the file needs to be as wide as the photo shows at that height.
-const coverSizes = (img: ImageMetadata) => `${Math.ceil(Math.max(244, 320 * (img.width / img.height)))}px`;
-
-const LOGO_AREA = 3200; // px²
-const logoHeight = (logo: ImageMetadata) => Math.round(Math.sqrt(LOGO_AREA / (logo.width / logo.height)));
-const heroClients = [
-  { src: mastercardLogo, name: 'Mastercard' },
-  { src: bankOfAmericaLogo, name: 'Bank of America' },
-  { src: honeywellLogo, name: 'Honeywell' },
-  { src: tataLogo, name: 'Tata' },
-  { src: volvoLogo, name: 'Volvo' },
-  { src: nissanLogo, name: 'Nissan' },
+  {
+    title: 'We launch websites',
+    words: 'launch websites',
+    lead: 'No two sites should be the same because no two businesses are.',
+    href: '/services/website-services/',
+    cta: 'Website services',
+    tags: ['User journeys', 'Design systems', 'Content strategy', 'Custom dev', 'Integrations'],
+    studies: pick(['turntide-website', 'atlfreight-website', 'plant-nursery-ecommerce', 'aprilaire-product-app']),
+  },
+  {
+    title: 'We support events',
+    words: 'support events',
+    lead: 'Crafting environments for unforgettable experiences.',
+    href: '/services/event-services/',
+    cta: 'Event services',
+    tags: ['Event branding', 'Trade show exhibits', 'Signage and wayfinding', 'Presentations', 'Post-event content'],
+    studies: pick(['innovation-forum-event', 'bank-apps', 'interactive-learning-mural', 'genpact-grow-event']),
+  },
 ];
 
 // 2025 in numbers, above the testimonials.
@@ -162,11 +99,11 @@ const values = [
 
 <!-- Organization (with ProfessionalService) and WebSite structured data
      come from SEO.astro, in full on this page -->
-<BaseLayout lcpImage={{ src: heroPoster, ...heroBackdrop }}>
-  <!-- Hero: a looping glowing-grid video under a dark veil, with the pearl
-       headline glowing on top -->
+<BaseLayout>
+  <!-- Hero: the four-color gradient drifting under the wave and a dark veil
+       (as on About), with the pearl headline glowing on top -->
   <section class="hero under-header">
-    <HeroBackdrop variant="video" video="/media/home/glowing-grid.mp4" image={heroPoster} />
+    <HeroBackdrop />
     <div class="container hero__content" data-intro>
       <p class="hero__eyebrow">Brand strategy and web design agency</p>
       <h1 class="hero__title holo-text">Creative foundations for brands of all sizes</h1>
@@ -179,22 +116,8 @@ const values = [
         <a class="button button--primary" href="/case-studies/">See our case studies <Icon name="arrow-up-right" size={16} /></a>
         <a class="button" href="#services">Explore our services <Icon name="arrow-up-right" size={16} /></a>
       </div>
-      <div class="hero__proof">
-        <ul class="hero__clients" aria-label="Clients">
-          {
-            heroClients.map((client) => (
-              <li style={`--logo-height: ${logoHeight(client.src)}px`}>
-                <Img src={client.src} alt={client.name} height={logoHeight(client.src)} densities={[1, 2]} />
-              </li>
-            ))
-          }
-        </ul>
-      </div>
     </div>
   </section>
-
-  <!-- Selected works: three featured case studies -->
-  <SelectedWorks />
 
   <!-- Services -->
   <section class="services curve-bottom" id="services" aria-labelledby="services-heading">
@@ -206,14 +129,15 @@ const values = [
         <h2 id="services-heading" class="visually-hidden">Our services</h2>
       </div>
 
-      <!-- Pinned line: the verb swaps as each service passes the middle of the
-           screen (script below). Decorative; each service's H3 says the same. -->
+      <!-- Pinned line: the phrase swaps as each service passes the middle of
+           the screen (script below). Decorative; each service's H3 says the
+           same, and shows in its place on small screens. -->
       <p class="cycler" aria-hidden="true" data-cycler>
         <span class="cycler__we">We</span>
         <span class="cycler__words">
           {
             services.map((service, i) => (
-              <span class:list={['cycler__word', { 'is-active': i === 0 }]}>{service.word}</span>
+              <span class:list={['cycler__word', { 'is-active': i === 0 }]}>{service.words}</span>
             ))
           }
         </span>
@@ -223,14 +147,8 @@ const values = [
         services.map((service, i) => (
           <article class="service" aria-labelledby={`service-${i}`} data-reveal data-cycler-step={i}>
             <div class="service__text">
-              <div>
-                <span class="service__icon">
-                  <Icon name={service.icon} size={40} class="icon--draw" />
-                </span>
-                <h3 id={`service-${i}`}>{service.title}</h3>
-                <p class="service__lead">{service.lead}</p>
-                <p class="service__body">{service.text}</p>
-              </div>
+              <h3 id={`service-${i}`}>{service.title}</h3>
+              <p class="service__lead">{service.lead}</p>
               <a class="button" href={service.href}>
                 {service.cta} <Icon name="arrow-up-right" size={16} />
               </a>
@@ -241,15 +159,10 @@ const values = [
                   <li class="pill">{tag}</li>
                 ))}
               </ul>
-              <Carousel id={`service-${i}-work`} label={`${service.title}: example work`} class="service__gallery">
-                {service.images.map((image) => (
+              <Carousel id={`service-${i}-work`} label={`${service.title}: case studies`} class="service__gallery">
+                {service.studies.map((study) => (
                   <li>
-                    <Img
-                      src={image.src}
-                      alt={image.alt}
-                      widths={[400, 600, 800, 1200].filter((w) => w <= image.src.width)}
-                      sizes={coverSizes(image.src)}
-                    />
+                    <CaseStudyCard study={study} headingLevel={4} />
                   </li>
                 ))}
               </Carousel>
@@ -257,27 +170,6 @@ const values = [
           </article>
         ))
       }
-    </div>
-  </section>
-
-  <!-- BrandForge: the four steps from the Creative GTM deck, in its teal,
-       as cards that open one at a time -->
-  <section class="home-forge theme-forge" aria-labelledby="home-forge-heading">
-    <div class="container section">
-      <div class="section__intro section__intro--center">
-        <p class="eyebrow"><span class="accent">Brand</span>Forge™ <em>for startups</em></p>
-        <h2 id="home-forge-heading">From zero to market-ready in four steps</h2>
-        <p class="section__lead">
-          Research-backed brand strategy and identity, launch-ready in weeks instead of months.
-        </p>
-      </div>
-      <div class="home-forge__cards">
-        <ProcessCards steps={brandForgeSteps} id="home-forge-step" />
-      </div>
-      <a class="button button--primary home-forge__cta" href="/brandforge/">
-        Explore BrandForge<span class="visually-hidden">, branding for startups</span>
-        <Icon name="arrow-up-right" size={16} />
-      </a>
     </div>
   </section>
 
@@ -352,9 +244,6 @@ const values = [
     </div>
   </section>
 
-  <!-- Our work -->
-  <OurWork />
-
   <!-- Who we are -->
   <section class="about-band curve-top" aria-labelledby="about-heading">
     <div class="container section about">
@@ -390,30 +279,6 @@ const values = [
       </div>
     </div>
   </section>
-
-  <!-- Closing call to action: the live site's holographic card. It rides
-       with the footer, uncovered as the page lifts away (see .page-end) -->
-  <Fragment slot="page-end">
-    <section class="container cta-wrap" aria-labelledby="cta-heading">
-      <div class="cta" data-reveal="zoom">
-        <video class="cta__video" src="/media/home/holographic.mp4" muted loop playsinline preload="none" aria-hidden="true" data-ambient
-        ></video>
-        <div class="cta__content">
-          <div>
-            <p class="cta__eyebrow">We launch websites</p>
-            <h2 id="cta-heading">Your custom website starts here.</h2>
-            <p class="cta__lead">Tailored web packages designed to match your goals.</p>
-          </div>
-          <div class="cta__actions">
-            <a class="button button--dark" href="/services/website-services/">
-              Find the right fit<span class="visually-hidden"> in our website services</span>
-              <Icon name="arrow-up-right" size={16} />
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </Fragment>
 </BaseLayout>
 
 <style>
@@ -468,38 +333,6 @@ const values = [
     color: var(--color-lavender);
   }
 
-  /* First-screen proof: a still row of client logos */
-  .hero__proof {
-    margin-top: var(--space-lg);
-  }
-
-  .hero__clients {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-xs) var(--space-lg);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .hero__clients img {
-    width: auto;
-    height: var(--logo-height);
-    filter: brightness(1.7);
-    opacity: 0.85;
-  }
-
-  @media (max-width: 599px) {
-    .hero__clients {
-      gap: var(--space-xs) var(--space-md);
-    }
-
-    .hero__clients img {
-      height: calc(var(--logo-height) * 0.7);
-    }
-  }
-
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
@@ -514,25 +347,9 @@ const values = [
     background-color: var(--color-night);
   }
 
-  /* BrandForge band */
-  .home-forge {
-    background: linear-gradient(160deg, var(--color-forge-teal), var(--color-night));
-  }
-
-  /* The cards break out of the container to the window's width, less the
-   * gutters, so the closed cards have room for their titles. */
-  .home-forge__cards {
-    width: min(100vw - 2 * var(--container-gutter), 110rem);
-    margin-left: 50%;
-    translate: -50%;
-  }
-
-  .home-forge__cta {
-    margin-top: var(--space-xl);
-  }
-
-  /* "We design / We develop / We build": pinned under the header while the
-   * services scroll beneath it; the verb blurs and scales between states. */
+  /* "We shape brands / launch websites / support events": pinned under the
+   * header while the services scroll beneath it; the phrase blurs and scales
+   * between states. */
   .cycler {
     position: sticky;
     top: var(--header-height);
@@ -595,24 +412,12 @@ const values = [
   .service__text {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: flex-start;
-    gap: var(--space-lg);
-  }
-
-  .service__icon {
-    display: inline-grid;
-    place-items: center;
-    width: 4.5rem;
-    height: 4.5rem;
-    margin-bottom: var(--space-lg);
-    border-radius: var(--radius-md);
-    background-color: var(--color-glass);
-    color: var(--color-white);
+    gap: var(--space-md);
   }
 
   .service h3 {
-    margin-bottom: var(--space-3xs);
+    margin: 0;
     font-family: var(--font-body);
     font-size: 2rem;
     font-weight: var(--font-weight-bold);
@@ -620,17 +425,23 @@ const values = [
     line-height: 1.4;
   }
 
+  /* The pinned line is the visible heading on wide screens; the H3 stays
+   * for screen readers and the outline */
+  @media (min-width: 978px) {
+    .service h3 {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+
   .service__lead {
+    margin: 0;
     font-size: var(--font-size-lg);
-  }
-
-  .service__body {
-    color: var(--color-text-muted);
-  }
-
-  /* The service icon beats like the live site's animated icons */
-  .service:hover .service__icon .icon {
-    animation: heart-beat 1.3s ease-in-out;
   }
 
   .service__tags {
@@ -642,17 +453,23 @@ const values = [
     list-style: none;
   }
 
-  /* Carousel class lands outside this page's style scope */
+  /* Case studies two at a time; the arrows bring on the next two. The
+   * Carousel class lands outside this page's style scope. */
   .service__media :global(.service__gallery) {
-    --slide-width: 15.25rem;
+    --slide-gap: var(--space-md);
+    --slide-width: calc((100% - var(--slide-gap)) / 2);
   }
 
-  .service__media :global(.service__gallery) img {
-    width: 100%;
-    aspect-ratio: 61 / 80;
-    object-fit: cover;
-    border-radius: var(--radius-lg);
-    pointer-events: none;
+  /* Room for the card hover lift and glow inside the scrolling row */
+  .service__media :global(.service__gallery .carousel__track) {
+    padding-block: var(--space-sm) var(--space-lg);
+  }
+
+  /* One card at a time on phones, with the next peeking in */
+  @media (max-width: 599px) {
+    .service__media :global(.service__gallery) {
+      --slide-width: 100%;
+    }
   }
 
   /* How we work */
@@ -876,77 +693,6 @@ const values = [
     font-weight: var(--font-weight-bold);
   }
 
-  /* Closing CTA: a holographic card */
-  .cta-wrap {
-    padding-block: var(--space-xl) var(--space-2xl);
-  }
-
-  /* After gpc.consulting: the card sticks under the header and the footer
-   * slides up over it. Only on screens tall enough to show the whole card. */
-  @media (min-height: 640px) {
-    .cta-wrap {
-      position: sticky;
-      top: var(--header-height);
-    }
-  }
-
-  .cta {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    padding: clamp(var(--space-lg), 6vw, 5rem);
-    border-radius: var(--radius-card);
-    background: conic-gradient(
-      from 90deg,
-      var(--color-cyan),
-      var(--color-mint-pale) 90deg,
-      var(--color-white) 180deg,
-      var(--color-lavender-light) 270deg,
-      var(--color-cyan)
-    );
-    color: var(--color-night);
-  }
-
-  .cta__video {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.55;
-    mix-blend-mode: multiply;
-  }
-
-  .cta__content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-lg);
-  }
-
-  .cta__eyebrow {
-    margin-bottom: var(--space-2xs);
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  .cta h2 {
-    max-width: 12em;
-    margin-bottom: var(--space-sm);
-    color: var(--color-night);
-  }
-
-  .cta__lead {
-    margin: 0;
-    font-size: var(--font-size-lg);
-  }
-
-  .cta :focus-visible {
-    outline-color: var(--color-night);
-  }
-
   @media (max-width: 977px) {
     .service,
     .about {
@@ -957,7 +703,7 @@ const values = [
 </style>
 
 <script>
-  // Swap the pinned verb to whichever service is crossing the middle of the screen.
+  // Swap the pinned phrase to whichever service is crossing the middle of the screen.
   const cycler = document.querySelector('[data-cycler]');
   if (cycler) {
     const words = [...cycler.querySelectorAll('.cycler__word')];

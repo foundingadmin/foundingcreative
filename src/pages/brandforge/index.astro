@@ -7,6 +7,7 @@ import CheckList from '../../components/CheckList.astro';
 import StatCards from '../../components/StatCards.astro';
 import FeatureGrid from '../../components/FeatureGrid.astro';
 import ProcessSplit from '../../components/ProcessSplit.astro';
+import ProcessCards from '../../components/ProcessCards.astro';
 import { brandForgeSteps } from '../../data/brandforge';
 import Icon from '../../components/Icon.astro';
 import HeroBackdrop from '../../components/HeroBackdrop.astro';
@@ -121,6 +122,23 @@ const jsonLd = [
 
     <!-- One teal backdrop runs under every section below the hero, so no seams show between them -->
     <div class="tone-backdrop">
+      <!-- The four steps at a glance (moved here from the homepage), as cards
+           that open one at a time -->
+      <section aria-labelledby="forge-steps-heading">
+        <div class="container section">
+          <div class="section__intro section__intro--center">
+            <p class="eyebrow"><span class="accent">Brand</span>Forge™ <em>for startups</em></p>
+            <h2 id="forge-steps-heading">From zero to market-ready in four steps</h2>
+            <p class="section__lead">
+              Research-backed brand strategy and identity, launch-ready in weeks instead of months.
+            </p>
+          </div>
+          <div class="forge-steps__cards">
+            <ProcessCards steps={brandForgeSteps} id="forge-step" />
+          </div>
+        </div>
+      </section>
+
       <!-- Who it's for: the list beside four glass stat cards -->
       <section aria-labelledby="audience-heading">
         <div class="container section audience">
@@ -208,6 +226,14 @@ const jsonLd = [
   .forge-hero__lead {
     max-width: 42rem;
     margin-bottom: var(--space-lg);
+  }
+
+  /* The step cards break out of the container to the window's width, less
+   * the gutters, so the closed cards have room for their titles. */
+  .forge-steps__cards {
+    width: min(100vw - 2 * var(--container-gutter), 110rem);
+    margin-left: 50%;
+    translate: -50%;
   }
 
   /* ===== Who it's for, and why: two columns ===== */

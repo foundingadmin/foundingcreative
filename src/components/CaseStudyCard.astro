@@ -9,11 +9,11 @@ import { caseStudyUrl, type CaseStudy } from '../lib/content';
 
 interface Props {
   study: CaseStudy;
-  headingLevel?: 2 | 3;
+  headingLevel?: 2 | 3 | 4;
 }
 
 const { study, headingLevel = 2 } = Astro.props;
-const Heading = `h${headingLevel}` as 'h2' | 'h3';
+const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
 const { data } = study;
 ---
 

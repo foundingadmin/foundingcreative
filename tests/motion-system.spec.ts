@@ -59,14 +59,17 @@ test('scroll reveals only ever slide up', async ({ page }) => {
   }
 });
 
-test('home services pin "We design / develop / build" and swap the verb on scroll', async ({ page }) => {
+test('home services pin "We shape brands / launch websites / support events" and swap on scroll', async ({ page }) => {
   await page.goto('/');
   const active = page.locator('[data-cycler] .cycler__word.is-active');
   const steps = page.locator('[data-cycler-step]');
-  for (const [i, word] of ['design', 'develop', 'build'].entries()) {
+  await expect(steps).toHaveCount(3);
+  for (const [i, words] of ['shape brands', 'launch websites', 'support events'].entries()) {
     await steps.nth(i).evaluate((el) => el.scrollIntoView({ block: 'center' }));
-    await expect(active).toHaveText(word);
-    await expect(steps.nth(i).getByRole('heading', { level: 3 })).toContainText(`We ${word}`);
+    await expect(active).toHaveText(words);
+    await expect(steps.nth(i).getByRole('heading', { level: 3 })).toHaveText(`We ${words}`);
+    // No icon, one sentence, then the button.
+    await expect(steps.nth(i).locator('.service__text > *')).toHaveCount(3);
   }
 });
 
@@ -75,9 +78,9 @@ test('the We build websites band stays off Home', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'We build websites' })).toHaveCount(0);
 });
 
-test('home BrandForge cards open one at a time and count down to the next', async ({ page }) => {
+test('BrandForge cards open one at a time and count down to the next', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/');
+  await page.goto('/brandforge/');
   const cards = page.locator('[data-process-cards]');
   const toggles = cards.getByRole('button');
   await cards.scrollIntoViewIfNeeded();
@@ -94,15 +97,17 @@ test('home BrandForge cards open one at a time and count down to the next', asyn
   await expect(cards).toHaveClass(/is-stopped/);
 });
 
-test('BrandForge steps: four on Home linking to the page, and in full on BrandForge', async ({ page }) => {
+test('BrandForge steps: off Home, as cards under the hero and in full on BrandForge', async ({ page }) => {
   const titles = ['Discovery & Alignment', 'Strategy & Direction', 'Visual Identity', 'Activation'];
   await page.goto('/');
+  await expect(page.locator('[data-process-cards]')).toHaveCount(0);
+  // The closing "Your custom website starts here" card is gone too.
+  await expect(page.getByRole('heading', { name: 'Your custom website starts here.' })).toHaveCount(0);
+
+  await page.goto('/brandforge/');
   const band = page.getByRole('region', { name: 'From zero to market-ready in four steps' });
   await expect(band.getByRole('heading', { level: 3 })).toHaveCount(4);
   await expect(band.locator('.process-card__title')).toHaveText(titles);
-  await expect(band.getByRole('link', { name: /Explore BrandForge/ })).toHaveAttribute('href', '/brandforge/');
-
-  await page.goto('/brandforge/');
   const steps = page.locator('.process-split__step');
   await expect(steps.getByRole('heading', { level: 3 })).toHaveText(titles);
   for (const step of await steps.all()) await expect(step.locator('img')).toHaveAttribute('alt', /\S/);
