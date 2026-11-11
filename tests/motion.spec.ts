@@ -138,7 +138,10 @@ test('home services show their case studies two at a time', async ({ page }) => 
   await track.locator('xpath=..').getByRole('button', { name: 'Next slides' }).click();
   await expect.poll(() => track.evaluate((el) => el.scrollLeft)).toBeGreaterThan(300);
   await expect.poll(inView).toBe(2);
-  await expect(track.locator('> li').nth(2)).toBeInViewport({ ratio: 0.9 });
+  // The third card now leads the row.
+  await expect
+    .poll(() => track.evaluate((el) => Math.abs(Math.round(el.children[2].getBoundingClientRect().left - el.getBoundingClientRect().left))))
+    .toBe(0);
 });
 
 test('logo marquee can be paused', async ({ page }) => {

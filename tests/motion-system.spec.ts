@@ -97,7 +97,7 @@ test('BrandForge cards open one at a time and count down to the next', async ({ 
   await expect(cards).toHaveClass(/is-stopped/);
 });
 
-test('BrandForge steps: off Home, as cards under the hero and in full on BrandForge', async ({ page }) => {
+test('BrandForge steps: off Home, once as cards under the hero on BrandForge', async ({ page }) => {
   const titles = ['Discovery & Alignment', 'Strategy & Direction', 'Visual Identity', 'Activation'];
   await page.goto('/');
   await expect(page.locator('[data-process-cards]')).toHaveCount(0);
@@ -105,12 +105,13 @@ test('BrandForge steps: off Home, as cards under the hero and in full on BrandFo
   await expect(page.getByRole('heading', { name: 'Your custom website starts here.' })).toHaveCount(0);
 
   await page.goto('/brandforge/');
-  const band = page.getByRole('region', { name: 'From zero to market-ready in four steps' });
+  const band = page.getByRole('region', { name: 'How BrandForge works' });
   await expect(band.getByRole('heading', { level: 3 })).toHaveCount(4);
   await expect(band.locator('.process-card__title')).toHaveText(titles);
-  const steps = page.locator('.process-split__step');
-  await expect(steps.getByRole('heading', { level: 3 })).toHaveText(titles);
-  for (const step of await steps.all()) await expect(step.locator('img')).toHaveAttribute('alt', /\S/);
+  // Once on the page, each with a described photo.
+  await expect(page.locator('[data-process-cards]')).toHaveCount(1);
+  await expect(page.locator('.process-split__step')).toHaveCount(0);
+  for (const card of await band.locator('[data-process-card]').all()) await expect(card.locator('img')).toHaveAttribute('alt', /\S/);
 });
 
 test('service work slider steps through projects with its buttons', async ({ page }) => {
