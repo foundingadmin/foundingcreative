@@ -68,8 +68,16 @@ test('home services pin "We shape brands / launch websites / support events" and
     await steps.nth(i).evaluate((el) => el.scrollIntoView({ block: 'center' }));
     await expect(active).toHaveText(words);
     await expect(steps.nth(i).getByRole('heading', { level: 3 })).toHaveText(`We ${words}`);
-    // No icon, one sentence, the button, then the pills.
+    // The pinned line and the H3 both link to the service page.
+    const href = ['/services/branding-services/', '/services/website-services/', '/services/event-services/'][i];
+    await expect(page.locator('[data-cycler-link]')).toHaveAttribute('href', href);
+    await expect(steps.nth(i).getByRole('heading', { level: 3 }).getByRole('link')).toHaveAttribute('href', href);
+    // No icon, one sentence, the pills, then the button.
     await expect(steps.nth(i).locator('.service__text > *')).toHaveCount(4);
+    await expect(steps.nth(i).locator('.service__text > *').last()).toHaveText(
+      ['View all brand services', 'View all website services', 'View all event services'][i],
+    );
+    await expect(steps.nth(i).locator('.service__text > *').last()).toHaveAttribute('href', href);
     await expect(steps.nth(i).locator('.service__media .pill')).toHaveCount(0);
   }
   // Each pill links to its section on the service page.

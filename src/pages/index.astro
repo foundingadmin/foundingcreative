@@ -34,7 +34,7 @@ const services = [
     words: 'shape brands',
     lead: 'Brand identities built to last through clear, scalable creative foundations.',
     href: '/services/branding-services/',
-    cta: 'Branding services',
+    cta: 'View all brand services',
     tags: pills('/services/branding-services/'),
     studies: pick(['bell-bird-atm', 'safezone-product-and-branding', 'genpact-grow-event', 'plant-nursery-ecommerce']),
   },
@@ -43,7 +43,7 @@ const services = [
     words: 'launch websites',
     lead: 'No two sites should be the same because no two businesses are.',
     href: '/services/website-services/',
-    cta: 'Website services',
+    cta: 'View all website services',
     tags: pills('/services/website-services/'),
     studies: pick(['turntide-website', 'atlfreight-website', 'plant-nursery-ecommerce', 'aprilaire-product-app']),
   },
@@ -52,7 +52,7 @@ const services = [
     words: 'support events',
     lead: 'Crafting environments for unforgettable experiences.',
     href: '/services/event-services/',
-    cta: 'Event services',
+    cta: 'View all event services',
     tags: pills('/services/event-services/'),
     studies: pick(['innovation-forum-event', 'bank-apps', 'interactive-learning-mural', 'genpact-grow-event']),
   },
@@ -103,28 +103,37 @@ const values = [
       </div>
 
       <!-- Pinned line: the phrase swaps as each service passes the middle of
-           the screen (script below). Decorative; each service's H3 says the
-           same, and shows in its place on small screens. -->
+           the screen (script below), and the whole line links to that
+           service's page. It is a mouse shortcut only (hidden from screen
+           readers, out of the tab order): each service's H3 says the same
+           and carries the real link, and shows in its place on small screens. -->
       <p class="cycler" aria-hidden="true" data-cycler>
-        <span class="cycler__we">We</span>
-        <span class="cycler__words">
-          {
-            services.map((service, i) => (
-              <span class:list={['cycler__word', { 'is-active': i === 0 }]}>{service.words}</span>
-            ))
-          }
-        </span>
+        <a class="cycler__link" href={services[0].href} tabindex="-1" data-cycler-link>
+          <span class="cycler__we">We</span>
+          <span class="cycler__words">
+            {
+              services.map((service, i) => (
+                <span class:list={['cycler__word', { 'is-active': i === 0 }]} data-href={service.href}>
+                  {service.words}
+                  <Icon name="arrow-up-right" size={32} class="cycler__arrow" />
+                </span>
+              ))
+            }
+          </span>
+        </a>
       </p>
 
       {
         services.map((service, i) => (
           <article class="service" aria-labelledby={`service-${i}`} data-reveal data-cycler-step={i}>
             <div class="service__text">
-              <h3 id={`service-${i}`}>{service.title}</h3>
+              <h3 id={`service-${i}`}>
+                <a class="service__title" href={service.href}>
+                  {service.title}
+                  <Icon name="arrow-up-right" size={20} class="service__title-arrow" />
+                </a>
+              </h3>
               <p class="service__lead">{service.lead}</p>
-              <a class="button" href={service.href}>
-                {service.cta} <Icon name="arrow-up-right" size={16} />
-              </a>
               <!-- What's included: each pill jumps to its section on the service page -->
               <ul class="service__tags" aria-label={`${service.title}: what's included`}>
                 {service.tags.map((tag) => (
@@ -135,6 +144,9 @@ const values = [
                   </li>
                 ))}
               </ul>
+              <a class="button" href={service.href}>
+                {service.cta} <Icon name="arrow-up-right" size={16} />
+              </a>
             </div>
             <div class="service__media">
               <Carousel id={`service-${i}-work`} label={`${service.title}: case studies`} class="service__gallery">
@@ -279,8 +291,6 @@ const values = [
     position: sticky;
     top: var(--header-height);
     z-index: 1;
-    display: flex;
-    gap: 0.25em;
     margin: 0;
     padding-block: var(--space-md) var(--space-lg);
     background: linear-gradient(var(--color-night) 75%, transparent);
@@ -291,8 +301,45 @@ const values = [
     line-height: 1;
   }
 
+  /* The whole line is one link, only as wide as its words */
+  .cycler__link {
+    display: inline-flex;
+    gap: 0.25em;
+    color: inherit;
+    text-decoration: none;
+  }
+
   .cycler__words {
     display: grid;
+  }
+
+  /* A small arrow at the top right of the phrase: white, mint on hover */
+  .cycler__word :global(.cycler__arrow) {
+    width: 0.32em;
+    height: 0.32em;
+    margin-left: 0.08em;
+    vertical-align: 0.55em;
+    color: var(--color-white);
+    transition:
+      color 200ms var(--ease-out),
+      transform 200ms var(--ease-out);
+  }
+
+  .cycler__link:hover .cycler__word {
+    text-shadow: 0 0 0.3em color-mix(in srgb, var(--color-mint) 65%, transparent);
+  }
+
+  .cycler__link:hover :global(.cycler__arrow) {
+    color: var(--color-mint);
+    transform: translate(0.06em, -0.06em);
+  }
+
+  /* Keyboard focus lands on the matching service's (visually hidden) H3
+   * link; show it on the pinned line. */
+  .services:has(.service__title:focus-visible) .cycler__link {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 0.1em;
+    border-radius: var(--radius-sm);
   }
 
   .cycler__word {
@@ -305,7 +352,8 @@ const values = [
     transition:
       opacity 500ms var(--ease-out),
       filter 500ms var(--ease-out),
-      transform 500ms var(--ease-out);
+      transform 500ms var(--ease-out),
+      text-shadow 200ms var(--ease-out);
   }
 
   .cycler__word.is-active {
@@ -315,8 +363,13 @@ const values = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cycler__word {
+    .cycler__word,
+    .cycler__word :global(.cycler__arrow) {
       transition: none;
+    }
+
+    .cycler__link:hover :global(.cycler__arrow) {
+      transform: none;
     }
   }
 
@@ -348,6 +401,30 @@ const values = [
     font-weight: var(--font-weight-bold);
     letter-spacing: normal;
     line-height: 1.4;
+  }
+
+  /* On small screens the H3 is the heading: a link with the same arrow */
+  .service__title {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .service__title :global(.service__title-arrow) {
+    width: 0.5em;
+    height: 0.5em;
+    vertical-align: 0.5em;
+    color: var(--color-white);
+    transition: color 200ms var(--ease-out);
+  }
+
+  .service__title:hover,
+  .service__title:focus-visible {
+    color: var(--color-mint);
+  }
+
+  .service__title:hover :global(.service__title-arrow),
+  .service__title:focus-visible :global(.service__title-arrow) {
+    color: var(--color-mint);
   }
 
   /* The pinned line is the visible heading on wide screens; the H3 stays
@@ -501,13 +578,16 @@ const values = [
   // Swap the pinned phrase to whichever service is crossing the middle of the screen.
   const cycler = document.querySelector('[data-cycler]');
   if (cycler) {
-    const words = [...cycler.querySelectorAll('.cycler__word')];
+    const words = [...cycler.querySelectorAll<HTMLElement>('.cycler__word')];
+    const link = cycler.querySelector<HTMLAnchorElement>('[data-cycler-link]');
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           const active = Number((entry.target as HTMLElement).dataset.cyclerStep);
           words.forEach((word, i) => word.classList.toggle('is-active', i === active));
+          // The pinned line links to whichever service it is naming
+          if (link && words[active]?.dataset.href) link.href = words[active].dataset.href;
         }
       },
       { rootMargin: '-45% 0px -45% 0px' },
