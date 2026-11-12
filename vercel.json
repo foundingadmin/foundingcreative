@@ -13,6 +13,21 @@
       "permanent": false
     },
     {
+      "source": "/rocket-sitelaunch/",
+      "destination": "/services/website-services/",
+      "permanent": true
+    },
+    {
+      "source": "/prism-sitelaunch/",
+      "destination": "/services/website-services/",
+      "permanent": true
+    },
+    {
+      "source": "/orbit-sitelaunch/",
+      "destination": "/services/website-services/",
+      "permanent": true
+    },
+    {
       "source": "/client-portal/",
       "destination": "/buckit/",
       "permanent": true

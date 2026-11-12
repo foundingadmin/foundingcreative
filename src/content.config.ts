@@ -67,8 +67,6 @@ const caseStudies = defineCollection({
           light: z.string().regex(hex),
         })
         .optional(),
-      // Show the SiteLaunch packages after the story (web projects).
-      showSiteLaunch: z.boolean().default(false),
       // Measured outcomes, shown as a Results band after the story. Leave out
       // until there are real numbers; the band only appears when set.
       results: z
@@ -144,47 +142,12 @@ const services = defineCollection({
           ),
         })
         .optional(),
-      showSiteLaunch: z.boolean().default(false),
+      // Show the BrandForge pitch for startups (branding services).
+      showBrandForge: z.boolean().default(false),
       relatedPosts: z.array(z.string()).default([]),
       cta: z.object({ heading: z.string(), text: z.string() }),
     });
   },
-});
-
-// SiteLaunch website packages (Prism, Rocket, Orbit), one YAML file each,
-// rendered by src/components/SiteLaunchPage.astro.
-const sitelaunch = defineCollection({
-  loader: glob({ pattern: '*.yaml', base: './src/content/sitelaunch' }),
-  schema: ({ image }) =>
-    z.object({
-      name: z.string(),
-      ...seo,
-      order: z.number(),
-      heroImage: image(),
-      shareImage: image(),
-      shareImageAlt: z.string().min(1),
-      // Icon names are from src/components/Icon.astro (the build fails on an unknown one).
-      pillars: z.array(z.object({ label: z.string(), icon: z.string() })).length(3),
-      title: z.string(),
-      subtitle: z.string(),
-      audience: z.object({ heading: z.string(), lead: z.string(), points: z.array(z.string()).min(1) }),
-      stats: z.array(z.object({ value: z.string(), label: z.string(), source: z.string().url().optional() })),
-      why: z.object({ heading: z.string(), lead: z.string(), text: z.string() }),
-      features: z.object({
-        heading: z.string(),
-        text: z.string(),
-        lead: z.string(),
-        items: z.array(z.object({ title: z.string(), text: z.string(), icon: z.string() })).length(6),
-      }),
-      process: z.object({
-        heading: z.string(),
-        text: z.string(),
-        lead: z.string(),
-        steps: z.array(z.object({ phase: z.string(), title: z.string(), text: z.string() })).length(4),
-      }),
-      closing: z.object({ heading: z.string(), text: z.string(), tagline: z.string() }),
-      ctaHeading: z.string(),
-    }),
 });
 
 // Legal pages (imprint, disclaimer, privacy statements, cookie policies),
@@ -198,4 +161,4 @@ const legal = defineCollection({
   }),
 });
 
-export const collections = { posts, caseStudies, services, sitelaunch, legal };
+export const collections = { posts, caseStudies, services, legal };

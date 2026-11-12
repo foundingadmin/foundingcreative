@@ -50,41 +50,62 @@ capabilities:
 areas:
   heading: What goes into an event
   items:
-    - id: event-branding
-      label: Event branding
-      what: "Event branding gives a conference or meeting its own look: a theme, a name, and a visual system that carries from the invitation to the main stage."
-      how: "We build the event identity out of your brand, then apply it to every touchpoint (stage, screens, badges, print, and digital) so the whole event feels like one experience."
+    - id: interactive-displays
+      label: Interactive displays
+      what: "Interactive displays give attendees something to touch, play, and explore: touchscreens, kiosks, games, and digital walls that bring them into your story."
+      how: "We design the experience around one clear message, build the screens and content, and test them before the doors open so they hold up to a full day of use."
       image:
-        src: ../../assets/services/genpact-grow-hallway.webp
-        alt: Genpact GROW event hallway with branded walls and signage
-    - id: trade-show-exhibits
-      label: Trade show exhibits
-      what: "Your booth has a few seconds to stop someone walking the floor. Exhibit design makes those seconds count."
-      how: "We design the booth, the graphics, and interactive pieces such as kiosks and games around one clear message, then prepare the files for production."
+        src: ../../assets/services/tata-interactive-wall.webp
+        alt: Man exploring the TCS Business 4.0 interactive wall
+    - id: animations
+      label: Animations
+      what: "Animation brings the event theme to life on stage screens, displays, and social: openers, loops, transitions, and motion graphics."
+      how: "We storyboard from the event theme, animate in the brand's look, and deliver files sized for every screen in the venue."
       image:
-        src: ../../assets/services/genpact-kiosk-render.webp
-        alt: Genpact branded kiosk render
-    - id: signage-and-wayfinding
-      label: Signage and wayfinding
-      what: "Signage and wayfinding get attendees where they need to be without having to ask, and keep the brand present in every hallway."
-      how: "We plan signs around how people move through the venue, then design them as one family: directional signs, room markers, agendas, and large-format graphics."
+        src: ../../assets/services/event-spin-wheel-game.webp
+        alt: Interactive spin wheel graphic for an event game
+    - id: large-format-prints-and-booths
+      label: Large-format prints and booths
+      what: "Murals, stage backdrops, wall wraps, and booths turn a venue into your space, and they have to read clearly from across the room."
+      how: "We design to the venue's real dimensions, proof at scale, and prepare the files for production."
+      image:
+        src: ../../assets/services/genpact-grow-mural.webp
+        alt: Genpact GROW18 event mural in a convention center
+    - id: directional-signage
+      label: Directional signage
+      what: "Directional signage gets attendees where they need to be without having to ask, and keeps the brand present in every hallway."
+      how: "We plan signs around how people move through the venue, then design them as one family: directional signs, room markers, and agendas."
       image:
         src: ../../assets/services/mastercard-event-signage.webp
         alt: Mastercard event wayfinding signs for general session, lunch, and breakouts
-    - id: presentations
-      label: Presentations
-      what: "Presentation design turns a speaker's message into slides an audience can follow from the back of the room."
-      how: "We work from your outline to build decks that match the event's look, with clear visuals, consistent templates, and motion where it helps the story."
-      image:
-        src: ../../assets/services/event-presenter-on-stage.webp
-        alt: Audience silhouette facing a presenter on a lit conference stage
-    - id: post-event-content
-      label: Post-event content
-      what: "Post-event content keeps the event working after the doors close: recaps, highlights, and material your team can share with people who weren't there."
-      how: "We plan what to capture before the event, then turn it into content sized for your website, email, and social channels."
+    - id: attendee-badges
+      label: Attendee badges
+      what: "A badge is the one piece of the event every attendee wears all day. It should be easy to read at a glance and unmistakably part of the event."
+      how: "We design badges and lanyards in the event's look, with names and roles sized to be read from a few steps away, and set them up for printing."
       image:
         src: ../../assets/services/genpact-event-attendees.webp
         alt: Attendees with lanyards talking at a Genpact event
+    - id: social-media-kits
+      label: Social media kits
+      what: "A social media kit gives your team, speakers, and sponsors ready-made graphics to promote the event before, during, and after."
+      how: "We build templates in the event's look for each channel, sized correctly, so anyone can post without starting from scratch."
+      image:
+        src: ../../assets/services/mastercard-forum-attendees.webp
+        alt: Two attendees laughing at the Mastercard Innovation Forum
+    - id: promotional-materials
+      label: Promotional materials
+      what: "Promotional materials carry the event beyond the venue: invitations, agendas, giveaways, and branded merchandise."
+      how: "We design each piece as part of the same system as the stage and signage, so everything an attendee picks up feels like it belongs."
+      image:
+        src: ../../assets/services/modl-event-tent.webp
+        alt: MODL branded event tent and banner
+    - id: event-websites
+      label: Event websites
+      what: "An event website is where attendees register, check the agenda, and find what they need before they arrive."
+      how: "We design and build the site in the event's look, keep it fast and easy to use on a phone, and update it as the schedule changes."
+      image:
+        src: ../../assets/services/genpact-grow-website-laptop.webp
+        alt: Laptop showing the Genpact GROW18 event website
 work:
   heading: Crafted Connections
   intro: A look inside the events where strategy, structure, and design all came together to drive meaningful business outcomes.

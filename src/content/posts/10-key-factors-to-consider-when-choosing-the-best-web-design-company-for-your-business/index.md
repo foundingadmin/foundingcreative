@@ -176,4 +176,4 @@ Your brand’s reputation is too valuable to gamble on a good-looking homepage t
 
 If you’re considering who should build your next site, now’s the time to think bigger than visuals.
 
-Founding Creative designs and builds websites for B2B teams, strategy first, so the site earns trust and turns visits into pipeline. [See our website design services](/services/website-services/), or compare our SiteLaunch packages, like [Prism SiteLaunch](/prism-sitelaunch/).
+Founding Creative designs and builds websites for B2B teams, strategy first, so the site earns trust and turns visits into pipeline. [See our website design services](/services/website-services/), or compare our SiteLaunch packages, like [Prism SiteLaunch](/services/website-services/).

@@ -80,7 +80,6 @@ test('structured data: one graph, Organization and WebSite once, breadcrumbs bel
 
   const expected: [string, string, string[]][] = [
     ['/services/website-services/', 'Service', ['Home', 'Services', 'Website Services']],
-    ['/rocket-sitelaunch/', 'Service', ['Home', 'Services', 'Website Services', 'Rocket SiteLaunch']],
     ['/case-study/turntide-website/', 'CreativeWork', ['Home', 'Case Studies', 'Turntide Website']],
     ['/5-website-truths-for-marketers/', 'BlogPosting', ['Home', 'Field Notes', '5 Website Truths for Marketers']],
     ['/buckit/', 'FAQPage', ['Home', 'BucKit']],

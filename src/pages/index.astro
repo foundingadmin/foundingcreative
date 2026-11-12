@@ -16,13 +16,14 @@ const allStudies = await getCaseStudies();
 const pick = (ids: string[]) =>
   ids.map((id) => allStudies.find((study) => study.id === id)).filter((study) => study !== undefined);
 
-// The three services, in the order the pinned "We shape brands / launch
-// websites / support events" line cycles through them. Each shows its case
-// studies two at a time (aim for six per service as more are written).
+// The services, in the order the pinned "We shape brands / launch websites /
+// transform events / design everything" line cycles through them. The first
+// three show their case studies two at a time (aim for six per service as
+// more are written); the last is a smaller row with no case studies.
 // Each service's pills are the sections ("areas") of its service page, set
 // in src/content/services/*.yaml: the pill links to that section's anchor.
 const servicePages = await getCollection('services');
-const pills = (path: string) =>
+const pills = (path: string): { label: string; href?: string }[] =>
   (servicePages.find((page) => page.data.path === path)?.data.areas?.items ?? []).map((area) => ({
     label: area.label,
     href: `${path}#${area.id}`,
@@ -32,7 +33,7 @@ const services = [
   {
     title: 'We shape brands',
     words: 'shape brands',
-    lead: 'Brand identities built to last through clear, scalable creative foundations.',
+    lead: "From core positioning to complete visual systems, let's craft strategic, cohesive brand identities that carry the business forward as it grows.",
     href: '/services/branding-services/',
     cta: 'View all brand services',
     tags: pills('/services/branding-services/'),
@@ -41,20 +42,32 @@ const services = [
   {
     title: 'We launch websites',
     words: 'launch websites',
-    lead: 'No two sites should be the same because no two businesses are.',
+    lead: "Custom, high-performing websites built to engage users, showcase your company's credibility, convert prospects to sales, and scale with ease.",
     href: '/services/website-services/',
     cta: 'View all website services',
     tags: pills('/services/website-services/'),
     studies: pick(['turntide-website', 'atlfreight-website', 'plant-nursery-ecommerce', 'aprilaire-product-app']),
   },
   {
-    title: 'We support events',
-    words: 'support events',
-    lead: 'Crafting environments for unforgettable experiences.',
+    title: 'We transform events',
+    words: 'transform events',
+    lead: 'Strategic event themes seamlessly executed across interactive displays and large-format graphics, turning ordinary moments into immersive, memorable brand experiences.',
     href: '/services/event-services/',
     cta: 'View all event services',
     tags: pills('/services/event-services/'),
     studies: pick(['innovation-forum-event', 'bank-apps', 'interactive-learning-mural', 'genpact-grow-event']),
+  },
+  {
+    title: 'We design everything',
+    words: 'design everything',
+    lead: 'Consider us your on-call creative partner for any asset imaginable. We turn ambitious ideas into polished reality with impactful deliverables that keep your brand consistent across the board.',
+    href: '/services/design-services/',
+    cta: 'View all design services',
+    // Plain labels: the design services page has no sections to link to.
+    tags: ['Digital marketing', 'Print collateral', 'Packaging', 'Presentations', 'Sales enablement'].map(
+      (label): { label: string; href?: string } => ({ label }),
+    ),
+    studies: [],
   },
 ];
 
@@ -79,15 +92,17 @@ const values = [
     <HeroBackdrop />
     <div class="container hero__content" data-intro>
       <p class="hero__eyebrow">Brand strategy and web design agency</p>
-      <h1 class="hero__title holo-text">Creative foundations for brands of all sizes</h1>
+      <h1 class="hero__title holo-text">Your complete creative department, built on strategy.</h1>
       <p class="hero__lead">
-        We're a brand strategy agency for growing B2B teams. We build the{' '}
-        <a href="/services/branding-services/">brand</a>, <a href="/services/website-services/">website</a>,{' and '}
-        <a href="/services/design-services/">design system</a> your team grows on, strategy first.
+        We're a full-service creative partner for scaling companies. From{' '}
+        <a href="/services/branding-services/">brand identity</a> and{' '}
+        <a href="/services/website-services/">websites</a> to <a href="/services/event-services/">live events</a> and{' '}
+        <a href="/services/design-services/">ongoing design support</a>, we build the creative foundations modern
+        businesses need to stand out and grow.
       </p>
       <div class="hero__actions">
         <a class="button button--primary" href="/case-studies/">See our case studies <Icon name="arrow-up-right" size={16} /></a>
-        <a class="button" href="#services">Explore our services <Icon name="arrow-up-right" size={16} /></a>
+        <a class="button" href="/services/">Explore our services <Icon name="arrow-up-right" size={16} /></a>
       </div>
     </div>
   </section>
@@ -125,7 +140,12 @@ const values = [
 
       {
         services.map((service, i) => (
-          <article class="service" aria-labelledby={`service-${i}`} data-reveal data-cycler-step={i}>
+          <article
+            class:list={['service', { 'service--compact': service.studies.length === 0 }]}
+            aria-labelledby={`service-${i}`}
+            data-reveal
+            data-cycler-step={i}
+          >
             <div class="service__text">
               <h3 id={`service-${i}`}>
                 <a class="service__title" href={service.href}>
@@ -134,55 +154,46 @@ const values = [
                 </a>
               </h3>
               <p class="service__lead">{service.lead}</p>
-              <!-- What's included: each pill jumps to its section on the service page -->
-              <ul class="service__tags" aria-label={`${service.title}: what's included`}>
-                {service.tags.map((tag) => (
-                  <li>
-                    <a class="pill service__tag" href={tag.href}>
-                      {tag.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <a class="button" href={service.href}>
-                {service.cta} <Icon name="arrow-up-right" size={16} />
-              </a>
+              <div class="service__list">
+                {/* What's included: a pill with a section on the service page jumps to it */}
+                <ul class="service__tags" aria-label={`${service.title}: what's included`}>
+                  {service.tags.map((tag) => (
+                    <li>
+                      {tag.href ? (
+                        <a class="pill service__tag" href={tag.href}>
+                          {tag.label}
+                        </a>
+                      ) : (
+                        <span class="pill service__tag service__tag--plain">{tag.label}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                <a class="button" href={service.href}>
+                  {service.cta} <Icon name="arrow-up-right" size={16} />
+                </a>
+              </div>
             </div>
-            <div class="service__media">
-              <Carousel id={`service-${i}-work`} label={`${service.title}: case studies`} class="service__gallery">
-                {service.studies.map((study) => (
-                  <li>
-                    <CaseStudyCard study={study} headingLevel={4} compact />
-                  </li>
-                ))}
-              </Carousel>
-            </div>
+            {service.studies.length > 0 && (
+              <div class="service__media">
+                <Carousel id={`service-${i}-work`} label={`${service.title}: case studies`} class="service__gallery">
+                  {service.studies.map((study) => (
+                    <li>
+                      <CaseStudyCard study={study} headingLevel={4} compact />
+                    </li>
+                  ))}
+                </Carousel>
+              </div>
+            )}
           </article>
         ))
       }
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class="testimonials-band" aria-labelledby="testimonials-heading">
-    <div class="container section">
-      <div class="section__intro section__intro--center section__intro--wide">
-        <p class="eyebrow">Partner <em>testimonials</em></p>
-        <h2 id="testimonials-heading">Proof is better than a pitch</h2>
-        <p class="section__lead">See what it's like to work with a creative team that builds for the long run.</p>
-      </div>
-      <ClientLogos />
-      <Testimonials />
-      <p class="section__more">
-        <a class="button button--primary" href={trustpilot}>
-          View all testimonials <Icon name="arrow-up-right" size={16} />
-        </a>
-      </p>
-    </div>
-  </section>
-
-  <!-- Who we are -->
-  <section class="about-band curve-top" aria-labelledby="about-heading">
+  <!-- About and testimonials, as one section: who we are, then the people
+       and brands who vouch for it -->
+  <section class="about-band" aria-labelledby="about-heading">
     <div class="container section about">
       <ul class="team" aria-label="The Founding Creative team" data-reveal-stagger>
         {
@@ -214,6 +225,23 @@ const values = [
         </ul>
         <a class="button" href="/about-us/">Meet the team <Icon name="arrow-up-right" size={16} /></a>
       </div>
+    </div>
+    <div class="container section proof">
+      <div class="section__intro section__intro--center section__intro--wide">
+        <p class="eyebrow">Partner <em>testimonials</em></p>
+        <h3 id="testimonials-heading" class="proof__heading">Proof is better than a pitch</h3>
+        <p class="section__lead">See what it's like to work with a creative team that builds for the long run.</p>
+      </div>
+      <p class="proof__industries">
+        Trusted by teams in finance, technology, logistics, construction, and consumer brands.
+      </p>
+      <ClientLogos />
+      <Testimonials />
+      <p class="section__more">
+        <a class="button button--primary" href={trustpilot}>
+          View all testimonials <Icon name="arrow-up-right" size={16} />
+        </a>
+      </p>
     </div>
   </section>
 </BaseLayout>
@@ -268,6 +296,10 @@ const values = [
 
   .hero__lead a:nth-of-type(3) {
     color: var(--color-lavender);
+  }
+
+  .hero__lead a:nth-of-type(4) {
+    color: var(--color-holo-cyan);
   }
 
   .hero__actions {
@@ -446,6 +478,25 @@ const values = [
     font-size: var(--font-size-lg);
   }
 
+  /* The pills, then the service button */
+  .service__list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+
+  /* The last service has no case studies: its summary sits in the first
+   * column and its list in the second, so the row stays short. */
+  .service--compact {
+    align-items: start;
+    border-bottom: 0;
+  }
+
+  .service--compact .service__text {
+    display: contents;
+  }
+
   .service__tags {
     display: flex;
     flex-wrap: wrap;
@@ -464,8 +515,8 @@ const values = [
       color 150ms var(--ease-out);
   }
 
-  .service__tag:hover,
-  .service__tag:focus-visible {
+  a.service__tag:hover,
+  a.service__tag:focus-visible {
     border-color: var(--color-mint);
     background-color: var(--color-mint);
     color: var(--color-black);
@@ -490,21 +541,32 @@ const values = [
     }
   }
 
-  /* Testimonials band */
-  .testimonials-band {
-    background-color: var(--color-coal);
+  /* About and testimonials: one band that runs down into dark gray, so the
+     page's lifting edge reads clearly against the CTA and footer beneath it */
+  .about-band {
+    background: linear-gradient(var(--color-night), var(--color-ink));
   }
 
   .section__intro--wide {
     max-width: 56rem;
   }
 
-  /* Who we are */
-  /* Who we are runs down into dark gray, so the page's lifting edge reads
-     clearly against the CTA and footer beneath it */
-  .about-band {
-    --curve-color: var(--color-night);
-    background: linear-gradient(var(--color-night), var(--color-ink));
+  /* Testimonials follow straight on from Who we are */
+  .proof {
+    padding-top: 0;
+  }
+
+  .proof__heading {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-tight);
+  }
+
+  /* The industries line introduces the logo row */
+  .proof__industries {
+    margin: 0 0 var(--space-md);
+    color: var(--color-text-muted);
+    text-align: center;
   }
 
   .about {

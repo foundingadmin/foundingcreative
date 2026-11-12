@@ -99,6 +99,7 @@ statement:
   body:
     - We start with who you serve, what you stand for, and why you're different. Then we design an identity that says it the same way on every page, deck, and product, so your brand looks established and stays consistent as your team grows.
     - Launching or rebranding on a deadline? [BrandForge](/brandforge/) is our fixed-scope brand identity package for startups, launch-ready in weeks.
+showBrandForge: true
 cta:
   heading: Ready for a brand identity that holds up?
   text: Tell us where your brand is today and where it needs to go.

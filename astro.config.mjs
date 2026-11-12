@@ -11,7 +11,7 @@ const NOINDEX = ['/404/'];
 // Sitemap priority: Home first, then the main pages, then posts and case
 // studies; legal pages last (they stay listed, just never prioritized).
 const LEGAL = /\/(imprint|disclaimer|opt-out-preferences|cookie-policy-(eu|uk)|privacy-statement-(eu|uk|us))\/$/;
-const MAIN = /\/(about-us|services|brandforge|fractional-creative|contact-us|case-studies|blog|[a-z]+-sitelaunch)\/$|\/services\/[^/]+\/$/;
+const MAIN = /\/(about-us|services|brandforge|fractional-creative|contact-us|case-studies|blog)\/$|\/services\/[^/]+\/$/;
 /** @param {import('@astrojs/sitemap').SitemapItem} item */
 function sitemapPriority(item) {
   const path = new URL(item.url).pathname;

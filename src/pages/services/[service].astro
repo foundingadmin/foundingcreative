@@ -3,8 +3,8 @@ import Img from '../../components/Img.astro';
 import { getCollection, getEntries, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FieldNotes from '../../components/FieldNotes.astro';
-import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import ClientLogos from '../../components/ClientLogos.astro';
+import BrandForgePromo from '../../components/BrandForgePromo.astro';
 import WorkSlider from '../../components/WorkSlider.astro';
 import WipeSlider from '../../components/WipeSlider.astro';
 import { wipeSlide } from '../../lib/images';
@@ -29,9 +29,9 @@ const { data } = service;
 const posts = await getEntries(data.relatedPosts.map((id) => ({ collection: 'posts' as const, id })));
 
 // The white statement band and the white closing band meet directly unless
-// dark sections (SiteLaunch, Field Notes) sit between them; then each white
+// a dark section (Field Notes) sits between them; then each white
 // band gets its own curved edge.
-const darkMiddle = data.showSiteLaunch || posts.length > 0;
+const darkMiddle = posts.length > 0;
 
 // The statement images stack in two staggered columns, as on the live site.
 const columns = [
@@ -168,6 +168,8 @@ const jsonLd = [
       )
     }
 
+    {data.showBrandForge && <BrandForgePromo />}
+
     <WorkSlider only={data.work.caseStudies} heading={data.work.heading} intro={data.work.intro} />
 
     {
@@ -229,8 +231,6 @@ const jsonLd = [
       </div>
     </div>
   </section>
-
-  {data.showSiteLaunch && <SiteLaunchSection />}
 
   {posts.length > 0 && <FieldNotes posts={posts} heading="From Field Notes" />}
 

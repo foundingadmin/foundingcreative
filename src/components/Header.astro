@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import logo from '../assets/brand/founding-wordmark-white.svg';
-import { mainNav, sitelaunch, letsTalkHref, bookMeetingHref } from '../data/navigation';
+import { mainNav, letsTalkHref, bookMeetingHref } from '../data/navigation';
 
 const current = Astro.url.pathname;
 const isCurrent = (href: string) => (current === href ? 'page' : undefined);
@@ -36,18 +36,6 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
                             <li style={`--i: ${i}`}>
                               <a href={child.href} aria-current={isCurrent(child.href)}>
                                 {child.label}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div class="mega-col">
-                        <p class="mega-col__label">SiteLaunch websites</p>
-                        <ul>
-                          {sitelaunch.map((link, i) => (
-                            <li style={`--i: ${i + 2}`}>
-                              <a href={link.href} aria-current={isCurrent(link.href)}>
-                                {link.label}
                               </a>
                             </li>
                           ))}
@@ -94,15 +82,21 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
           mainNav.map((item) =>
             item.children ? (
               <li data-disclosure="accordion">
-                <button
-                  type="button"
-                  class="mobile-menu__item mobile-menu__toggle"
-                  aria-expanded="false"
-                  aria-controls="mobile-services-menu"
-                >
-                  {item.label}
-                  <Icon name="chevron-down" size={16} />
-                </button>
+                <!-- "Services" goes to the services page; the chevron beside it opens the list -->
+                <div class="mobile-menu__row">
+                  <a class="mobile-menu__item" href={item.href} aria-current={isCurrent(item.href)}>
+                    {item.label}
+                  </a>
+                  <button
+                    type="button"
+                    class="mobile-menu__item mobile-menu__toggle"
+                    aria-expanded="false"
+                    aria-controls="mobile-services-menu"
+                  >
+                    <span class="visually-hidden">{item.label} menu</span>
+                    <Icon name="chevron-down" size={16} />
+                  </button>
+                </div>
                 <ul class="mobile-menu__sublist" id="mobile-services-menu" hidden>
                   {item.children.map((child) => (
                     <li>
@@ -111,6 +105,11 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
                       </a>
                     </li>
                   ))}
+                  <li>
+                    <a class="mobile-menu__item" href="/brandforge/" aria-current={isCurrent('/brandforge/')}>
+                      BrandForge for startups
+                    </a>
+                  </li>
                 </ul>
               </li>
             ) : (
@@ -347,7 +346,7 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
 
   .site-nav__menu-inner {
     display: grid;
-    grid-template-columns: 1fr 1fr minmax(16rem, 1.2fr);
+    grid-template-columns: 1fr minmax(16rem, 1.2fr);
     gap: var(--space-xl);
     padding-block: var(--space-lg) var(--space-xl);
   }
@@ -362,9 +361,11 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
     text-transform: uppercase;
   }
 
+  /* The six services in two columns */
   .mega-col ul {
     display: grid;
-    gap: var(--space-3xs);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3xs) var(--space-xl);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -544,6 +545,18 @@ const isCurrent = (href: string) => (current === href ? 'page' : undefined);
   .mobile-menu__item[aria-current='page'] {
     background-color: var(--color-neutral-lighter);
     color: var(--color-black);
+  }
+
+  .mobile-menu__row {
+    display: flex;
+    gap: var(--space-2xs);
+  }
+
+  .mobile-menu__row .mobile-menu__toggle {
+    flex: none;
+    justify-content: center;
+    width: auto;
+    min-width: 3rem;
   }
 
   .mobile-menu__toggle[aria-expanded='true'] .icon {
