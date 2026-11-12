@@ -1,0 +1,869 @@
+---
+// Showcase template v3 (docs/case-study-sop.md): image-led case study
+// modules, driven by the entry's `showcase` list and its `brandKit`. Rendered
+// inside the page's .case-story, so the band, heading and step styles there
+// apply. Motion is CSS only (scroll timelines where the browser has them)
+// and everything sits still under prefers-reduced-motion.
+import type { CollectionEntry } from 'astro:content';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import Img from '../Img.astro';
+
+type Data = CollectionEntry<'caseStudies'>['data'];
+interface Props {
+  blocks: NonNullable<Data['showcase']>;
+  kit?: Data['brandKit'];
+  logo?: Data['logo'];
+  logoAlt?: string;
+  /** The entry's folder, for files the brand kit names (the mark). */
+  dir?: string;
+}
+
+const { blocks, kit, logo, logoAlt, dir } = Astro.props;
+
+// The brand mark, inlined so each of its shapes can animate. The XML
+// prolog goes, and the SVG is labeled as one image.
+const mark =
+  kit?.mark && dir
+    ? readFileSync(join(dir, kit.mark), 'utf8')
+        .replace(/<\?xml[^>]*\?>\s*/, '')
+        .replace(/<svg /, `<svg role="img" aria-label="${logoAlt ?? 'Brand mark'}" `)
+    : undefined;
+// Font weight names to CSS weights, for the type specimen.
+const WEIGHTS: Record<string, number> = { Light: 300, Regular: 400, Medium: 500, Semibold: 600, Bold: 700, Black: 800 };
+
+/**
+ * Copy that lives in frontmatter: **bold** and [text](/path/), plus any HTML
+ * written there (an external link with rel, visually hidden text).
+ */
+const inline = (text: string) =>
+  text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+
+const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+/** Black or white, whichever reads better on the swatch. */
+const inkOn = (hex: string) => {
+  const [r, g, b] = rgb(hex).map((v) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.3 ? 'var(--color-black)' : 'var(--color-white)';
+};
+
+const bleed = { widths: [640, 960, 1280, 1920, 2400], sizes: '100vw' };
+const sizesFor = (count: number) =>
+  count === 1 ? bleed : { widths: [480, 800, 1200, 1600], sizes: `(max-width: 700px) 100vw, ${Math.round(100 / count)}vw` };
+---
+
+{
+  blocks.map((block) => {
+    // Every block but the statement and conclusion can carry copy. Keys left
+    // out of the frontmatter are absent, so read them loosely.
+    const copy = block as { kicker?: string; heading?: string; points?: { title: string; text: string }[] } & { text?: string };
+    const Header = block.type !== 'statement' && (copy.kicker || copy.heading || copy.text) && (
+      <div class="case-header show__header">
+        {copy.kicker && <p class="case-kicker">{copy.kicker}</p>}
+        {copy.heading && <h2>{copy.heading}</h2>}
+        {copy.text && <p set:html={inline(copy.text)} />}
+      </div>
+    );
+    const Points = copy.points && (
+      <div class="show__points" data-count={copy.points.length}>
+        {copy.points.map((point) => (
+          <div>
+            <h3>{point.title}</h3>
+            <p set:html={inline(point.text)} />
+          </div>
+        ))}
+      </div>
+    );
+
+    if (block.type === 'statement') {
+      return (
+        <section class="case-band case-band--statement show show--statement" data-tone="accent">
+          <div class="case-band__inner">
+            <p class="statement show__statement">{block.text}</p>
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'board') {
+      return (
+        <section class="case-band show show--board" data-tone="dark">
+          <div class="case-band__inner">{Header}</div>
+          <div class="show__board" data-reveal>
+            <ul class="show__board-grid" data-count={block.images.length}>
+              {block.images.map((image) => (
+                <li>
+                  <Img src={image.src} alt={image.alt} widths={[480, 800, 1200]} sizes="(max-width: 700px) 60vw, 34vw" />
+                </li>
+              ))}
+            </ul>
+          </div>
+          {Points && <div class="case-band__inner">{Points}</div>}
+        </section>
+      );
+    }
+
+    if (block.type === 'colors' && kit) {
+      return (
+        <section class="case-band show show--colors" data-tone="white">
+          <div class="case-band__inner">
+            {Header}
+            <ul class="show__swatches" style={`--count: ${kit.colors.length}`}>
+              {kit.colors.map((color, i) => (
+                <li style={`--swatch: ${color.hex}; --ink: ${inkOn(color.hex)}; --i: ${i}`}>
+                  <strong>{color.name}</strong>
+                  {color.role && <span>{color.role}</span>}
+                  <span class="show__swatch-codes">
+                    {color.hex.toUpperCase()}
+                    <br />
+                    RGB {rgb(color.hex).join(' ')}
+                    {color.cmyk && (
+                      <>
+                        <br />
+                        CMYK {color.cmyk}
+                      </>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            {Points}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'logo' && logo) {
+      return (
+        <section class="case-band show show--logo" data-tone="accent">
+          <div class="case-band__inner">
+            {mark ? (
+              <div class="show__mark" data-reveal set:html={mark} />
+            ) : (
+              <div class="show__logo" data-reveal>
+                <Img src={logo} alt={logoAlt ?? ''} height={160} />
+              </div>
+            )}
+            {Header}
+            {Points}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'type' && kit?.fonts.length) {
+      const font = kit.fonts[0];
+      return (
+        <section class="case-band show show--type" data-tone="light">
+          <div class="case-band__inner">
+            <div class="show__type">
+              <p class="show__aa" aria-hidden="true">
+                Aa
+              </p>
+              <div>
+                {Header}
+                <ul class="show__weights">
+                  {font.weights.map((weight) => (
+                    <li style={`font-weight: ${WEIGHTS[weight] ?? 400}`}>{weight}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            {Points}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'mockup') {
+      return (
+        <section class="case-band show show--mockup" data-tone={block.tone}>
+          <div class="case-band__inner">{Header}</div>
+          <div class="show__mockups" data-count={block.images.length} data-reveal>
+            {block.images.map((image) => (
+              <Img src={image.src} alt={image.alt} {...sizesFor(block.images.length)} />
+            ))}
+          </div>
+          {Points && <div class="case-band__inner">{Points}</div>}
+        </section>
+      );
+    }
+
+    if (block.type === 'scene') {
+      return (
+        <section class="case-band show show--scene" data-tone="dark">
+          <figure class="show__scene" data-reveal>
+            <Img src={block.image.src} alt={block.image.alt} {...bleed} />
+            {block.concept && <figcaption class="show__concept">Concept</figcaption>}
+          </figure>
+          {(Header || Points) && (
+            <div class="case-band__inner">
+              {Header}
+              {Points}
+            </div>
+          )}
+        </section>
+      );
+    }
+
+    if (block.type === 'device') {
+      return (
+        <section class="case-band show show--device" data-tone="light">
+          <div class="case-band__inner">
+            {Header}
+            <div class="show__laptop">
+              <div class="show__screen">
+                <Img src={block.image.src} alt={block.image.alt} widths={[640, 960, 1280, 1600]} sizes="(max-width: 1100px) 90vw, 960px" />
+              </div>
+              <div class="show__base" aria-hidden="true" />
+            </div>
+            {Points}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'clip') {
+      return (
+        <section class="case-band show show--clip" data-tone="white">
+          <div class="case-band__inner">
+            {Header}
+            <div class="show__clip">
+              <Img src={block.poster.src} alt={block.poster.alt} widths={[640, 960, 1280, 1600]} sizes="(max-width: 1100px) 92vw, 960px" />
+              {/* Loads after the page does, plays only on screen, and never
+                  for reduced-motion visitors (src/scripts/motion.ts) */}
+              <video muted loop playsinline preload="none" data-src={block.video} data-ambient aria-hidden="true" tabindex="-1" />
+            </div>
+            {Points}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'numbers' && kit?.stats.length) {
+      return (
+        <section class="case-band show show--numbers" data-tone="accent">
+          <div class="case-band__inner">
+            {Header}
+            <dl class="show__numbers" data-reveal-stagger>
+              {kit.stats.map((stat) => (
+                <div>
+                  <dt>{stat.label}</dt>
+                  <dd>{stat.value}</dd>
+                </div>
+              ))}
+            </dl>
+            {block.credit && <p class="show__credit">{block.credit}</p>}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'scope') {
+      return (
+        <section class="case-band show show--scope" data-tone="neutral">
+          <div class="case-band__inner">
+            {Header}
+            <details class="show__scope">
+              <summary>
+                {block.label}
+                <span class="show__scope-count">{block.steps.length} steps</span>
+              </summary>
+              <ol>
+                {block.steps.map((step) => (
+                  <li>
+                    <span class="case-step__text" set:html={inline(step)} />
+                  </li>
+                ))}
+              </ol>
+            </details>
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'conclusion') {
+      return (
+        <section class="case-band case-band--conclusion show show--conclusion" data-tone="white">
+          <div class="case-band__inner">
+            <div class="case-conclusion">
+              <div class="case-conclusion__col">
+                <h3>Conclusion</h3>
+                {block.paragraphs.map((paragraph) => (
+                  <p set:html={inline(paragraph)} />
+                ))}
+              </div>
+              <div class="case-conclusion__col">
+                <h3>Key outcomes</h3>
+                {block.outcomes.map((outcome) => (
+                  <>
+                    <h4>{outcome.title}</h4>
+                    <p set:html={inline(outcome.text)} />
+                  </>
+                ))}
+                {block.after && <p set:html={inline(block.after)} />}
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+  })
+}
+
+<style>
+  .show {
+    overflow: clip;
+  }
+
+  .show__header {
+    max-width: 44rem;
+  }
+
+  .show__header :global(p:not(.case-kicker)) {
+    margin: var(--space-sm) 0 0;
+    font-size: var(--font-size-md);
+  }
+
+  /* Points: the short subsections under a visual */
+  .show__points {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--space-xl);
+  }
+
+  .show__points h3 {
+    margin: 0 0 var(--space-2xs);
+    padding-top: var(--space-md);
+    border-top: 1px solid color-mix(in srgb, currentcolor 30%, transparent);
+    color: var(--band-heading);
+    font-size: var(--font-size-h6);
+  }
+
+  .show__points p {
+    margin: 0;
+  }
+
+  /* Statement: one sentence, as large as the band allows */
+  .show--statement {
+    padding-block: clamp(5rem, 3rem + 9vw, 11rem);
+  }
+
+  .show--statement .show__statement {
+    max-width: 18ch;
+    font-size: clamp(2.5rem, 1rem + 6.5vw, 7rem);
+  }
+
+  /* Brand board: guide pages in a tilted grid that runs off both edges */
+  .show__board {
+    margin-block: clamp(3rem, 2rem + 4vw, 6rem);
+    padding-block: clamp(2rem, 6vw, 6rem);
+  }
+
+  .show__board-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.6vw, 1.75rem);
+    width: 124%;
+    margin: 0 0 0 -12%;
+    padding: 0;
+    list-style: none;
+    rotate: -8deg;
+  }
+
+  .show__board-grid li {
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.35);
+  }
+
+  .show__board-grid li:nth-child(3n + 2) {
+    translate: 0 12%;
+  }
+
+  .show__board-grid :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Color system: tall swatches that rise and settle */
+  .show__swatches {
+    display: grid;
+    grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+    align-items: end;
+    height: clamp(20rem, 12rem + 26vw, 34rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .show__swatches li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    justify-content: flex-end;
+    height: calc(100% - var(--i) * 7%);
+    padding: var(--space-md) var(--space-sm);
+    background-color: var(--swatch);
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+    color: var(--ink);
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .show__swatches li:first-child {
+    border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+  }
+
+  .show__swatches li:last-child {
+    border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
+  }
+
+  .show__swatches strong {
+    color: inherit;
+    font-family: var(--font-display);
+    font-size: var(--font-size-h6);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .show__swatch-codes {
+    margin-top: var(--space-2xs);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+
+  /* Logo moment */
+  .show--logo .case-band__inner {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .show__logo {
+    padding-block: clamp(2rem, 6vw, 5rem);
+  }
+
+  .show__logo :global(img) {
+    display: block;
+    width: min(34rem, 70vw);
+    height: auto;
+  }
+
+  /* The mark builds itself: the shape lands, then each piece drops in */
+  .show__mark {
+    padding-block: clamp(2rem, 6vw, 5rem);
+  }
+
+  .show__mark :global(svg) {
+    display: block;
+    width: min(18rem, 50vw);
+    height: auto;
+    overflow: visible;
+    border-radius: 0;
+  }
+
+  /* On the accent band the mark's own color would vanish: ring it in white */
+  .show__mark :global(svg path:first-of-type) {
+    stroke: var(--color-white);
+    stroke-width: 2px;
+  }
+
+  /* Type specimen */
+  .show__type {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .show__aa {
+    margin: 0;
+    color: var(--case-accent);
+    font-family: var(--font-body);
+    font-size: clamp(8rem, 4rem + 18vw, 20rem);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+
+  .show__weights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-lg);
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    color: var(--case-dark);
+    font-size: var(--font-size-h5);
+    list-style: none;
+  }
+
+  .show__weights li {
+    margin: 0;
+  }
+
+  @media (max-width: 700px) {
+    .show__type {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Mockups, edge to edge */
+  .show__mockups {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr));
+    margin-block: clamp(2rem, 1rem + 3vw, 4rem);
+  }
+
+  .show__mockups[data-count='2'] {
+    --cols: 2;
+  }
+
+  .show__mockups[data-count='3'] {
+    --cols: 3;
+  }
+
+  /* Each picture is one cell (its sources must not take cells of their own) */
+  .show__mockups :global(picture) {
+    display: block;
+    min-width: 0;
+  }
+
+  .show__mockups :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+  }
+
+  /* Screenshots on a dark or white band sit in from the edges as cards */
+  .show--mockup:is([data-tone='dark'], [data-tone='white']) .show__mockups {
+    gap: clamp(0.75rem, 1.6vw, 1.75rem);
+    padding-inline: var(--container-gutter);
+  }
+
+  .show--mockup:is([data-tone='dark'], [data-tone='white']) .show__mockups :global(img) {
+    border-radius: var(--radius-card);
+    box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.18);
+  }
+
+  .show--mockup > .case-band__inner:first-child:empty {
+    display: none;
+  }
+
+  /* Context scene: full width, the copy underneath */
+  .show--scene {
+    padding-top: 0;
+  }
+
+  .show__scene {
+    position: relative;
+    margin: 0 0 clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  .show--scene > .show__scene:last-child {
+    margin-bottom: calc(-1 * clamp(4rem, 3rem + 4vw, 6.3rem));
+  }
+
+  .show__scene :global(img) {
+    border-radius: 0;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 90vh;
+    object-fit: cover;
+  }
+
+  .show__concept {
+    position: absolute;
+    right: var(--container-gutter);
+    bottom: var(--space-sm);
+    padding: var(--space-3xs) var(--space-xs);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-chip);
+    color: var(--color-white);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Scrolling device: the full page moves inside a laptop */
+  .show__laptop {
+    width: min(100%, 60rem);
+    margin-inline: auto;
+  }
+
+  .show__screen {
+    container-type: inline-size;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: clamp(0.4rem, 1vw, 0.75rem) solid var(--color-ink);
+    border-bottom-width: clamp(0.6rem, 1.4vw, 1.1rem);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background-color: var(--color-white);
+  }
+
+  .show__screen :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .show__base {
+    width: 112%;
+    height: clamp(0.6rem, 1.4vw, 1rem);
+    margin-left: -6%;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: linear-gradient(var(--color-neutral-lighter), var(--color-neutral-light));
+  }
+
+  /* Interaction clip: the video fades in over its poster once it plays */
+  .show__clip {
+    position: relative;
+    width: min(100%, 60rem);
+    margin-inline: auto;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    box-shadow: 0 1.5rem 3.5rem rgb(0 0 0 / 0.2);
+  }
+
+  .show__clip :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+  }
+
+  .show__clip video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 400ms var(--ease-out);
+  }
+
+  .show__clip video:global(.is-playing) {
+    opacity: 1;
+  }
+
+  /* Numbers */
+  .show__numbers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-xl);
+    margin: 0;
+  }
+
+  .show__numbers div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .show__numbers dd {
+    margin: 0;
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 2rem + 9vw, 9rem);
+    line-height: 1;
+  }
+
+  .show__numbers dt {
+    font-size: var(--font-size-lg);
+  }
+
+  .show__credit {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  /* Full scope, collapsed */
+  .show__scope summary {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: baseline;
+    width: fit-content;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--case-dark);
+    border-radius: var(--radius-pill);
+    color: var(--case-dark);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+  }
+
+  .show__scope summary:focus-visible {
+    outline: 2px solid var(--case-dark);
+    outline-offset: 3px;
+  }
+
+  .show__scope-count {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-regular);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .show__scope[open] summary {
+    margin-bottom: var(--space-lg);
+  }
+
+  @media (max-width: 700px) {
+    .show__board-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 150%;
+      margin-left: -25%;
+    }
+
+    .show__board-grid li:nth-child(3n + 2) {
+      translate: none;
+    }
+
+    .show__board-grid li:nth-child(even) {
+      translate: 0 14%;
+    }
+
+    .show__mockups:is([data-count='2'], [data-count='3']) {
+      --cols: 1;
+    }
+
+    .show__swatches {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      height: auto;
+    }
+
+    .show__swatches li {
+      height: auto;
+      min-height: 9rem;
+      border-radius: 0 !important;
+    }
+  }
+
+  /* Motion: scroll-linked where the browser has scroll timelines, still
+   * otherwise and under reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .show__swatches li {
+        animation: show-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry calc(60% + var(--i) * 8%);
+      }
+
+      .show__board-grid {
+        animation: show-drift linear both;
+        animation-timeline: view();
+      }
+
+      .show__screen :global(img) {
+        animation: show-scroll linear both;
+        animation-timeline: view();
+        animation-range: cover 25% cover 75%;
+      }
+
+      .show__statement {
+        animation: show-settle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%;
+      }
+    }
+
+    .js .show__mark :global(path) {
+      opacity: 0;
+      translate: 0 -1.5rem;
+      transition:
+        opacity 500ms var(--ease-out),
+        translate 700ms var(--ease-out);
+      transition-delay: calc(250ms + var(--n, 1) * 180ms);
+    }
+
+    .js .show__mark :global(path:first-of-type) {
+      scale: 0.8;
+      transform-origin: center;
+      transform-box: fill-box;
+      translate: none;
+      transition:
+        opacity 500ms var(--ease-out),
+        scale 700ms var(--ease-out);
+      transition-delay: 0ms;
+    }
+
+    .js .show__mark :global(path:nth-of-type(3)) {
+      --n: 2;
+    }
+
+    /* The last piece (82 South's lime arrow) drops last, pointing south */
+    .js .show__mark :global(path:last-of-type) {
+      --n: 4;
+    }
+
+    .js .show__mark.is-revealed :global(path) {
+      opacity: 1;
+      scale: 1;
+      translate: none;
+    }
+
+    @supports (animation-timeline: view()) {
+      .show__aa {
+        animation: show-weigh linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 60%;
+      }
+    }
+
+    .js .show__logo :global(img) {
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 1.2s var(--ease-out) 200ms;
+    }
+
+    .js .show__logo.is-revealed :global(img) {
+      clip-path: inset(0);
+    }
+  }
+
+  /* The specimen runs through the weights as it scrolls in */
+  @keyframes show-weigh {
+    from {
+      font-weight: 300;
+    }
+    to {
+      font-weight: 800;
+    }
+  }
+
+  @keyframes show-rise {
+    from {
+      opacity: 0;
+      translate: 0 35%;
+    }
+  }
+
+  @keyframes show-drift {
+    from {
+      translate: 4% 0;
+    }
+    to {
+      translate: -4% 0;
+    }
+  }
+
+  /* The page is far taller than the screen: slide it up by its own height
+   * less the screen's (16:10 of the screen's width). */
+  @keyframes show-scroll {
+    to {
+      transform: translateY(calc(-100% + 62.5cqw));
+    }
+  }
+
+  @keyframes show-settle {
+    from {
+      opacity: 0.35;
+      scale: 0.94;
+    }
+  }
+</style>

@@ -35,8 +35,40 @@ const hex = /^#[0-9a-f]{6}$/i;
 
 const caseStudies = defineCollection({
   loader: glob({ pattern: '*/index.md', base: './src/content/case-studies', generateId: slugFromFolder }),
-  schema: ({ image }) =>
-    z.object({
+  schema: ({ image }) => {
+    // Showcase template v3 (docs/case-study-sop.md): image-led modules that
+    // read the client's brand kit. Text takes **bold** and [links](/path/).
+    const pic = z.object({ src: image(), alt: z.string().min(1) });
+    const point = z.object({ title: z.string(), text: z.string() });
+    const copy = { kicker: z.string().optional(), heading: z.string().optional(), text: z.string().optional(), points: z.array(point).max(4).optional() };
+    const block = z.discriminatedUnion('type', [
+      // One sentence, huge, on the client's primary color.
+      z.object({ type: z.literal('statement'), text: z.string() }),
+      // Brand guide pages in a tilted, full-bleed grid.
+      z.object({ type: z.literal('board'), ...copy, images: z.array(pic).min(4).max(9) }),
+      // The brand kit's colors as tall swatches that rise into place.
+      z.object({ type: z.literal('colors'), ...copy }),
+      // The logo on the client's color. With a brand kit `mark`, the mark
+      // builds itself piece by piece; otherwise the logo wipes in.
+      z.object({ type: z.literal('logo'), ...copy }),
+      // A big "Aa" and the brand font's weights, set in the site's own type.
+      z.object({ type: z.literal('type'), ...copy }),
+      // One to three mockups, edge to edge.
+      z.object({ type: z.literal('mockup'), ...copy, images: z.array(pic).min(1).max(3), tone: z.enum(['light', 'white', 'dark']).default('light') }),
+      // A person using the real work. `concept` adds a "Concept" label.
+      z.object({ type: z.literal('scene'), ...copy, image: pic, concept: z.boolean().default(false) }),
+      // A full-page capture that scrolls inside a laptop as the page scrolls.
+      z.object({ type: z.literal('device'), ...copy, image: pic }),
+      // A short silent loop of the real site in use, over its poster image.
+      // `video` is a file in public/ ("/media/case-studies/<slug>/clip.mp4").
+      z.object({ type: z.literal('clip'), ...copy, video: z.string().regex(/^\/media\/.+\.mp4$/), poster: pic }),
+      // The brand kit's stats, large, on the client's color.
+      z.object({ type: z.literal('numbers'), ...copy, credit: z.string().optional() }),
+      // The long process list, collapsed.
+      z.object({ type: z.literal('scope'), ...copy, label: z.string().default('Full scope'), steps: z.array(z.string()).min(1) }),
+      z.object({ type: z.literal('conclusion'), paragraphs: z.array(z.string()).min(1), outcomes: z.array(point).min(1), after: z.string().optional() }),
+    ]);
+    return z.object({
       title: z.string(),
       ...seo,
       eyebrow: z.string(),
@@ -76,7 +108,32 @@ const caseStudies = defineCollection({
         .optional(),
       // A client quote, shown after Results when one exists.
       testimonial: z.object({ quote: z.string(), name: z.string(), role: z.string() }).optional(),
-    }),
+      // The client's brand kit, read by the showcase modules.
+      brandKit: z
+        .object({
+          colors: z.array(z.object({ name: z.string(), hex: z.string().regex(hex), cmyk: z.string().optional(), role: z.string().optional() })).min(2),
+          fonts: z.array(z.object({ name: z.string(), weights: z.array(z.string()).min(1), role: z.string().optional() })).default([]),
+          stats: z.array(z.object({ value: z.string(), label: z.string() })).max(4).default([]),
+          // The brand pattern, behind the cutout hero and the next-case band.
+          pattern: image().optional(),
+          // The brand mark as an SVG beside the entry ("./badge.svg"). It is
+          // inlined so its shapes can animate in, in the order they are drawn.
+          mark: z.string().regex(/^\.\/[\w-]+\.svg$/).optional(),
+          // What makes the brand its own, for whoever art directs the page.
+          motif: z.string().optional(),
+        })
+        .optional(),
+      // The page's own hero image, when it differs from the cover (which
+      // stays the card and share image).
+      hero: pic.optional(),
+      // A transparent cutout that floats over the brand kit's pattern in
+      // the hero, in place of the cover or `hero`.
+      heroCutout: pic.optional(),
+      // Showcase modules, in order, shown after the Markdown body (the lead
+      // and The challenge).
+      showcase: z.array(block).optional(),
+    });
+  },
 });
 
 // Service pages share one template (src/pages/services/[...slug].astro).
