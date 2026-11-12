@@ -15,7 +15,7 @@ created: "2024-09"
 clientUrl: "https://82south.com"
 next: "82-south-brand"
 cover: "./cover.jpg"
-coverAlt: "Event company website design for 82 South: the homepage in a browser window and on a phone"
+coverAlt: "Event company website design for 82 South: the homepage on a laptop and a phone"
 logo: "./logo.svg"
 logoAlt: "82 South logo"
 # 82 South purple, a darker purple for the deep bands, and the brand's light purple
@@ -75,13 +75,13 @@ Built alongside the brand, launched the same month.
 
 ### Squircles everywhere
 
-![82 South squircle-framed photos of a guest, confetti, stage truss and a camera lens](./squircles.webp)
+![82 South homepage services section with three squircle-framed event photos](./squircles.webp)
 
 The badge's rounded shape frames the photography across the site, so even a stock photo feels like 82 South.
 
 ### Headlines that sell the feeling
 
-![82 South homepage hero reading Sensory experiences that go deeper than the event itself](./home.webp)
+![82 South About page headline reading At the core of every lasting moment](./about.webp)
 
 "Sensory experiences that go deeper than the event itself" moved straight from strategy to the hero.
 
@@ -107,9 +107,7 @@ Buyers can jump straight to exhibits, activations or media, the way they actuall
 
 ## Lean by design
 
-![82 South homepage on a phone](./mobile-home.webp)
-
-![82 South portfolio page on a phone](./mobile-portfolio.webp)
+![82 South homepage and portfolio page on two phones](./phones.webp)
 
 ### Fast and focused
 

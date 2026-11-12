@@ -62,7 +62,9 @@ async function shoot(context, page, name, fullPage) {
 
 const browser = await chromium.launch();
 const desktop = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
-const mobile = await browser.newContext({ ...devices['iPhone 14'] });
+// The phone's whole screen (390x844), not the area under Safari's toolbars,
+// so the shot fills a phone mockup without cropping its sides.
+const mobile = await browser.newContext({ ...devices['iPhone 14'], viewport: { width: 390, height: 844 } });
 for (const page of PAGES) {
   await shoot(desktop, page, page.name, false);
   if (page.fullPage) await shoot(desktop, page, `${page.name}-full`, true);

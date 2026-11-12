@@ -100,15 +100,33 @@ function splitIntoBands(nodes) {
   return bands;
 }
 
+/**
+ * Row sizes for `count` items so every row is full: one row for up to four,
+ * then rows of three, with the remainder made up by rows of two or four.
+ * 5 is 3 + 2, 7 is 4 + 3, 8 is 4 + 4.
+ */
+export function fullRows(count) {
+  if (count <= 4) return [count];
+  if (count % 4 === 0) return Array(count / 4).fill(4);
+  const threes = Math.floor(count / 3);
+  if (count % 3 === 0) return Array(threes).fill(3);
+  if (count % 3 === 1) return [4, ...Array(threes - 1).fill(3)];
+  return [...Array(threes).fill(3), 2];
+}
+
 /** Collect runs of media into galleries, leaving everything else in place. */
 function withGalleries(nodes) {
   const out = [];
   let run = [];
   const flush = () => {
     if (run.length > 1) {
-      const gallery = el('div', 'case-gallery', run);
-      gallery.properties.dataCount = String(Math.min(run.length, 4));
-      out.push(gallery);
+      let start = 0;
+      for (const size of fullRows(run.length)) {
+        const gallery = el('div', 'case-gallery', run.slice(start, start + size));
+        gallery.properties.dataCount = String(size);
+        out.push(gallery);
+        start += size;
+      }
     } else out.push(...run);
     run = [];
   };
@@ -262,15 +280,21 @@ function layoutBand(band) {
   };
   const flushCards = () => {
     if (cardRun.length > 1) {
-      out.push(
-        el(
+      // One grid per row, with as many columns as it has cards, so a row
+      // never ends on an empty cell.
+      let start = 0;
+      for (const size of fullRows(cardRun.length)) {
+        const row = el(
           'div',
           'case-cards',
-          cardRun.map((g) =>
+          cardRun.slice(start, start + size).map((g) =>
             el('div', 'case-card', [el('div', 'case-card__media', withGalleries(g.media)), g.heading, ...withCredits(g.text)]),
           ),
-        ),
-      );
+        );
+        row.properties.dataCount = String(size);
+        out.push(row);
+        start += size;
+      }
     } else {
       for (const g of cardRun) {
         out.push(

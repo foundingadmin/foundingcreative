@@ -126,6 +126,7 @@ Required: semantic HTML, alt text on every image, visible focus states, keyboard
 ## Rules for Claude
 
 - Work on a branch, never commit straight to main. Open a pull request for review.
+- Case studies: follow `docs/case-study-sop.md` (brief, build, image pipeline, QA gate) for every new or changed case study.
 - Keep changes scoped to what was asked. If a change touches anything outside the request, stop and say so first.
 - Never edit the contact form handler, the Formspree wiring, or the consent/tracking scripts unless the request explicitly names them.
 - No secrets in the repo (it is public). Form IDs and keys live in Vercel env vars and `.env.local`, which is gitignored. Document new variables in `.env.example`.
