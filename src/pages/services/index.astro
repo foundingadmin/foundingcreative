@@ -1,21 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
+import BrandForgePromo from '../../components/BrandForgePromo.astro';
 import Icon from '../../components/Icon.astro';
 import { letsTalkHref } from '../../data/navigation';
 import { pages } from '../../data/seo';
 
 // Replaces the unfinished WordPress /services/ page with a real overview.
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
-const offerings = [
-  {
-    name: 'BrandForge™ branding and strategy',
-    summary: 'Research-backed brand strategy and an AI-ready identity system, launch-ready in weeks.',
-    href: '/brandforge/',
-  },
-  ...services.map((s) => ({ name: s.data.name, summary: s.data.summary, href: s.data.path })),
-];
+// BrandForge, the startup package, has its own band below the six services.
+const offerings = services.map((s) => ({ name: s.data.name, summary: s.data.summary, href: s.data.path }));
 
 const { description } = pages['/services/'];
 const jsonLd = {
@@ -65,7 +59,7 @@ const jsonLd = {
     </ul>
   </section>
 
-  <SiteLaunchSection />
+  <BrandForgePromo />
 
   <section class="container section cta">
     <h2>Not sure where to start?</h2>

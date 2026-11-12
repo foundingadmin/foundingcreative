@@ -16,7 +16,6 @@ coverAlt: "Engineer in a factory holding a laptop showing the redesigned Turntid
 logo: "./logo.svg"
 logoAlt: "Turntide logo"
 # Colors from the live case study: statement band, dark band, light band
-showSiteLaunch: true
 theme:
   accent: "#0d5b97"
   dark: "#003464"
