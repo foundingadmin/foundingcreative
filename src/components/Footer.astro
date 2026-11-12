@@ -43,7 +43,7 @@ const year = new Date().getFullYear();
         <img class="footer-contact__logo" src={logo.src} width="175" height="58" alt="Founding Creative" />
         <!-- Repeats the homepage H1, so it is styled text rather than a heading -->
         <p class="footer-contact__heading" id="footer-contact-heading">
-          Creative foundations for <br />brands of all sizes
+          Your complete creative department, <br />built on strategy.
         </p>
         <p class="footer-contact__tagline">Brand and Web Creative Marketing Agency</p>
         <TeamFaces class="footer-contact__team" />
@@ -145,6 +145,8 @@ const year = new Date().getFullYear();
 
   .footer-contact__heading {
     margin: 0 0 var(--space-sm);
+    /* Room for the last line's descenders, which the gradient clip cuts off */
+    padding-bottom: 0.15em;
     font-family: var(--font-display);
     font-size: var(--font-size-h2);
     font-weight: var(--font-weight-regular);

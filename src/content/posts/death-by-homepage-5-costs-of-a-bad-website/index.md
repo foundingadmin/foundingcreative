@@ -63,6 +63,6 @@ A poor website exposes the entire business to risk. Whether it’s legal liabili
 
 </div>
 
-If any of the above sounds like it hits close to home, [let’s chat about next steps](/contact-us/). We offer comprehensive [website services](/services/website-services/), including SiteLaunch packages designed to suit businesses of all types and needs.  
+If any of the above sounds like it hits close to home, [let’s chat about next steps](/contact-us/). We offer comprehensive [website services](/services/website-services/), designed to suit businesses of all types and needs.  
   
 We specialize in crafting intentional, scalable, and growth-oriented creative systems. From custom websites to strategic branding, our holistic design services are built with the future in mind to help businesses of all sizes grow efficiently and exceed goals.
