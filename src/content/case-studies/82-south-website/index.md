@@ -81,7 +81,7 @@ The badge's rounded shape frames the photography across the site, so even a stoc
 
 ### Headlines that sell the feeling
 
-![82 South About page headline reading At the core of every lasting moment](./about.webp)
+![82 South homepage headline reading Sensory experiences that go deeper than the event itself](./home-headline.webp)
 
 "Sensory experiences that go deeper than the event itself" moved straight from strategy to the hero.
 
