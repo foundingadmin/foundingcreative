@@ -5,6 +5,7 @@ import { caseCover } from '../../lib/images';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OurWork from '../../components/OurWork.astro';
+import Showcase from '../../components/showcase/Showcase.astro';
 import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import Icon from '../../components/Icon.astro';
 import { getCaseStudies, caseStudyUrl, servicesFor, type CaseStudy } from '../../lib/content';
@@ -63,6 +64,9 @@ const headingInk = (() => {
 
 // The closing image card near the end of the story reuses the cover and
 // logo, drawn by CSS (it is decorative), so pass them in as variables.
+// Showcase pages (template v3) can open on their own hero image; the cover
+// stays the card and share image.
+const hero = data.hero ?? { src: data.cover, alt: data.coverAlt };
 const closingCover = await getImage({ src: data.cover, width: 1600, format: 'webp' });
 const closingLogo = data.logo ? await getImage({ src: data.logo }) : undefined;
 const themeStyle = [
@@ -116,7 +120,7 @@ const jsonLd = [
   })}
   article={{ published: data.date, section: 'Case Studies', tags: [...data.services, ...data.sectors] }}
   jsonLd={jsonLd}
-  lcpImage={{ src: data.cover, ...caseCover }}
+  lcpImage={{ src: hero.src, ...caseCover }}
 >
   <article style={themeStyle}>
     <!-- Hero: the live page's shifting gradient in the study's colors -->
@@ -149,22 +153,23 @@ const jsonLd = [
          view, the photo drifting slower than the page, logo wiping in -->
     <div class="case-cover curve-top">
       <div class="container">
-        <figure class="case-cover__card" data-reveal="color">
+        <figure class:list={['case-cover__card', data.hero && 'case-cover__card--clear']} data-reveal="color">
           <Img
             class="case-cover__image"
-            src={data.cover}
-            alt={data.coverAlt}
+            src={hero.src}
+            alt={hero.alt}
             {...caseCover}
             loading="eager"
             fetchpriority="high"
           />
-          {data.logo && <Img class="case-cover__logo" src={data.logo} alt={data.logoAlt ?? ''} height={96} />}
+          {data.logo && !data.hero && <Img class="case-cover__logo" src={data.logo} alt={data.logoAlt ?? ''} height={96} />}
         </figure>
       </div>
     </div>
 
     <div class="case-story">
       <Content />
+      {data.showcase && <Showcase blocks={data.showcase} kit={data.brandKit} logo={data.logo} logoAlt={data.logoAlt} />}
     </div>
 
     {
@@ -359,6 +364,11 @@ const jsonLd = [
     inset: 0;
     z-index: -1;
     background-color: color-mix(in srgb, var(--case-dark) 70%, transparent);
+  }
+
+  /* A showcase hero is a finished scene: no veil, no logo over it */
+  .case-cover__card--clear::after {
+    content: none;
   }
 
   .case-cover__logo {

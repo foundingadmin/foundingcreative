@@ -206,7 +206,7 @@ test('case study card and gallery rows are always full', async ({ page }) => {
   for (const slug of ['82-south-website', '82-south-brand', 'genpact-grow-event', 'turntide-website']) {
     await page.goto(`/case-study/${slug}/`);
     // Each grid has as many columns as items, so no row ends on an empty cell.
-    const rows = await page.locator('.case-story :is(.case-cards, .case-gallery)').evaluateAll((grids) =>
+    const rows = await page.locator('.case-story :is(.case-cards, .case-gallery, .show__mockups)').evaluateAll((grids) =>
       grids.map((grid) => ({
         items: grid.children.length,
         columns: getComputedStyle(grid).gridTemplateColumns.split(' ').length,
@@ -214,7 +214,9 @@ test('case study card and gallery rows are always full', async ({ page }) => {
     );
     for (const row of rows) expect(row.items % row.columns, `${slug}: ${row.items} items in ${row.columns} columns`).toBe(0);
   }
-  // Three cards sit three across.
+  // Three mockups sit three across (showcase template v3).
   await page.goto('/case-study/82-south-website/');
-  await expect(page.locator('.case-cards[data-count="3"] > .case-card')).toHaveCount(3);
+  const three = page.locator('.show__mockups[data-count="3"]').first();
+  await expect(three.locator('> picture')).toHaveCount(3);
+  expect(await three.evaluate((grid) => getComputedStyle(grid).gridTemplateColumns.split(' ').length)).toBe(3);
 });

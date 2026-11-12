@@ -12,8 +12,10 @@ The work splits into two halves. Cowork (this project) researches and writes one
 6. **SEO:** long-tail primary phrase tied to a service page target, checked in Ubersuggest. Title 60 characters max, description 155 max.
 7. **Theme:** primary, light, accent and neutral hex codes from the client's brand guide.
 8. **Image plan:** list every slot with its source (Drive file, live URL or "generate"). Each image is used once per page, except the hero and share image.
-9. **Flags:** typos in mockups, broken client links, client's-client logos, scope claims.
-10. **Review:** Tyler edits, then exports the doc as Markdown to `briefs/<client>.md`.
+9. **Brand kit** (showcase pages): colors (name, hex, role, and CMYK from the brand guide if it gives one), fonts and weights, the logo and pattern files, up to four stats with their source, and a line on the brand's motif.
+10. **Shot list** (showcase pages): 8 to 12 big visuals in order, each with its module (see "Showcase template v3"), its source file or "generate", and the one heading and 40 to 60 words that go with it.
+11. **Flags:** typos in mockups, broken client links, client's-client logos, scope claims.
+12. **Review:** Tyler edits, then exports the doc as Markdown to `briefs/<client>.md`.
 
 ## Part B: the build (Claude Code)
 
@@ -37,6 +39,33 @@ The rule: **AI never draws the client's UI or logo.** Nano Banana builds the sce
 **Key handling:** GEMINI_API_KEY lives in `.env.local`, which is gitignored. Scripts run locally, never in the Vercel build. Never paste the key into a chat. Cost is about 5 cents per 2K image, so under $2 per case study.
 
 **No key yet:** the same capture plus flat device frames composed with sharp, under the same reject rules.
+
+## Showcase template v3
+
+Image-led pages: big visuals carry the story and the copy stays short. A case study opts in by adding `brandKit` and `showcase` to its frontmatter (schema in `src/content.config.ts`, modules in `src/components/showcase/Showcase.astro`). The Markdown body keeps only the lead and The challenge; everything after it is a list of modules.
+
+**Copy diet:** one heading and 40 to 60 words per section. The process is a collapsed "Full scope" list. A page tops out around 400 words outside that list, with 8 to 12 big visuals.
+
+| Module (`type`) | What it does | Reads |
+| --- | --- | --- |
+| `statement` | One sentence, huge, on the client's primary color | `text` |
+| `board` | Brand guide pages in a tilted grid that runs off both edges | 4 to 9 page images |
+| `colors` | Tall swatches that rise into place, labeled with name, role, hex and RGB | `brandKit.colors` |
+| `logo` | The logo wipes in on the client's color | `logo` |
+| `mockup` | One to three mockups, edge to edge | images, `tone` |
+| `scene` | A person using the real work; `concept: true` adds a "Concept" label | one image |
+| `device` | The full-page capture scrolls inside a laptop as the page scrolls | full-page capture |
+| `numbers` | The brand kit's stats, large, with a credit line | `brandKit.stats` |
+| `scope` | The long process list, collapsed | `steps` |
+| `conclusion` | Conclusion beside Key outcomes | paragraphs, outcomes |
+
+`hero` sets the page's opening image when it differs from the cover, which stays the card and share image.
+
+**Scenes:** `scripts/case-study-scene.mjs scene` has `laptop-in-hands`, `phone-in-hand` and `crew-backs`. Screens and print panels are flat green, and the real screenshot or logo is composited on. Save four variants per scene to `review/<client>/v3/` and wait for Tyler's picks.
+
+Motion is CSS only: scroll timelines where the browser has them, still everywhere else and under `prefers-reduced-motion`.
+
+Not built yet: the cutout hero over the client's pattern, the live type specimen, the logo micro animation, the interaction clip and the patterned next-case band. Each needs a source file or a decision first (see the PR that added this section).
 
 ## QA gate (Claude Code checks each page at 1440 and 390, fixes, then checks again)
 
