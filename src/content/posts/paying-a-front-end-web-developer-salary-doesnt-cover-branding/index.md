@@ -97,7 +97,7 @@ In other words: you’re paying premium prices for just the development phase of
 
 ## How Prism aligns brand with build
 
-At Founding Creative, [Prism SiteLaunch](/prism-sitelaunch/) bridges the gap. We give you the design system, UI tools, and brand clarity PLUS the development team to build it.
+At Founding Creative, [Prism SiteLaunch](/services/website-services/) bridges the gap. We give you the design system, UI tools, and brand clarity PLUS the development team to build it.
 
 With Prism, we:
 
@@ -116,4 +116,4 @@ Design-led websites look better, perform better, and scale better.
 
 If you’re ready to get more out of your dev investment dollars, it’s time to make sure your strategy and design are locked in first.
 
-👉 [See how Prism helps high-growth brands](/prism-sitelaunch/) translate identity into show-stopping digital experiences.
+👉 [See how Prism helps high-growth brands](/services/website-services/) translate identity into show-stopping digital experiences.

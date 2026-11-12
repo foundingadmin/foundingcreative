@@ -59,25 +59,33 @@ test('scroll reveals only ever slide up', async ({ page }) => {
   }
 });
 
-test('home services pin "We shape brands / launch websites / support events" and swap on scroll', async ({ page }) => {
+test('home services pin "We shape brands / launch websites / transform events / design everything" and swap on scroll', async ({ page }) => {
   await page.goto('/');
   const active = page.locator('[data-cycler] .cycler__word.is-active');
   const steps = page.locator('[data-cycler-step]');
-  await expect(steps).toHaveCount(3);
-  for (const [i, words] of ['shape brands', 'launch websites', 'support events'].entries()) {
+  await expect(steps).toHaveCount(4);
+  for (const [i, words] of ['shape brands', 'launch websites', 'transform events', 'design everything'].entries()) {
     await steps.nth(i).evaluate((el) => el.scrollIntoView({ block: 'center' }));
     await expect(active).toHaveText(words);
     await expect(steps.nth(i).getByRole('heading', { level: 3 })).toHaveText(`We ${words}`);
     // The pinned line and the H3 both link to the service page.
-    const href = ['/services/branding-services/', '/services/website-services/', '/services/event-services/'][i];
+    const href = [
+      '/services/branding-services/',
+      '/services/website-services/',
+      '/services/event-services/',
+      '/services/design-services/',
+    ][i];
     await expect(page.locator('[data-cycler-link]')).toHaveAttribute('href', href);
     await expect(steps.nth(i).getByRole('heading', { level: 3 }).getByRole('link')).toHaveAttribute('href', href);
-    // No icon, one sentence, the pills, then the button.
-    await expect(steps.nth(i).locator('.service__text > *')).toHaveCount(4);
-    await expect(steps.nth(i).locator('.service__text > *').last()).toHaveText(
-      ['View all brand services', 'View all website services', 'View all event services'][i],
+    // No icon: the heading, one summary, then the pills over the button.
+    await expect(steps.nth(i).locator('.service__text > *')).toHaveCount(3);
+    const button = steps.nth(i).locator('.service__list > .button');
+    await expect(button).toHaveText(
+      ['View all brand services', 'View all website services', 'View all event services', 'View all design services'][i],
     );
-    await expect(steps.nth(i).locator('.service__text > *').last()).toHaveAttribute('href', href);
+    await expect(button).toHaveAttribute('href', href);
+    // Case studies for the first three; the last is a short row without them.
+    await expect(steps.nth(i).locator('.carousel')).toHaveCount(i < 3 ? 1 : 0);
     await expect(steps.nth(i).locator('.service__media .pill')).toHaveCount(0);
   }
   // Each pill links to its section on the service page.
@@ -85,16 +93,33 @@ test('home services pin "We shape brands / launch websites / support events" and
     'href',
     '/services/branding-services/#brand-strategy',
   );
-  await expect(steps.nth(2).getByRole('link', { name: 'Signage and wayfinding' })).toHaveAttribute(
+  await expect(steps.nth(2).getByRole('link', { name: 'Directional signage' })).toHaveAttribute(
     'href',
-    '/services/event-services/#signage-and-wayfinding',
+    '/services/event-services/#directional-signage',
   );
+  await expect(steps.nth(2).locator('.service__tags li')).toHaveText([
+    'Interactive displays',
+    'Animations',
+    'Large-format prints and booths',
+    'Directional signage',
+    'Attendee badges',
+    'Social media kits',
+    'Promotional materials',
+    'Event websites',
+  ]);
+  await expect(steps.nth(3).locator('.service__tags li')).toHaveText([
+    'Digital marketing',
+    'Print collateral',
+    'Packaging',
+    'Presentations',
+    'Sales enablement',
+  ]);
 });
 
 test('every home service pill lands on a section of its service page', async ({ page }) => {
   await page.goto('/');
-  const hrefs = await page.locator('.service__tag').evaluateAll((links) => links.map((a) => a.getAttribute('href')!));
-  expect(hrefs).toHaveLength(14);
+  const hrefs = await page.locator('a.service__tag').evaluateAll((links) => links.map((a) => a.getAttribute('href')!));
+  expect(hrefs).toHaveLength(17);
   for (const href of hrefs) {
     await page.goto(href);
     const section = page.locator(`article#${href.split('#')[1]}`);
@@ -205,14 +230,16 @@ test('case study hero carries the project facts', async ({ page }) => {
   await expect(facts.locator('dd').first()).toHaveText('Turntide');
 });
 
-test('Services panel opens full width with services, SiteLaunch and BrandForge', async ({ page }) => {
+test('Services panel opens full width with the services and BrandForge, no SiteLaunch', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
   const toggle = page.getByRole('navigation', { name: 'Main' }).getByRole('button', { name: 'Services menu' });
   const panel = page.locator('#services-menu');
-  await expect(panel.getByRole('link', { name: 'Rocket SiteLaunch' })).toBeHidden();
+  await expect(panel.getByRole('link', { name: 'Event Services' })).toBeHidden();
   await toggle.click();
-  await expect(panel.getByRole('link', { name: 'Rocket SiteLaunch' })).toBeVisible();
+  await expect(panel.getByRole('link', { name: 'Event Services' })).toBeVisible();
+  await expect(panel.getByRole('link')).toHaveCount(7);
+  await expect(panel.locator('a[href*="sitelaunch"]')).toHaveCount(0);
   await expect(panel.getByRole('link', { name: /BrandForge/ })).toHaveAttribute('href', '/brandforge/');
   const box = await panel.boundingBox();
   expect(box!.width).toBeGreaterThan(1400);

@@ -63,7 +63,7 @@ Each of these adds just enough friction to stall the sales conversation.
 
 ## The power of UI that reflects brand identity
 
-This is where [Prism SiteLaunch](/prism-sitelaunch/) makes a difference.
+This is where [Prism SiteLaunch](/services/website-services/) makes a difference.
 
 Instead of treating design as decoration, Prism treats it as brand activation, bringing your identity to life in a scalable UI framework that supports both marketing and sales.
 
@@ -118,4 +118,4 @@ When your UI and your identity are in sync, every click becomes a brand moment.
 
 If your teams are doing the right things, but your website isn’t keeping up, it might be time to rethink how you’re connecting brand identity to user experience.
 
-[Learn how our high-growth brands are using Prism SiteLaunch](/prism-sitelaunch/) to replace templates with performance.
+[Learn how our high-growth brands are using Prism SiteLaunch](/services/website-services/) to replace templates with performance.

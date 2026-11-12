@@ -16,7 +16,12 @@ test.describe('desktop header', () => {
     await services.focus();
     await page.keyboard.press('Enter');
     await expect(services).toHaveAttribute('aria-expanded', 'true');
-    await expect(nav.getByRole('link', { name: 'Branding and Strategy' })).toHaveAttribute('href', '/brandforge/');
+    await expect(nav.getByRole('link', { name: 'Branding and Strategy' })).toHaveAttribute(
+      'href',
+      '/services/branding-services/',
+    );
+    // The services index is the Services link itself, not a menu item.
+    await expect(nav.getByRole('link', { name: 'All services' })).toHaveCount(0);
 
     await page.keyboard.press('Tab');
     await expect(nav.getByRole('link', { name: 'Branding and Strategy' })).toBeFocused();
@@ -68,10 +73,19 @@ test.describe('mobile header', () => {
     const dialog = page.getByRole('dialog', { name: 'Menu', exact: true });
     await expect(dialog).toBeVisible();
 
-    const services = dialog.getByRole('button', { name: 'Services' });
+    // "Services" is a link to the services page; the chevron opens the list.
+    await expect(dialog.getByRole('link', { name: 'Services', exact: true })).toHaveAttribute('href', '/services/');
+    await expect(dialog.getByRole('link', { name: 'All services' })).toHaveCount(0);
+    const services = dialog.getByRole('button', { name: 'Services menu' });
     await services.click();
     await expect(services).toHaveAttribute('aria-expanded', 'true');
     await expect(dialog.getByRole('link', { name: 'Animation Services' })).toBeVisible();
+    await expect(dialog.getByRole('link', { name: 'Branding and Strategy' })).toHaveAttribute(
+      'href',
+      '/services/branding-services/',
+    );
+    await expect(dialog.getByRole('link', { name: /BrandForge/ })).toHaveAttribute('href', '/brandforge/');
+    await expect(dialog.locator('a[href*="sitelaunch"]')).toHaveCount(0);
 
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
@@ -106,10 +120,21 @@ test('footer has the live columns, LinkedIn, and legal links', async ({ page }) 
   await page.goto('/');
   const footer = page.getByRole('contentinfo');
 
-  for (const heading of ['Company', 'What we do', 'SiteLaunch™', 'Our latest work', 'Field Notes blog']) {
+  for (const heading of ['Company', 'What we do', 'Our latest work', 'Field Notes blog']) {
     await expect(footer.getByRole('heading', { name: heading })).toBeVisible();
   }
-  await expect(footer.getByRole('link', { name: 'Prism SiteLaunch' })).toHaveAttribute('href', '/prism-sitelaunch/');
+  // SiteLaunch is sunset; Fractional Creative sits under What we do.
+  await expect(footer.getByRole('heading', { name: /SiteLaunch/ })).toHaveCount(0);
+  await expect(footer.locator('a[href*="sitelaunch"]')).toHaveCount(0);
+  const whatWeDo = footer.locator('section[aria-labelledby="footer-services"]');
+  await expect(whatWeDo.getByRole('link', { name: 'Fractional Creative' })).toHaveAttribute('href', '/fractional-creative/');
+  await expect(whatWeDo.getByRole('link', { name: 'Branding and Strategy' })).toHaveAttribute(
+    'href',
+    '/services/branding-services/',
+  );
+  await expect(
+    footer.locator('section[aria-labelledby="footer-company"]').getByRole('link', { name: 'Fractional Creative' }),
+  ).toHaveCount(0);
   await expect(footer.getByRole('link', { name: 'View all case studies' })).toHaveAttribute('href', '/case-studies/');
   await expect(footer.getByRole('link', { name: /Creative tips weekly/ })).toHaveAttribute(
     'href',
@@ -133,10 +158,10 @@ test('footer has the live columns, LinkedIn, and legal links', async ({ page }) 
   await expect(footer.getByRole('button', { name: 'Submit' })).toBeVisible();
 });
 
-test('footer does not repeat the homepage H1 as a heading, and its credit reads in full', async ({ page }) => {
+test('the homepage has one H1, the footer tagline is not a heading, and its credit reads in full', async ({ page }) => {
   await page.goto('/');
   const footer = page.getByRole('contentinfo');
-  await expect(page.getByRole('heading', { name: 'Creative foundations for brands of all sizes' })).toHaveCount(1);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your complete creative department, built on strategy.');
   await expect(footer.getByText('Creative foundations for brands of all sizes')).toBeVisible();
   await expect(footer.getByRole('heading', { name: /Creative foundations/ })).toHaveCount(0);
   await expect(footer.locator('.footer-bottom__credit')).toHaveText('Designed & developed with love by Founding Creative');

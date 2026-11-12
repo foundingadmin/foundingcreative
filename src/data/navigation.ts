@@ -1,5 +1,6 @@
 // Site navigation, shared by the header, mobile menu, and footer.
-// Labels and URLs match the live WordPress menus.
+// Labels and URLs match the live WordPress menus, except where the Q4 2026
+// review changed them (Branding and Strategy, no SiteLaunch).
 
 export interface NavLink {
   label: string;
@@ -11,7 +12,7 @@ export interface NavItem extends NavLink {
 }
 
 export const services: NavLink[] = [
-  { label: 'Branding and Strategy', href: '/brandforge/' },
+  { label: 'Branding and Strategy', href: '/services/branding-services/' },
   { label: 'Design Services', href: '/services/design-services/' },
   { label: 'Website Services', href: '/services/website-services/' },
   { label: 'Event Services', href: '/services/event-services/' },
@@ -19,15 +20,9 @@ export const services: NavLink[] = [
   { label: 'Custom', href: '/services/custom/' },
 ];
 
-export const sitelaunch: NavLink[] = [
-  { label: 'Rocket SiteLaunch', href: '/rocket-sitelaunch/' },
-  { label: 'Prism SiteLaunch', href: '/prism-sitelaunch/' },
-  { label: 'Orbit SiteLaunch', href: '/orbit-sitelaunch/' },
-];
-
 export const mainNav: NavItem[] = [
   { label: 'Case Studies', href: '/case-studies/' },
-  { label: 'Services', href: '/services/', children: [...services, { label: 'All services', href: '/services/' }] },
+  { label: 'Services', href: '/services/', children: services },
   { label: 'About', href: '/about-us/' },
   { label: 'Fractional Creative', href: '/fractional-creative/' },
   { label: 'Contact Us', href: '/contact-us/' },
@@ -37,10 +32,12 @@ export const mainNav: NavItem[] = [
 export const companyLinks: NavLink[] = [
   { label: 'About Us', href: '/about-us/' },
   { label: 'Case Studies', href: '/case-studies/' },
-  { label: 'Fractional Creative', href: '/fractional-creative/' },
   { label: 'Contact Us', href: '/contact-us/' },
   { label: 'Blog', href: '/blog/' },
 ];
+
+// The footer's "What we do" column: the services, then the retainer offer.
+export const footerServices: NavLink[] = [...services, { label: 'Fractional Creative', href: '/fractional-creative/' }];
 
 export const legalLinks: NavLink[] = [
   { label: 'Imprint', href: '/imprint/' },
@@ -54,7 +51,3 @@ export const letsTalkHref = '/coffee/';
 export const bookMeetingHref =
   'https://calendar.google.com/calendar/appointments/schedules/AcZssZ1I3oI4KqMnFfcTTL5qkzXIuY06h4DeAE4B10vNbRNinT71if9o6Tj8-BXP-0kzp8vnu2KKz7yb';
 export const linkedInHref = 'https://www.linkedin.com/company/founding-creative/';
-
-// Discovery-call booking page linked from the SiteLaunch package pages.
-export const siteLaunchBookingHref =
-  'https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ05BDuPiNgyfpK6HRFzchDUrBoX2SjOj_dGFp47_xWtYoovrxOv1kLTSdDIoXCudPLii9WVIFpX';
