@@ -33,3 +33,6 @@ npm-debug.log*
 # repo is public)
 briefs/
 review/
+
+# macOS folder icon files (Google Drive adds one to every folder it syncs)
+Icon[]
