@@ -67,8 +67,6 @@ Brand patterns now feature complex, data-driven geometric shapes that build upon
 
 ![Dense isometric maze pattern in Genpact coral, cyan, and navy built from interlocking geometric shapes](./image-6.webp)
 
-![Genpact GROW wireframe cube pattern with a cluster of filled coral and blue cubes at the center](./image-7.webp)
-
 ![Genpact transforming brandmark system, isometric glyphs that evolve into the Genpact G logo](./image-8.webp)
 
 ### A transforming brandmark
@@ -138,8 +136,6 @@ The reinvigorated visual identity for Genpact's Grow was meticulously extended t
 ## Suspended motion
 
 Upon entering the venue, attendees were greeted with a striking focal point installation. Skrim panels projected animated art that seemed to float mid-air. This visually arresting illusion served as a beacon of innovation, setting the stage for an event that promised to defy the ordinary and celebrate transformative thinking.
-
-![Genpact meeting event mockup of large screens](./image-26.webp)
 
 ![Storyboard of three GROW18 animation sequences: shifting cubes, filling cubes, and building GROW18](./image-27.webp)
 

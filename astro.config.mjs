@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import { satteri } from '@astrojs/markdown-satteri';
 import caseStudyBands from './src/lib/case-study-bands.mjs';
 import seoCheck from './src/integrations/seo-check.mjs';
+import caseStudyCheck from './src/integrations/case-study-check.mjs';
 
 // Pages marked `noindex` in src/data/seo.ts; keep this list in sync.
 const NOINDEX = ['/404/'];
@@ -40,6 +41,7 @@ export default defineConfig({
     // Fails the build on a missing description, not exactly one H1, a title
     // over 60 characters, or a description over 155.
     seoCheck({ title: 60, description: 155, enforceLengths: true }),
+    caseStudyCheck(),
   ],
   // Manrope is downloaded at build time and served from this site, so
   // visitors never request Google Fonts. Gelica is Adobe Fonts and has to

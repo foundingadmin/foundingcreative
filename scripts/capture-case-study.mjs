@@ -14,7 +14,9 @@ import { join } from 'node:path';
 
 const SITE = 'https://82south.com';
 const PAGES = [
-  { name: 'home', path: '/', fullPage: true, mobile: true },
+  // `crops` are tight shots of one part of the page, taken at 3x so a small
+  // area still comes out 1600px wide or more. Clips are in CSS pixels.
+  { name: 'home', path: '/', fullPage: true, mobile: true, crops: [{ name: 'home-headline', clip: { x: 113, y: 123, width: 625, height: 391 } }] },
   { name: 'services', path: '/services/' },
   { name: 'portfolio', path: '/portfolio/', mobile: true },
   { name: 'about', path: '/about/' },
@@ -33,7 +35,7 @@ const out = process.argv[2];
 if (!out) throw new Error('Usage: node scripts/capture-case-study.mjs <out dir>');
 mkdirSync(out, { recursive: true });
 
-async function shoot(context, page, name, fullPage) {
+async function shoot(context, page, name, fullPage, clip) {
   const tab = await context.newPage();
   await tab.goto(SITE + page.path, { waitUntil: 'networkidle', timeout: 90_000 });
   await tab.addStyleTag({ content: HIDE });
@@ -54,7 +56,7 @@ async function shoot(context, page, name, fullPage) {
   await tab.waitForTimeout(1500);
   if (TYPED) await tab.waitForFunction(({ selector, words }) => words.includes(document.querySelector(selector)?.textContent.trim()), TYPED).catch(() => {});
   const file = join(out, `${name}.png`);
-  await tab.screenshot({ path: file, fullPage });
+  await tab.screenshot({ path: file, fullPage, clip });
   await tab.close();
   console.log('captured', file);
   return file;
@@ -62,9 +64,13 @@ async function shoot(context, page, name, fullPage) {
 
 const browser = await chromium.launch();
 const desktop = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
-const mobile = await browser.newContext({ ...devices['iPhone 14'] });
+// The phone's whole screen (390x844), not the area under Safari's toolbars,
+// so the shot fills a phone mockup without cropping its sides.
+const mobile = await browser.newContext({ ...devices['iPhone 14'], viewport: { width: 390, height: 844 } });
+const sharp3x = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 3 });
 for (const page of PAGES) {
   await shoot(desktop, page, page.name, false);
+  for (const crop of page.crops ?? []) await shoot(sharp3x, page, crop.name, false, crop.clip);
   if (page.fullPage) await shoot(desktop, page, `${page.name}-full`, true);
   if (page.mobile) await shoot(mobile, page, `${page.name}-mobile`, false);
 }

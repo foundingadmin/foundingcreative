@@ -210,3 +210,21 @@ test('two case studies for one client link to each other, and process steps keep
   await expect(page.locator('.case-next__title a')).toHaveAttribute('href', '/case-study/82-south-brand/');
   await expect(page.locator('.case-quote')).toContainText('Trust the process!');
 });
+
+test('case study card and gallery rows are always full', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const slug of ['82-south-website', '82-south-brand', 'genpact-grow-event', 'turntide-website']) {
+    await page.goto(`/case-study/${slug}/`);
+    // Each grid has as many columns as items, so no row ends on an empty cell.
+    const rows = await page.locator('.case-story :is(.case-cards, .case-gallery)').evaluateAll((grids) =>
+      grids.map((grid) => ({
+        items: grid.children.length,
+        columns: getComputedStyle(grid).gridTemplateColumns.split(' ').length,
+      })),
+    );
+    for (const row of rows) expect(row.items % row.columns, `${slug}: ${row.items} items in ${row.columns} columns`).toBe(0);
+  }
+  // Three cards sit three across.
+  await page.goto('/case-study/82-south-website/');
+  await expect(page.locator('.case-cards[data-count="3"] > .case-card')).toHaveCount(3);
+});

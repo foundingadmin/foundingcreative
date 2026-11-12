@@ -582,8 +582,9 @@ const jsonLd = [
   }
 
   .case-story :global(.case-band__inner) {
+    --band-gap: clamp(3rem, 2rem + 3vw, 5rem);
     display: grid;
-    gap: clamp(3rem, 2rem + 3vw, 5rem);
+    gap: var(--band-gap);
     width: 100%;
     max-width: calc(var(--container-max) + 2 * var(--container-gutter));
     margin-inline: auto;
@@ -823,11 +824,30 @@ const jsonLd = [
     gap: var(--space-md);
   }
 
-  /* Image cards, two to a row: picture, heading, words */
+  /* Image cards: picture, heading, words. Each row has as many columns as
+     cards (2, 3 or 4, set by the bands plugin), so no cell is ever empty. */
   .case-story :global(.case-cards) {
+    --cols: 2; /* set here so a grid nested in another doesn't inherit its count */
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
     gap: var(--space-2xl) var(--space-xl);
+  }
+
+  .case-story :global(.case-cards[data-count='3']) {
+    --cols: 3;
+  }
+
+  .case-story :global(.case-cards[data-count='4']) {
+    --cols: 4;
+  }
+
+  /* A long run is split into full rows; keep them as close as one grid's rows. */
+  .case-story :global(.case-band__inner > .case-cards + .case-cards) {
+    margin-top: calc(var(--space-2xl) - var(--band-gap));
+  }
+
+  .case-story :global(.case-band__inner > .case-gallery + .case-gallery) {
+    margin-top: calc(var(--space-md) - var(--band-gap));
   }
 
   .case-story :global(.case-card__media) {
@@ -868,8 +888,9 @@ const jsonLd = [
 
   /* Galleries */
   .case-story :global(.case-gallery) {
+    --cols: 2; /* set here so a grid nested in another doesn't inherit its count */
     display: grid;
-    grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
     gap: var(--space-md);
     align-items: start;
   }
@@ -879,7 +900,7 @@ const jsonLd = [
   }
 
   .case-story :global(.case-gallery[data-count='4']) {
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    --cols: 4;
   }
 
   .case-story :global(.case-gallery > p) {
@@ -1132,14 +1153,20 @@ const jsonLd = [
       order: 0;
     }
 
-    .case-story :global(.case-gallery[data-count='3']) {
-      --cols: 2;
+    .case-story :global(:is(.case-gallery, .case-cards)[data-count='4']) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 599px) {
-    .case-story :global(.case-gallery) {
+    .case-story :global(.case-gallery),
+    .case-story :global(.case-gallery[data-count='4']) {
       --cols: 1;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .case-story :global(.case-cards[data-count='4']) {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

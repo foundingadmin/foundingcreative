@@ -28,3 +28,8 @@ npm-debug.log*
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# Case study briefs and review images (client notes and working files; the
+# repo is public)
+briefs/
+review/
