@@ -33,7 +33,7 @@ The rule: **AI never draws the client's UI or logo.** Nano Banana builds the sce
 2. **Scene.** The Gemini image model (GEMINI_IMAGE_MODEL, currently Nano Banana 2.1) makes 4 variants at 2K, 16:9. Template prompt: photoreal 3D studio shot; laptop and phone both fully in frame; phone in front, overlapping the laptop's lower-right corner; screens a flat pure #00FF00; background in the client's primary color; soft studio light; no text or logos.
 3. **Composite.** Detect each green screen's four corners, perspective-warp the real screenshot into it, then add a soft glare layer.
 4. **Pick.** Save all variants to `review/<client>/`. Reject any with a cropped device, a phone behind the laptop, or unreadable UI text at 100%. Tyler or Claude Code picks the winner.
-5. **Brand scenes (optional).** Nano Banana can use the logo and mockup PNGs as references for in-the-wild shots, like a road case backstage or crew hoodies at a booth. Zoom to 100% and reject any distorted mark. These are art direction, so don't caption them as real events.
+5. **Brand scenes (optional).** Nano Banana can use the logo and mockup PNGs as references for in-the-wild shots of objects, like a road case backstage. Zoom to 100% and reject any distorted mark. These are art direction, so don't caption them as real events. Never generate people as the client's staff or crew.
 6. **Export** AVIF and WebP: hero 2400px wide or more, gallery images 1600px or more, share image 1200x630 JPG.
 
 **Key handling:** GEMINI_API_KEY lives in `.env.local`, which is gitignored. Scripts run locally, never in the Vercel build. Never paste the key into a chat. Cost is about 5 cents per 2K image, so under $2 per case study.
@@ -65,7 +65,7 @@ Image-led pages: big visuals carry the story and the copy stays short. A case st
 
 **Brand board pages:** render the brand guide PDF to 1600px images and pick up to nine. Leave out any page with a known typo, a placeholder title or third-party logos.
 
-**Scenes:** `scripts/case-study-scene.mjs scene` has `laptop-in-hands`, `phone-in-hand` and `crew-backs`. Screens and print panels are flat green, and the real screenshot or logo is composited on. Save four variants per scene to `review/<client>/v3/` and wait for Tyler's picks.
+**Scenes:** `scripts/case-study-scene.mjs scene` has `laptop-in-hands` and `phone-in-hand`. Screens are flat green, and the real screenshot is composited on. **Never show made-up people as the client's employees:** no generated crew, staff or team in the client's branding. People in a scene are anonymous visitors using the work. Save four variants per scene to `review/<client>/v3/` and wait for Tyler's picks.
 
 Motion is CSS only: scroll timelines where the browser has them, still everywhere else and under `prefers-reduced-motion`.
 

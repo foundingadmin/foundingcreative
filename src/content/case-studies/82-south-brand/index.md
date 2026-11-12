@@ -96,9 +96,6 @@ showcase:
     points:
       - title: "Brand activations"
         text: "Twenty-plus art direction mockups show the brand on caps, hoodies, luggage, tumblers, packing tape and a road case that rides with the crew to every show."
-  - type: scene
-    concept: true
-    image: { src: "./crew.webp", alt: "Brand concept: two crew members in 82 South hoodies setting up a trade show booth" }
   - type: scope
     kicker: "The process"
     heading: "From strategy to swag"
