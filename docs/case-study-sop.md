@@ -56,6 +56,7 @@ Image-led pages: big visuals carry the story and the copy stays short. A case st
 | `mockup` | One to three mockups, edge to edge | images, `tone` |
 | `scene` | A person using the real work; `concept: true` adds a "Concept" label | one image |
 | `device` | The full-page capture scrolls inside a laptop as the page scrolls | full-page capture |
+| `clip` | A short silent loop of the real site in use, over its poster; loads after the page and never plays under reduced motion | an MP4 in `public/media/`, a poster image |
 | `numbers` | The brand kit's stats, large, with a credit line | `brandKit.stats` |
 | `scope` | The long process list, collapsed | `steps` |
 | `conclusion` | Conclusion beside Key outcomes | paragraphs, outcomes |
@@ -68,7 +69,7 @@ Image-led pages: big visuals carry the story and the copy stays short. A case st
 
 Motion is CSS only: scroll timelines where the browser has them, still everywhere else and under `prefers-reduced-motion`.
 
-Not built yet: the interaction clip (a short silent loop of the real site in use). It needs ffmpeg to produce an MP4.
+**Clips:** `scripts/record-case-study-clip.mjs` records the live site with Playwright and writes an H.264 MP4 and a poster (needs ffmpeg). Keep a clip under 12 seconds and 1 MB, and check every frame against the brief's flags.
 
 ## QA gate (Claude Code checks each page at 1440 and 390, fixes, then checks again)
 

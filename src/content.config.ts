@@ -59,6 +59,9 @@ const caseStudies = defineCollection({
       z.object({ type: z.literal('scene'), ...copy, image: pic, concept: z.boolean().default(false) }),
       // A full-page capture that scrolls inside a laptop as the page scrolls.
       z.object({ type: z.literal('device'), ...copy, image: pic }),
+      // A short silent loop of the real site in use, over its poster image.
+      // `video` is a file in public/ ("/media/case-studies/<slug>/clip.mp4").
+      z.object({ type: z.literal('clip'), ...copy, video: z.string().regex(/^\/media\/.+\.mp4$/), poster: pic }),
       // The brand kit's stats, large, on the client's color.
       z.object({ type: z.literal('numbers'), ...copy, credit: z.string().optional() }),
       // The long process list, collapsed.

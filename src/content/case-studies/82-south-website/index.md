@@ -65,16 +65,19 @@ showcase:
   - type: scene
     image: { src: "./booth-phone.webp", alt: "82 South portfolio page on a phone held up at a trade show booth" }
     heading: "A portfolio that keeps growing"
+  - type: clip
+    video: "/media/case-studies/82-south-website/portfolio-filter.mp4"
+    poster: { src: "./portfolio.webp", alt: "82 South portfolio page with filters for event, exhibit, media, talent and activation" }
+    points:
+      - title: "Filter by what you need"
+        text: "Buyers can jump straight to exhibits, activations or media, the way they actually shop."
   - type: mockup
     tone: white
     images:
       - { src: "./project.webp", alt: "82 South portfolio project page for Duck Creek Formation with client, industry and attendance" }
-      - { src: "./portfolio.webp", alt: "82 South portfolio page with filters for event, exhibit, media, talent and activation" }
     points:
       - title: "Post an event in minutes"
         text: "The 82 South team publishes their own projects, from Duck Creek Formation in Orlando to Avalara CRUSH in Austin."
-      - title: "Filter by what you need"
-        text: "Buyers can jump straight to exhibits, activations or media, the way they actually shop."
   - type: mockup
     heading: "Lean by design"
     images:
