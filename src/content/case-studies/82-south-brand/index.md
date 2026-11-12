@@ -38,7 +38,10 @@ brandKit:
     - { name: "White", hex: "#ffffff" }
   fonts:
     - { name: "Mulish", weights: ["Regular", "Medium", "Bold", "Black"], role: "Everything" }
+  pattern: "./pattern.jpg"
+  mark: "./badge.svg"
   motif: "Squircle frames, a wave pattern, and a badge whose lime arrow always points south."
+heroCutout: { src: "./road-case-cutout.png", alt: "82 South stenciled road case floating over the purple wave pattern" }
 showcase:
   - type: statement
     text: "Sensory experiences that go deeper than the event itself."
@@ -46,12 +49,15 @@ showcase:
     kicker: "Strategy the whole team can say out loud."
     heading: "A North Star that points South"
     images:
-      - { src: "./strategic-framework.webp", alt: "82 South Brand Blueprint strategic framework page with the mission, vision, positioning and personality" }
-      - { src: "./logo-system.webp", alt: "82 South logo system: horizontal wordmark, vertical wordmark and the badge" }
-      - { src: "./pillar-hierarchy.webp", alt: "82 South marketing pillar hierarchy, a funnel from sensory enhancing at the top to growth, client care and expertise at the bottom" }
-      - { src: "./badge.webp", alt: "82 South badge in its approved purple, grey, black and white color versions" }
-      - { src: "./color-palette.webp", alt: "82 South color palette swatches: purple, light purple, lime green, white, black and grey" }
-      - { src: "./mulish-weights.webp", alt: "82 South typography page showing Mulish in Regular, Medium, Bold and Black weights" }
+      - { src: "./board-01.webp", alt: "82 South Brand Blueprint cover with the wordmark on the purple wave pattern" }
+      - { src: "./board-02.webp", alt: "82 South Brand Blueprint strategic framework page with the mission, vision, positioning and personality" }
+      - { src: "./board-03.webp", alt: "82 South marketing pillar hierarchy, a funnel from sensory enhancing at the top to growth, client care and expertise at the bottom" }
+      - { src: "./board-04.webp", alt: "82 South brand font page showing Mulish letters and numerals" }
+      - { src: "./board-05.webp", alt: "82 South color palette swatches: purple, light purple, lime green, white, black and grey" }
+      - { src: "./board-06.webp", alt: "82 South logo system: horizontal wordmark, vertical wordmark and the badge" }
+      - { src: "./board-07.webp", alt: "82 South badge in its approved purple, grey, black and white color versions" }
+      - { src: "./board-08.webp", alt: "82 South brand patterns page with the purple and white wave patterns" }
+      - { src: "./board-09.webp", alt: "82 South one sheet templates in purple, lime and white" }
     points:
       - title: "Mission, vision, positioning"
         text: "We wrote three lines the team could repeat anywhere. The vision, \"To be the South Star in leading a better kind of partnership,\" gave the badge its meaning."
@@ -62,8 +68,9 @@ showcase:
     points:
       - title: "The badge"
         text: "The 82 sits inside a squircle, and a lime arrow below it points south. Rotating the badge is off limits: the arrow has to point the right way."
-      - title: "Mulish everywhere"
-        text: "One open-source typeface works across the web, Office and Google, so nobody hunts for a font file."
+  - type: type
+    heading: "Mulish everywhere"
+    text: "One open-source typeface works across the web, Office and Google, so nobody hunts for a font file."
   - type: colors
     heading: "Color built for contrast"
     text: "The palette is purple, light purple, lime green, grey, black and white. Every approved pairing passes AAA contrast, so the brand stays readable on stage screens and in print."

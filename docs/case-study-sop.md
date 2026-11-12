@@ -51,7 +51,8 @@ Image-led pages: big visuals carry the story and the copy stays short. A case st
 | `statement` | One sentence, huge, on the client's primary color | `text` |
 | `board` | Brand guide pages in a tilted grid that runs off both edges | 4 to 9 page images |
 | `colors` | Tall swatches that rise into place, labeled with name, role, hex and RGB | `brandKit.colors` |
-| `logo` | The logo wipes in on the client's color | `logo` |
+| `logo` | The brand mark builds itself piece by piece (`brandKit.mark`, an SVG beside the entry); without one, the logo wipes in | `brandKit.mark` or `logo` |
+| `type` | A big "Aa" and the brand font's weight names, set in the site's own type (client fonts are not loaded) | `brandKit.fonts` |
 | `mockup` | One to three mockups, edge to edge | images, `tone` |
 | `scene` | A person using the real work; `concept: true` adds a "Concept" label | one image |
 | `device` | The full-page capture scrolls inside a laptop as the page scrolls | full-page capture |
@@ -59,13 +60,15 @@ Image-led pages: big visuals carry the story and the copy stays short. A case st
 | `scope` | The long process list, collapsed | `steps` |
 | `conclusion` | Conclusion beside Key outcomes | paragraphs, outcomes |
 
-`hero` sets the page's opening image when it differs from the cover, which stays the card and share image.
+`hero` sets the page's opening image when it differs from the cover, which stays the card and share image. `heroCutout` (a transparent PNG) floats over `brandKit.pattern` instead. The pattern also runs faintly behind the "Next case study" band on the page that links to this one.
+
+**Brand board pages:** render the brand guide PDF to 1600px images and pick up to nine. Leave out any page with a known typo, a placeholder title or third-party logos.
 
 **Scenes:** `scripts/case-study-scene.mjs scene` has `laptop-in-hands`, `phone-in-hand` and `crew-backs`. Screens and print panels are flat green, and the real screenshot or logo is composited on. Save four variants per scene to `review/<client>/v3/` and wait for Tyler's picks.
 
 Motion is CSS only: scroll timelines where the browser has them, still everywhere else and under `prefers-reduced-motion`.
 
-Not built yet: the cutout hero over the client's pattern, the live type specimen, the logo micro animation, the interaction clip and the patterned next-case band. Each needs a source file or a decision first (see the PR that added this section).
+Not built yet: the interaction clip (a short silent loop of the real site in use). It needs ffmpeg to produce an MP4.
 
 ## QA gate (Claude Code checks each page at 1440 and 390, fixes, then checks again)
 

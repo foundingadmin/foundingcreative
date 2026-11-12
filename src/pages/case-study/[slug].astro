@@ -1,4 +1,5 @@
 ---
+import { dirname, join } from 'node:path';
 import { getImage } from 'astro:assets';
 import Img from '../../components/Img.astro';
 import { caseCover } from '../../lib/images';
@@ -66,6 +67,15 @@ const headingInk = (() => {
 // Showcase pages (template v3) can open on their own hero image; the cover
 // stays the card and share image.
 const hero = data.hero ?? { src: data.cover, alt: data.coverAlt };
+// Or on a cutout floating over the brand kit's pattern (the cutout hero).
+const cutout = data.brandKit?.pattern ? data.heroCutout : undefined;
+const cutoutSizes = { widths: [480, 800, 1280], sizes: '(max-width: 900px) 78vw, 680px' };
+// The next study's pattern runs behind the "Next case study" band.
+const nextPattern = next.data.brandKit?.pattern
+  ? await getImage({ src: next.data.brandKit.pattern, width: 1200, format: 'webp' })
+  : undefined;
+// The entry's folder, for files its brand kit names.
+const entryDir = study.filePath ? dirname(join(process.cwd(), study.filePath)) : undefined;
 const closingCover = await getImage({ src: data.cover, width: 1600, format: 'webp' });
 const closingLogo = data.logo ? await getImage({ src: data.logo }) : undefined;
 const themeStyle = [
@@ -78,7 +88,7 @@ const themeStyle = [
 ]
   .filter(Boolean)
   .join('; ');
-const nextStyle = `--next-accent: ${nextTheme.accent}; --next-dark: ${nextTheme.dark};`;
+const nextStyle = `--next-accent: ${nextTheme.accent}; --next-dark: ${nextTheme.dark};${nextPattern ? ` --next-pattern: url(${nextPattern.src});` : ''}`;
 // The project at a glance, along the bottom of the hero (after thebranx.com).
 const facts = [
   { label: 'Client', value: data.clients.join(', ') },
@@ -119,7 +129,7 @@ const jsonLd = [
   })}
   article={{ published: data.date, section: 'Case Studies', tags: [...data.services, ...data.sectors] }}
   jsonLd={jsonLd}
-  lcpImage={{ src: hero.src, ...caseCover }}
+  lcpImage={{ src: cutout ? data.brandKit!.pattern! : hero.src, ...caseCover }}
 >
   <article style={themeStyle}>
     <!-- Hero: the live page's shifting gradient in the study's colors -->
@@ -152,23 +162,26 @@ const jsonLd = [
          view, the photo drifting slower than the page, logo wiping in -->
     <div class="case-cover curve-top">
       <div class="container">
-        <figure class:list={['case-cover__card', data.hero && 'case-cover__card--clear']} data-reveal="color">
-          <Img
-            class="case-cover__image"
-            src={hero.src}
-            alt={hero.alt}
-            {...caseCover}
-            loading="eager"
-            fetchpriority="high"
-          />
-          {data.logo && !data.hero && <Img class="case-cover__logo" src={data.logo} alt={data.logoAlt ?? ''} height={96} />}
-        </figure>
+        {
+          cutout ? (
+            <figure class="case-cover__card case-cover__card--clear case-cover__card--cutout" data-reveal="color">
+              {/* The pattern fills the card, so it is the LCP image: preloaded above */}
+              <Img class="case-cover__image" src={data.brandKit!.pattern!} alt="" {...caseCover} loading="eager" fetchpriority="high" />
+              <Img class="case-cover__cutout" src={cutout.src} alt={cutout.alt} {...cutoutSizes} loading="eager" />
+            </figure>
+          ) : (
+            <figure class:list={['case-cover__card', data.hero && 'case-cover__card--clear']} data-reveal="color">
+              <Img class="case-cover__image" src={hero.src} alt={hero.alt} {...caseCover} loading="eager" fetchpriority="high" />
+              {data.logo && !data.hero && <Img class="case-cover__logo" src={data.logo} alt={data.logoAlt ?? ''} height={96} />}
+            </figure>
+          )
+        }
       </div>
     </div>
 
     <div class="case-story">
       <Content />
-      {data.showcase && <Showcase blocks={data.showcase} kit={data.brandKit} logo={data.logo} logoAlt={data.logoAlt} />}
+      {data.showcase && <Showcase blocks={data.showcase} kit={data.brandKit} logo={data.logo} logoAlt={data.logoAlt} dir={entryDir} />}
     </div>
 
     {
@@ -230,6 +243,7 @@ const jsonLd = [
 
   <!-- Next case study, set in the next client's colors -->
   <section class="case-next curve-top" style={nextStyle} aria-labelledby="case-next-heading">
+    {nextPattern && <div class="case-next__pattern" aria-hidden="true" />}
     <div class="container case-next__inner">
       <div class="case-next__text">
         <p class="case-next__label">Next case study</p>
@@ -367,6 +381,31 @@ const jsonLd = [
   /* A showcase hero is a finished scene: no veil, no logo over it */
   .case-cover__card--clear::after {
     content: none;
+  }
+
+  /* Cutout hero: the subject floats over the client's pattern */
+  .case-cover__cutout {
+    z-index: 1;
+    width: min(58%, 42rem);
+    height: auto;
+    filter: drop-shadow(0 2.5rem 2.5rem rgb(0 0 0 / 0.35));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .case-cover__cutout {
+        animation: cutout-float linear both;
+        animation-timeline: scroll();
+        animation-range: 0 100vh;
+      }
+    }
+  }
+
+  @keyframes cutout-float {
+    to {
+      translate: 0 -12%;
+      rotate: -2deg;
+    }
   }
 
   .case-cover__logo {
@@ -1077,7 +1116,18 @@ const jsonLd = [
       var(--next-dark);
   }
 
+  /* The next client's pattern, faint, behind the band */
+  .case-next__pattern {
+    position: absolute;
+    inset: 0;
+    background: var(--next-pattern) center / cover;
+    mix-blend-mode: soft-light;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
   .case-next__inner {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-2xl);

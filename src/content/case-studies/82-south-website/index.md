@@ -41,6 +41,7 @@ brandKit:
   stats:
     - { value: "45", label: "Cities" }
     - { value: "10", label: "Countries" }
+  pattern: "./pattern.jpg"
   motif: "Squircle-framed photography, wave patterns, and lime green saved for calls to action."
 showcase:
   - type: statement

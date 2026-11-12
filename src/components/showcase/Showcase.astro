@@ -5,6 +5,8 @@
 // apply. Motion is CSS only (scroll timelines where the browser has them)
 // and everything sits still under prefers-reduced-motion.
 import type { CollectionEntry } from 'astro:content';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import Img from '../Img.astro';
 
 type Data = CollectionEntry<'caseStudies'>['data'];
@@ -13,9 +15,22 @@ interface Props {
   kit?: Data['brandKit'];
   logo?: Data['logo'];
   logoAlt?: string;
+  /** The entry's folder, for files the brand kit names (the mark). */
+  dir?: string;
 }
 
-const { blocks, kit, logo, logoAlt } = Astro.props;
+const { blocks, kit, logo, logoAlt, dir } = Astro.props;
+
+// The brand mark, inlined so each of its shapes can animate. The XML
+// prolog goes, and the SVG is labeled as one image.
+const mark =
+  kit?.mark && dir
+    ? readFileSync(join(dir, kit.mark), 'utf8')
+        .replace(/<\?xml[^>]*\?>\s*/, '')
+        .replace(/<svg /, `<svg role="img" aria-label="${logoAlt ?? 'Brand mark'}" `)
+    : undefined;
+// Font weight names to CSS weights, for the type specimen.
+const WEIGHTS: Record<string, number> = { Light: 300, Regular: 400, Medium: 500, Semibold: 600, Bold: 700, Black: 800 };
 
 /**
  * Copy that lives in frontmatter: **bold** and [text](/path/), plus any HTML
@@ -124,10 +139,38 @@ const sizesFor = (count: number) =>
       return (
         <section class="case-band show show--logo" data-tone="accent">
           <div class="case-band__inner">
-            <div class="show__logo" data-reveal>
-              <Img src={logo} alt={logoAlt ?? ''} height={160} />
-            </div>
+            {mark ? (
+              <div class="show__mark" data-reveal set:html={mark} />
+            ) : (
+              <div class="show__logo" data-reveal>
+                <Img src={logo} alt={logoAlt ?? ''} height={160} />
+              </div>
+            )}
             {Header}
+            {Points}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === 'type' && kit?.fonts.length) {
+      const font = kit.fonts[0];
+      return (
+        <section class="case-band show show--type" data-tone="light">
+          <div class="case-band__inner">
+            <div class="show__type">
+              <p class="show__aa" aria-hidden="true">
+                Aa
+              </p>
+              <div>
+                {Header}
+                <ul class="show__weights">
+                  {font.weights.map((weight) => (
+                    <li style={`font-weight: ${WEIGHTS[weight] ?? 400}`}>{weight}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
             {Points}
           </div>
         </section>
@@ -391,6 +434,64 @@ const sizesFor = (count: number) =>
     height: auto;
   }
 
+  /* The mark builds itself: the shape lands, then each piece drops in */
+  .show__mark {
+    padding-block: clamp(2rem, 6vw, 5rem);
+  }
+
+  .show__mark :global(svg) {
+    display: block;
+    width: min(18rem, 50vw);
+    height: auto;
+    overflow: visible;
+    border-radius: 0;
+  }
+
+  /* On the accent band the mark's own color would vanish: ring it in white */
+  .show__mark :global(svg path:first-of-type) {
+    stroke: var(--color-white);
+    stroke-width: 2px;
+  }
+
+  /* Type specimen */
+  .show__type {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+
+  .show__aa {
+    margin: 0;
+    color: var(--case-accent);
+    font-family: var(--font-body);
+    font-size: clamp(8rem, 4rem + 18vw, 20rem);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+
+  .show__weights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-lg);
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    color: var(--case-dark);
+    font-size: var(--font-size-h5);
+    list-style: none;
+  }
+
+  .show__weights li {
+    margin: 0;
+  }
+
+  @media (max-width: 700px) {
+    .show__type {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
   /* Mockups, edge to edge */
   .show__mockups {
     display: grid;
@@ -621,6 +722,49 @@ const sizesFor = (count: number) =>
       }
     }
 
+    .js .show__mark :global(path) {
+      opacity: 0;
+      translate: 0 -1.5rem;
+      transition:
+        opacity 500ms var(--ease-out),
+        translate 700ms var(--ease-out);
+      transition-delay: calc(250ms + var(--n, 1) * 180ms);
+    }
+
+    .js .show__mark :global(path:first-of-type) {
+      scale: 0.8;
+      transform-origin: center;
+      transform-box: fill-box;
+      translate: none;
+      transition:
+        opacity 500ms var(--ease-out),
+        scale 700ms var(--ease-out);
+      transition-delay: 0ms;
+    }
+
+    .js .show__mark :global(path:nth-of-type(3)) {
+      --n: 2;
+    }
+
+    /* The last piece (82 South's lime arrow) drops last, pointing south */
+    .js .show__mark :global(path:last-of-type) {
+      --n: 4;
+    }
+
+    .js .show__mark.is-revealed :global(path) {
+      opacity: 1;
+      scale: 1;
+      translate: none;
+    }
+
+    @supports (animation-timeline: view()) {
+      .show__aa {
+        animation: show-weigh linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 60%;
+      }
+    }
+
     .js .show__logo :global(img) {
       clip-path: inset(0 100% 0 0);
       transition: clip-path 1.2s var(--ease-out) 200ms;
@@ -628,6 +772,16 @@ const sizesFor = (count: number) =>
 
     .js .show__logo.is-revealed :global(img) {
       clip-path: inset(0);
+    }
+  }
+
+  /* The specimen runs through the weights as it scrolls in */
+  @keyframes show-weigh {
+    from {
+      font-weight: 300;
+    }
+    to {
+      font-weight: 800;
     }
   }
 
