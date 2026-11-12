@@ -74,8 +74,8 @@ At cutover, nothing needs to change in the code: once foundingcreative.com point
 ## Site map
 
 - Home, About (`/about-us/`), Fractional Creative, Contact, Let's talk (`/coffee/`, redirects to the scheduler)
-- 6 service pages (Branding and Strategy at `/brandforge/`, the rest under `/services/`)
-- 3 SiteLaunch package pages (Rocket, Prism, Orbit)
+- 6 service pages under `/services/` (Branding and Strategy in the menus is `/services/branding-services/`), plus BrandForge, the startup brand package, at `/brandforge/`
+- SiteLaunch (Rocket, Prism, Orbit) was sunset in November 2026: the three URLs redirect to `/services/website-services/` and the pages are kept, unbuilt, in `archive/sitelaunch/`
 - Case Studies index + case studies at `/case-study/<slug>/` (content collection)
 - Field Notes blog index at `/blog/`, posts at `/<slug>/` (content collection), RSS at `/feed/`
 - Legal: Imprint, Cookie Policy, Disclaimer, Privacy Statement (EU, UK, US variants)

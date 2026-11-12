@@ -4,7 +4,7 @@ import ContactForm from './ContactForm.astro';
 import Icon from './Icon.astro';
 import TeamFaces from './TeamFaces.astro';
 import logo from '../assets/brand/founding-wordmark-white.svg';
-import { companyLinks, services, sitelaunch, legalLinks, linkedInHref } from '../data/navigation';
+import { companyLinks, footerServices, legalLinks, linkedInHref } from '../data/navigation';
 import { getCaseStudies, getPosts, caseStudyUrl, postUrl } from '../lib/content';
 
 // Newest five case studies and three posts, as on the live footer.
@@ -14,8 +14,7 @@ const latestPosts = (await getPosts()).slice(0, 3).map((p) => ({ label: p.data.t
 // Column headings put one phrase in mint, as on the live footer.
 const columns = [
   { id: 'company', before: '', accent: 'Company', after: '', links: companyLinks },
-  { id: 'services', before: '', accent: 'What', after: ' we do', links: services },
-  { id: 'sitelaunch', before: '', accent: 'SiteLaunch™', after: '', links: sitelaunch },
+  { id: 'services', before: '', accent: 'What', after: ' we do', links: footerServices },
   {
     id: 'work',
     before: 'Our ',

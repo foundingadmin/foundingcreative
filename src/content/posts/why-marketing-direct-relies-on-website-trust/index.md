@@ -157,4 +157,4 @@ If you’re running campaigns that are laser-targeted, personalized, and high-st
 
 Interactive visuals, seamless page animations, bold design systems, and web experiences that perform as beautifully as they look. That’s Prism.
 
-👉 [Explore the Prism SiteLaunch](/prism-sitelaunch/) to see how we help teams create branded websites that stand out from the competition.
+👉 [Explore the Prism SiteLaunch](/services/website-services/) to see how we help teams create branded websites that stand out from the competition.

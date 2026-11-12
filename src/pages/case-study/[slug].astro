@@ -5,7 +5,6 @@ import { caseCover } from '../../lib/images';
 import { render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OurWork from '../../components/OurWork.astro';
-import SiteLaunchSection from '../../components/SiteLaunchSection.astro';
 import Icon from '../../components/Icon.astro';
 import { getCaseStudies, caseStudyUrl, servicesFor, type CaseStudy } from '../../lib/content';
 import { entrySeo } from '../../data/seo';
@@ -223,7 +222,6 @@ const jsonLd = [
     }
   </article>
 
-  {data.showSiteLaunch && <SiteLaunchSection />}
 
   <!-- Next case study, set in the next client's colors -->
   <section class="case-next curve-top" style={nextStyle} aria-labelledby="case-next-heading">

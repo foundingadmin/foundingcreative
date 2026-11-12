@@ -120,7 +120,9 @@ test('home says what we do up top, without client logos in the hero', async ({ p
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
   const hero = page.locator('.hero');
-  await expect(hero.getByText('We\'re a brand strategy agency for growing B2B teams.', { exact: false })).toBeVisible();
+  await expect(hero.getByText("We're a full-service creative partner for scaling companies.", { exact: false })).toBeVisible();
+  await expect(hero.getByText('Brand strategy and web design agency')).toBeVisible();
+  await expect(hero.getByRole('link', { name: 'Explore our services' })).toHaveAttribute('href', '/services/');
   // The coded gradient backdrop, not a video, and no logo row.
   await expect(hero.locator('.backdrop--spectrum')).toHaveCount(1);
   await expect(hero.locator('video, img')).toHaveCount(0);
@@ -144,6 +146,14 @@ test('service pages explain their process and link two relevant case studies', a
   }
   await page.goto('/services/branding-services/');
   await expect(page.getByRole('link', { name: 'BrandForge', exact: true })).toHaveAttribute('href', '/brandforge/');
+  // The BrandForge pitch for startups, on branding services and the services overview.
+  for (const path of ['/services/branding-services/', '/services/']) {
+    await page.goto(path);
+    const promo = page.getByRole('region', { name: /BrandForge/ });
+    await expect(promo.getByRole('link', { name: 'See how BrandForge works' })).toHaveAttribute('href', '/brandforge/');
+    await expect(page.locator('main a[href*="sitelaunch"]')).toHaveCount(0);
+  }
+  await expect(page.getByText('Not every brand needs the same website')).toHaveCount(0);
 });
 
 test('Fractional Creative FAQ matches its FAQPage structured data', async ({ page }) => {
