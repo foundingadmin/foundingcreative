@@ -4,7 +4,7 @@ seoTitle: "SafeZone Gun Safety Branding Case Study | Founding Creative"
 description: "Brand identity, product design, and app UI for SafeZone, a fingerprint-authorized gun safety device built for fast, secure access when it matters."
 ogTitle: "SafeZone Product and Branding"
 ogDescription: "Brand identity, product design, and app UI for SafeZone, a fingerprint-authorized gun safety device built for fast, secure access when it matters."
-eyebrow: "Case Study: SafeZone Product and Branding"
+eyebrow: "SafeZone Product and Branding"
 headline: "Gun-safety innovation for humankind"
 subheadline: "SafeZone enables fingerprint authorization while still having ease of accessibility in times of defense."
 clients: ["SafeZone"]

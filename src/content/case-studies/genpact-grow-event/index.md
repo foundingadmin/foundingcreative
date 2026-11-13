@@ -4,7 +4,7 @@ seoTitle: "Genpact GROW Event Branding Case Study | Founding Creative"
 description: "How we rebranded Genpact's annual GROW event from concept to execution, with a fresh identity and digital experience for a global audience."
 ogTitle: "Genpact GROW Event Branding"
 ogDescription: "How we rebranded Genpact's annual GROW event from concept to execution, with a fresh identity and digital experience for a global audience."
-eyebrow: "Case Study: Genpact GROW Event"
+eyebrow: "Genpact GROW Event"
 headline: "Growing an event from concept to execution"
 subheadline: "Taking Genpact's annual event to new heights with a fresh branding approach"
 clients: ["Genpact"]

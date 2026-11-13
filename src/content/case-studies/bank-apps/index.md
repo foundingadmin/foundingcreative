@@ -4,7 +4,7 @@ seoTitle: "Bank of America Interactive Apps | Founding Creative"
 description: "Interactive PDFs, a cached web app, and event touchscreens that made Bank of America content easy to explore, share, and track across sectors."
 ogTitle: "Bank of America Interactive Apps"
 ogDescription: "Interactive PDFs, a cached web app, and event touchscreens that made Bank of America content easy to explore, share, and track across sectors."
-eyebrow: "Case Study: Banking App"
+eyebrow: "Banking App"
 headline: "Multiple internal sectors, multiple solutions"
 subheadline: "Adapting to meet the needs of the masses through research and implementation"
 clients: ["Bank of America"]
