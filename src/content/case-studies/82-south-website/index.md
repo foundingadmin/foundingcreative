@@ -4,7 +4,7 @@ seoTitle: "82 South event company website | Founding Creative"
 description: "A brand-first WordPress website for 82 South, an Orlando event production agency, designed to sell the experience and easy for their team to update."
 ogTitle: "82 South event company website"
 ogDescription: "A brand-first WordPress website for 82 South, an Orlando event production agency, designed to sell the experience and easy for their team to update."
-eyebrow: "Case Study: 82 South Website"
+eyebrow: "82 South Website"
 headline: "An event company website that feels like the event"
 subheadline: "A brand-first WordPress website for an Orlando event production agency, built so their team can run it on their own."
 clients: ["82 South"]
@@ -28,6 +28,7 @@ testimonial:
   quote: "Trust the process! Working with Founding showed us what we had been missing in previous rebrands."
   name: "DeAnna Miller"
   role: "Managing Director, 82 South"
+  portrait: "../../../assets/case-studies/deanna-miller.webp"
 hero: { src: "./hero.webp", alt: "82 South homepage on a laptop held by an attendee on a trade show floor under purple stage light" }
 brandKit:
   colors:
@@ -37,10 +38,6 @@ brandKit:
     - { name: "Grey", hex: "#3a3f49", role: "Text" }
   fonts:
     - { name: "Mulish", weights: ["Regular", "Medium", "Bold", "Black"], role: "Everything" }
-  # From the About page's global footprint map.
-  stats:
-    - { value: "45", label: "Cities" }
-    - { value: "10", label: "Countries" }
   pattern: "./pattern.jpg"
   motif: "Squircle-framed photography, wave patterns, and lime green saved for calls to action."
 showcase:
@@ -87,8 +84,6 @@ showcase:
         text: "We skipped plugin bloat. One lightweight SEO tool and GA4 give the team clean data without slowing the site."
       - title: "Owned by the client"
         text: "Analytics admin access, training videos and a care plan mean the team never waits on us to make a change."
-  - type: numbers
-    credit: "82 South's reach, from the footprint map on their About page."
   - type: scope
     kicker: "The process"
     heading: "Blueprint to browser"
@@ -101,7 +96,7 @@ showcase:
       - "**Services page** covering five offerings and the Discover, Design, Deliver process."
       - "**Filterable portfolio** sorted by Event, Exhibit, Media, Talent and Activation."
       - "**Project template** for each event, with location, scope and a photo gallery."
-      - "**About page** with founder story, leadership, awards and a global footprint map: 45 cities, 10 countries."
+      - "**About page** with founder story, leadership, awards and a global footprint map."
       - "**WordPress build** on the Pro theme and Cornerstone, kept lean with The SEO Framework and GA4."
       - "**Launch on Sep 16, 2024**, the same day the client asked to go live."
       - "**Training** on image and copy edits and on posting new portfolio projects."

@@ -4,7 +4,7 @@ seoTitle: "82 South brand identity case study | Founding Creative"
 description: "How we built the strategy, logo system, and brand blueprint for 82 South, an Orlando event production agency, from mission statement to road case."
 ogTitle: "82 South brand identity case study"
 ogDescription: "How we built the strategy, logo system, and brand blueprint for 82 South, an Orlando event production agency, from mission statement to road case."
-eyebrow: "Case Study: 82 South Brand"
+eyebrow: "82 South Brand"
 headline: "A brand built for lasting moments"
 subheadline: "Brand strategy, visual identity, and a complete brand blueprint for an Orlando experiential agency that stages events."
 clients: ["82 South"]
@@ -23,11 +23,13 @@ theme:
   accent: "#532896"
   dark: "#2b134f"
   light: "#e2e2fd"
-# Waiting on DeAnna's OK to quote her email. Uncomment once she says yes.
-# testimonial:
-#   quote: "Thank you for your creativity and strategy each step of the way."
-#   name: "DeAnna Miller"
-#   role: "Managing Director, 82 South"
+# From DeAnna's public Trustpilot review of Founding Creative, Jan 9, 2025
+# (the same quote as the website case study).
+testimonial:
+  quote: "Trust the process! Working with Founding showed us what we had been missing in previous rebrands."
+  name: "DeAnna Miller"
+  role: "Managing Director, 82 South"
+  portrait: "../../../assets/case-studies/deanna-miller.webp"
 brandKit:
   colors:
     - { name: "Purple", hex: "#532896", role: "Primary" }
@@ -37,7 +39,9 @@ brandKit:
     - { name: "Black", hex: "#000000" }
     - { name: "White", hex: "#ffffff" }
   fonts:
-    - { name: "Mulish", weights: ["Regular", "Medium", "Bold", "Black"], role: "Everything" }
+    # Drawn as outlines by scripts/font-specimen.mjs, so the page shows
+    # Mulish without loading it.
+    - { name: "Mulish", weights: ["Regular", "Medium", "Bold", "Black"], role: "Everything", specimen: "./type-aa.svg", weightsArt: "./type-weights.svg" }
   pattern: "./pattern.jpg"
   mark: "./badge.svg"
   motif: "Squircle frames, a wave pattern, and a badge whose lime arrow always points south."
@@ -68,6 +72,16 @@ showcase:
     points:
       - title: "The badge"
         text: "The 82 sits inside a squircle, and a lime arrow below it points south. Rotating the badge is off limits: the arrow has to point the right way."
+  - type: lockups
+    heading: "One logo, three colors"
+    text: "The 82 South logo runs in purple, white or black, and nothing else. Keeping it to three colors makes it easy to recognize wherever it shows up."
+    construction: "./logo-construction.svg"
+    constructionAlt: "82 South logo in outline, with guides marking its baseline, x-height and letter widths"
+    versions:
+      - { background: "#532896", ink: "#ffffff", label: "White on purple" }
+      - { background: "#ffffff", ink: "#532896", label: "Purple on white" }
+      - { background: "#000000", ink: "#ffffff", label: "White on black" }
+      - { background: "#ffffff", ink: "#000000", label: "Black on white" }
   - type: type
     heading: "Mulish everywhere"
     text: "One open-source typeface works across the web, Office and Google, so nobody hunts for a font file."
@@ -87,12 +101,10 @@ showcase:
         text: "We converted the email signature design into HTML for all five staff members, then recorded a two-minute install video."
   - type: mockup
     images:
-      - { src: "./road-case.webp", alt: "82 South stenciled road case with the 82south wordmark on the lid and side" }
-  - type: mockup
-    images:
       - { src: "./cap.webp", alt: "82 South purple cap with the badge on the front" }
       - { src: "./polos.webp", alt: "82 South purple polo shirts with the badge on the chest" }
       - { src: "./tote.webp", alt: "82 South purple tote bag reading You imagine. We create." }
+      - { src: "./road-case.webp", alt: "82 South stenciled road case with the 82south wordmark on the lid and side" }
     points:
       - title: "Brand activations"
         text: "Twenty-plus art direction mockups show the brand on caps, hoodies, luggage, tumblers, packing tape and a road case that rides with the crew to every show."

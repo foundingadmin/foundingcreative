@@ -209,6 +209,16 @@ test('two case studies for one client link to each other, and process steps keep
   await page.goto('/case-study/82-south-website/');
   await expect(page.locator('.case-next__title a')).toHaveAttribute('href', '/case-study/82-south-brand/');
   await expect(page.locator('.case-quote')).toContainText('Trust the process!');
+  // The client quote sits right under the opening lead, above the challenge.
+  for (const slug of ['82-south-website', '82-south-brand']) {
+    await page.goto(`/case-study/${slug}/`);
+    const tops = await page
+      .locator('.case-story > .case-band:first-child, .case-quote, .case-challenge')
+      .evaluateAll((els) => els.map((el) => [el.className.split(' ')[0], el.getBoundingClientRect().top]));
+    const order = tops.sort((a, b) => (a[1] as number) - (b[1] as number)).map((entry) => entry[0]);
+    expect(order, slug).toEqual(['case-band', 'case-quote', 'case-challenge']);
+    await expect(page.locator('.case-quote img')).toHaveCount(1);
+  }
 });
 
 test('case study card and gallery rows are always full', async ({ page }) => {

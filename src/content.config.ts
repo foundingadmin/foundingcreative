@@ -39,6 +39,8 @@ const caseStudies = defineCollection({
     // Showcase template v3 (docs/case-study-sop.md): image-led modules that
     // read the client's brand kit. Text takes **bold** and [links](/path/).
     const pic = z.object({ src: image(), alt: z.string().min(1) });
+    // An SVG beside the entry ("./badge.svg"), inlined into the page.
+    const svgFile = z.string().regex(/^\.\/[\w-]+\.svg$/);
     const point = z.object({ title: z.string(), text: z.string() });
     const copy = { kicker: z.string().optional(), heading: z.string().optional(), text: z.string().optional(), points: z.array(point).max(4).optional() };
     const block = z.discriminatedUnion('type', [
@@ -51,10 +53,19 @@ const caseStudies = defineCollection({
       // The logo on the client's color. With a brand kit `mark`, the mark
       // builds itself piece by piece; otherwise the logo wipes in.
       z.object({ type: z.literal('logo'), ...copy }),
+      // The full logo: an optional construction drawing (an SVG beside the
+      // entry, inlined), then the logo in each approved color pairing.
+      z.object({
+        type: z.literal('lockups'),
+        ...copy,
+        construction: svgFile.optional(),
+        constructionAlt: z.string().optional(),
+        versions: z.array(z.object({ background: z.string().regex(hex), ink: z.string().regex(hex), label: z.string() })).min(2).max(4),
+      }),
       // A big "Aa" and the brand font's weights, set in the site's own type.
       z.object({ type: z.literal('type'), ...copy }),
-      // One to three mockups, edge to edge.
-      z.object({ type: z.literal('mockup'), ...copy, images: z.array(pic).min(1).max(3), tone: z.enum(['light', 'white', 'dark']).default('light') }),
+      // One to four mockups, edge to edge.
+      z.object({ type: z.literal('mockup'), ...copy, images: z.array(pic).min(1).max(4), tone: z.enum(['light', 'white', 'dark']).default('light') }),
       // A person using the real work. `concept` adds a "Concept" label.
       z.object({ type: z.literal('scene'), ...copy, image: pic, concept: z.boolean().default(false) }),
       // A full-page capture that scrolls inside a laptop as the page scrolls.
@@ -106,19 +117,25 @@ const caseStudies = defineCollection({
         .min(1)
         .max(4)
         .optional(),
-      // A client quote, shown after Results when one exists.
-      testimonial: z.object({ quote: z.string(), name: z.string(), role: z.string() }).optional(),
+      // A client quote, shown as a card right under the opening lead. The
+      // portrait is a small square photo, shown in a circle.
+      testimonial: z.object({ quote: z.string(), name: z.string(), role: z.string(), portrait: image().optional() }).optional(),
       // The client's brand kit, read by the showcase modules.
       brandKit: z
         .object({
           colors: z.array(z.object({ name: z.string(), hex: z.string().regex(hex), cmyk: z.string().optional(), role: z.string().optional() })).min(2),
-          fonts: z.array(z.object({ name: z.string(), weights: z.array(z.string()).min(1), role: z.string().optional() })).default([]),
+          // `specimen` and `weightsArt` are the font drawn as SVG outlines
+          // (scripts/font-specimen.mjs), so the type module shows the real
+          // typeface without the page loading it.
+          fonts: z
+            .array(z.object({ name: z.string(), weights: z.array(z.string()).min(1), role: z.string().optional(), specimen: svgFile.optional(), weightsArt: svgFile.optional() }))
+            .default([]),
           stats: z.array(z.object({ value: z.string(), label: z.string() })).max(4).default([]),
           // The brand pattern, behind the cutout hero and the next-case band.
           pattern: image().optional(),
           // The brand mark as an SVG beside the entry ("./badge.svg"). It is
           // inlined so its shapes can animate in, in the order they are drawn.
-          mark: z.string().regex(/^\.\/[\w-]+\.svg$/).optional(),
+          mark: svgFile.optional(),
           // What makes the brand its own, for whoever art directs the page.
           motif: z.string().optional(),
         })
@@ -142,6 +159,8 @@ const services = defineCollection({
   loader: glob({ pattern: '*.yaml', base: './src/content/services' }),
   schema: ({ image }) => {
     const pic = z.object({ src: image(), alt: z.string().min(1) });
+    // An SVG beside the entry ("./badge.svg"), inlined into the page.
+    const svgFile = z.string().regex(/^\.\/[\w-]+\.svg$/);
     return z.object({
       path: z.string().regex(/^\/.*\/$/),
       ...seo,
