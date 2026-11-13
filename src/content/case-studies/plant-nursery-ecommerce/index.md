@@ -4,7 +4,7 @@ seoTitle: "Huckleberry Holler eCommerce Case Study | Founding Creative"
 description: "Branding and an eCommerce website for Huckleberry Holler, a sustainable plant nursery, that turns plant education into a path to purchase."
 ogTitle: "Huckleberry Holler Plant Nursery eCommerce"
 ogDescription: "Branding and an eCommerce website for Huckleberry Holler, a sustainable plant nursery, that turns plant education into a path to purchase."
-eyebrow: "Case Study: Plant Nursery eCommerce"
+eyebrow: "Plant Nursery eCommerce"
 headline: "Sustainable Agriculture"
 subheadline: "Come to the website to learn, leave with a plant and a mission"
 clients: ["Huckleberry Holler"]

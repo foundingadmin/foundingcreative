@@ -4,7 +4,7 @@ seoTitle: "Bell Bird ATM UX and Branding Case Study | Founding Creative"
 description: "Branding and UX design for Bell Bird, a cardless ATM that uses soundwaves to transfer secure financial data. See how we defined the ATM of tomorrow."
 ogTitle: "Bell Bird ATM UX and Branding"
 ogDescription: "Branding and UX design for Bell Bird, a cardless ATM that uses soundwaves to transfer secure financial data. See how we defined the ATM of tomorrow."
-eyebrow: "Case Study: Bell Bird ATM"
+eyebrow: "Bell Bird ATM"
 headline: "Defining the ATM user experience of tomorrow"
 subheadline: "Encoding secure financial data through the power of soundwaves."
 clients: ["Bell Bird"]

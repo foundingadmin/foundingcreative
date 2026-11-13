@@ -181,6 +181,31 @@ const jsonLd = [
 
     <div class="case-story">
       <Content />
+      {/* The client quote shows right under the opening lead: CSS places it
+          after the story's first band (see .case-quote). */}
+      {
+        data.testimonial && (
+          <section class="case-quote" aria-label={`What ${data.clients.join(', ')} said`}>
+            <div class="container">
+              <figure class="case-quote__card" data-reveal>
+                <span class="case-quote__mark" aria-hidden="true">
+                  “
+                </span>
+                <blockquote>
+                  <p>“{data.testimonial.quote}”</p>
+                </blockquote>
+                <figcaption>
+                  {data.testimonial.portrait && <Img src={data.testimonial.portrait} alt="" width={144} height={144} />}
+                  <span>
+                    <strong>{data.testimonial.name}</strong>
+                    <span>{data.testimonial.role}</span>
+                  </span>
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+        )
+      }
       {data.showcase && <Showcase blocks={data.showcase} kit={data.brandKit} logo={data.logo} logoAlt={data.logoAlt} dir={entryDir} />}
     </div>
 
@@ -198,21 +223,6 @@ const jsonLd = [
               ))}
             </dl>
           </div>
-        </section>
-      )
-    }
-
-    {
-      data.testimonial && (
-        <section class="case-quote" aria-label={`What ${data.clients.join(', ')} said`}>
-          <figure class="container">
-            <blockquote>
-              <p>“{data.testimonial.quote}”</p>
-            </blockquote>
-            <figcaption>
-              <strong>{data.testimonial.name}</strong>, {data.testimonial.role}
-            </figcaption>
-          </figure>
         </section>
       )
     }
@@ -495,18 +505,91 @@ const jsonLd = [
     font-size: var(--font-size-lg);
   }
 
-  /* Client quote */
+  /* Client quote: a card in the client's color, right under the opening
+   * lead. It comes after the Markdown story in the source (the lead and the
+   * challenge render as one block), so the story is a column and the quote
+   * is ordered in after the first band. */
+  .case-story {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .case-story > :global(.case-band:first-child) {
+    order: -2;
+  }
+
   .case-quote {
-    padding-block: var(--space-2xl);
+    order: -1;
+    padding-bottom: clamp(4rem, 3rem + 4vw, 6.3rem);
     background-color: var(--color-white);
-    color: var(--case-dark);
+  }
+
+  .case-quote__card {
+    position: relative;
+    display: grid;
+    gap: var(--space-lg);
+    justify-items: center;
+    margin: 0;
+    padding: clamp(2.5rem, 1.5rem + 5vw, 5rem) clamp(1.5rem, 1rem + 4vw, 5rem);
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: var(--radius-card);
+    background: linear-gradient(150deg, var(--case-accent), var(--case-dark) 140%);
+    color: var(--color-white);
+    text-align: center;
+  }
+
+  /* A huge, faint opening quote mark behind the words */
+  .case-quote__mark {
+    position: absolute;
+    top: -0.12em;
+    left: 0.04em;
+    z-index: -1;
+    font-family: var(--font-display);
+    font-size: clamp(16rem, 8rem + 30vw, 32rem);
+    line-height: 1;
+    opacity: 0.12;
+    pointer-events: none;
+    user-select: none;
   }
 
   .case-quote blockquote {
-    margin: 0 0 var(--space-md);
+    max-width: 52rem;
+    margin: 0;
     font-family: var(--font-display);
-    font-size: var(--font-size-h3);
-    line-height: var(--line-height-snug);
+    font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .case-quote blockquote p {
+    margin: 0;
+  }
+
+  .case-quote figcaption {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+    text-align: left;
+  }
+
+  .case-quote figcaption :global(img) {
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 2px solid var(--color-white);
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .case-quote figcaption > span {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .case-quote figcaption strong {
+    color: var(--color-white);
+    font-size: var(--font-size-lg);
   }
 
   /* Links back to the service pages behind the work */

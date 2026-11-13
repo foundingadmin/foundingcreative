@@ -52,8 +52,9 @@ Image-led pages: big visuals carry the story and the copy stays short. A case st
 | `board` | Brand guide pages in a tilted grid that runs off both edges | 4 to 9 page images |
 | `colors` | Tall swatches that rise into place, labeled with name, role, hex and RGB | `brandKit.colors` |
 | `logo` | The brand mark builds itself piece by piece (`brandKit.mark`, an SVG beside the entry); without one, the logo wipes in | `brandKit.mark` or `logo` |
-| `type` | A big "Aa" and the brand font's weight names, set in the site's own type (client fonts are not loaded) | `brandKit.fonts` |
-| `mockup` | One to three mockups, edge to edge | images, `tone` |
+| `lockups` | The full logo in each approved color pairing, under an optional construction drawing (the outlined logo over its guides, an SVG beside the entry) | `logo`, `versions`, `construction` |
+| `type` | A big "Aa" and the brand font's weight names. Client fonts are never loaded: draw them as SVG outlines with `scripts/font-specimen.mjs` (`fonts[0].specimen` and `weightsArt`), or the site's own type stands in | `brandKit.fonts` |
+| `mockup` | One to four mockups, edge to edge | images, `tone` |
 | `scene` | A person using the real work; `concept: true` adds a "Concept" label | one image |
 | `device` | The full-page capture scrolls inside a laptop as the page scrolls | full-page capture |
 | `clip` | A short silent loop of the real site in use, over its poster; loads after the page and never plays under reduced motion | an MP4 in `public/media/`, a poster image |
@@ -66,6 +67,10 @@ Image-led pages: big visuals carry the story and the copy stays short. A case st
 **Brand board pages:** render the brand guide PDF to 1600px images and pick up to nine. Leave out any page with a known typo, a placeholder title or third-party logos.
 
 **Scenes:** `scripts/case-study-scene.mjs scene` has `laptop-in-hands` and `phone-in-hand`. Screens are flat green, and the real screenshot is composited on. **Never show made-up people as the client's employees:** no generated crew, staff or team in the client's branding. People in a scene are anonymous visitors using the work. Save four variants per scene to `review/<client>/v3/` and wait for Tyler's picks.
+
+**Layout:** headings and the points under a visual are centered. Neighboring modules on the same band color share one gap, so change color only where a new section starts. Don't show the client's own numbers (cities, countries, headcount) as stats: results are what our work did.
+
+**Quote:** `testimonial` shows as a card right under the opening lead, with a square `portrait` if there is one.
 
 Motion is CSS only: scroll timelines where the browser has them, still everywhere else and under `prefers-reduced-motion`.
 

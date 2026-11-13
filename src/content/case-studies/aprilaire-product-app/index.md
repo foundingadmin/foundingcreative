@@ -4,7 +4,7 @@ seoTitle: "Aprilaire Product Selector App | Founding Creative"
 description: "How Founding Creative designed an interactive product selector app that matches Aprilaire customers to the right indoor air quality products."
 ogTitle: "Aprilaire Product Selector App"
 ogDescription: "How Founding Creative designed an interactive product selector app that matches Aprilaire customers to the right indoor air quality products."
-eyebrow: "Case Study: Aprilaire Product App"
+eyebrow: "Aprilaire Product App"
 headline: "Aprilaire Interactive Product Selector"
 subheadline: "Customers input their location and get a product recommendation"
 clients: ["AprilAire"]

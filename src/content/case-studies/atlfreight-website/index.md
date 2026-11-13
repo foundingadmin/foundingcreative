@@ -4,7 +4,7 @@ seoTitle: "ATL Freight Website Design Case Study | Founding Creative"
 description: "A bold, conversion-focused website for ATL Freight that reflects the reliability of their trucking operations and supports a fast-growing business."
 ogTitle: "ATL Freight Website Design"
 ogDescription: "A bold, conversion-focused website for ATL Freight that reflects the reliability of their trucking operations and supports a fast-growing business."
-eyebrow: "Case Study: ATL Freight Website"
+eyebrow: "ATL Freight Website"
 headline: "An edgy website for an established sector"
 subheadline: "By the people for the people"
 clients: ["ATL Freight"]

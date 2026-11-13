@@ -7,6 +7,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { getImage } from 'astro:assets';
 import Img from '../Img.astro';
 
 type Data = CollectionEntry<'caseStudies'>['data'];
@@ -21,14 +22,19 @@ interface Props {
 
 const { blocks, kit, logo, logoAlt, dir } = Astro.props;
 
-// The brand mark, inlined so each of its shapes can animate. The XML
-// prolog goes, and the SVG is labeled as one image.
-const mark =
-  kit?.mark && dir
-    ? readFileSync(join(dir, kit.mark), 'utf8')
+/** An SVG beside the entry, inlined: the XML prolog goes, and it is labeled as one image. */
+const inlineSvg = (file: string | undefined, label: string) =>
+  file && dir
+    ? readFileSync(join(dir, file), 'utf8')
         .replace(/<\?xml[^>]*\?>\s*/, '')
-        .replace(/<svg /, `<svg role="img" aria-label="${logoAlt ?? 'Brand mark'}" `)
+        .replace(/\s(role|aria-label)="[^"]*"/g, '')
+        .replace(/<svg /, `<svg role="img" aria-label="${label}" `)
     : undefined;
+// The brand mark, inlined so each of its shapes can animate. Its artboard
+// clip goes too: the ring drawn around the mark sits just outside it.
+const mark = inlineSvg(kit?.mark, logoAlt ?? 'Brand mark')?.replace(/\sclip-path="[^"]*"/g, '');
+// The full logo as a CSS mask, so one file shows in any color.
+const logoMask = logo ? await getImage({ src: logo }) : undefined;
 // Font weight names to CSS weights, for the type specimen.
 const WEIGHTS: Record<string, number> = { Light: 300, Regular: 400, Medium: 500, Semibold: 600, Bold: 700, Black: 800 };
 
@@ -53,7 +59,7 @@ const inkOn = (hex: string) => {
 
 const bleed = { widths: [640, 960, 1280, 1920, 2400], sizes: '100vw' };
 const sizesFor = (count: number) =>
-  count === 1 ? bleed : { widths: [480, 800, 1200, 1600], sizes: `(max-width: 700px) 100vw, ${Math.round(100 / count)}vw` };
+  count === 1 ? bleed : { widths: [480, 800, 1200, 1600], sizes: `(max-width: 700px) ${count === 4 ? 50 : 100}vw, ${Math.round(100 / count)}vw` };
 ---
 
 {
@@ -61,8 +67,9 @@ const sizesFor = (count: number) =>
     // Every block but the statement and conclusion can carry copy. Keys left
     // out of the frontmatter are absent, so read them loosely.
     const copy = block as { kicker?: string; heading?: string; points?: { title: string; text: string }[] } & { text?: string };
+    // Copy is centered, except beside the type specimen.
     const Header = block.type !== 'statement' && (copy.kicker || copy.heading || copy.text) && (
-      <div class="case-header show__header">
+      <div class:list={['case-header show__header', block.type !== 'type' && 'case-header--center']}>
         {copy.kicker && <p class="case-kicker">{copy.kicker}</p>}
         {copy.heading && <h2>{copy.heading}</h2>}
         {copy.text && <p set:html={inline(copy.text)} />}
@@ -155,22 +162,55 @@ const sizesFor = (count: number) =>
       );
     }
 
+    if (block.type === 'lockups' && logoMask) {
+      const construction = inlineSvg(block.construction, block.constructionAlt ?? `${logoAlt ?? 'Logo'} with its construction lines`);
+      return (
+        <section class="case-band show show--lockups" data-tone="light">
+          <div class="case-band__inner">
+            {Header}
+            {construction && <div class="show__construction" data-reveal set:html={construction} />}
+            <ul class="show__lockups" data-count={block.versions.length} data-reveal-stagger>
+              {block.versions.map((version) => (
+                <li style={`--tile: ${version.background}; --ink: ${version.ink}`}>
+                  <span class="show__lockup" role="img" aria-label={`${logoAlt ?? 'Logo'}, ${version.label.toLowerCase()}`} style={`--logo: url(${logoMask.src}); aspect-ratio: ${logoMask.attributes.width} / ${logoMask.attributes.height}`} />
+                  <span class="show__lockup-label">{version.label}</span>
+                </li>
+              ))}
+            </ul>
+            {Points}
+          </div>
+        </section>
+      );
+    }
+
     if (block.type === 'type' && kit?.fonts.length) {
       const font = kit.fonts[0];
+      // The font drawn as outlines, when the brand kit has them; otherwise
+      // the site's own type stands in.
+      const specimen = inlineSvg(font.specimen, `${font.name} specimen: Aa`);
+      const weightsArt = inlineSvg(font.weightsArt, `${font.name} weights: ${font.weights.join(', ')}`);
       return (
         <section class="case-band show show--type" data-tone="light">
           <div class="case-band__inner">
             <div class="show__type">
-              <p class="show__aa" aria-hidden="true">
-                Aa
-              </p>
+              {specimen ? (
+                <div class="show__aa show__aa--art" set:html={specimen} />
+              ) : (
+                <p class="show__aa" aria-hidden="true">
+                  Aa
+                </p>
+              )}
               <div>
                 {Header}
-                <ul class="show__weights">
-                  {font.weights.map((weight) => (
-                    <li style={`font-weight: ${WEIGHTS[weight] ?? 400}`}>{weight}</li>
-                  ))}
-                </ul>
+                {weightsArt ? (
+                  <div class="show__weights show__weights--art" set:html={weightsArt} />
+                ) : (
+                  <ul class="show__weights">
+                    {font.weights.map((weight) => (
+                      <li style={`font-weight: ${WEIGHTS[weight] ?? 400}`}>{weight}</li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
             {Points}
@@ -324,6 +364,20 @@ const sizesFor = (count: number) =>
     max-width: 44rem;
   }
 
+  /* Neighbors on the same color read as one section: the pair shares one
+   * band gap instead of two full band paddings. */
+  .show:is(
+      [data-tone='white']:has(+ .show[data-tone='white']),
+      [data-tone='light']:has(+ .show[data-tone='light']),
+      [data-tone='dark']:has(+ .show[data-tone='dark'])
+    ) {
+    padding-bottom: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+
+  .show:is([data-tone='white'] + [data-tone='white'], [data-tone='light'] + [data-tone='light'], [data-tone='dark'] + [data-tone='dark']) {
+    padding-top: 0;
+  }
+
   .show__header :global(p:not(.case-kicker)) {
     margin: var(--space-sm) 0 0;
     font-size: var(--font-size-md);
@@ -334,12 +388,17 @@ const sizesFor = (count: number) =>
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
     gap: var(--space-xl);
+    text-align: center;
+  }
+
+  .show__points > div {
+    width: 100%;
+    max-width: 40rem;
+    margin-inline: auto;
   }
 
   .show__points h3 {
     margin: 0 0 var(--space-2xs);
-    padding-top: var(--space-md);
-    border-top: 1px solid color-mix(in srgb, currentcolor 30%, transparent);
     color: var(--band-heading);
     font-size: var(--font-size-h6);
   }
@@ -472,6 +531,65 @@ const sizesFor = (count: number) =>
     stroke-width: 2px;
   }
 
+  /* Logo construction: the outlined logo over its guides */
+  .show__construction {
+    width: min(100%, 60rem);
+    margin-inline: auto;
+    color: var(--case-accent);
+  }
+
+  .show__construction :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    border-radius: 0;
+  }
+
+  /* The logo in each approved color pairing */
+  .show__lockups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.6vw, 1.75rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .show__lockups[data-count='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .show__lockups li {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    margin: 0;
+    border-radius: var(--radius-card);
+    background-color: var(--tile);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--case-dark) 12%, transparent);
+    color: var(--ink);
+  }
+
+  .show__lockup {
+    width: min(52%, 22rem);
+    background-color: currentcolor;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+  }
+
+  .show__lockup-label {
+    position: absolute;
+    bottom: var(--space-sm);
+    left: var(--space-md);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
   /* Type specimen */
   .show__type {
     display: grid;
@@ -505,6 +623,23 @@ const sizesFor = (count: number) =>
     margin: 0;
   }
 
+  /* The client's font as outlines (scripts/font-specimen.mjs) */
+  .show__aa--art {
+    width: clamp(9rem, 4rem + 20vw, 22rem);
+  }
+
+  .show__weights--art {
+    display: block;
+    max-width: 30rem;
+  }
+
+  .show__type :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+  }
+
   @media (max-width: 700px) {
     .show__type {
       grid-template-columns: minmax(0, 1fr);
@@ -524,6 +659,19 @@ const sizesFor = (count: number) =>
 
   .show__mockups[data-count='3'] {
     --cols: 3;
+  }
+
+  .show__mockups[data-count='4'] {
+    --cols: 4;
+  }
+
+  /* With no heading above, the band's own padding is the space on top */
+  .show--mockup > .case-band__inner:first-child:empty + .show__mockups {
+    margin-top: 0;
+  }
+
+  .show--mockup > .show__mockups:last-child {
+    margin-bottom: 0;
   }
 
   /* Each picture is one cell (its sources must not take cells of their own) */
@@ -686,6 +834,7 @@ const sizesFor = (count: number) =>
   /* Full scope, collapsed */
   .show__scope summary {
     display: flex;
+    margin-inline: auto;
     gap: var(--space-sm);
     align-items: baseline;
     width: fit-content;
@@ -731,6 +880,18 @@ const sizesFor = (count: number) =>
 
     .show__mockups:is([data-count='2'], [data-count='3']) {
       --cols: 1;
+    }
+
+    .show__mockups[data-count='4'] {
+      --cols: 2;
+    }
+
+    .show__lockups:is([data-count='3'], [data-count='2']) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .show__lockup-label {
+      left: var(--space-sm);
     }
 
     .show__swatches {
@@ -809,7 +970,7 @@ const sizesFor = (count: number) =>
     }
 
     @supports (animation-timeline: view()) {
-      .show__aa {
+      .show__aa:not(.show__aa--art) {
         animation: show-weigh linear both;
         animation-timeline: view();
         animation-range: entry 10% cover 60%;

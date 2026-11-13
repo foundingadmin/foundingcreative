@@ -4,7 +4,7 @@ seoTitle: "Tata Interactive Learning Mural | Founding Creative"
 description: "We turned a 44-page Tata company document into a large interactive mural that merged physical space with digital storytelling at a busy conference."
 ogTitle: "Tata Interactive Learning Mural"
 ogDescription: "We turned a 44-page Tata company document into a large interactive mural that merged physical space with digital storytelling at a busy conference."
-eyebrow: "Case Study: Interactive Learning Mural"
+eyebrow: "Interactive Learning Mural"
 headline: "Large content into an even larger interactive"
 subheadline: "A huge document transformed into an exploratory experience"
 clients: ["Tata"]

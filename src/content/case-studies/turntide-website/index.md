@@ -4,7 +4,7 @@ seoTitle: "Turntide B2B Website Redesign Case Study | Founding Creative"
 description: "A full-stack website overhaul, brand repositioning, and marketing funnel for Turntide, a B2B electrification company selling to engineers."
 ogTitle: "Turntide B2B Website Redesign"
 ogDescription: "A full-stack website overhaul, brand repositioning, and marketing funnel for Turntide, a B2B electrification company selling to engineers."
-eyebrow: "Case Study: Turntide Website"
+eyebrow: "Turntide Website"
 headline: "Engineering a better customer journey"
 subheadline: "Full-stack website overhaul, brand repositioning, and marketing funnel enablement for a B2B electrification powerhouse."
 clients: ["Turntide"]
