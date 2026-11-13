@@ -8,7 +8,7 @@ excerpt: "Looking for beauty industry marketing jobs? Learn how interactive 3D c
 date: 2025-06-05
 updated: 2025-06-05
 author: "Josh Titus"
-categories: ["Prism", "Website"]
+categories: ["Website"]
 cover: "./cover.png"
 coverAlt: "3D render of three dark beauty product containers with iridescent highlights"
 ---
@@ -111,4 +111,4 @@ And your next opportunity might just be waiting for someone who knows how to cli
 
 👉 Want to see how 3D web content helps beauty brands convert better, faster, and with more style? [Let’s talk.](/contact-us/)
 
-🔗 Learn more about how Founding Creative builds show-stopping websites using [Prism Sitelaunch.](/services/website-services/)
+🔗 Learn more about how Founding Creative builds show-stopping websites with our [website services.](/services/website-services/)

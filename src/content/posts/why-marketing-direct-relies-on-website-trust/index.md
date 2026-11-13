@@ -8,7 +8,7 @@ excerpt: "Marketing direct to customers works best when your website looks the p
 date: 2025-05-28
 updated: 2025-05-31
 author: "Josh Titus"
-categories: ["Prism", "Website"]
+categories: ["Website"]
 cover: "./cover.webp"
 coverAlt: "People standing in front of a large glowing interface screen"
 ---
@@ -49,7 +49,7 @@ Because when the outreach is tailored, but the website isn’t, you lose trust. 
 
 Direct marketing creates curiosity. Your website must convert it into confidence.
 
-Prism, our SiteLaunch product for design-led brands, is built to carry the handoff from direct marketing to brand validation so your most intentional marketing doesn’t lose momentum.
+Our [website services](/services/website-services/) are built to carry the handoff from direct marketing to brand validation so your most intentional marketing doesn’t lose momentum.
 
 ---
 
@@ -73,13 +73,13 @@ No matter how direct your marketing is, your site experience needs to match.
 
 ---
 
-## Prism supports direct marketing
+## A website built to support direct marketing
 
 Direct marketing puts the message right in front of your audience. But what happens when they click? If the experience doesn’t meet the expectation, your conversion drops off a cliff.
 
-That’s where Prism steps in.
+That’s where the right website steps in.
 
-Here’s how a Prism-built website becomes an extension of your marketing strategy:
+Here’s how a website we build becomes an extension of your marketing strategy:
 
 ### Reinforces brand precision
 
@@ -91,11 +91,11 @@ We give you a full library of customizable components that let your team spin up
 
 ### Reduced friction for high-intent visitors
 
-Prism sites are fast, responsive, and clear. We prioritize intuitive layouts, legible content, and unmistakable CTAs. That means fewer distractions and less chance of losing that warm direct lead.
+Our sites are fast, responsive, and clear. We prioritize intuitive layouts, legible content, and unmistakable CTAs. That means fewer distractions and less chance of losing that warm direct lead.
 
 ### Responsive performance that doesn’t break trust
 
-Direct traffic often comes from mobile. Prism’s high-performance front end is optimized to load quickly and beautifully across devices so nobody bounces.
+Direct traffic often comes from mobile. A high-performance front end is optimized to load quickly and beautifully across devices so nobody bounces.
 
 ### Messaging that aligns with your funnel
 
@@ -103,13 +103,13 @@ We work with your team to prioritize copy, CTAs, and navigation flows that match
 
 ### Conversion tracking ready
 
-Prism supports seamless integration with analytics, CRM, and ad platforms so you’re not just impressing your direct leads, you’re learning from their behavior too.
+We set up seamless integration with analytics, CRM, and ad platforms so you’re not just impressing your direct leads, you’re learning from their behavior too.
 
 ### Builds trust through design
 
-Targeted users often click to verify credibility. A Prism site reassures them immediately. Modern design, intelligent structure, and cohesive branding make your business feel as good as it looks.
+Targeted users often click to verify credibility. A well-built site reassures them immediately. Modern design, intelligent structure, and cohesive branding make your business feel as good as it looks.
 
-Prism doesn’t just support your marketing. It completes it.
+The right website doesn’t just support your marketing. It completes it.
 
 ---
 
@@ -122,7 +122,7 @@ If your site wasn’t built with marketing direct in mind, you might start notic
 -   Bounce rates spike after email sends
 -   Brand perception mismatches between outreach and site
 
-These are not traffic problems. They’re trust problems. And Prism was built to fix them.
+These are not traffic problems. They’re trust problems. And they’re the problems we build websites to fix.
 
 ---
 
@@ -133,15 +133,15 @@ Not if you care about continuity.
 Templates are broad. Direct marketing is narrow.  
 Templates serve many. Direct marketing speaks to one.
 
-Prism lets you scale precision.
+A custom site lets you scale precision.
 
 It brings a design system to your site that scales from homepage to campaign page without losing the polish that first captured your lead’s interest.
 
 ---
 
-## Prism SiteLaunch isn’t redesign. It’s realignment.
+## This isn’t redesign. It’s realignment.
 
-We called this product “Prism” because it filters brand light into something clear and powerful. It doesn’t just make you look good. It makes you _feel_ coherent to your audience.
+A website built this way filters your brand into something clear and powerful. It doesn’t just make you look good. It makes you _feel_ coherent to your audience.
 
 In a world where attention is short and first impressions live online, marketing direct to customers is only as strong as the site they lead to.
 
@@ -151,10 +151,10 @@ If you’re going to spend the time crafting personal marketing messages, don’
 
 ## Support your direct marketing with a brand that performs
 
-Direct marketing brings people to your door. Prism ensures your front porch doesn’t disappoint.
+Direct marketing brings people to your door. Your website has to make sure the front porch doesn’t disappoint.
 
-If you’re running campaigns that are laser-targeted, personalized, and high-stakes, your website needs to match that energy. Prism SiteLaunch was built for credibility-seekers like you, leaders who know brand experience is part of the conversion strategy.
+If you’re running campaigns that are laser-targeted, personalized, and high-stakes, your website needs to match that energy. Our website services are built for credibility-seekers like you, leaders who know brand experience is part of the conversion strategy.
 
-Interactive visuals, seamless page animations, bold design systems, and web experiences that perform as beautifully as they look. That’s Prism.
+Interactive visuals, seamless page animations, bold design systems, and web experiences that perform as beautifully as they look. That’s what we build.
 
-👉 [Explore the Prism SiteLaunch](/services/website-services/) to see how we help teams create branded websites that stand out from the competition.
+👉 [Explore our website services](/services/website-services/) to see how we help teams create branded websites that stand out from the competition.

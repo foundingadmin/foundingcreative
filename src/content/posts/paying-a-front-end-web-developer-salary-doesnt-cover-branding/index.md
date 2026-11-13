@@ -8,7 +8,7 @@ excerpt: "Learn why brand strategy and UI planning should come before hiring fro
 date: 2025-05-31
 updated: 2025-06-03
 author: "Josh Titus"
-categories: ["Prism", "Website"]
+categories: ["Website"]
 cover: "./cover.png"
 coverAlt: "Silhouette of a developer working on a laptop with a rainbow light beam"
 ---
@@ -95,11 +95,11 @@ In other words: you’re paying premium prices for just the development phase of
 
 ---
 
-## How Prism aligns brand with build
+## How we align brand with build
 
-At Founding Creative, [Prism SiteLaunch](/services/website-services/) bridges the gap. We give you the design system, UI tools, and brand clarity PLUS the development team to build it.
+At Founding Creative, our [website services](/services/website-services/) bridge the gap. We give you the design system, UI tools, and brand clarity PLUS the development team to build it.
 
-With Prism, we:
+We:
 
 -   Create brand-rooted design systems
 -   Align structure, interaction, and content hierarchy
@@ -116,4 +116,4 @@ Design-led websites look better, perform better, and scale better.
 
 If you’re ready to get more out of your dev investment dollars, it’s time to make sure your strategy and design are locked in first.
 
-👉 [See how Prism helps high-growth brands](/services/website-services/) translate identity into show-stopping digital experiences.
+👉 [See how we help high-growth brands](/services/website-services/) translate identity into show-stopping digital experiences.
