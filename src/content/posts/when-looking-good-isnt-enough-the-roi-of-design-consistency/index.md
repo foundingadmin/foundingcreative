@@ -8,7 +8,7 @@ excerpt: "Design can power your marketing and management strategy. Explore how c
 date: 2025-05-31
 updated: 2025-05-31
 author: "Josh Titus"
-categories: ["Prism", "Website"]
+categories: ["Website"]
 cover: "./cover.png"
 coverAlt: "Two overlapping glowing circles forming a Venn diagram"
 ---

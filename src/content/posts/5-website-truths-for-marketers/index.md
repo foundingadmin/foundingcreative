@@ -85,4 +85,4 @@ Turn that humdrum water cooler conversation to chit chat about web speed, modern
 
 </div>
 
-Once you get the greenlight on the well-overdue website needed, [**let’s chat**](/contact-us/) **about a custom website that is built to scale**. We offer a wide array of [website services](/services/website-services/), including SiteLaunch website packages designed to meet the needs of any business, regardless of its size or growth stage.
+Once you get the greenlight on the well-overdue website needed, [**let’s chat**](/contact-us/) **about a custom website that is built to scale**. We offer a wide array of [website services](/services/website-services/), designed to meet the needs of any business, regardless of its size or growth stage.

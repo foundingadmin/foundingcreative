@@ -162,8 +162,8 @@ test('the homepage has one H1, the footer tagline is not a heading, and its cred
   await page.goto('/');
   const footer = page.getByRole('contentinfo');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your complete creative department, built on strategy.');
-  await expect(footer.getByText('Creative foundations for brands of all sizes')).toBeVisible();
-  await expect(footer.getByRole('heading', { name: /Creative foundations/ })).toHaveCount(0);
+  await expect(footer.getByText('Your complete creative department, built on strategy.')).toBeVisible();
+  await expect(footer.getByRole('heading', { name: /creative department/ })).toHaveCount(0);
   await expect(footer.locator('.footer-bottom__credit')).toHaveText('Designed & developed with love by Founding Creative');
 });
 

@@ -8,7 +8,7 @@ excerpt: "Figma web templates are fast, but are they the best option? Learn how 
 date: 2025-05-29
 updated: 2025-07-17
 author: "Josh Titus"
-categories: ["Prism", "Website"]
+categories: ["Website"]
 cover: "./cover.webp"
 coverAlt: "Laptop showing the Figma logo with floating translucent website panels and a phone"
 ---

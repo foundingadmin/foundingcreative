@@ -8,7 +8,7 @@ excerpt: "Marketing with content isn’t enough to stand out, especially for tea
 date: 2025-05-29
 updated: 2025-05-31
 author: "Josh Titus"
-categories: ["Prism", "Website"]
+categories: ["Website"]
 cover: "./cover.webp"
 coverAlt: "Website layout cards spread across a surface under a sweep of colorful light"
 ---
@@ -135,12 +135,12 @@ They make marketing with content feel real.
 
 ---
 
-## How Prism SiteLaunch approaches design systems
+## How we approach design systems
 
-We built Prism SiteLaunch™ to solve more than just how your website looks.  
-It solves how your brand performs everywhere, especially in the hands of content creators and marketers.
+Our [website services](/services/website-services/) solve more than just how your website looks.  
+They solve how your brand performs everywhere, especially in the hands of content creators and marketers.
 
-Prism wields the web design process as more than just a great looking site.
+We treat the web design process as more than just a great looking site.
 
 ### It’s the engine of alignment
 
@@ -154,6 +154,6 @@ It’s a fully branded experience layer anchored in strategy, built for performa
 
 ## Ready for More?
 
-If your content is scaling but your brand systems aren’t, the next step is exploring how Prism helps you unify design, message, and performance in every touchpoint.
+If your content is scaling but your brand systems aren’t, the next step is exploring how we help you unify design, message, and performance in every touchpoint.
 
 Coming soon
